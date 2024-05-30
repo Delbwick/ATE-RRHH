@@ -7,8 +7,8 @@ import pandas as pd
 
 # Creamos la cabecera
 st.set_page_config(page_title="ATE-Alta nuevos proyectos", page_icon="🆕")
-st.title("🚀 ¡Bienvenido a ATE! 🎉")
-st.header("🚀 ¡Empieza tu Proyecto! 🎉")
+st.title("¡Bienvenido a ATE! 👷")
+st.header("¡Empieza tu Proyecto!")
 
 # Definir el color de fondo del encabezado
 header_html = """
