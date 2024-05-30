@@ -66,22 +66,24 @@ st.dataframe(df_clientes)
 
 # Creamos formulario de alta de clientes
 st.title('Alta Proyectos:')
-col1, col2, col3 = st.columns(3)  # Tres columnas al 33.33% cada una, si quisieramos otras medidas serian (1,1,2) 25%25%y50%
+col1, col2, col3,col4 = st.columns(4)  # Tres columnas al 33.33% cada una, si quisieramos otras medidas serian (1,1,2) 25%25%y50%
 
   
 with col1:
     #id_cliente = st.number_input('id_cliente', step=1) step=1 siginifica que el booleano se queda sin decimales
-    nombre = st.text_input('nombre')
+    nombre = st.text_input('Nombre de Proyecto')
 with col2:
-    mail = st.text_input('mail')
+    descripcion = st.text_input('Descripción')
 
 with col3:
-    website = st.text_input('Sitio Web')
+    fecha_inicio = st.date_input('Fecha de Inicio')
+with col4:
+    fecha_fin = st.date_input('Fecha de Fin')
 
 # Filas de columnas para otros campos
 col1, col2, col3,col4 = st.columns(4)
 with col1:
-    id_ga4 = st.text_input('Identificador GA4')
+    proyecto_activo = st.checkbox('Poryecto Activo')
    
 
 with col2:
@@ -129,13 +131,13 @@ if submit:
 
     # Incrementar el máximo ID en 1 para obtener el nuevo ID de cliente
       if max_id is not None:
-            new_id_cliente = max_id + 1
+            new_id_proyecto = max_id + 1
       else:
-           new_id_cliente = 1
+           new_id_proyecto = 1
     # Consulta para insertar datos de BigQuery
       query_kai_insert = f"""
-      INSERT INTO ate-rrhh-2024.Ate_kaibot_2024.proyectos (id_cliente, nombre_cliente, mail,website,id_ga4,id_ads,id_tag,sector,tamano,fecha_de_alta,forma_pago,propiedad_ga4) 
-      VALUES ({new_id_cliente}, '{nombre}', '{mail}','{website}','{id_ga4}',{id_ads},'{id_tag}','{sector}','{tamano_empresa}','{fecha_alta}','{pago}',{id_propiedad})
+      INSERT INTO ate-rrhh-2024.Ate_kaibot_2024.proyectos (id_proyecto, nombre, descripcion,fecha_inicio,fecha_fin,proyecto_activo) 
+      VALUES ({new_id_proyecto}, '{nombre}', '{descripcion}','{fecha_inicio}','{fecha_fin}','{proyecto_activo}')
       """
     # Ejecutar la consulta
       query_job_kai_insert = client.query(query_kai_insert)
