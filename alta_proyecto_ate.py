@@ -30,7 +30,7 @@ header_html = """
 st.markdown(header_html, unsafe_allow_html=True)
 
 # Agregar la imagen (logo) y el texto al encabezado
-st.markdown('<div class="header-container"><img class="logo" src="https://kaibot.es/wp-content/uploads/2020/07/image1.png" alt="Logo"></div>', unsafe_allow_html=True)
+st.markdown('<div class="header-container"><img class="logo" src="https://www.ategrupo.com/wp-content/uploads/2021/03/ATE.png" alt="Logo"></div>', unsafe_allow_html=True)
 st.write("# Alta nuevo cliente")
 
 # Create API client.
