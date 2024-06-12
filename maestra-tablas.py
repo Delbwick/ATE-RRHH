@@ -40,23 +40,25 @@ credentials = service_account.Credentials.from_service_account_info(
 )
 client = bigquery.Client(credentials=credentials)
 
-# Páginas de la aplicación
-PAGES = {
+# Páginas de la aplicación y sus tablas correspondientes
+PAGES_TABLES = {
+    "Documentos del Proyecto": ("ate-rrhh-2024.Ate_kaibot_2024.project_document", "id_documento"),
+    "Proyectos": ("ate-rrhh-2024.Ate_kaibot_2024.proyectos", "id_proyecto"),
     "Puestos": ("ate-rrhh-2024.Ate_kaibot_2024.puestos", "id_puesto"),
     "Responsabilidad": ("ate-rrhh-2024.Ate_kaibot_2024.responsabilidad", "Id_responsabilidad"),
+    "Complejidad": ("ate-rrhh-2024.Ate_kaibot_2024.complejidad", "Id_complejidad"),
     "Role": ("ate-rrhh-2024.Ate_kaibot_2024.role", "id_role"),
     "Salario Base": ("ate-rrhh-2024.Ate_kaibot_2024.salario_base_xcategoria_xaño", "id_salario_base"),
     "Turno": ("ate-rrhh-2024.Ate_kaibot_2024.turno", "id_turno"),
     "User": ("ate-rrhh-2024.Ate_kaibot_2024.user", "id_user"),
     "Usuario": ("ate-rrhh-2024.Ate_kaibot_2024.usuario", "id_usuario"),
     "Valoración Definitiva": ("ate-rrhh-2024.Ate_kaibot_2024.valoracion_definitiva", "id_valoracion_definitiva"),
-    "Valoración Técnica Previa": ("ate-rrhh-2024.Ate_kaibot_2024.valoracion_tecnica_previa", "id_valoracion_tecnica_previa"),
+    "Valoración Técnica": ("ate-rrhh-2024.Ate_kaibot_2024.valoracion_tecnica_previa", "id_valoracion_tecnica_previa"),
     "Complemento de Destino": ("ate-rrhh-2024.Ate_kaibot_2024.Complemento_de_destino", "id_complemento_destino"),
     "Complemento Específico por Año": ("ate-rrhh-2024.Ate_kaibot_2024.Complemento_específico_xaño", "id_complemento_especifico"),
     "Calendario": ("ate-rrhh-2024.Ate_kaibot_2024.calendar", "id_calendario"),
     "Cliente": ("ate-rrhh-2024.Ate_kaibot_2024.client", "id_cliente"),
     "Empresa": ("ate-rrhh-2024.Ate_kaibot_2024.company", "id_empresa"),
-    "Complejidad": ("ate-rrhh-2024.Ate_kaibot_2024.complejidad", "Id_complejidad"),
     "Complejidad Técnica": ("ate-rrhh-2024.Ate_kaibot_2024.complejidad_tecnica", "id_complejidad_tecnica"),
     "Complejidad Territorial": ("ate-rrhh-2024.Ate_kaibot_2024.complejidad_territorial", "id_complejidad_territorial"),
     "Condiciones de Trabajo": ("ate-rrhh-2024.Ate_kaibot_2024.condiciones_de_trabajo", "id_condiciones_trabajo"),
@@ -75,10 +77,6 @@ PAGES = {
     "Penosidad del Turno": ("ate-rrhh-2024.Ate_kaibot_2024.penosidad_turno", "id_penosidad_turno"),
     "Porcentajes Variables": ("ate-rrhh-2024.Ate_kaibot_2024.porcentajes_variables", "id_porcentajes_variables")
 }
-
-selection = st.sidebar.selectbox("Selecciona la tabla", list(PAGES.keys()))
-table_info = PAGES[selection]
-manage_table(table_info[0], table_info[1])
 
 def add_custom_css():
     st.markdown("""
@@ -115,13 +113,15 @@ def get_id_proyecto():
 
 def main():
     st.sidebar.title("Menú")
-    selection = st.sidebar.radio("Ir a", list(PAGES.keys()))
+    selection = st.sidebar.radio("Ir a", list(PAGES_TABLES.keys()))
 
-    
+    table_name, id_column = PAGES_TABLES[selection]
+    manage_table(table_name, id_column)
 
 def manage_table(table_name, id_column):
     st.title(f"Gestión de {table_name.split('.')[-1].replace('_', ' ').title()}")
     action = st.radio("Acción", ["Ver", "Insertar", "Modificar", "Eliminar"])
+
 
     if action == "Ver":
         query = f"SELECT * FROM `{table_name}`"
