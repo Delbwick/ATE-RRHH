@@ -121,7 +121,8 @@ def main():
     elif page == "responsabilidad":
         manage_table("ate-rrhh-2024.Ate_kaibot_2024.responsabilidad", "Id_responsabilidad") #TENER CUIDADO QUE ALGUNOS NOMBRES DEL CAMPO ESTA LA I EN MAYUSUCLAS
     elif page == "role":
-        manage_table("ate-rrhh-2024.Ate_kaibot_2024.role", "id_role")
+        manage_table("ate-rrhh-2024.Ate_kaibot_2024.complejidad", "id_role")
+        #manage_table("ate-rrhh-2024.Ate_kaibot_2024.role", "id_role")
     elif page == "salario_base_xcategoria_xaño":
         manage_table("ate-rrhh-2024.Ate_kaibot_2024.salario_base_xcategoria_xaño", "id_salario_base")
     elif page == "turno":
