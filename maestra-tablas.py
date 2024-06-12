@@ -219,6 +219,13 @@ def manage_table(table_name, id_column):
         query = f"SELECT * FROM {table_name}"
         results = client.query(query).result()
         records = [dict(row) for row in results]
+         # Verificar nombres de columnas
+        if records:
+            st.write("Columnas recuperadas:", list(records[0].keys()))
+        else:
+            st.error("No se encontraron registros en la tabla.")
+            return
+        
         
         # Seleccionar el registro a modificar
         selected_id = st.selectbox("Selecciona el ID del registro a modificar", [record[id_column] for record in records])
