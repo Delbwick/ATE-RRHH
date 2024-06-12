@@ -42,6 +42,8 @@ client = bigquery.Client(credentials=credentials)
 
 # Páginas de la aplicación
 PAGES = {
+    "Documentos del Proyecto": "project_document",
+    "Proyectos": "proyectos",
     "Puestos": "puestos",
     "Responsabilidad": "responsabilidad",
     "Role": "role",
@@ -50,9 +52,31 @@ PAGES = {
     "User": "user",
     "Usuario": "usuario",
     "Valoración Definitiva": "valoracion_definitiva",
-    "Valoración Técnica": "valoracion_tecnica_pr",
+    "Valoración Técnica": "valoracion_tecnica_previa",
+    "Complemento de Destino": "Complemento_de_destino",
+    "Complemento Específico por Año": "Complemento_específico_xaño",
+    "Calendario": "calendar",
+    "Cliente": "client",
+    "Empresa": "company",
+    "Complejidad": "complejidad",
+    "Complejidad Técnica": "complejidad_tecnica",
+    "Complejidad Territorial": "complejidad_territorial",
+    "Condiciones de Trabajo": "condiciones_de_trabajo",
+    "Definitivo": "definitivo",
+    "Documento": "document",
+    "Esfuerzo Emocional": "esfuerzo_emocional",
+    "Especialización": "especializacion",
+    "Idioma del Proyecto": "idioma_proyecto",
+    "Idiomas": "idiomas",
+    "Idiomas (Euskera)": "idiomas_euskera",
+    "Importancia Relativa": "importancia_relativa",
+    "Incompatibilidad": "incompatibilidad",
+    "Iniciativa": "iniciativa",
+    "Mando": "mando",
+    "Nivel de Formación": "nivel_formacion",
+    "Penosidad del Turno": "penosidad_turno",
+    "Porcentajes Variables": "porcentajes_variables"
 }
-
 def add_custom_css():
     st.markdown("""
         <style>
@@ -91,24 +115,70 @@ def main():
     selection = st.sidebar.radio("Ir a", list(PAGES.keys()))
 
     page = PAGES[selection]
-    if page == "puestos":
-        manage_table("ate-rrhh-2024.Ate_kaibot_2024.puestos", "id_puesto")
-    elif page == "responsabilidad":
-        manage_table("ate-rrhh-2024.Ate_kaibot_2024.responsabilidad", "id_responsabilidad")
-    elif page == "role":
-        manage_table("ate-rrhh-2024.Ate_kaibot_2024.role", "id_role")
-    elif page == "salario_base_xcategoria_xaño":
-        manage_table("ate-rrhh-2024.Ate_kaibot_2024.salario_base_xcategoria_xaño", "id_salario_base")
-    elif page == "turno":
-        manage_table("ate-rrhh-2024.Ate_kaibot_2024.turno", "id_turno")
-    elif page == "user":
-        manage_table("ate-rrhh-2024.Ate_kaibot_2024.user", "id_user")
-    elif page == "usuario":
-        manage_table("ate-rrhh-2024.Ate_kaibot_2024.usuario", "id_usuario")
-    elif page == "valoracion_definitiva":
-        manage_table("ate-rrhh-2024.Ate_kaibot_2024.valoracion_definitiva", "id_valoracion_definitiva")
-    elif page == "valoracion_tecnica_pr":
-        manage_table("ate-rrhh-2024.Ate_kaibot_2024.valoracion_tecnica_pr", "id_valoracion_tecnica_pr")
+if page == "puestos":
+    manage_table("ate-rrhh-2024.Ate_kaibot_2024.puestos", "id_puesto")
+elif page == "responsabilidad":
+    manage_table("ate-rrhh-2024.Ate_kaibot_2024.responsabilidad", "id_responsabilidad")
+elif page == "role":
+    manage_table("ate-rrhh-2024.Ate_kaibot_2024.role", "id_role")
+elif page == "salario_base_xcategoria_xaño":
+    manage_table("ate-rrhh-2024.Ate_kaibot_2024.salario_base_xcategoria_xaño", "id_salario_base")
+elif page == "turno":
+    manage_table("ate-rrhh-2024.Ate_kaibot_2024.turno", "id_turno")
+elif page == "user":
+    manage_table("ate-rrhh-2024.Ate_kaibot_2024.user", "id_user")
+elif page == "usuario":
+    manage_table("ate-rrhh-2024.Ate_kaibot_2024.usuario", "id_usuario")
+elif page == "valoracion_definitiva":
+    manage_table("ate-rrhh-2024.Ate_kaibot_2024.valoracion_definitiva", "id_valoracion_definitiva")
+elif page == "valoracion_tecnica_previa":
+    manage_table("ate-rrhh-2024.Ate_kaibot_2024.valoracion_tecnica_previa", "id_valoracion_tecnica_previa")
+elif page == "Complemento de Destino":
+    manage_table("ate-rrhh-2024.Ate_kaibot_2024.Complemento_de_destino", "id_complemento_destino")
+elif page == "Complemento Específico por Año":
+    manage_table("ate-rrhh-2024.Ate_kaibot_2024.Complemento_específico_xaño", "id_complemento_especifico")
+elif page == "Calendario":
+    manage_table("ate-rrhh-2024.Ate_kaibot_2024.calendar", "id_calendario")
+elif page == "Cliente":
+    manage_table("ate-rrhh-2024.Ate_kaibot_2024.client", "id_cliente")
+elif page == "Empresa":
+    manage_table("ate-rrhh-2024.Ate_kaibot_2024.company", "id_empresa")
+elif page == "Complejidad":
+    manage_table("ate-rrhh-2024.Ate_kaibot_2024.complejidad", "id_complejidad")
+elif page == "Complejidad Técnica":
+    manage_table("ate-rrhh-2024.Ate_kaibot_2024.complejidad_tecnica", "id_complejidad_tecnica")
+elif page == "Complejidad Territorial":
+    manage_table("ate-rrhh-2024.Ate_kaibot_2024.complejidad_territorial", "id_complejidad_territorial")
+elif page == "Condiciones de Trabajo":
+    manage_table("ate-rrhh-2024.Ate_kaibot_2024.condiciones_de_trabajo", "id_condiciones_trabajo")
+elif page == "Definitivo":
+    manage_table("ate-rrhh-2024.Ate_kaibot_2024.definitivo", "id_definitivo")
+elif page == "Documento":
+    manage_table("ate-rrhh-2024.Ate_kaibot_2024.document", "id_documento")
+elif page == "Esfuerzo Emocional":
+    manage_table("ate-rrhh-2024.Ate_kaibot_2024.esfuerzo_emocional", "id_esfuerzo_emocional")
+elif page == "Especialización":
+    manage_table("ate-rrhh-2024.Ate_kaibot_2024.especializacion", "id_especializacion")
+elif page == "Idioma del Proyecto":
+    manage_table("ate-rrhh-2024.Ate_kaibot_2024.idioma_proyecto", "id_idioma_proyecto")
+elif page == "Idiomas":
+    manage_table("ate-rrhh-2024.Ate_kaibot_2024.idiomas", "id_idioma")
+elif page == "Idiomas (Euskera)":
+    manage_table("ate-rrhh-2024.Ate_kaibot_2024.idiomas_euskera", "id_idioma_euskera")
+elif page == "Importancia Relativa":
+    manage_table("ate-rrhh-2024.Ate_kaibot_2024.importancia_relativa", "id_importancia_relativa")
+elif page == "Incompatibilidad":
+    manage_table("ate-rrhh-2024.Ate_kaibot_2024.incompatibilidad", "id_incompatibilidad")
+elif page == "Iniciativa":
+    manage_table("ate-rrhh-2024.Ate_kaibot_2024.iniciativa", "id_iniciativa")
+elif page == "Mando":
+    manage_table("ate-rrhh-2024.Ate_kaibot_2024.mando", "id_mando")
+elif page == "Nivel de Formación":
+    manage_table("ate-rrhh-2024.Ate_kaibot_2024.nivel_formacion", "id_nivel_formacion")
+elif page == "Penosidad del Turno":
+    manage_table("ate-rrhh-2024.Ate_kaibot_2024.penosidad_turno", "id_penosidad_turno")
+elif page == "Porcentajes Variables":
+    manage_table("ate-rrhh-2024.Ate_kaibot_2024.porcentajes_variables", "id_porcentajes_variables")
 
 def manage_table(table_name, id_column):
     st.title(f"Gestión de {table_name.split('.')[-1].replace('_', ' ').title()}")
