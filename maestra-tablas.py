@@ -216,7 +216,7 @@ def manage_table(table_name, id_column):
         #st.warning("La funcionalidad de modificación no está implementada aún.")
         # Código para modificar un registro
          # Consultar los registros existentes
-        query = f"SELECT * FROM {table_id}"
+        query = f"SELECT * FROM {table_name}"
         results = client.query(query).result()
         records = [dict(row) for row in results]
         
@@ -239,7 +239,7 @@ def manage_table(table_name, id_column):
         if st.button("Actualizar registro"):
             # Construir la consulta de actualización
             update_query = f"""
-            UPDATE {table_id}
+            UPDATE {table_name}
             SET {', '.join([f'{key} = "{value}"' for key, value in updated_record.items() if key != id_column])}
             WHERE {id_column} = {selected_id}
             """
