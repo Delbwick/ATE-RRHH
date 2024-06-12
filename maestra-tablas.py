@@ -61,7 +61,7 @@ PAGES_TABLES = {
     "Empresa": ("ate-rrhh-2024.Ate_kaibot_2024.company", "id_empresa"),
     "Complejidad Técnica": ("ate-rrhh-2024.Ate_kaibot_2024.complejidad_tecnica", "Id_complejidad_tecnica"),
     "Complejidad Territorial": ("ate-rrhh-2024.Ate_kaibot_2024.complejidad_territorial", "id_complejidad_territorial"),#Id_complejidad
-    "Condiciones de Trabajo": ("ate-rrhh-2024.Ate_kaibot_2024.condiciones_de_trabajo", "Id_condiciones_trabajo"),
+    "Condiciones de Trabajo": ("ate-rrhh-2024.Ate_kaibot_2024.condiciones_de_trabajo", "Id_condiciones"),
     "Definitivo": ("ate-rrhh-2024.Ate_kaibot_2024.definitivo", "id_definitivo"),
     "Documento": ("ate-rrhh-2024.Ate_kaibot_2024.document", "id_documento"),
     "Esfuerzo Emocional": ("ate-rrhh-2024.Ate_kaibot_2024.esfuerzo_emocional", "id_esfuerzo_emocional"),
