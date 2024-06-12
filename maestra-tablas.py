@@ -144,7 +144,7 @@ def main():
     elif page == "Empresa":
         manage_table("ate-rrhh-2024.Ate_kaibot_2024.company", "id_empresa")
     elif page == "Complejidad":
-        manage_table("ate-rrhh-2024.Ate_kaibot_2024.complejidad", "id_complejidad")
+        manage_table("ate-rrhh-2024.Ate_kaibot_2024.complejidad", "Id_complejidad")
     elif page == "Complejidad Técnica":
         manage_table("ate-rrhh-2024.Ate_kaibot_2024.complejidad_tecnica", "id_complejidad_tecnica")
     elif page == "Complejidad Territorial":
