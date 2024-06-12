@@ -40,7 +40,7 @@ credentials = service_account.Credentials.from_service_account_info(
 )
 client = bigquery.Client(credentials=credentials)
 
-# Páginas de la aplicación y sus tablas correspondientes
+# Páginas de la aplicación y sus tablas correspondientes OJO LOS ID ALGUNOS VAN EN MAYUSUCULAS
 PAGES_TABLES = {
     "Documentos del Proyecto": ("ate-rrhh-2024.Ate_kaibot_2024.project_document", "id_documento"),
     "Proyectos": ("ate-rrhh-2024.Ate_kaibot_2024.proyectos", "id_proyecto"),
