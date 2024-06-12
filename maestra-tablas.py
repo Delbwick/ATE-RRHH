@@ -238,7 +238,12 @@ def manage_table(table_name, id_column):
         updated_record = {}
         for key, value in selected_record.items():
             if key != id_column:  # No permitir la modificación de la columna ID
-                updated_record[key] = st.text_input(f"Nuevo valor para {key}", value)
+                if isinstance(value, int):
+                    updated_record[key] = st.number_input(f"Nuevo valor para {key}", value=value)
+                elif isinstance(value, float):
+                    updated_record[key] = st.number_input(f"Nuevo valor para {key}", value=value, format="%f")
+                else:
+                    updated_record[key] = st.text_input(f"Nuevo valor para {key}", value)
             else:
                 updated_record[key] = value
         
