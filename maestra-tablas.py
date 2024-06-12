@@ -59,9 +59,9 @@ PAGES_TABLES = {
     "Calendario": ("ate-rrhh-2024.Ate_kaibot_2024.calendar", "id_calendario"),
     "Cliente": ("ate-rrhh-2024.Ate_kaibot_2024.client", "id_cliente"),
     "Empresa": ("ate-rrhh-2024.Ate_kaibot_2024.company", "id_empresa"),
-    "Complejidad Técnica": ("ate-rrhh-2024.Ate_kaibot_2024.complejidad_tecnica", "id_complejidad_tecnica"),
-    "Complejidad Territorial": ("ate-rrhh-2024.Ate_kaibot_2024.complejidad_territorial", "id_complejidad_territorial"),
-    "Condiciones de Trabajo": ("ate-rrhh-2024.Ate_kaibot_2024.condiciones_de_trabajo", "id_condiciones_trabajo"),
+    "Complejidad Técnica": ("ate-rrhh-2024.Ate_kaibot_2024.complejidad_tecnica", "Id_complejidad_tecnica"),
+    "Complejidad Territorial": ("ate-rrhh-2024.Ate_kaibot_2024.complejidad_territorial", "id_complejidad_territorial"),#Id_complejidad
+    "Condiciones de Trabajo": ("ate-rrhh-2024.Ate_kaibot_2024.condiciones_de_trabajo", "Id_condiciones_trabajo"),
     "Definitivo": ("ate-rrhh-2024.Ate_kaibot_2024.definitivo", "id_definitivo"),
     "Documento": ("ate-rrhh-2024.Ate_kaibot_2024.document", "id_documento"),
     "Esfuerzo Emocional": ("ate-rrhh-2024.Ate_kaibot_2024.esfuerzo_emocional", "id_esfuerzo_emocional"),
