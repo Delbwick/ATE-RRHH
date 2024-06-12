@@ -118,7 +118,7 @@ def main():
     if page == "puestos":
         manage_table("ate-rrhh-2024.Ate_kaibot_2024.puestos", "id_puesto")
     elif page == "responsabilidad":
-        manage_table("ate-rrhh-2024.Ate_kaibot_2024.responsabilidad", "id_responsabilidad")
+        manage_table("ate-rrhh-2024.Ate_kaibot_2024.responsabilidad", "Id_responsabilidad") #TENER CUIDADO QUE ALGUNOS NOMBRES DEL CAMPO ESTA LA I EN MAYUSUCLAS
     elif page == "role":
         manage_table("ate-rrhh-2024.Ate_kaibot_2024.role", "id_role")
     elif page == "salario_base_xcategoria_xaño":
