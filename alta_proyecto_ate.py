@@ -30,7 +30,7 @@ header_html = """
 st.markdown(header_html, unsafe_allow_html=True)
 
 # Agregar la imagen (logo) y el texto al encabezado
-st.markdown('<div class="header-container"><img class="logo" src="https://www.ategrupo.com/wp-content/uploads/2021/03/ATE.png" alt="Logo"></div>', unsafe_allow_html=True)
+st.markdown('<div class="header-container"><img class="logo" src="https://www.rrhhdelnorte.es/-_-/res/702f8fd0-46a5-4f0d-9c65-afb737164745/images/files/702f8fd0-46a5-4f0d-9c65-afb737164745/e0e4dc73-78c2-4413-b62c-250cbeea83fa/683-683/3b3822cd156fd081c427cc6b35617e4031b98c63" alt="Logo"></div>', unsafe_allow_html=True)
 st.write("# Alta nuevo cliente")
 
 # Create API client.
