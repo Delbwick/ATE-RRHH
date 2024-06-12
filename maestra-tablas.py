@@ -250,11 +250,21 @@ def manage_table(table_name, id_column):
         # Botón para confirmar la modificación
         if st.button("Actualizar registro"):
             # Construir la consulta de actualización
+            # Construir la consulta de actualización
+            update_query_parts = []
+            for key, value in updated_record.items():
+                if key != id_column:
+                    if isinstance(value, (int, float)):
+                        update_query_parts.append(f"{key} = {value}")
+                    else:
+                        update_query_parts.append(f'{key} = "{value}"')
+
             update_query = f"""
             UPDATE {table_name}
-            SET {', '.join([f'{key} = "{value}"' for key, value in updated_record.items() if key != id_column])}
+            SET {', '.join(update_query_parts)}
             WHERE {id_column} = {selected_id}
             """
+            
             client.query(update_query).result()
             st.success("Registro actualizado correctamente")
 
