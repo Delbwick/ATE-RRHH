@@ -73,31 +73,43 @@ def add_custom_css():
         </style>
     """, unsafe_allow_html=True)
 
+def get_next_id(table_name, id_column):
+    query = f"SELECT MAX({id_column}) AS max_id FROM `{table_name}`"
+    result = client.query(query).result()
+    for row in result:
+        max_id = row['max_id']
+        return max_id + 1 if max_id is not None else 1
+
+def get_id_proyecto():
+    # Suponiendo que esta función obtiene el id_proyecto de alguna manera
+    # Aquí se retorna un valor fijo para fines de demostración
+    return random.randint(1, 1000)
+
 def main():
     st.sidebar.title("Menú")
     selection = st.sidebar.radio("Ir a", list(PAGES.keys()))
 
     page = PAGES[selection]
     if page == "puestos":
-        manage_table("ate-rrhh-2024.Ate_kaibot_2024.puestos")
+        manage_table("ate-rrhh-2024.Ate_kaibot_2024.puestos", "id_puesto")
     elif page == "responsabilidad":
-        manage_table("ate-rrhh-2024.Ate_kaibot_2024.responsabilidad")
+        manage_table("ate-rrhh-2024.Ate_kaibot_2024.responsabilidad", "id_responsabilidad")
     elif page == "role":
-        manage_table("ate-rrhh-2024.Ate_kaibot_2024.role")
+        manage_table("ate-rrhh-2024.Ate_kaibot_2024.role", "id_role")
     elif page == "salario_base_xcategoria_xaño":
-        manage_table("ate-rrhh-2024.Ate_kaibot_2024.salario_base_xcategoria_xaño")
+        manage_table("ate-rrhh-2024.Ate_kaibot_2024.salario_base_xcategoria_xaño", "id_salario_base")
     elif page == "turno":
-        manage_table("ate-rrhh-2024.Ate_kaibot_2024.turno")
+        manage_table("ate-rrhh-2024.Ate_kaibot_2024.turno", "id_turno")
     elif page == "user":
-        manage_table("ate-rrhh-2024.Ate_kaibot_2024.user")
+        manage_table("ate-rrhh-2024.Ate_kaibot_2024.user", "id_user")
     elif page == "usuario":
-        manage_table("ate-rrhh-2024.Ate_kaibot_2024.usuario")
+        manage_table("ate-rrhh-2024.Ate_kaibot_2024.usuario", "id_usuario")
     elif page == "valoracion_definitiva":
-        manage_table("ate-rrhh-2024.Ate_kaibot_2024.valoracion_definitiva")
+        manage_table("ate-rrhh-2024.Ate_kaibot_2024.valoracion_definitiva", "id_valoracion_definitiva")
     elif page == "valoracion_tecnica_pr":
-        manage_table("ate-rrhh-2024.Ate_kaibot_2024.valoracion_tecnica_pr")
+        manage_table("ate-rrhh-2024.Ate_kaibot_2024.valoracion_tecnica_pr", "id_valoracion_tecnica_pr")
 
-def manage_table(table_name):
+def manage_table(table_name, id_column):
     st.title(f"Gestión de {table_name.split('.')[-1].replace('_', ' ').title()}")
     action = st.radio("Acción", ["Ver", "Insertar", "Modificar", "Eliminar"])
 
@@ -107,14 +119,20 @@ def manage_table(table_name):
         st.dataframe(df)
 
     elif action == "Insertar":
-        columns_query = f"SELECT column_name FROM `{table_name}`.INFORMATION_SCHEMA.COLUMNS"
-        columns = [row["column_name"] for row in client.query(columns_query)]
-        values = {}
-        for column in columns:
-            values[column] = st.text_input(f"Valor para {column}")
+        # Especifica los campos de la tabla, excluyendo el id autoincremental y id_proyecto
+        fields = {
+            "letra": st.text_input("Letra"),
+            "descripcion": st.text_input("Descripción"),
+            "porcentaje_del_total": st.number_input("Porcentaje del Total", min_value=0.0, max_value=100.0, step=0.1),
+            "puntos": st.number_input("Puntos", min_value=0, step=1)
+        }
         if st.button("Insertar"):
+            next_id = get_next_id(table_name, id_column)
+            id_proyecto = get_id_proyecto()
+            columns = [id_column, "id_proyecto"] + list(fields.keys())
+            values = [next_id, id_proyecto] + list(fields.values())
             columns_str = ", ".join(columns)
-            values_str = ", ".join([f"'{value}'" for value in values.values()])
+            values_str = ", ".join([f"'{value}'" if isinstance(value, str) else str(value) for value in values])
             query = f"""
                 INSERT INTO `{table_name}` ({columns_str})
                 VALUES ({values_str})
@@ -133,4 +151,3 @@ def manage_table(table_name):
 if __name__ == "__main__":
     add_custom_css()
     main()
-
