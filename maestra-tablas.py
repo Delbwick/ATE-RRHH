@@ -6,7 +6,7 @@ from google.cloud import bigquery
 import pandas as pd
 
 # Creamos la cabecera
-st.set_page_config(page_title="ATE-Alta nuevos proyectos", page_icon="🆕")
+st.set_page_config(page_title="ATE-Maestra de tablas", page_icon="🆕")
 st.title("¡Bienvenido a ATE! 👷")
 st.header("¡Empieza tu Proyecto!")
 
