@@ -213,8 +213,43 @@ def manage_table(table_name, id_column):
             st.success("Registro insertado correctamente")
 
     elif action == "Modificar":
-        st.warning("La funcionalidad de modificación no está implementada aún.")
+        #st.warning("La funcionalidad de modificación no está implementada aún.")
         # Código para modificar un registro
+         # Consultar los registros existentes
+        query = f"SELECT * FROM {table_id}"
+        results = client.query(query).result()
+        records = [dict(row) for row in results]
+        
+        # Seleccionar el registro a modificar
+        selected_id = st.selectbox("Selecciona el ID del registro a modificar", [record[id_column] for record in records])
+        
+        # Mostrar los detalles del registro seleccionado
+        selected_record = next(record for record in records if record[id_column] == selected_id)
+        st.write("Registro seleccionado:", selected_record)
+        
+        # Modificar los campos del registro
+        updated_record = {}
+        for key, value in selected_record.items():
+            if key != id_column:  # No permitir la modificación de la columna ID
+                updated_record[key] = st.text_input(f"Nuevo valor para {key}", value)
+            else:
+                updated_record[key] = value
+        
+        # Botón para confirmar la modificación
+        if st.button("Actualizar registro"):
+            # Construir la consulta de actualización
+            update_query = f"""
+            UPDATE {table_id}
+            SET {', '.join([f'{key} = "{value}"' for key, value in updated_record.items() if key != id_column])}
+            WHERE {id_column} = {selected_id}
+            """
+            client.query(update_query).result()
+            st.success("Registro actualizado correctamente")
+
+    # Eliminar registro
+    elif action == "Eliminar":
+        # Aquí el código para eliminar un registro
+        pass
 
     elif action == "Eliminar":
         st.warning("La funcionalidad de eliminación no está implementada aún.")
