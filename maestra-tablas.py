@@ -117,6 +117,7 @@ def get_next_id(table_name, id_column):
     result = client.query(query).result()
     max_id = next(result)['max_id']
     next_id = max_id + 1 if max_id is not None else 1
+    next_id=int(next_id)
     
     # Mostrar el valor máximo en la interfaz
     st.write(f"El próximo {id_column} disponible es: {next_id}")
