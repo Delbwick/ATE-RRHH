@@ -130,6 +130,7 @@ def main():
 
     table_name, id_column = PAGES_TABLES[selection]
     manage_table(table_name, id_column)
+    
 # Función para obtener la descripción de una tabla
 def get_table_description(table_name):
     table = client.get_table(table_name)  # Obtener la tabla
@@ -150,8 +151,17 @@ def manage_table(table_name, id_column):
         df = client.query(query).to_dataframe()
         st.dataframe(df)
 
+    if action == "Ver":
+    # Obtener y mostrar la descripción de la tabla
+    description = get_table_description(table_name)
+    st.write(f"**Descripción de la tabla**: {description}")
+    # Consulta de selección
+    query = f"SELECT * FROM `{table_name}`"
+    df = client.query(query).to_dataframe()
+    st.dataframe(df)
+
     elif action == "Insertar":
-        # Especifica los campos de la tabla, excluyendo el id autoincremental y id_proyecto
+    # Especifica los campos de la tabla, excluyendo el id autoincremental y id_proyecto
         fields = {
             "letra": st.text_input("Letra"),
             "descripcion": st.text_input("Descripción"),
@@ -161,19 +171,28 @@ def manage_table(table_name, id_column):
         }
         if st.button("Insertar"):
             next_id = get_next_id(table_name, id_column)
-            #id_proyecto = get_id_proyecto() vamos a eliminar la inserción del ID_proyecto de moemnto
-            #columns = [id_column, "id_proyecto"] + list(fields.keys())
             columns = [id_column] + list(fields.keys())
-            #values = [next_id, id_proyecto] + list(fields.values())
             values = [next_id] + list(fields.values())
             columns_str = ", ".join(columns)
             values_str = ", ".join([f"'{value}'" if isinstance(value, str) else str(value) for value in values])
+        
+            # Debugging output
+            st.write(f"Columnas: {columns_str}")
+            st.write(f"Valores: {values_str}")
+        
             query = f"""
                 INSERT INTO `{table_name}` ({columns_str})
                 VALUES ({values_str})
             """
-            client.query(query)
-            st.success("Registro insertado correctamente")
+        
+            # Debugging output
+            st.write(f"Consulta de inserción: {query}")
+        
+            try:
+                client.query(query).result()
+                st.success("Registro insertado correctamente")
+            except Exception as e:
+                st.error(f"Error al insertar el registro: {e}")
 
     elif action == "Modificar":
         #st.warning("La funcionalidad de modificación no está implementada aún.")
