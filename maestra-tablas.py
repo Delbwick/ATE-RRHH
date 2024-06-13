@@ -115,9 +115,13 @@ def add_custom_css():
 def get_next_id(table_name, id_column):
     query = f"SELECT MAX({id_column}) AS max_id FROM `{table_name}`"
     result = client.query(query).result()
-    for row in result:
-        max_id = row['max_id']
-        return max_id + 1 if max_id is not None else 1
+    max_id = next(result)['max_id']
+    next_id = max_id + 1 if max_id is not None else 1
+    
+    # Mostrar el valor máximo en la interfaz
+    st.write(f"El próximo {id_column} disponible es: {next_id}")
+    
+    return next_id
 
 def get_id_proyecto():
     # Suponiendo que esta función obtiene el id_proyecto de alguna manera
