@@ -67,7 +67,7 @@ for nombre_tabla, (nombre_completo, id_tabla) in PAGES_TABLES.items():
     
     # Consultar los registros existentes en la tabla respectiva
     query = f"""
-        SELECT id_tabla, letra, descripcion, porcentaje_de_total, puntos
+        SELECT *
         FROM `{nombre_completo}`
     """
     try:
