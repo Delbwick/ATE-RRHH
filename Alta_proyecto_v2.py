@@ -41,12 +41,12 @@ client = bigquery.Client(credentials=credentials)
 # Función para obtener puestos desde BigQuery
 def get_puestos():
     query = """
-        SELECT descripcion
+        SELECT puesto
         FROM `ate-rrhh-2024.Ate_kaibot_2024.puestos`
     """
     query_job = client.query(query)
     results = query_job.result()
-    puestos = [row.descripcion for row in results]
+    puestos = [row.puesto for row in results]
     return puestos
 
 # Mostrar el selectbox de puestos
@@ -60,52 +60,11 @@ PAGES_TABLES = {
     # Agregar el resto de las tablas aquí
 }
 
-# Mostrar checkboxes para seleccionar los registros de cada tabla de factores
+# Mostrar checkboxes para seleccionar las tablas de factores
 selected_factores = []
 for nombre_tabla, (nombre_completo, id_tabla) in PAGES_TABLES.items():
-    st.subheader(nombre_tabla)
-    
-    # Consultar los registros existentes en la tabla respectiva
-    query = f"""
-        SELECT *
-        FROM `{nombre_completo}`
-    """
-    try:
-        query_job = client.query(query)
-        results = query_job.result()
-        df = pd.DataFrame(results)
-
-        # Mostrar los registros como checkboxes
-        for index, row in df.iterrows():
-            checkbox_label = f"{row['letra']} - {row['descripcion']}"
-            if st.checkbox(checkbox_label):
-                selected_factores.append((nombre_completo, id_tabla))
-    except Exception as e:
-        st.error(f"Error al obtener datos de la tabla {nombre_tabla}: {e}")
-
-# Verificar los elementos seleccionados y proceder con la inserción en la tabla proyecto
-if selected_factores:
-    st.write("Factores seleccionados:")
-    st.write(selected_factores)
-    
-    # Aquí añadirías la lógica para insertar los datos en la tabla proyecto
-    # ...
-    # Insertar lógica de inserción en la tabla de proyecto según los factores seleccionados
-else:
-    st.warning("Por favor, selecciona al menos un factor para continuar.")
-
-
-
-
-
-
-
-
-
-
-
-
-
+    if st.checkbox(nombre_tabla):
+        selected_factores.append((nombre_completo, id_tabla))
 
 # Crear formulario para datos del proyecto
 st.title('Alta Proyectos:')
