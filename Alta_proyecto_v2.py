@@ -22,6 +22,13 @@ header_html = """
             max-width: 150px;
             margin-bottom: 10px;
         }
+        .wide-line {
+        width: 100%;
+        height: 2px;
+        background-color: #333333;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
     </style>
 """
 
@@ -51,6 +58,26 @@ def get_puestos():
 
 # Mostrar el selectbox de puestos
 selected_puesto = st.selectbox("Selecciona un puesto", get_puestos())
+#mostrar los puestos como checkbox
+# Obtener los puestos
+puestos = get_puestos()
+
+# Mostrar los puestos como checkboxes
+st.write("Selecciona los puestos:")
+selected_puestos = []
+for id_puesto, descripcion in puestos:
+    if st.checkbox(descripcion):
+        selected_puestos.append((id_puesto, descripcion))
+
+# Mostrar los puestos seleccionados
+if selected_puestos:
+    st.write("Puestos seleccionados:")
+    for id_puesto, descripcion in selected_puestos:
+        st.write(f"{descripcion} (ID: {id_puesto})")
+else:
+    st.warning("Por favor, selecciona al menos un puesto para continuar.")
+
+st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 
 # Diccionario de tablas de factores
 PAGES_TABLES = {
