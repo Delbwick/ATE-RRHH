@@ -168,8 +168,12 @@ def manage_table(table_name, id_column):
                 INSERT INTO `{table_name}` ({columns_str})
                 VALUES ({values_str})
             """
-            client.query(query)
-            st.success("Registro insertado correctamente")
+            try:
+                client.query(query)
+                st.success("Registro insertado correctamente")
+            except Exception as e:
+                st.error(f"Error al insertar el registro: {e}")
+
     elif action == "Modificar":
         #st.warning("La funcionalidad de modificación no está implementada aún.")
         # Código para modificar un registro
