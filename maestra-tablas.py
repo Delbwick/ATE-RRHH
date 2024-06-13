@@ -8,8 +8,8 @@ import random
 
 # Creamos la cabecera
 st.set_page_config(page_title="ATE-Maestra de tablas", page_icon="👨")
-st.title("¡Bienvenido a Recursos Humanos del Norte! 👷")
-st.header("¡Revisa tus Proyectos!")
+st.title("¡Bienvenido a ATE! 👷")
+st.header("¡Empieza tu Proyecto!")
 
 # Definir el color de fondo del encabezado
 header_html = """
@@ -32,7 +32,7 @@ st.markdown(header_html, unsafe_allow_html=True)
 
 # Agregar la imagen (logo) y el texto al encabezado
 st.markdown('<div class="header-container"><img class="logo" src="https://www.rrhhdelnorte.es/-_-/res/702f8fd0-46a5-4f0d-9c65-afb737164745/images/files/702f8fd0-46a5-4f0d-9c65-afb737164745/e0e4dc73-78c2-4413-b62c-250cbeea83fa/683-683/3b3822cd156fd081c427cc6b35617e4031b98c63" alt="Logo"></div>', unsafe_allow_html=True)
-st.write("# Página maestra de tablas")
+st.write("# Alta nuevo cliente")
 
 # Create API client.
 credentials = service_account.Credentials.from_service_account_info(
@@ -65,7 +65,7 @@ PAGES_TABLES = {
     "Mando": ("ate-rrhh-2024.Ate_kaibot_2024.mando", "id_mando"),
     "Nivel de Formación": ("ate-rrhh-2024.Ate_kaibot_2024.nivel_formacion", "id_nivel_formacion"),
     "Penosidad del Turno": ("ate-rrhh-2024.Ate_kaibot_2024.penosidad_turno", "id_penosidad_turno"),
-    "Porcentajes Variables": ("ate-rrhh-2024.Ate_kaibot_2024.porcentajes_variables", "id_porcentajes_variables"),
+    "Porcentajes Variables": ("ate-rrhh-2024.Ate_kaibot_2024.porcentajes_variables", "id_porcentajes_variables")
     "Proyectos": ("ate-rrhh-2024.Ate_kaibot_2024.proyecto", "id_proyecto"),
     "Puestos": ("ate-rrhh-2024.Ate_kaibot_2024.puestos", "id_puesto"),
     "Responsabilidad": ("ate-rrhh-2024.Ate_kaibot_2024.responsabilidad", "id_responsabilidad"),
@@ -130,12 +130,6 @@ def main():
 
     table_name, id_column = PAGES_TABLES[selection]
     manage_table(table_name, id_column)
-    
-# Función para obtener la descripción de una tabla
-def get_table_description(table_name):
-    table = client.get_table(table_name)  # Obtener la tabla
-    return table.description
-
 
 def manage_table(table_name, id_column):
     st.title(f"Gestión de {table_name.split('.')[-1].replace('_', ' ').title()}")
@@ -143,56 +137,32 @@ def manage_table(table_name, id_column):
 
 
     if action == "Ver":
-        # Obtener y mostrar la descripción de la tabla
-        description = get_table_description(table_name)
-        st.write(f"**Descripción de la tabla**: {description}")
-        #consulta de seleccion
         query = f"SELECT * FROM `{table_name}`"
         df = client.query(query).to_dataframe()
         st.dataframe(df)
 
-    if action == "Ver":
-    # Obtener y mostrar la descripción de la tabla
-    description = get_table_description(table_name)
-    st.write(f"**Descripción de la tabla**: {description}")
-    # Consulta de selección
-    query = f"SELECT * FROM `{table_name}`"
-    df = client.query(query).to_dataframe()
-    st.dataframe(df)
-
     elif action == "Insertar":
-    # Especifica los campos de la tabla, excluyendo el id autoincremental y id_proyecto
+        # Especifica los campos de la tabla, excluyendo el id autoincremental y id_proyecto
         fields = {
             "letra": st.text_input("Letra"),
             "descripcion": st.text_input("Descripción"),
             "porcentaje_del_total": st.number_input("Porcentaje del Total", min_value=0.0, max_value=100.0, step=0.1),
             "puntos": st.number_input("Puntos", min_value=0.0, step=0.1),
-            "id_idioma_registro": st.number_input("id_idioma (1-ESp;2-EUS)", min_value=1, step=1)
+            "id_idioma": st.number_input("id_idioma (1-ESp;2-EUS)", min_value=1, step=1)
         }
         if st.button("Insertar"):
             next_id = get_next_id(table_name, id_column)
-            columns = [id_column] + list(fields.keys())
-            values = [next_id] + list(fields.values())
+            id_proyecto = get_id_proyecto()
+            columns = [id_column, "id_proyecto"] + list(fields.keys())
+            values = [next_id, id_proyecto] + list(fields.values())
             columns_str = ", ".join(columns)
             values_str = ", ".join([f"'{value}'" if isinstance(value, str) else str(value) for value in values])
-        
-            # Debugging output
-            st.write(f"Columnas: {columns_str}")
-            st.write(f"Valores: {values_str}")
-        
             query = f"""
                 INSERT INTO `{table_name}` ({columns_str})
                 VALUES ({values_str})
             """
-        
-            # Debugging output
-            st.write(f"Consulta de inserción: {query}")
-        
-            try:
-                client.query(query).result()
-                st.success("Registro insertado correctamente")
-            except Exception as e:
-                st.error(f"Error al insertar el registro: {e}")
+            client.query(query)
+            st.success("Registro insertado correctamente")
 
     elif action == "Modificar":
         #st.warning("La funcionalidad de modificación no está implementada aún.")
