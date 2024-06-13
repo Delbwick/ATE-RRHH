@@ -65,7 +65,7 @@ puestos = get_puestos()
 # Mostrar los puestos como checkboxes
 st.write("Selecciona los puestos:")
 selected_puestos = []
-for id_puesto, descripcion in puestos:
+for descripcion in puestos:
     if st.checkbox(descripcion):
         selected_puestos.append((id_puesto, descripcion))
 
