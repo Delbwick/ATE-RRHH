@@ -162,8 +162,10 @@ def manage_table(table_name, id_column):
         if st.button("Insertar"):
             next_id = get_next_id(table_name, id_column)
             #id_proyecto = get_id_proyecto() vamos a eliminar la inserción del ID_proyecto de moemnto
-            columns = [id_column, "id_proyecto"] + list(fields.keys())
-            values = [next_id, id_proyecto] + list(fields.values())
+            #columns = [id_column, "id_proyecto"] + list(fields.keys())
+            columns = [id_column] + list(fields.keys())
+            #values = [next_id, id_proyecto] + list(fields.values())
+            values = [next_id] + list(fields.values())
             columns_str = ", ".join(columns)
             values_str = ", ".join([f"'{value}'" if isinstance(value, str) else str(value) for value in values])
             query = f"""
