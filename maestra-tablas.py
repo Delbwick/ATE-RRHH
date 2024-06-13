@@ -148,11 +148,11 @@ def manage_table(table_name, id_column):
             "descripcion": st.text_input("Descripción"),
             "porcentaje_del_total": st.number_input("Porcentaje del Total", min_value=0.0, max_value=100.0, step=0.1),
             "puntos": st.number_input("Puntos", min_value=0.0, step=0.1),
-            "id_idioma": st.number_input("id_idioma (1-ESp;2-EUS)", min_value=1, step=1)
+            "id_idioma_registro": st.number_input("id_idioma (1-ESp;2-EUS)", min_value=1, step=1)
         }
         if st.button("Insertar"):
             next_id = get_next_id(table_name, id_column)
-            id_proyecto = get_id_proyecto()
+            #id_proyecto = get_id_proyecto() vamos a eliminar la inserción del ID_proyecto de moemnto
             columns = [id_column, "id_proyecto"] + list(fields.keys())
             values = [next_id, id_proyecto] + list(fields.values())
             columns_str = ", ".join(columns)
