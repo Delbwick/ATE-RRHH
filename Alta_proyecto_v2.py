@@ -78,7 +78,7 @@ else:
     st.warning("Por favor, selecciona al menos un puesto para continuar.")
 
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
-
+st.write("Selecciona los Factores:")
 # Diccionario de tablas de factores
 PAGES_TABLES = {
     "Capacidades Necesarias": ("ate-rrhh-2024.Ate_kaibot_2024.capacidades_necesarias", "id_capacidades_necesarias"),
