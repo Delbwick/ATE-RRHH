@@ -67,7 +67,7 @@ st.write("Selecciona los puestos:")
 selected_puestos = []
 for descripcion in puestos:
     if st.checkbox(descripcion):
-        selected_puestos.append((id_puesto, descripcion))
+        selected_puestos.append((descripcion))
 
 # Mostrar los puestos seleccionados
 if selected_puestos:
