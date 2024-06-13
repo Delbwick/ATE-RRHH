@@ -72,7 +72,7 @@ for descripcion in puestos:
 # Mostrar los puestos seleccionados
 if selected_puestos:
     st.write("Puestos seleccionados:")
-    for id_puesto, descripcion in selected_puestos:
+    for descripcion in selected_puestos:
         st.write(f"{descripcion} (ID: {id_puesto})")
 else:
     st.warning("Por favor, selecciona al menos un puesto para continuar.")
