@@ -41,7 +41,7 @@ client = bigquery.Client(credentials=credentials)
 # Función para obtener puestos desde BigQuery
 def get_puestos():
     query = """
-        SELECT puesto
+        SELECT descripcion
         FROM `ate-rrhh-2024.Ate_kaibot_2024.puestos`
     """
     query_job = client.query(query)
