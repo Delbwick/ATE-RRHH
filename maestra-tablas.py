@@ -167,13 +167,17 @@ def manage_table(table_name, id_column):
             values = [next_id] + list(fields.values())
             columns_str = ", ".join(columns)
             values_str = ", ".join([f"'{value}'" if isinstance(value, str) else str(value) for value in values])
+            # Mostrar la consulta que se va a ejecutar
+            st.write("Consulta SQL que se va a ejecutar:")
+            st.code(f"INSERT INTO `{table_name}` ({columns_str}) VALUES ({values_str})")
+        
+            # Ejecutar la consulta
             query = f"""
                 INSERT INTO `{table_name}` ({columns_str})
                 VALUES ({values_str})
             """
             client.query(query)
             st.success("Registro insertado correctamente")
-
     elif action == "Modificar":
         #st.warning("La funcionalidad de modificación no está implementada aún.")
         # Código para modificar un registro
