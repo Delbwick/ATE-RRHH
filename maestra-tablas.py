@@ -124,10 +124,10 @@ def get_next_id(table_name, id_column):
     
     return next_id
 
-def get_id_proyecto():
+#def get_id_proyecto():
     # Suponiendo que esta función obtiene el id_proyecto de alguna manera
     # Aquí se retorna un valor fijo para fines de demostración
-    return random.randint(1, 1000)
+    #return random.randint(1, 1000)
 
 def main():
     st.sidebar.title("Menú")
