@@ -65,7 +65,7 @@ PAGES_TABLES = {
     "Mando": ("ate-rrhh-2024.Ate_kaibot_2024.mando", "id_mando"),
     "Nivel de Formación": ("ate-rrhh-2024.Ate_kaibot_2024.nivel_formacion", "id_nivel_formacion"),
     "Penosidad del Turno": ("ate-rrhh-2024.Ate_kaibot_2024.penosidad_turno", "id_penosidad_turno"),
-    "Porcentajes Variables": ("ate-rrhh-2024.Ate_kaibot_2024.porcentajes_variables", "id_porcentajes_variables")
+    "Porcentajes Variables": ("ate-rrhh-2024.Ate_kaibot_2024.porcentajes_variables", "id_porcentajes_variables"),
     "Proyectos": ("ate-rrhh-2024.Ate_kaibot_2024.proyecto", "id_proyecto"),
     "Puestos": ("ate-rrhh-2024.Ate_kaibot_2024.puestos", "id_puesto"),
     "Responsabilidad": ("ate-rrhh-2024.Ate_kaibot_2024.responsabilidad", "id_responsabilidad"),
@@ -142,7 +142,7 @@ def manage_table(table_name, id_column):
         st.dataframe(df)
 
     elif action == "Insertar":
-        # Especifica los campos de la tabla, excluyendo el id autoincremental y id_proyecto
+    # Especifica los campos de la tabla, excluyendo el id autoincremental y id_proyecto
         fields = {
             "letra": st.text_input("Letra"),
             "descripcion": st.text_input("Descripción"),
@@ -152,9 +152,8 @@ def manage_table(table_name, id_column):
         }
         if st.button("Insertar"):
             next_id = get_next_id(table_name, id_column)
-            id_proyecto = get_id_proyecto()
-            columns = [id_column, "id_proyecto"] + list(fields.keys())
-            values = [next_id, id_proyecto] + list(fields.values())
+            columns = [id_column] + list(fields.keys())
+            values = [next_id] + list(fields.values())
             columns_str = ", ".join(columns)
             values_str = ", ".join([f"'{value}'" if isinstance(value, str) else str(value) for value in values])
             query = f"""
