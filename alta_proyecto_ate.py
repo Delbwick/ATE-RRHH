@@ -41,7 +41,7 @@ client = bigquery.Client(credentials=credentials)
 
 # Consulta para extraer datos de BigQuery de la tabla de clientes
 query_clientes = """
-   SELECT * FROM `ate-rrhh-2024.Ate_kaibot_2024.proyectos`
+   SELECT * FROM `ate-rrhh-2024.Ate_kaibot_2024.proyecto`
 """
 
 # Ejecutar la consulta y obtener resultados
@@ -98,7 +98,7 @@ if submit:
     try:
         # Consulta para obtener el último ID de cliente
         query_max_id = """
-        SELECT MAX(id_proyecto) FROM `ate-rrhh-2024.Ate_kaibot_2024.proyectos`
+        SELECT MAX(id_proyecto) FROM `ate-rrhh-2024.Ate_kaibot_2024.proyecto`
         """
         query_job_max_id = client.query(query_max_id)
         max_id_result = query_job_max_id.result()
@@ -112,7 +112,7 @@ if submit:
 
         # Consulta para insertar datos en BigQuery
         query_kai_insert = f"""
-        INSERT INTO `ate-rrhh-2024.Ate_kaibot_2024.proyectos` (id_proyecto, nombre, descripcion, fecha_inicio, fecha_fin, proyecto_activo) 
+        INSERT INTO `ate-rrhh-2024.Ate_kaibot_2024.proyecto` (id_proyecto, nombre, descripcion, fecha_inicio, fecha_fin, proyecto_activo) 
         VALUES ({new_id_proyecto}, '{nombre}', '{descripcion}', '{fecha_inicio}', '{fecha_fin}', '{proyecto_activo}')
         """
         query_job_kai_insert = client.query(query_kai_insert)
