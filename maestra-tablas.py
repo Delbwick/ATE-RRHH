@@ -232,12 +232,39 @@ def manage_table(table_name, id_column):
 
     # Eliminar registro
     elif action == "Eliminar":
-        # Aquí el código para eliminar un registro
-        pass
+        # Consultar los registros existentes
+        query = f"SELECT * FROM {table_name}"
+        results = client.query(query).result()
+        records = [dict(row) for row in results]
+    
+        # Verificar nombres de columnas
+        if records:
+            st.write("Columnas recuperadas:", list(records[0].keys()))
+        else:
+            st.error("No se encontraron registros en la tabla.")
+            return
+    
+        # Seleccionar el registro a eliminar
+        selected_id = st.selectbox("Selecciona el ID del registro a eliminar", [record[id_column] for record in records])
+    
+        # Mostrar los detalles del registro seleccionado
+        selected_record = next(record for record in records if record[id_column] == selected_id)
+        st.write("Registro seleccionado para eliminar:", selected_record)
+    
+        # Botón para confirmar la eliminación
+        if st.button("Eliminar registro"):
+            # Construir la consulta de eliminación
+            delete_query = f"""
+            DELETE FROM {table_name}
+            WHERE {id_column} = {selected_id}
+            """
+        
+            try:
+                client.query(delete_query)
+                st.success("Registro eliminado correctamente")
+            except Exception as e:
+                st.error(f"Error al eliminar el registro: {e}")
 
-    elif action == "Eliminar":
-        st.warning("La funcionalidad de eliminación no está implementada aún.")
-        # Código para eliminar un registro
 
 if __name__ == "__main__":
     add_custom_css()
