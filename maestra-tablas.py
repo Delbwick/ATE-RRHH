@@ -131,12 +131,19 @@ def main():
     table_name, id_column = PAGES_TABLES[selection]
     manage_table(table_name, id_column)
 
+# Función para obtener la descripción de una tabla
+def get_table_description(table_name):
+    table = client.get_table(table_name)  # Obtener la tabla
+    return table.description
+
 def manage_table(table_name, id_column):
     st.title(f"Gestión de {table_name.split('.')[-1].replace('_', ' ').title()}")
     action = st.radio("Acción", ["Ver", "Insertar", "Modificar", "Eliminar"])
 
 
     if action == "Ver":
+        description = get_table_description(table_name)
+        st.write(f"**Descripción de la tabla**: {description}")
         query = f"SELECT * FROM `{table_name}`"
         df = client.query(query).to_dataframe()
         st.dataframe(df)
