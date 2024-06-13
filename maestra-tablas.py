@@ -73,23 +73,14 @@ PAGES_TABLES = {
     "Turno": ("ate-rrhh-2024.Ate_kaibot_2024.turno", "id_turno"),
     "Valoración Definitiva": ("ate-rrhh-2024.Ate_kaibot_2024.valoracion_definitiva", "id_valoracion_definitiva"),
     "Valoración Técnica Previa": ("ate-rrhh-2024.Ate_kaibot_2024.valoracion_tecnica_previa", "id_valoracion_tecnica_previa"),
-
-
-
-    
     "Documentos del Proyecto": ("ate-rrhh-2024.Ate_kaibot_2024.project_document", "id_documento"),
     "Role": ("ate-rrhh-2024.Ate_kaibot_2024.role", "id_role"),
     "User": ("ate-rrhh-2024.Ate_kaibot_2024.user", "id_user"),
     "Usuario": ("ate-rrhh-2024.Ate_kaibot_2024.usuario", "id_usuario"),
     "Cliente": ("ate-rrhh-2024.Ate_kaibot_2024.client", "id_cliente"),
     "Empresa": ("ate-rrhh-2024.Ate_kaibot_2024.company", "id_empresa"),
-    
-    "Calendario": ("ate-rrhh-2024.Ate_kaibot_2024.calendar", "id_calendario"),
-    
-    
-    
-    
-}
+    "Calendario": ("ate-rrhh-2024.Ate_kaibot_2024.calendar", "id_calendario")
+    }
 
 def add_custom_css():
     st.markdown("""
