@@ -30,7 +30,13 @@ header_html = """
         margin-bottom: 20px;
     }
     h1 {
-        font-family: 'Open Sans', sans-serif;
+        font-family: 'Arial', sans-serif;
+        font-size: 17pt;
+        text-align: left;
+        color: #333333;
+    }
+    h2 {
+        font-family: 'Arial', sans-serif;
         font-size: 17pt;
         text-align: left;
         color: #333333;
@@ -59,7 +65,7 @@ client = bigquery.Client(credentials=credentials)
 #Incluimos Los primeros campos del Proyecto
 # Crear formulario para datos del proyecto
 st.title('Nuevo Proyecto:')
-st.markdown("<h1>Datos de Poryecto</h1>", unsafe_allow_html=True)
+st.markdown("<h2>Datos de Proyecto</h2>", unsafe_allow_html=True)
     # Línea horizontal ancha
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
   
@@ -118,7 +124,7 @@ def get_puestos():
     return puestos
 
 # Mostrar el selectbox de puestos
-st.markdown("<h1>Datos de Factores</h1>", unsafe_allow_html=True)
+st.markdown("<h2>Datos de Factores</h2>", unsafe_allow_html=True)
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 selected_puesto = st.selectbox("Selecciona un puesto", get_puestos())
 #mostrar los puestos como checkbox
