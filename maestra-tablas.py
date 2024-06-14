@@ -8,7 +8,7 @@ import random
 
 # Creamos la cabecera
 st.set_page_config(page_title="RRHH del Norte - Maestra de tablas", page_icon="👨")
-st.title("¡Bienvenido a ATE! 👷")
+st.title("¡Bienvenido a RRHH del Norte! 👷")
 st.header("¡Empieza tu Proyecto!")
 
 # Definir el color de fondo del encabezado
