@@ -29,6 +29,12 @@ header_html = """
         margin-top: 20px;
         margin-bottom: 20px;
     }
+    h1 {
+        font-family: 'Open Sans', sans-serif;
+        font-size: 17pt;
+        text-align: left;
+        color: #333333;
+    }
     </style>
 """
 
@@ -45,6 +51,61 @@ credentials = service_account.Credentials.from_service_account_info(
 )
 client = bigquery.Client(credentials=credentials)
 
+#>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<
+#CODIGO DE LA APLICACION
+#<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>
+
+
+#Incluimos Los primeros campos del Proyecto
+# Crear formulario para datos del proyecto
+st.title('Nuevo Proyecto:')
+st.markdown("<h1>Datos de Poryecto</h1>", unsafe_allow_html=True)
+    # Línea horizontal ancha
+st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
+  
+col1, col2, col3, col4 = st.columns(4)
+
+with col1:
+    nombre = st.text_input('Nombre de Proyecto')
+with col2:
+    descripcion = st.text_input('Descripción')
+with col3:
+    fecha_inicio = st.date_input('Fecha de Inicio')
+with col4:
+    fecha_fin = st.date_input('Fecha de Fin')
+
+# Filas para otros campos del proyecto
+col1, col2, col3, col4 = st.columns(4)
+with col1:
+    proyecto_activo = st.checkbox('Proyecto Activo')
+with col2:
+    id_ads = st.text_input('Cliente')
+with col3:
+    id_tag = st.text_input('Creado en')
+with col4:
+    id_propiedad = st.text_input('Actualizado en')
+
+# Filas para datos adicionales
+col1, col2 = st.columns(2)
+with col1:
+    sector = st.selectbox('Sector', ['Ayuntamiento', 'Gobierno'])
+with col2:
+    tamano_empresa = st.radio('Selecciona el tamaño:', ['Pequeña', 'Mediana', 'Gran Empresa'])
+
+# Filas para datos de alta
+col1, col2 = st.columns(2)
+with col1:
+    fecha_alta = st.date_input('Fecha de Alta')
+with col2:
+    pago = st.text_input('Forma de Pago')
+
+
+
+
+
+
+#Finde Primeros campos de proyectos
+
 # Función para obtener puestos desde BigQuery
 def get_puestos():
     query = """
@@ -57,6 +118,8 @@ def get_puestos():
     return puestos
 
 # Mostrar el selectbox de puestos
+st.markdown("<h1>Datos de Factores</h1>", unsafe_allow_html=True)
+st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 selected_puesto = st.selectbox("Selecciona un puesto", get_puestos())
 #mostrar los puestos como checkbox
 # Obtener los puestos
@@ -119,43 +182,13 @@ for nombre_tabla, (nombre_completo, id_tabla) in PAGES_TABLES.items():
     if st.checkbox(nombre_tabla):
         selected_factores.append((nombre_completo, id_tabla))
 
-# Crear formulario para datos del proyecto
-st.title('Alta Proyectos:')
-col1, col2, col3, col4 = st.columns(4)
 
-with col1:
-    nombre = st.text_input('Nombre de Proyecto')
-with col2:
-    descripcion = st.text_input('Descripción')
-with col3:
-    fecha_inicio = st.date_input('Fecha de Inicio')
-with col4:
-    fecha_fin = st.date_input('Fecha de Fin')
 
-# Filas para otros campos del proyecto
-col1, col2, col3, col4 = st.columns(4)
-with col1:
-    proyecto_activo = st.checkbox('Proyecto Activo')
-with col2:
-    id_ads = st.text_input('Identificador Google Ads XXX-XXX-XXXX, introducir sin guiones 1234567890')
-with col3:
-    id_tag = st.text_input('Identificador Tag Manager')
-with col4:
-    id_propiedad = st.text_input('Propiedad GA4')
 
-# Filas para datos adicionales
-col1, col2 = st.columns(2)
-with col1:
-    sector = st.selectbox('Sector', ['Ecommerce', 'B2B'])
-with col2:
-    tamano_empresa = st.radio('Selecciona el tamaño:', ['Pequeña', 'Mediana', 'Gran Empresa'])
 
-# Filas para datos de alta
-col1, col2 = st.columns(2)
-with col1:
-    fecha_alta = st.date_input('Fecha de Alta')
-with col2:
-    pago = st.text_input('Forma de Pago')
+
+
+#CONSULTA DE INSERCION
 
 # Formulario de envío
 with st.form('addition'):
