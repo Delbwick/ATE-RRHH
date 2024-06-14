@@ -87,9 +87,9 @@ with col1:
 with col2:
     id_ads = st.text_input('Cliente')
 with col3:
-    id_tag = st.text_input('Creado en')
+    id_tag = st.date_input('Creado en')
 with col4:
-    id_propiedad = st.text_input('Actualizado en')
+    id_propiedad = st.date_input('Actualizado en')
 
 # Filas para datos adicionales
 col1, col2 = st.columns(2)
