@@ -350,7 +350,11 @@ new_id_proyecto = st.number_input('Nuevo ID de Proyecto', min_value=1, step=1)
 
 if st.button('Insertar en BigQuery'):
     rows_to_insert = []
-    for id_tabla, valores in valores_seleccionados.items():
+
+    # Unificar los dos diccionarios de valores seleccionados
+    valores_seleccionados_unificados = {**valores_seleccionados, **valores_seleccionados_2}
+
+    for id_tabla, valores in valores_seleccionados_unificados.items():
         for valor in valores:
             row = {id_tabla: valor, 'id_proyecto': new_id_proyecto}
             rows_to_insert.append(row)
