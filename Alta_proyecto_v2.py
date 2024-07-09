@@ -182,6 +182,7 @@ if selected_factores:
 
     valores_seleccionados = {}
     for nombre_completo, id_tabla in selected_factores:
+        st.write(f"Tabla: {nombre_completo.split('.')[-1]}")
         df = obtener_datos_bigquery(nombre_completo)
         if not df.empty:
             valores_seleccionados[id_tabla] = []
