@@ -312,7 +312,7 @@ if submit:
         query_job_kai_insert.result()  # Asegurarse de que la consulta se complete
 
 
-        def generar_consulta_insercion(new_id_proyecto, valores_seleccionados):
+    def generar_consulta_insercion(new_id_proyecto, valores_seleccionados):
     # Construir la consulta SQL inicial
         query = f"INSERT INTO `ate-rrhh-2024.Ate_kaibot_2024.complementos_de_destino_por_proyecto` (id_proyecto, "
 
