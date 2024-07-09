@@ -259,7 +259,7 @@ if submit:
     try:
         # Consulta para obtener el último ID de proyecto
         query_max_id = """
-        SELECT MAX(id_proyecto) FROM `ate-rrhh-2024.Ate_kaibot_2024.proyecto`
+        SELECT MAX(id_projecto) FROM `ate-rrhh-2024.Ate_kaibot_2024.proyecto`
         """
         query_job_max_id = client.query(query_max_id)
         max_id_result = query_job_max_id.result()
