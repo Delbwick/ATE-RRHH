@@ -239,14 +239,14 @@ PAGES_TABLES_2 = {
 selected_factores_2 = []
 for nombre_tabla, (nombre_completo, id_tabla) in PAGES_TABLES_2.items():
     if st.checkbox(nombre_tabla):
-        selected_factores.append((nombre_completo, id_tabla))
+        selected_factores_2.append((nombre_completo, id_tabla))
 
 # Mostrar los datos seleccionados
 if selected_factores_2:
     st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
     st.write("Selecciona los valores específicos de las tablas seleccionadas:")
 
-    valores_seleccionados = {}
+    valores_seleccionados_2 = {}
     for nombre_completo, id_tabla in selected_factores_2:
         st.write(f"Tabla: {nombre_completo.split('.')[-1]}")
         df = obtener_datos_bigquery(nombre_completo)
