@@ -167,6 +167,28 @@ selected_factores = []
 for nombre_tabla, (nombre_completo, id_tabla) in PAGES_TABLES.items():
     if st.checkbox(nombre_tabla):
         selected_factores.append((nombre_completo, id_tabla))
+
+
+# Mostrar los datos seleccionados
+if selected_factores:
+    st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
+    st.write("Selecciona los valores específicos de las tablas seleccionadas:")
+
+    valores_seleccionados = {}
+    for nombre_completo, id_tabla in selected_factores:
+        df = obtener_datos_bigquery(nombre_completo)
+        if not df.empty:
+            valores_seleccionados[id_tabla] = []
+            for index, row in df.iterrows():
+                if st.checkbox(str(row[id_tabla]), key=f"{id_tabla}_{index}"):
+                    valores_seleccionados[id_tabla].append(row[id_tabla])
+
+    st.write("Valores seleccionados:")
+    st.write(valores_seleccionados)
+
+
+
+
         
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 st.write("Selecciona los Factores de complemento específico:")
