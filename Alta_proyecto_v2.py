@@ -124,7 +124,7 @@ with col2:
 
 
 #Finde Primeros campos de proyectos
-#para las selecciones de los factores
+#para las selecciones de los factores que ya estan seleccionadops
 def obtener_datos_bigquery(nombre_tabla):
     query = f"SELECT * FROM `{nombre_tabla}` LIMIT 100"  # Ajusta el límite según sea necesario
     query_job = client.query(query)
@@ -186,12 +186,13 @@ if selected_factores:
         if not df.empty:
             valores_seleccionados[id_tabla] = []
             for index, row in df.iterrows():
-                if st.checkbox(str(row[id_tabla]), key=f"{id_tabla}_{index}"):
+                # Crear la etiqueta del checkbox usando descripcion y letra
+                etiqueta_checkbox = f"{row['descripcion']} ({row['letra']})"
+                if st.checkbox(etiqueta_checkbox, key=f"{id_tabla}_{index}"):
                     valores_seleccionados[id_tabla].append(row[id_tabla])
 
     st.write("Valores seleccionados:")
     st.write(valores_seleccionados)
-
 
 
 
