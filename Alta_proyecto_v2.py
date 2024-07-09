@@ -326,6 +326,9 @@ if submit:
         st.error(f"Error al insertar el registro: {e}")
 
 # Insertar los valores seleccionados en BigQuery
+# Generar un nuevo ID de proyecto
+new_id_proyecto = st.number_input('Nuevo ID de Proyecto', min_value=1, step=1)
+
 if st.button('Insertar en BigQuery'):
     rows_to_insert = []
     for id_tabla, valores in valores_seleccionados.items():
