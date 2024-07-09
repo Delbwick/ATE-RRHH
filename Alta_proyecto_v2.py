@@ -314,32 +314,32 @@ if submit:
 
         def generar_consulta_insercion(new_id_proyecto, valores_seleccionados):
     # Construir la consulta SQL inicial
-        query = f"INSERT INTO `ate-rrhh-2024.Ate_kaibot_2024.complementos_de_destino_por_proyecto` (id_proyecto, "
+            query = f"INSERT INTO `ate-rrhh-2024.Ate_kaibot_2024.complementos_de_destino_por_proyecto` (id_proyecto, "
 
     # Lista para almacenar los nombres de las columnas a insertar
-        columns = ["id_proyecto"]
+            columns = ["id_proyecto"]
 
     # Iterar sobre los elementos de valores_seleccionados para agregar las columnas y sus valores
-        for id_tabla, valores in valores_seleccionados.items():
-            if valores:
-                query += f"id_{id_tabla}, "  # Agregar el nombre de la columna a la consulta
-                columns.append(f"id_{id_tabla}")  # Agregar el nombre de la columna a la lista
+            for id_tabla, valores in valores_seleccionados.items():
+                if valores:
+                    query += f"id_{id_tabla}, "  # Agregar el nombre de la columna a la consulta
+                    columns.append(f"id_{id_tabla}")  # Agregar el nombre de la columna a la lista
 
     # Eliminar la última coma y espacio de la consulta y agregar el inicio de los valores
-        query = query.rstrip(", ") + ") VALUES "
+            query = query.rstrip(", ") + ") VALUES "
 
     # Lista para almacenar los valores de cada fila a insertar
-        values = []
+            values = []
 
     # Iterar sobre las listas de valores en valores_seleccionados y construir cada fila de valores
-        for valores in zip(*[valores_seleccionados[id_tabla] for id_tabla in columns[1:]]):
-            values.append(f"({new_id_proyecto}, " + ", ".join(map(str, valores)) + ")")
+            for valores in zip(*[valores_seleccionados[id_tabla] for id_tabla in columns[1:]]):
+                values.append(f"({new_id_proyecto}, " + ", ".join(map(str, valores)) + ")")
 
     # Unir todas las filas de valores con comas y agregar punto y coma al final
-        query += ", ".join(values) + ";"
+            query += ", ".join(values) + ";"
 
     # Devolver la consulta SQL completa
-        return query
+            return query
 
 # Ejemplo de uso:
 #new_id_proyecto = 123  # Suponiendo que tienes el valor de new_id_proyecto
