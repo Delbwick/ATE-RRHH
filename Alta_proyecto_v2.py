@@ -241,6 +241,25 @@ for nombre_tabla, (nombre_completo, id_tabla) in PAGES_TABLES_2.items():
     if st.checkbox(nombre_tabla):
         selected_factores.append((nombre_completo, id_tabla))
 
+# Mostrar los datos seleccionados
+if selected_factores_2:
+    st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
+    st.write("Selecciona los valores específicos de las tablas seleccionadas:")
+
+    valores_seleccionados = {}
+    for nombre_completo, id_tabla in selected_factores_2:
+        st.write(f"Tabla: {nombre_completo.split('.')[-1]}")
+        df = obtener_datos_bigquery(nombre_completo)
+        if not df.empty:
+            valores_seleccionados_2[id_tabla] = []
+            for index, row in df.iterrows():
+                # Crear la etiqueta del checkbox usando descripcion y letra
+                etiqueta_checkbox = f"{row['descripcion']} ({row['letra']})"
+                if st.checkbox(etiqueta_checkbox, key=f"{id_tabla}_{index}"):
+                    valores_seleccionados_2[id_tabla].append(row[id_tabla])
+
+    st.write("Valores seleccionados:")
+    st.write(valores_seleccionados_2)
 
 # Función para obtener puestos desde BigQuery
 def get_puestos():
