@@ -360,16 +360,4 @@ if submit:
         client.query(consulta_insercion).result()
 
 
-# Función para abrir otra aplicación
-def abrir_otra_app():
-    url_otra_app = "https://test-analytics-g7zhphce2svtgaye6sgiso.streamlit.app/"
-    webbrowser.open_new_tab(url_otra_app)
 
-st.title("Ver listado de clientes")
-
-# Botón para abrir otra aplicación
-if st.button("Clientes"):
-    abrir_otra_app()
-
-if st.button("Ir a Otra App"):
-    st.markdown('[Otra App](https://test-analytics-g7zhphce2svtgaye6sgiso.streamlit.app/)')
