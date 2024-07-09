@@ -94,7 +94,20 @@ with col4:
 # Filas para datos adicionales
 col1, col2 = st.columns(2)
 with col1:
-    sector = st.selectbox('Sector', ['Ayuntamiento', 'Gobierno'])
+    sector = st.selectbox('Sector', ['Ayuntamiento', 'Gobierno','Administración local',
+'Ayuntamiento de primera categoría',
+'Ayuntamiento de segunda categoría',
+'Ayuntamiento de tercera categoría',
+'Consorcio',
+'Mancomunidad',
+'Cuadrilla',
+'Entidad autónoma local',
+'Empresa pública',
+'Sociedad pública local',
+'Sociedad pública autonómica',
+'Sociedad pública estatal',
+'Agencia',
+'Departamento'])
 with col2:
     tamano_empresa = st.radio('Selecciona el tamaño:', ['Pequeña', 'Mediana', 'Gran Empresa'])
 
