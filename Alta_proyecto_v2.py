@@ -162,6 +162,12 @@ PAGES_TABLES = {
     "Turno": ("ate-rrhh-2024.Ate_kaibot_2024.turno", "id_turno")
     # Agregar el resto de las tablas aquí
 }
+# Mostrar checkboxes para seleccionar las tablas de factores de compleemnto de destino
+selected_factores = []
+for nombre_tabla, (nombre_completo, id_tabla) in PAGES_TABLES.items():
+    if st.checkbox(nombre_tabla):
+        selected_factores.append((nombre_completo, id_tabla))
+        
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 st.write("Selecciona los Factores de complemento específico:")
 # Diccionario de tablas de factores de compelemto específico
@@ -197,11 +203,7 @@ PAGES_TABLES_2 = {
     #"Turno": ("ate-rrhh-2024.Ate_kaibot_2024.turno", "id_turno")
     # Agregar el resto de las tablas aquí
 }
-# Mostrar checkboxes para seleccionar las tablas de factores de compleemnto de destino
-selected_factores = []
-for nombre_tabla, (nombre_completo, id_tabla) in PAGES_TABLES.items():
-    if st.checkbox(nombre_tabla):
-        selected_factores.append((nombre_completo, id_tabla))
+
 
 # Mostrar checkboxes para seleccionar las tablas de factores de complemento de destino
 selected_factores_2 = []
