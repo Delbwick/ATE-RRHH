@@ -124,6 +124,12 @@ with col2:
 
 
 #Finde Primeros campos de proyectos
+#para las selecciones de los factores
+def obtener_datos_bigquery(nombre_tabla):
+    query = f"SELECT * FROM `{nombre_tabla}` LIMIT 100"  # Ajusta el límite según sea necesario
+    query_job = client.query(query)
+    df = query_job.result().to_dataframe()
+    return df
 
 
 
