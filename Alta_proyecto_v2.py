@@ -158,7 +158,7 @@ PAGES_TABLES = {
     #"Incompatibilidad": ("ate-rrhh-2024.Ate_kaibot_2024.incompatibilidad", "id_incompatibilidad"),
     #"Iniciativa": ("ate-rrhh-2024.Ate_kaibot_2024.iniciativa", "id_iniciativa"),
     #"Mando": ("ate-rrhh-2024.Ate_kaibot_2024.mando", "id_mando"),
-    "Nivel de Formación": ("ate-rrhh-2024.Ate_kaibot_2024.nivel_de_fomacion", "id_nivel_formacion"),
+    "Nivel de Formación": ("ate-rrhh-2024.Ate_kaibot_2024.nivel_de_formacion", "id_nivel_formacion"),
     #"Penosidad del Turno": ("ate-rrhh-2024.Ate_kaibot_2024.penosidad_turno", "id_penosidad_turno"),
     #"Porcentajes Variables": ("ate-rrhh-2024.Ate_kaibot_2024.porcentajes_variables", "id_porcentajes_variables"),
     #"Proyectos": ("ate-rrhh-2024.Ate_kaibot_2024.proyecto", "id_proyecto"),
@@ -311,5 +311,31 @@ if submit:
         query_job_kai_insert = client.query(query_kai_insert)
         query_job_kai_insert.result()  # Asegurarse de que la consulta se complete
 
+        # Insertar datos seleccionados de las tablas de factores
+        for nombre_completo, id_tabla in selected_factores:
+            query_factores_insert = f"""
+                INSERT INTO `{nombre_completo}` 
+                (id_tabla, letra, descripcion, porcentaje_de_total, puntos) 
+                VALUES 
+                ({new_id_proyecto}, '{letra}', '{descripcion}', {porcentaje_de_total}, {puntos})
+            """
+            query_job_factores_insert = client.query(query_factores_insert)
+            query_job_factores_insert.result()  # Asegurarse de que la consulta se complete
 
- 
+        st.success('Registro añadido correctamente')
+    except Exception as e:
+        st.error(f"Error al insertar el registro: {e}")
+
+# Función para abrir otra aplicación
+def abrir_otra_app():
+    url_otra_app = "https://test-analytics-g7zhphce2svtgaye6sgiso.streamlit.app/"
+    webbrowser.open_new_tab(url_otra_app)
+
+st.title("Ver listado de clientes")
+
+# Botón para abrir otra aplicación
+if st.button("Clientes"):
+    abrir_otra_app()
+
+if st.button("Ir a Otra App"):
+    st.markdown('[Otra App](https://test-analytics-g7zhphce2svtgaye6sgiso.streamlit.app/)')
