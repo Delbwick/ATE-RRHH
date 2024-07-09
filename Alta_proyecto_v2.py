@@ -356,8 +356,6 @@ if submit:
         consulta_insercion = generar_consulta_insercion(new_id_proyecto, valores_seleccionados)
         print(consulta_insercion)  # Opcional: Mostrar la consulta generada
 
-# Luego puedes ejecutar esta consulta usando el cliente de BigQuery
-        client.query(consulta_insercion).result()
 
 
 
