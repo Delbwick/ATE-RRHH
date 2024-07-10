@@ -448,7 +448,7 @@ def ejecutar_consulta():
         ce.id_complemento_especifico,
         ce.descripcion AS complemento_especifico_descripcion
     FROM 
-        `ate-rrhh-2024.Ate_kaibot_2024.proyectos` p
+        `ate-rrhh-2024.Ate_kaibot_2024.proyecto` p
     JOIN 
         `ate-rrhh-2024.Ate_kaibot_2024.puestos_seleccionados_por_proyecto` pd ON p.id_proyecto = pd.id_proyecto
     JOIN 
