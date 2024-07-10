@@ -352,20 +352,20 @@ new_id_proyecto = st.number_input('Nuevo ID de Proyecto', min_value=1, step=1)
 
 
 # Insertar los valores seleccionados en BigQuery
-    if st.button('Insertar en BigQuery'):
-        rows_to_insert = []
-        for id_tabla, valores in valores_seleccionados.items():
-            for valor in valores:
-                row = {id_tabla: valor, 'id_proyecto': new_id_proyecto}
-                rows_to_insert.append(row)
+if st.button('Insertar en BigQuery'):
+    rows_to_insert = []
+    for id_tabla, valores in valores_seleccionados.items():
+        for valor in valores:
+            row = {id_tabla: valor, 'id_proyecto': new_id_proyecto}
+            rows_to_insert.append(row)
 
-        if rows_to_insert:
-            table_id = "ate-rrhh-2024.Ate_kaibot_2024.complementos_de_destino_por_proyecto"
-            errors = client.insert_rows_json(table_id, rows_to_insert)
-            if errors == []:
-                st.success('Datos insertados exitosamente en BigQuery')
-            else:
-                st.error(f'Error al insertar datos en BigQuery: {errors}')
+    if rows_to_insert:
+        table_id = "ate-rrhh-2024.Ate_kaibot_2024.complementos_de_destino_por_proyecto"
+        errors = client.insert_rows_json(table_id, rows_to_insert)
+        if errors == []:
+            st.success('Datos insertados exitosamente en BigQuery')
+        else:
+            st.error(f'Error al insertar datos en BigQuery: {errors}')
 
 
 # Función para abrir otra aplicación
