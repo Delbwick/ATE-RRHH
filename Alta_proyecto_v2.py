@@ -450,7 +450,7 @@ def ejecutar_consulta():
     FROM 
         `ate-rrhh-2024.Ate_kaibot_2024.proyecto` p
     JOIN 
-        `ate-rrhh-2024.Ate_kaibot_2024.puestos_seleccionados_por_proyecto` pd ON p.id_proyecto = pd.id_projecto
+        `ate-rrhh-2024.Ate_kaibot_2024.puestos_seleccionados_por_proyecto` pd ON p.id_projecto = pd.id_proyecto
     JOIN 
         `ate-rrhh-2024.Ate_kaibot_2024.puestos` pu ON pd.id_puesto = pu.id_puesto
     LEFT JOIN 
