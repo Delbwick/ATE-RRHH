@@ -464,37 +464,30 @@ def ejecutar_consulta():
     query += """
     FROM 
         `ate-rrhh-2024.Ate_kaibot_2024.proyecto` p
-    JOIN 
+    LEFT JOIN 
         `ate-rrhh-2024.Ate_kaibot_2024.puestos_seleccionados_por_proyecto` pd ON p.id_projecto = pd.id_proyecto
-    JOIN 
+    LEFT JOIN 
         `ate-rrhh-2024.Ate_kaibot_2024.puestos` pu ON pd.id_puesto = pu.id_puesto
-    LEFT JOIN 
-        `ate-rrhh-2024.Ate_kaibot_2024.complementos_de_destino_por_proyecto` cd ON p.id_projecto = cd.id_proyecto
-    LEFT JOIN 
-        `ate-rrhh-2024.Ate_kaibot_2024.complementos_especificos_por_proyecto` ce ON p.id_projecto = ce.id_proyecto
     """
     
     # Agregar LEFT JOINs para las tablas de complemento de destino
     for nombre, (tabla, id_tabla) in PAGES_TABLES.items():
         query += f"""
     LEFT JOIN 
-        `{tabla}` cd_{id_tabla} ON cd.id_complemento_destino = cd_{id_tabla}.{id_tabla}
-    """
+        `{tabla}` cd_{id_tabla} ON p.id_projecto = cd_{id_tabla}.id_proyecto
+        AND cd_{id_tabla}.{id_tabla} = pd.{id_tabla}
+        """
     
     # Agregar LEFT JOINs para las tablas de complemento específico
     for nombre, (tabla, id_tabla) in PAGES_TABLES_2.items():
         query += f"""
     LEFT JOIN 
-        `{tabla}` ce_{id_tabla} ON ce.id_complemento_especifico = ce_{id_tabla}.{id_tabla}
-    """
+        `{tabla}` ce_{id_tabla} ON p.id_projecto = ce_{id_tabla}.id_proyecto
+        AND ce_{id_tabla}.{id_tabla} = pd.{id_tabla}
+        """
     
-    query += ";"
-    
-    # Ejecutar la consulta
-    query_job = client.query(query)
-    results = query_job.result().to_dataframe()
+    return query
 
-    return results
 
 # Mostrar botón para ejecutar la consulta
 if st.button("Ejecutar Consulta"):
