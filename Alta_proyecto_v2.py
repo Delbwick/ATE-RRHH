@@ -3,6 +3,8 @@ import streamlit as st
 from google.oauth2 import service_account
 from google.cloud import bigquery
 import pandas as pd
+import uuid
+
 
 # Configurar la página de Streamlit
 st.set_page_config(page_title="ATE-Alta nuevos proyectos", page_icon="🆕")
@@ -355,6 +357,7 @@ new_id_proyecto = st.number_input('Nuevo ID de Proyecto', min_value=1, step=1)
 if st.button('Insertar en BigQuery'):
     rows_to_insert_1 = []
     rows_to_insert_2 = []
+    rows_to_insert_puestos = []
 
     # Procesar valores seleccionados para la primera tabla
     for id_tabla, valores in valores_seleccionados.items():
@@ -367,6 +370,28 @@ if st.button('Insertar en BigQuery'):
         for valor in valores:
             row = {id_tabla: valor, 'id_proyecto': new_id_proyecto}
             rows_to_insert_2.append(row)
+
+    # Procesar puestos seleccionados
+    for descripcion in selected_puestos:
+        # Obtener el id_puesto basado en la descripción del puesto
+        query = f"""
+            SELECT id_puesto
+            FROM `ate-rrhh-2024.Ate_kaibot_2024.puestos`
+            WHERE descripcion = '{descripcion}'
+        """
+        query_job = client.query(query)
+        results = query_job.result()
+        id_puesto = None
+        for row in results:
+            id_puesto = row.id_puesto
+            break
+
+        if id_puesto is not None:
+            row = {
+                'id_proyecto': new_id_proyecto,
+                'id_puesto': id_puesto
+            }
+            rows_to_insert_puestos.append(row)
 
     # Insertar en la primera tabla
     if rows_to_insert_1:
@@ -385,6 +410,15 @@ if st.button('Insertar en BigQuery'):
             st.success('Datos insertados exitosamente en complementos_especificos_por_proyecto')
         else:
             st.error(f'Error al insertar datos en complementos_especificos_por_proyecto: {errors_2}')
+
+    # Insertar en la tabla de puestos seleccionados por proyectos
+    if rows_to_insert_puestos:
+        table_id_puestos = "ate-rrhh-2024.Ate_kaibot_2024.puestos_seleccionados_por_proyecto"
+        errors_puestos = client.insert_rows_json(table_id_puestos, rows_to_insert_puestos)
+        if errors_puestos == []:
+            st.success('Datos insertados exitosamente en puestos_seleccionados_por_proyecto')
+        else:
+            st.error(f'Error al insertar datos en puestos_seleccionados_por_proyecto: {errors_puestos}')
 
 
 # Función para abrir otra aplicación
