@@ -56,6 +56,7 @@ PAGES_TABLES = {
     "Esfuerzo Físico": ("ate-rrhh-2024.Ate_kaibot_2024.esfuerzo_fisico", "id_esfuerzo_fisico"),
     "Esfuerzo Mental": ("ate-rrhh-2024.Ate_kaibot_2024.esfuerzo_mental", "id_esfuerzo_mental"),
     "Especialización": ("ate-rrhh-2024.Ate_kaibot_2024.especializacion", "id_especializacion"),
+    "Formacion": ("ate-rrhh-2024.Ate_kaibot_2024.formacion", "id_formacion_general"),
     "Idioma del Proyecto": ("ate-rrhh-2024.Ate_kaibot_2024.idioma_de_proyecto", "id_idioma_proyecto"),
     "Idiomas del puesto?": ("ate-rrhh-2024.Ate_kaibot_2024.idiomas", "id_idiomas"),
     "Idiomas (Euskera)": ("ate-rrhh-2024.Ate_kaibot_2024.idiomas_euskera", "id_idioma_euskera"),
