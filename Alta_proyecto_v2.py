@@ -443,9 +443,9 @@ def ejecutar_consulta():
         p.descripcion AS proyecto_descripcion,
         pd.id_puesto,
         pu.descripcion AS puesto_descripcion,
-        cd.id_complemento_destino,
+        
         cd.descripcion AS complemento_destino_descripcion,
-        ce.id_complemento_especifico,
+        
         ce.descripcion AS complemento_especifico_descripcion
     FROM 
         `ate-rrhh-2024.Ate_kaibot_2024.proyecto` p
