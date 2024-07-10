@@ -434,3 +434,39 @@ if st.button("Clientes"):
 
 if st.button("Ir a Otra App"):
     st.markdown('[Otra App](https://test-analytics-g7zhphce2svtgaye6sgiso.streamlit.app/)')
+
+
+def ejecutar_consulta():
+    query = """
+    SELECT 
+        p.id_proyecto,
+        p.descripcion AS proyecto_descripcion,
+        pd.id_puesto,
+        pu.descripcion AS puesto_descripcion,
+        cd.id_complemento_destino,
+        cd.descripcion AS complemento_destino_descripcion,
+        ce.id_complemento_especifico,
+        ce.descripcion AS complemento_especifico_descripcion
+    FROM 
+        `ate-rrhh-2024.Ate_kaibot_2024.proyectos` p
+    JOIN 
+        `ate-rrhh-2024.Ate_kaibot_2024.puestos_seleccionados_por_proyecto` pd ON p.id_proyecto = pd.id_proyecto
+    JOIN 
+        `ate-rrhh-2024.Ate_kaibot_2024.puestos` pu ON pd.id_puesto = pu.id_puesto
+    LEFT JOIN 
+        `ate-rrhh-2024.Ate_kaibot_2024.complementos_de_destino_por_proyecto` cd ON p.id_proyecto = cd.id_proyecto
+    LEFT JOIN 
+        `ate-rrhh-2024.Ate_kaibot_2024.complementos_especificos_por_proyecto` ce ON p.id_proyecto = ce.id_proyecto;
+    """
+    query_job = client.query(query)
+    results = query_job.result().to_dataframe()
+    return results
+
+# Botón para ejecutar la consulta y mostrar los resultados
+if st.button('Mostrar resultados'):
+    resultados = ejecutar_consulta()
+    if not resultados.empty:
+        st.write("Resultados de la consulta:")
+        st.dataframe(resultados)
+    else:
+        st.warning("No se encontraron resultados.")
