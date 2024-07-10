@@ -443,79 +443,57 @@ def ejecutar_consulta():
         p.descripcion AS proyecto_descripcion,
         pd.id_puesto,
         pu.descripcion AS puesto_descripcion,
-        cd.id_complemento_destino,
-        cd_tablas.descripcion AS complemento_destino_descripcion,
-        ce.id_complemento_especifico,
-        ce_tablas.descripcion AS complemento_especifico_descripcion
+    """
+    
+    # Agregar campos de complemento de destino
+    for nombre, (tabla, id_tabla) in PAGES_TABLES.items():
+        query += f"""
+        cd_{id_tabla}.descripcion AS {id_tabla}_descripcion,
+        """
+    
+    # Agregar campos de complemento específico
+    for nombre, (tabla, id_tabla) in PAGES_TABLES_2.items():
+        query += f"""
+        ce_{id_tabla}.descripcion AS {id_tabla}_descripcion,
+        """
+    
+    # Quitar la última coma
+    query = query.rstrip(",\n")
+    
+    # Agregar el FROM y los JOINs
+    query += """
     FROM 
         `ate-rrhh-2024.Ate_kaibot_2024.proyecto` p
     JOIN 
         `ate-rrhh-2024.Ate_kaibot_2024.puestos_seleccionados_por_proyecto` pd ON p.id_projecto = pd.id_proyecto
     JOIN 
         `ate-rrhh-2024.Ate_kaibot_2024.puestos` pu ON pd.id_puesto = pu.id_puesto
-    LEFT JOIN 
-        `ate-rrhh-2024.Ate_kaibot_2024.complementos_de_destino_por_proyecto` cd ON p.id_projecto = cd.id_proyecto
-    LEFT JOIN 
-        `ate-rrhh-2024.Ate_kaibot_2024.complementos_especificos_por_proyecto` ce ON p.id_projecto = ce.id_proyecto
-    LEFT JOIN (
-        SELECT id_formacion_general AS id, descripcion FROM `ate-rrhh-2024.Ate_kaibot_2024.formacion`
-        UNION ALL
-        SELECT id_capacidades_necesarias, descripcion FROM `ate-rrhh-2024.Ate_kaibot_2024.capacidades_necesarias`
-        UNION ALL
-        SELECT id_complejidad, descripcion FROM `ate-rrhh-2024.Ate_kaibot_2024.complejidad`
-        UNION ALL
-        SELECT id_complejidad_tecnica, descripcion FROM `ate-rrhh-2024.Ate_kaibot_2024.complejidad_tecnica`
-        UNION ALL
-        SELECT id_complejidad_territorial, descripcion FROM `ate-rrhh-2024.Ate_kaibot_2024.complejidad_territorial`
-        UNION ALL
-        SELECT id_conocimientos_basicos_acceso_al_puesto, descripcion FROM `ate-rrhh-2024.Ate_kaibot_2024.conocimientos_basicos_acceso_al_puesto`
-        UNION ALL
-        SELECT id_especializacion, descripcion FROM `ate-rrhh-2024.Ate_kaibot_2024.especializacion`
-        UNION ALL
-        SELECT id_iniciativa, descripcion FROM `ate-rrhh-2024.Ate_kaibot_2024.iniciativa`
-        UNION ALL
-        SELECT id_mando, descripcion FROM `ate-rrhh-2024.Ate_kaibot_2024.mando`
-        UNION ALL
-        SELECT id_formacion, descripcion FROM `ate-rrhh-2024.Ate_kaibot_2024.nivel_de_fomacion`
-        UNION ALL
-        SELECT id_responsabilidad_actividad, descripcion FROM `ate-rrhh-2024.Ate_kaibot_2024.responsabilidad_actividad`
-        UNION ALL
-        SELECT id_responsabilidad, descripcion FROM `ate-rrhh-2024.Ate_kaibot_2024.responsabilidad`
-    ) cd_tablas ON cd.id_complemento_destino = cd_tablas.id
-    LEFT JOIN (
-        SELECT id_complemento_destino, descripcion FROM `ate-rrhh-2024.Ate_kaibot_2024.complemento_de_destino`
-        UNION ALL
-        SELECT id_complemento_especifico, descripcion FROM `ate-rrhh-2024.Ate_kaibot_2024.complemento_específico_xaño`
-        UNION ALL
-        SELECT id_condiciones, descripcion FROM `ate-rrhh-2024.Ate_kaibot_2024.condiciones_de_trabajo`
-        UNION ALL
-        SELECT id_conocimientos_especificos, descripcion FROM `ate-rrhh-2024.Ate_kaibot_2024.conocimientos_especificos`
-        UNION ALL
-        SELECT id_definitivo, descripcion FROM `ate-rrhh-2024.Ate_kaibot_2024.definitivo`
-        UNION ALL
-        SELECT id_esfuerzo, descripcion FROM `ate-rrhh-2024.Ate_kaibot_2024.esfuerzo_emocional`
-        UNION ALL
-        SELECT id_esfuerzo_fisico, descripcion FROM `ate-rrhh-2024.Ate_kaibot_2024.esfuerzo_fisico`
-        UNION ALL
-        SELECT id_esfuerzo_mental, descripcion FROM `ate-rrhh-2024.Ate_kaibot_2024.esfuerzo_mental`
-        UNION ALL
-        SELECT id_idiomas, descripcion FROM `ate-rrhh-2024.Ate_kaibot_2024.idiomas`
-        UNION ALL
-        SELECT id_idioma_euskera, descripcion FROM `ate-rrhh-2024.Ate_kaibot_2024.idiomas_euskera`
-        UNION ALL
-        SELECT id_importancia, descripcion FROM `ate-rrhh-2024.Ate_kaibot_2024.importancia_relativa`
-        UNION ALL
-        SELECT id_incompatibilidad, descripcion FROM `ate-rrhh-2024.Ate_kaibot_2024.incompatibilidad`
-        UNION ALL
-        SELECT id_turno, descripcion FROM `ate-rrhh-2024.Ate_kaibot_2024.turno`
-    ) ce_tablas ON ce.id_complemento_especifico = ce_tablas.id;
     """
+    
+    # Agregar LEFT JOINs para las tablas de complemento de destino
+    for nombre, (tabla, id_tabla) in PAGES_TABLES.items():
+        query += f"""
+    LEFT JOIN 
+        `{tabla}` cd_{id_tabla} ON p.id_projecto = cd_{id_tabla}.id_proyecto
+    """
+    
+    # Agregar LEFT JOINs para las tablas de complemento específico
+    for nombre, (tabla, id_tabla) in PAGES_TABLES_2.items():
+        query += f"""
+    LEFT JOIN 
+        `{tabla}` ce_{id_tabla} ON p.id_projecto = ce_{id_tabla}.id_proyecto
+    """
+    
+    query += ";"
+    
+    # Ejecutar la consulta
     query_job = client.query(query)
     results = query_job.result().to_dataframe()
+
     return results
 
-# Uso de la función en Streamlit con un botón
+# Mostrar botón para ejecutar la consulta
 if st.button("Ejecutar Consulta"):
     resultados = ejecutar_consulta()
-    st.write("Resultados de la Consulta:")
-    st.dataframe(resultados)
+    st.write(resultados)
+
