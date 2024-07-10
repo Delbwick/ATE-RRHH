@@ -474,7 +474,7 @@ def ejecutar_consulta():
     for nombre, (tabla, id_tabla) in PAGES_TABLES.items():
         query += f"""
     LEFT JOIN 
-        `{tabla}` cd_{id_tabla} ON p.id_projecto = cd_{id_tabla}.id_proyecto
+        `{tabla}` cd_{id_tabla} ON p.id_projecto = cd_{id_tabla}.id_projecto
         AND cd_{id_tabla}.{id_tabla} = pd.{id_tabla}
         """
     
@@ -482,17 +482,20 @@ def ejecutar_consulta():
     for nombre, (tabla, id_tabla) in PAGES_TABLES_2.items():
         query += f"""
     LEFT JOIN 
-        `{tabla}` ce_{id_tabla} ON p.id_projecto = ce_{id_tabla}.id_proyecto
+        `{tabla}` ce_{id_tabla} ON p.id_projecto = ce_{id_tabla}.id_projecto
         AND ce_{id_tabla}.{id_tabla} = pd.{id_tabla}
         """
     
-    return query
+    query += ";"
+    
+    # Ejecutar la consulta
+    query_job = client.query(query)
+    results = query_job.result().to_dataframe()
 
+    return results
 
 # Mostrar botón para ejecutar la consulta
 if st.button("Ejecutar Consulta"):
     resultados = ejecutar_consulta()
     st.write(resultados)
-
-
 
