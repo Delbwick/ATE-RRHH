@@ -119,7 +119,39 @@ with col2:
     pago = st.text_input('Forma de Pago')
 
 
+# Función para obtener puestos desde BigQuery
+def get_puestos():
+    query = """
+        SELECT *
+        FROM `ate-rrhh-2024.Ate_kaibot_2024.puestos`
+    """
+    query_job = client.query(query)
+    results = query_job.result()
+    puestos = [row.descripcion for row in results]
+    return puestos
 
+# Mostrar el selectbox de puestos
+st.markdown("<h2>Datos de Factores</h2>", unsafe_allow_html=True)
+st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
+selected_puesto = st.selectbox("Selecciona un puesto", get_puestos())
+#mostrar los puestos como checkbox
+# Obtener los puestos
+puestos = get_puestos()
+
+# Mostrar los puestos como checkboxes
+st.write("Selecciona los puestos:")
+selected_puestos = []
+for descripcion in puestos:
+    if st.checkbox(descripcion):
+        selected_puestos.append((descripcion))
+
+# Mostrar los puestos seleccionados
+if selected_puestos:
+    st.write("Puestos seleccionados:")
+    for descripcion in selected_puestos:
+        st.write(f"{descripcion}")
+else:
+    st.warning("Por favor, selecciona al menos un puesto para continuar.")
 
 
 
@@ -263,39 +295,7 @@ if selected_factores_2:
     st.write("Valores seleccionados:")
     st.write(valores_seleccionados_2)
 
-# Función para obtener puestos desde BigQuery
-def get_puestos():
-    query = """
-        SELECT *
-        FROM `ate-rrhh-2024.Ate_kaibot_2024.puestos`
-    """
-    query_job = client.query(query)
-    results = query_job.result()
-    puestos = [row.descripcion for row in results]
-    return puestos
 
-# Mostrar el selectbox de puestos
-st.markdown("<h2>Datos de Factores</h2>", unsafe_allow_html=True)
-st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
-selected_puesto = st.selectbox("Selecciona un puesto", get_puestos())
-#mostrar los puestos como checkbox
-# Obtener los puestos
-puestos = get_puestos()
-
-# Mostrar los puestos como checkboxes
-st.write("Selecciona los puestos:")
-selected_puestos = []
-for descripcion in puestos:
-    if st.checkbox(descripcion):
-        selected_puestos.append((descripcion))
-
-# Mostrar los puestos seleccionados
-if selected_puestos:
-    st.write("Puestos seleccionados:")
-    for descripcion in selected_puestos:
-        st.write(f"{descripcion}")
-else:
-    st.warning("Por favor, selecciona al menos un puesto para continuar.")
 
 
 
