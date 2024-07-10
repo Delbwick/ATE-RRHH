@@ -353,19 +353,38 @@ new_id_proyecto = st.number_input('Nuevo ID de Proyecto', min_value=1, step=1)
 
 # Insertar los valores seleccionados en BigQuery
 if st.button('Insertar en BigQuery'):
-    rows_to_insert = []
+    rows_to_insert_1 = []
+    rows_to_insert_2 = []
+
+    # Procesar valores seleccionados para la primera tabla
     for id_tabla, valores in valores_seleccionados.items():
         for valor in valores:
             row = {id_tabla: valor, 'id_proyecto': new_id_proyecto}
-            rows_to_insert.append(row)
+            rows_to_insert_1.append(row)
 
-    if rows_to_insert:
-        table_id = "ate-rrhh-2024.Ate_kaibot_2024.complementos_de_destino_por_proyecto"
-        errors = client.insert_rows_json(table_id, rows_to_insert)
-        if errors == []:
-            st.success('Datos insertados exitosamente en BigQuery')
+    # Procesar valores seleccionados para la segunda tabla
+    for id_tabla, valores in valores_seleccionados_2.items():
+        for valor in valores:
+            row = {id_tabla: valor, 'id_proyecto': new_id_proyecto}
+            rows_to_insert_2.append(row)
+
+    # Insertar en la primera tabla
+    if rows_to_insert_1:
+        table_id_1 = "ate-rrhh-2024.Ate_kaibot_2024.complementos_de_destino_por_proyecto"
+        errors_1 = client.insert_rows_json(table_id_1, rows_to_insert_1)
+        if errors_1 == []:
+            st.success('Datos insertados exitosamente en complementos_de_destino_por_proyecto')
         else:
-            st.error(f'Error al insertar datos en BigQuery: {errors}')
+            st.error(f'Error al insertar datos en complementos_de_destino_por_proyecto: {errors_1}')
+
+    # Insertar en la segunda tabla
+    if rows_to_insert_2:
+        table_id_2 = "ate-rrhh-2024.Ate_kaibot_2024.complementos_especificos_por_proyecto"
+        errors_2 = client.insert_rows_json(table_id_2, rows_to_insert_2)
+        if errors_2 == []:
+            st.success('Datos insertados exitosamente en complementos_especificos_por_proyecto')
+        else:
+            st.error(f'Error al insertar datos en complementos_especificos_por_proyecto: {errors_2}')
 
 
 # Función para abrir otra aplicación
