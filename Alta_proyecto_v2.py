@@ -454,9 +454,9 @@ def ejecutar_consulta():
     JOIN 
         `ate-rrhh-2024.Ate_kaibot_2024.puestos` pu ON pd.id_puesto = pu.id_puesto
     LEFT JOIN 
-        `ate-rrhh-2024.Ate_kaibot_2024.complementos_de_destino_por_proyecto` cd ON p.id_proyecto = cd.id_proyecto
+        `ate-rrhh-2024.Ate_kaibot_2024.complementos_de_destino_por_proyecto` cd ON p.id_projecto = cd.id_proyecto
     LEFT JOIN 
-        `ate-rrhh-2024.Ate_kaibot_2024.complementos_especificos_por_proyecto` ce ON p.id_proyecto = ce.id_proyecto;
+        `ate-rrhh-2024.Ate_kaibot_2024.complementos_especificos_por_proyecto` ce ON p.id_projecto = ce.id_proyecto;
     """
     query_job = client.query(query)
     results = query_job.result().to_dataframe()
