@@ -487,6 +487,8 @@ def ejecutar_consulta():
         """
     
     #return query
+    query_job = client.query(query)
+    results = query_job.result().to_dataframe()
 
     return results
 
