@@ -237,8 +237,8 @@ PAGES_TABLES_2 = {
 
 # Mostrar checkboxes para seleccionar las tablas de factores de complemento de destino
 selected_factores_2 = []
-for nombre_tabla, (nombre_completo, id_tabla) in PAGES_TABLES_2.items():
-    if st.checkbox(nombre_tabla):
+for nombre_tabla_2, (nombre_completo, id_tabla) in PAGES_TABLES_2.items():
+    if st.checkbox(nombre_tabla_2):
         selected_factores_2.append((nombre_completo, id_tabla))
 
 # Mostrar los datos seleccionados
