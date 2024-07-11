@@ -113,7 +113,7 @@ client = bigquery.Client(credentials=credentials)
 
     # Consulta SQL con filtro de fechas
 query_clientes_ads_adsbasics = f"""
-        SELECT * FROM `ate-rrhh-2024.Ate_kaibot_2024.puestos`
+        SELECT * FROM `ate-rrhh-2024.Ate_kaibot_2024.puestos_seleccionados_por_proyecto`
         WHERE id_proyecto = {id_proyecto_seleccionado}
         
     """
