@@ -111,7 +111,7 @@ credentials = service_account.Credentials.from_service_account_info(
 client = bigquery.Client(credentials=credentials)
     #probamos otra manera de manipular las fechas
 
-    # Consulta SQL con filtro de fechas
+    # Consulta SQL 
 query_clientes_ads_adsbasics = f"""
         SELECT * FROM `ate-rrhh-2024.Ate_kaibot_2024.puestos`
         WHERE id_puesto IN (
@@ -122,6 +122,7 @@ query_clientes_ads_adsbasics = f"""
 query_job_clientes_adsbasic = client.query(query_clientes_ads_adsbasics)
 results_clientes_adsbasic = query_job_clientes_adsbasic.result()
 df_clientes_adsbasic = pd.DataFrame(data=[row.values() for row in results_clientes_adsbasic], columns=[field.name for field in results_clientes_adsbasic.schema])
+st.dataframe(df_clientes_adsbasic)
 
 
 
