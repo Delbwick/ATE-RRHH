@@ -150,6 +150,7 @@ query_formacion_proyecto = f"""
 query_job_formacion_proyecto = client.query(query_formacion_proyecto)
 results_puestos_proyecto = query_job_formacion_proyecto.result()
 df_formacion_proyecto = pd.DataFrame(data=[row.values() for row in results_puestos_proyecto], columns=[field.name for field in results_puestos_proyecto.schema])
+st.markdown("<h3>Formacion</h3>", unsafe_allow_html=True)
 st.dataframe(df_formacion_proyecto)
 
 query_capacidades_necesarias_proyecto = f"""
@@ -162,6 +163,7 @@ query_capacidades_necesarias_proyecto = f"""
 query_job_capacidades_proyecto = client.query(query_capacidades_necesarias_proyecto)
 results_capacidades_proyecto = query_job_capacidades_proyecto.result()
 df_capacidades_proyecto = pd.DataFrame(data=[row.values() for row in results_capacidades_proyecto], columns=[field.name for field in results_capacidades_proyecto.schema])
+st.markdown("<h3>Capacidades Necesarias</h3>", unsafe_allow_html=True)
 st.dataframe(df_capacidades_proyecto)
 
 
@@ -176,5 +178,7 @@ df_unido = pd.concat([df_formacion_proyecto, df_capacidades_proyecto], axis=1)
 # Las columnas de df_formacion_proyecto tendrán el prefijo 'formacion_' y las de df_capacidades_proyecto 'capacidades_'
 
 # Mostramos el DataFrame unido en Streamlit
-st.dataframe(df_unido)
+#st.dataframe(df_unido)
+
+#Creo que es mejor que vayan 1 a 1
 
