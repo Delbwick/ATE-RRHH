@@ -272,8 +272,9 @@ st.write(f"Total acumulado de puntos específicos: {total_puntos_especificos}")
 
 
 #>>>>>>>>>Valor por punto especifico por poryecto
-#ºel valor por peso especifico por poryecto va avriar dependiendo del ayntamiento del año y de la legislacion por lo que tendremos que tener una tabla
+#ºel valor por peso especifico por poryecto va variar dependiendo del ayntamiento del año y de la legislacion por lo que tendremos que tener una tabla
 #puntos por peso especifico por año
-
+valor_punto_especifico_proyecto = st.number_input('valor_punto_especifico_proyecto', min_value=1)
+st.write(f"Valor especifico del puesto de trabajo: {total_puntos_especificos}*{valor_punto_especifico_proyecto}")
 
 
