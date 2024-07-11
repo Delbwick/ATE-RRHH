@@ -73,7 +73,7 @@ def get_proyectos():
     return proyectos
 
 # Mostrar el encabezado y línea separadora
-st.markdown("<h2>Datos de Factores</h2>", unsafe_allow_html=True)
+st.markdown("<h2>Selector de Proyectos</h2>", unsafe_allow_html=True)
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 
 # Obtener lista de proyectos
@@ -99,5 +99,29 @@ else:
     st.write("Selecciona un proyecto para ver su ID")
 
 # Puedes usar 'id_proyecto_seleccionado' en tu lógica posterior según sea necesario
+
+#Vamos extraer los datos de puestos de ese proyecto
+# Mostrar el encabezado y línea separadora
+st.markdown("<h2>Puestos asociados a ese proyecto</h2>", unsafe_allow_html=True)
+st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
+
+credentials = service_account.Credentials.from_service_account_info(
+        st.secrets["gcp_service_account"]
+    )
+    client = bigquery.Client(credentials=credentials)
+    #probamos otra manera de manipular las fechas
+
+    # Consulta SQL con filtro de fechas
+    query_clientes_ads_adsbasics = f"""
+        SELECT * FROM `ate-rrhh-2024.Ate_kaibot_2024.puestos`
+        WHERE id_proyecto = {id_proyecto_seleccionado}
+        
+    """
+
+    query_job_clientes_adsbasic = client.query(query_clientes_ads_adsbasics)
+    results_clientes_adsbasic = query_job_clientes_adsbasic.result()
+    df_clientes_adsbasic = pd.DataFrame(data=[row.values() for row in results_clientes_adsbasic], columns=[field.name for field in results_clientes_adsbasic.schema])
+
+
 
 
