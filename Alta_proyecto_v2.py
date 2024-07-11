@@ -444,7 +444,7 @@ def obtener_datos_por_proyecto(id_proyecto):
         cd.id_formacion,
         cd.id_responsabilidad_actividad,
         cd.id_responsabilidad,
-        ce.id_complemento_especifico
+        
     FROM 
         `ate-rrhh-2024.Ate_kaibot_2024.puestos_seleccionados_por_proyecto` ps
     LEFT JOIN 
