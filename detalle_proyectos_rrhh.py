@@ -243,7 +243,7 @@ def execute_query_for_page(page_name, id_proyecto):
         df = pd.DataFrame(data=[row.values() for row in results], columns=[field.name for field in results.schema])
         if not df.empty:
             total_puntos = df['puntos'].iloc[0]
-            total_puntos_especificos +=total_puntos
+            
         else:
             total_puntos = 0
         return df, total_puntos
@@ -252,6 +252,8 @@ def execute_query_for_page(page_name, id_proyecto):
 
 # Obtener el id_proyecto seleccionado desde un inputbox en Streamlit
 #id_proyecto_seleccionado = st.number_input('Ingrese el ID del proyecto', min_value=1)
+# Variable para acumular los puntos totales
+total_puntos_especificos = 0
 
 # Iterar sobre todas las páginas en el diccionario y ejecutar las consultas
 for page_name in PAGES_TABLES_2:
@@ -261,10 +263,12 @@ for page_name in PAGES_TABLES_2:
     if df is not None:
         st.dataframe(df)
         st.write(f"Total de puntos: {total_puntos}")
+        total_puntos_especificos += total_puntos
     else:
         st.write(f"No se encontró la página '{page_name}' en el diccionario o no se pudo ejecutar la consulta.")
 
-st.write(f"Total de puntos totales: {total_puntos_especificos}")
+# Mostrar el total acumulado de puntos específicos
+st.write(f"Total acumulado de puntos específicos: {total_puntos_especificos}")
 
 
 #>>>>>>>>>Valor por punto especifico por poryecto
