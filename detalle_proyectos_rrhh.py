@@ -136,13 +136,10 @@ st.dataframe(df_puestos_proyecto)
 
 #Vamos extraer los datos de puestos de ese proyecto
 # Mostrar el encabezado y línea separadora
-st.markdown("<h2>Puestos asociados a ese proyecto</h2>", unsafe_allow_html=True)
+st.markdown("<h2>COmplementos de destino asociados a ese proyecto</h2>", unsafe_allow_html=True)
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 
-credentials = service_account.Credentials.from_service_account_info(
-        st.secrets["gcp_service_account"]
-    )
-client = bigquery.Client(credentials=credentials)
+
     #probamos otra manera de manipular las fechas
 
     # Consulta SQL 
