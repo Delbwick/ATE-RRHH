@@ -241,7 +241,7 @@ def execute_query_for_page(page_name, id_proyecto):
         query_job = client.query(query)
         results = query_job.result()
         df = pd.DataFrame(data=[row.values() for row in results], columns=[field.name for field in results.schema])
-       if not df.empty:
+        if not df.empty:
             total_puntos = df['total_puntos'].iloc[0]
         else:
             total_puntos = 0
