@@ -61,23 +61,43 @@ client = bigquery.Client(credentials=credentials)
 #>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<
 #CODIGO DE LA APLICACION
 #<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>
-#FUncion para selecciopnar los proyectos
+# Función para seleccionar los proyectos desde BigQuery
 def get_proyectos():
     query = """
-        SELECT *
+        SELECT id_proyecto, nombre
         FROM `ate-rrhh-2024.Ate_kaibot_2024.proyecto`
     """
     query_job = client.query(query)
     results = query_job.result()
-    proyectos = [row.nombre for row in results]
-    #id_proyecto_seleccionado = [row.id_projecto for row in results]
+    proyectos = [{'id': row.id_projecto, 'nombre': row.nombre} for row in results]
     return proyectos
 
-# Mostrar el selectbox de puestos
+# Mostrar el encabezado y línea separadora
 st.markdown("<h2>Datos de Factores</h2>", unsafe_allow_html=True)
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
-selected_proyecto = st.selectbox("Selecciona un proyecto", get_proyectos())
-st.write(id_proyecto_seleccionado)
-#mostrar los puestos como checkbox
-# Obtener los puestos
+
+# Obtener lista de proyectos
 proyectos = get_proyectos()
+
+# Extraer solo los nombres de los proyectos para el selectbox
+proyectos_nombres = [proyecto['nombre'] for proyecto in proyectos]
+
+# Mostrar el cuadro de selección de proyectos
+index_seleccionado = st.selectbox("Selecciona un proyecto", proyectos_nombres)
+
+# Obtener el ID del proyecto seleccionado
+id_proyecto_seleccionado = None
+for proyecto in proyectos:
+    if proyecto['nombre'] == index_seleccionado:
+        id_proyecto_seleccionado = proyecto['id']
+        break
+
+# Mostrar el ID seleccionado (solo para propósitos de verificación)
+if id_proyecto_seleccionado is not None:
+    st.write(f"ID del proyecto seleccionado: {id_proyecto_seleccionado}")
+else:
+    st.write("Selecciona un proyecto para ver su ID")
+
+# Puedes usar 'id_proyecto_seleccionado' en tu lógica posterior según sea necesario
+
+
