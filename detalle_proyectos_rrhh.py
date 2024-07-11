@@ -112,17 +112,17 @@ client = bigquery.Client(credentials=credentials)
     #probamos otra manera de manipular las fechas
 
     # Consulta SQL 
-query_clientes_ads_adsbasics = f"""
+query_puestos_proyecto = f"""
         SELECT * FROM `ate-rrhh-2024.Ate_kaibot_2024.puestos`
         WHERE id_puesto IN (
         SELECT id_puesto FROM `ate-rrhh-2024.Ate_kaibot_2024.puestos_seleccionados_por_proyecto`
         WHERE id_proyecto = {id_proyecto_seleccionado})
     """
 
-query_job_clientes_adsbasic = client.query(query_clientes_ads_adsbasics)
-results_clientes_adsbasic = query_job_clientes_adsbasic.result()
-df_clientes_adsbasic = pd.DataFrame(data=[row.values() for row in results_clientes_adsbasic], columns=[field.name for field in results_clientes_adsbasic.schema])
-st.dataframe(df_clientes_adsbasic)
+query_job_puestos_proyecto = client.query(query_puestos_proyecto)
+results_puestos_proyecto = query_job_puestos_proyecto.result()
+df_puestos_proyecto = pd.DataFrame(data=[row.values() for row in results_puestos_proyecto], columns=[field.name for field in results_puestos_proyecto.schema])
+st.dataframe(df_puestos_proyecto)
 
 
 
