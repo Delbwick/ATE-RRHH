@@ -241,9 +241,13 @@ def execute_query_for_page(page_name, id_proyecto):
         query_job = client.query(query)
         results = query_job.result()
         df = pd.DataFrame(data=[row.values() for row in results], columns=[field.name for field in results.schema])
-        return df
+       if not df.empty:
+            total_puntos = df['total_puntos'].iloc[0]
+        else:
+            total_puntos = 0
+        return df, total_puntos
     else:
-        return None
+        return None, 0
 
 # Obtener el id_proyecto seleccionado desde un inputbox en Streamlit
 #id_proyecto_seleccionado = st.number_input('Ingrese el ID del proyecto', min_value=1)
@@ -252,9 +256,17 @@ def execute_query_for_page(page_name, id_proyecto):
 for page_name in PAGES_TABLES_2:
     st.markdown(f"<h3>{page_name}</h3>", unsafe_allow_html=True)
     df = execute_query_for_page(page_name, id_proyecto_seleccionado)
+    df, total_puntos = execute_query_for_page(page_name, id_proyecto_seleccionado)
     if df is not None:
         st.dataframe(df)
+        st.write(f"Total de puntos: {total_puntos}")
     else:
         st.write(f"No se encontró la página '{page_name}' en el diccionario o no se pudo ejecutar la consulta.")
+
+
+#>>>>>>>>>Valor por punto especifico por poryecto
+#ºel valor por peso especifico por poryecto va avriar dependiendo del ayntamiento del año y de la legislacion por lo que tendremos que tener una tabla
+#puntos por peso especifico por año
+
 
 
