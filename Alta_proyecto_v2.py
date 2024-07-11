@@ -427,18 +427,15 @@ if st.button('Insertar en BigQuery'):
     #webbrowser.open_new_tab(url_otra_app)
 
 # Función para obtener datos de BigQuery
+# Función para obtener datos de BigQuery
 def obtener_datos_por_proyecto(id_proyecto):
     query = f"""
     SELECT 
-        p.descripcion AS puesto,
-        cd.descripcion AS factor_destino,
-        ce.descripcion AS factor_especifico
+        ps.id_puesto,
+        cd.id_complemento_destino,
+        ce.id_complemento_especifico
     FROM 
         `ate-rrhh-2024.Ate_kaibot_2024.puestos_seleccionados_por_proyecto` ps
-    LEFT JOIN 
-        `ate-rrhh-2024.Ate_kaibot_2024.puestos` p
-    ON 
-        ps.id_puesto = p.id_puesto
     LEFT JOIN 
         `ate-rrhh-2024.Ate_kaibot_2024.complementos_de_destino_por_proyecto` cd
     ON 
@@ -460,7 +457,7 @@ id_proyecto = st.number_input('ID de Proyecto', min_value=1, step=1)
 if st.button('Mostrar Datos'):
     df = obtener_datos_por_proyecto(id_proyecto)
     if not df.empty:
-        st.write('Datos del Proyecto:')
+        st.write('IDs Relacionados del Proyecto:')
         st.dataframe(df)
     else:
         st.warning('No se encontraron datos para este ID de proyecto.')
