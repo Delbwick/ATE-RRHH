@@ -426,4 +426,39 @@ if st.button('Insertar en BigQuery'):
     #url_otra_app = "https://test-analytics-g7zhphce2svtgaye6sgiso.streamlit.app/"
     #webbrowser.open_new_tab(url_otra_app)
 
+# Función para obtener datos de BigQuery
+def obtener_datos_por_proyecto(id_proyecto):
+    query = f"""
+    SELECT 
+        p.descripcion as puesto,
+        cd.descripcion as factor_destino,
+        ce.descripcion as factor_especifico
+    FROM 
+        `ate-rrhh-2024.Ate_kaibot_2024.puestos` p
+    LEFT JOIN 
+        `ate-rrhh-2024.Ate_kaibot_2024.complementos_de_destino_por_proyecto` cd
+    ON 
+        p.id_puesto = cd.id_puesto AND p.id_proyecto = cd.id_proyecto
+    LEFT JOIN 
+        `ate-rrhh-2024.Ate_kaibot_2024.complementos_especificos_por_proyecto` ce
+    ON 
+        p.id_puesto = ce.id_puesto AND p.id_proyecto = ce.id_proyecto
+    WHERE 
+        p.id_proyecto = {id_proyecto}
+    """
+    query_job = client.query(query)
+    df = query_job.result().to_dataframe()
+    return df
+
+# Formulario de entrada
+st.title('Ver Datos del Proyecto')
+id_proyecto = st.number_input('ID de Proyecto', min_value=1, step=1)
+if st.button('Mostrar Datos'):
+    df = obtener_datos_por_proyecto(id_proyecto)
+    if not df.empty:
+        st.write('Datos del Proyecto:')
+        st.dataframe(df)
+    else:
+        st.warning('No se encontraron datos para este ID de proyecto.')
+
 
