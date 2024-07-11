@@ -165,3 +165,16 @@ df_capacidades_proyecto = pd.DataFrame(data=[row.values() for row in results_cap
 st.dataframe(df_capacidades_proyecto)
 
 
+# Renombramos las columnas para evitar conflictos si tienen nombres comunes
+df_formacion_proyecto = df_formacion_proyecto.add_prefix('formacion_')
+df_capacidades_proyecto = df_capacidades_proyecto.add_prefix('capacidades_')
+
+# Unimos ambos DataFrames
+df_unido = pd.concat([df_formacion_proyecto, df_capacidades_proyecto], axis=1)
+
+# Ahora df_unido contendrá todas las columnas de df_formacion_proyecto y df_capacidades_proyecto
+# Las columnas de df_formacion_proyecto tendrán el prefijo 'formacion_' y las de df_capacidades_proyecto 'capacidades_'
+
+# Mostramos el DataFrame unido en Streamlit
+st.dataframe(df_unido)
+
