@@ -64,7 +64,7 @@ client = bigquery.Client(credentials=credentials)
 # Función para seleccionar los proyectos desde BigQuery
 def get_proyectos():
     query = """
-        SELECT id_proyecto, nombre
+        SELECT id_projecto, nombre
         FROM `ate-rrhh-2024.Ate_kaibot_2024.proyecto`
     """
     query_job = client.query(query)
