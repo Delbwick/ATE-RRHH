@@ -140,6 +140,7 @@ st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
     #probamos otra manera de manipular las fechas
 
     # Consulta SQL 
+'''
 query_formacion_proyecto = f"""
         SELECT * FROM `ate-rrhh-2024.Ate_kaibot_2024.formacion`
         WHERE id_formacion_general IN (
@@ -194,7 +195,7 @@ df_unido = pd.concat([df_formacion_proyecto, df_capacidades_proyecto], axis=1)
 #st.dataframe(df_unido)
 
 #Creo que es mejor que vayan 1 a 1
-
+'''
 
 #vamos aintentar una funcion más felxible
 # Diccionario con las tablas y campos correspondientes
