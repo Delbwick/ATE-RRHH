@@ -7,7 +7,7 @@ import uuid
 
 
 # Configurar la página de Streamlit
-st.set_page_config(page_title="RRHH Proyectos", page_icon="🆕")
+st.set_page_config(page_title="RRHH Proyectos", page_icon="💾")
 st.title("¡Bienvenido a RRHH! ")
 st.header("¡Calcula tu Proyecto!")
 
@@ -166,6 +166,19 @@ df_capacidades_proyecto = pd.DataFrame(data=[row.values() for row in results_cap
 st.markdown("<h3>Capacidades Necesarias</h3>", unsafe_allow_html=True)
 st.dataframe(df_capacidades_proyecto)
 
+query_capacidades_necesarias_proyecto = f"""
+        SELECT * FROM `ate-rrhh-2024.Ate_kaibot_2024.complejidad`
+        WHERE id_complejidad IN (
+        SELECT id_complejidad FROM `ate-rrhh-2024.Ate_kaibot_2024.complementos_de_destino_por_proyecto`
+        WHERE id_proyecto = {id_proyecto_seleccionado})
+    """
+
+query_job_capacidades_proyecto = client.query(query_capacidades_necesarias_proyecto)
+results_capacidades_proyecto = query_job_capacidades_proyecto.result()
+df_capacidades_proyecto = pd.DataFrame(data=[row.values() for row in results_capacidades_proyecto], columns=[field.name for field in results_capacidades_proyecto.schema])
+st.markdown("<h3>Autonomia-Complejidad de la catividad</h3>", unsafe_allow_html=True)
+st.dataframe(df_capacidades_proyecto)
+
 
 # Renombramos las columnas para evitar conflictos si tienen nombres comunes
 df_formacion_proyecto = df_formacion_proyecto.add_prefix('formacion_')
@@ -181,4 +194,53 @@ df_unido = pd.concat([df_formacion_proyecto, df_capacidades_proyecto], axis=1)
 #st.dataframe(df_unido)
 
 #Creo que es mejor que vayan 1 a 1
+
+
+#vamos aintentar una funcion más felxible
+# Diccionario con las tablas y campos correspondientes
+PAGES_TABLES = {
+    "Formación": ("ate-rrhh-2024.Ate_kaibot_2024.formacion", "id_formacion_general"),
+    "Capacidades Necesarias": ("ate-rrhh-2024.Ate_kaibot_2024.capacidades_necesarias", "id_capacidades_necesarias"),
+    "Autonomía-Complejidad de la Actividad": ("ate-rrhh-2024.Ate_kaibot_2024.complejidad", "id_complejidad"),
+    "Complejidad Técnica destino": ("ate-rrhh-2024.Ate_kaibot_2024.complejidad_tecnica", "id_complejidad_tecnica"),
+    "Complejidad Territorial": ("ate-rrhh-2024.Ate_kaibot_2024.complejidad_territorial", "id_complejidad_territorial"),
+    "Conocimientos básicos de acceso al puesto": ("ate-rrhh-2024.Ate_kaibot_2024.conocimientos_basicos_acceso_al_puesto", "id_conocimientos_basicos"),
+    "Especialización destino /ACTUALIZACIÓN DE CONOCIMIENTOS /ESPECIALIZACIÓN/FICICULTAD TÉCNICA/": ("ate-rrhh-2024.Ate_kaibot_2024.especializacion", "id_especializacion"),
+    "Iniciativa": ("ate-rrhh-2024.Ate_kaibot_2024.iniciativa", "id_iniciativa"),
+    "Mando": ("ate-rrhh-2024.Ate_kaibot_2024.mando", "id_mando"),
+    "Nivel de Formación": ("ate-rrhh-2024.Ate_kaibot_2024.nivel_de_fomacion", "id_formacion"),
+    "Responsabilidad de la Actividad": ("ate-rrhh-2024.Ate_kaibot_2024.responsabilidad_actividad", "id_responsabilidad_actividad"),
+    "Responsabilidad Relacional": ("ate-rrhh-2024.Ate_kaibot_2024.responsabilidad", "id_responsabilidad")
+}
+
+# Esta función genera y ejecuta la consulta SQL para una página específica
+def execute_query_for_page(page_name, id_proyecto):
+    if page_name in PAGES_TABLES:
+        table_name, id_field = PAGES_TABLES[page_name]
+        query = f"""
+            SELECT * FROM `{table_name}`
+            WHERE {id_field} IN (
+                SELECT {id_field} FROM `ate-rrhh-2024.Ate_kaibot_2024.complementos_de_destino_por_proyecto`
+                WHERE id_proyecto = {id_proyecto}
+            )
+        """
+        query_job = client.query(query)
+        results = query_job.result()
+        df = pd.DataFrame(data=[row.values() for row in results], columns=[field.name for field in results.schema])
+        return df
+    else:
+        return None
+
+# Obtener el id_proyecto seleccionado desde un inputbox en Streamlit
+#id_proyecto_seleccionado = st.number_input('Ingrese el ID del proyecto', min_value=1)
+
+# Iterar sobre todas las páginas en el diccionario y ejecutar las consultas
+for page_name in PAGES_TABLES:
+    st.markdown(f"<h3>{page_name}</h3>", unsafe_allow_html=True)
+    df = execute_query_for_page(page_name, id_proyecto_seleccionado)
+    if df is not None:
+        st.dataframe(df)
+    else:
+        st.write(f"No se encontró la página '{page_name}' en el diccionario o no se pudo ejecutar la consulta.")
+
 
