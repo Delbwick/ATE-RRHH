@@ -100,6 +100,11 @@ else:
 
 # Puedes usar 'id_proyecto_seleccionado' en tu lógica posterior según sea necesario
 
+
+#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+#PUESTOS POR PROYECTO
+#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
 #Vamos extraer los datos de puestos de ese proyecto
 # Mostrar el encabezado y línea separadora
 st.markdown("<h2>Puestos asociados a ese proyecto</h2>", unsafe_allow_html=True)
@@ -125,5 +130,32 @@ df_puestos_proyecto = pd.DataFrame(data=[row.values() for row in results_puestos
 st.dataframe(df_puestos_proyecto)
 
 
+#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+#COMPLEMENTOS DE DESTINO POR PROYECTO
+#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+#Vamos extraer los datos de puestos de ese proyecto
+# Mostrar el encabezado y línea separadora
+st.markdown("<h2>Puestos asociados a ese proyecto</h2>", unsafe_allow_html=True)
+st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
+
+credentials = service_account.Credentials.from_service_account_info(
+        st.secrets["gcp_service_account"]
+    )
+client = bigquery.Client(credentials=credentials)
+    #probamos otra manera de manipular las fechas
+
+    # Consulta SQL 
+query_puestos_proyecto = f"""
+        SELECT * FROM `ate-rrhh-2024.Ate_kaibot_2024.formacion`
+        WHERE id_formacion_general IN (
+        SELECT id_formacion_general FROM `ate-rrhh-2024.Ate_kaibot_2024.complementos_de_destino_por_proyecto`
+        WHERE id_proyecto = {id_proyecto_seleccionado})
+    """
+
+query_job_puestos_proyecto = client.query(query_puestos_proyecto)
+results_puestos_proyecto = query_job_puestos_proyecto.result()
+df_puestos_proyecto = pd.DataFrame(data=[row.values() for row in results_puestos_proyecto], columns=[field.name for field in results_puestos_proyecto.schema])
+st.dataframe(df_puestos_proyecto)
 
 
