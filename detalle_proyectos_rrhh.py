@@ -62,7 +62,7 @@ client = bigquery.Client(credentials=credentials)
 #CODIGO DE LA APLICACION
 #<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>
 #FUncion para selecciopnar los proyectos
-def get_puestos():
+def get_proyectos():
     query = """
         SELECT *
         FROM `ate-rrhh-2024.Ate_kaibot_2024.proyecto`
