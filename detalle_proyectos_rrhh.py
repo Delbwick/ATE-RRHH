@@ -70,7 +70,7 @@ def get_proyectos():
     query_job = client.query(query)
     results = query_job.result()
     proyectos = [row.nombre for row in results]
-    id_proyecto_seleccionado = [row.id_projecto for row in results]
+    #id_proyecto_seleccionado = [row.id_projecto for row in results]
     return proyectos
 
 # Mostrar el selectbox de puestos
