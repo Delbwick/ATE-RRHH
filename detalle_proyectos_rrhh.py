@@ -243,6 +243,7 @@ def execute_query_for_page(page_name, id_proyecto):
         df = pd.DataFrame(data=[row.values() for row in results], columns=[field.name for field in results.schema])
         if not df.empty:
             total_puntos = df['puntos'].iloc[0]
+            total_puntos_especificos +=total_puntos
         else:
             total_puntos = 0
         return df, total_puntos
@@ -262,6 +263,8 @@ for page_name in PAGES_TABLES_2:
         st.write(f"Total de puntos: {total_puntos}")
     else:
         st.write(f"No se encontró la página '{page_name}' en el diccionario o no se pudo ejecutar la consulta.")
+
+st.write(f"Total de puntos totales: {total_puntos_especificos}")
 
 
 #>>>>>>>>>Valor por punto especifico por poryecto
