@@ -140,62 +140,24 @@ st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
     #probamos otra manera de manipular las fechas
 
     # Consulta SQL 
-"""
-query_formacion_proyecto = f"""
-        SELECT * FROM `ate-rrhh-2024.Ate_kaibot_2024.formacion`
-        WHERE id_formacion_general IN (
-        SELECT id_formacion_general FROM `ate-rrhh-2024.Ate_kaibot_2024.complementos_de_destino_por_proyecto`
-        WHERE id_proyecto = {id_proyecto_seleccionado})
-    """
 
-query_job_formacion_proyecto = client.query(query_formacion_proyecto)
-results_puestos_proyecto = query_job_formacion_proyecto.result()
-df_formacion_proyecto = pd.DataFrame(data=[row.values() for row in results_puestos_proyecto], columns=[field.name for field in results_puestos_proyecto.schema])
-st.markdown("<h3>Formacion</h3>", unsafe_allow_html=True)
-st.dataframe(df_formacion_proyecto)
+#query_formacion_proyecto = f"""
+ #       SELECT * FROM `ate-rrhh-2024.Ate_kaibot_2024.formacion`
+  #      WHERE id_formacion_general IN (
+   #     SELECT id_formacion_general FROM `ate-rrhh-2024.Ate_kaibot_2024.complementos_de_destino_por_proyecto`
+     #   WHERE id_proyecto = {id_proyecto_seleccionado})
+    #"""
 
-query_capacidades_necesarias_proyecto = f"""
-        SELECT * FROM `ate-rrhh-2024.Ate_kaibot_2024.capacidades_necesarias`
-        WHERE id_capacidades_necesarias IN (
-        SELECT id_capacidades_necesarias FROM `ate-rrhh-2024.Ate_kaibot_2024.complementos_de_destino_por_proyecto`
-        WHERE id_proyecto = {id_proyecto_seleccionado})
-    """
-
-query_job_capacidades_proyecto = client.query(query_capacidades_necesarias_proyecto)
-results_capacidades_proyecto = query_job_capacidades_proyecto.result()
-df_capacidades_proyecto = pd.DataFrame(data=[row.values() for row in results_capacidades_proyecto], columns=[field.name for field in results_capacidades_proyecto.schema])
-st.markdown("<h3>Capacidades Necesarias</h3>", unsafe_allow_html=True)
-st.dataframe(df_capacidades_proyecto)
-
-query_capacidades_necesarias_proyecto = f"""
-        SELECT * FROM `ate-rrhh-2024.Ate_kaibot_2024.complejidad`
-        WHERE id_complejidad IN (
-        SELECT id_complejidad FROM `ate-rrhh-2024.Ate_kaibot_2024.complementos_de_destino_por_proyecto`
-        WHERE id_proyecto = {id_proyecto_seleccionado})
-    """
-
-query_job_capacidades_proyecto = client.query(query_capacidades_necesarias_proyecto)
-results_capacidades_proyecto = query_job_capacidades_proyecto.result()
-df_capacidades_proyecto = pd.DataFrame(data=[row.values() for row in results_capacidades_proyecto], columns=[field.name for field in results_capacidades_proyecto.schema])
-st.markdown("<h3>Autonomia-Complejidad de la catividad</h3>", unsafe_allow_html=True)
-st.dataframe(df_capacidades_proyecto)
+#query_job_formacion_proyecto = client.query(query_formacion_proyecto)
+#results_puestos_proyecto = query_job_formacion_proyecto.result()
+#df_formacion_proyecto = pd.DataFrame(data=[row.values() for row in results_puestos_proyecto], columns=[field.name for field in results_puestos_proyecto.schema])
+#st.markdown("<h3>Formacion</h3>", unsafe_allow_html=True)
+#st.dataframe(df_formacion_proyecto)
 
 
-# Renombramos las columnas para evitar conflictos si tienen nombres comunes
-df_formacion_proyecto = df_formacion_proyecto.add_prefix('formacion_')
-df_capacidades_proyecto = df_capacidades_proyecto.add_prefix('capacidades_')
 
-# Unimos ambos DataFrames
-df_unido = pd.concat([df_formacion_proyecto, df_capacidades_proyecto], axis=1)
 
-# Ahora df_unido contendrá todas las columnas de df_formacion_proyecto y df_capacidades_proyecto
-# Las columnas de df_formacion_proyecto tendrán el prefijo 'formacion_' y las de df_capacidades_proyecto 'capacidades_'
 
-# Mostramos el DataFrame unido en Streamlit
-#st.dataframe(df_unido)
-
-#Creo que es mejor que vayan 1 a 1
-"""
 
 #vamos aintentar una funcion más felxible
 # Diccionario con las tablas y campos correspondientes
@@ -237,6 +199,74 @@ def execute_query_for_page(page_name, id_proyecto):
 
 # Iterar sobre todas las páginas en el diccionario y ejecutar las consultas
 for page_name in PAGES_TABLES:
+    st.markdown(f"<h3>{page_name}</h3>", unsafe_allow_html=True)
+    df = execute_query_for_page(page_name, id_proyecto_seleccionado)
+    if df is not None:
+        st.dataframe(df)
+    else:
+        st.write(f"No se encontró la página '{page_name}' en el diccionario o no se pudo ejecutar la consulta.")
+
+
+st.markdown("<h2>Complementos Especificos</h2>", unsafe_allow_html=True)
+st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
+
+
+
+PAGES_TABLES_2 = {
+    #"Capacidades Necesarias": ("ate-rrhh-2024.Ate_kaibot_2024.capacidades_necesarias", "id_capacidades_necesarias"),
+    #"Complejidad": ("ate-rrhh-2024.Ate_kaibot_2024.complejidad", "id_complejidad"),
+    "Complejidad Técnica": ("ate-rrhh-2024.Ate_kaibot_2024.complejidad_tecnica", "id_complejidad_tecnica"),
+    #"Complejidad Territorial": ("ate-rrhh-2024.Ate_kaibot_2024.complejidad_territorial", "id_complejidad_territorial"),
+    #"Complemento de Destino": ("ate-rrhh-2024.Ate_kaibot_2024.complemento_de_destino", "id_complemento_destino"),
+    #"Complemento Específico por Año": ("ate-rrhh-2024.Ate_kaibot_2024.complemento_específico_xaño", "id_complemento_especifico"),
+    "Condiciones de Trabajo": ("ate-rrhh-2024.Ate_kaibot_2024.condiciones_de_trabajo", "id_condiciones"),
+    #"Conocimientos básicos de acceso al puesto": ("ate-rrhh-2024.Ate_kaibot_2024.conocimientos_basicos_acceso_al_puesto", "id_conocimientos_basicos"),
+    #"Conocimientos específicos al puesto": ("ate-rrhh-2024.Ate_kaibot_2024.conocimientos_especificos", "id_conocimientos_especificos"),
+    #"Definitivo?¿ ": ("ate-rrhh-2024.Ate_kaibot_2024.definitivo", "id_definitivo"),
+    "Esfuerzo Emocional": ("ate-rrhh-2024.Ate_kaibot_2024.esfuerzo_emocional", "id_esfuerzo"),
+    "Esfuerzo Físico": ("ate-rrhh-2024.Ate_kaibot_2024.esfuerzo_fisico", "id_esfuerzo_fisico"),
+    "Esfuerzo Mental": ("ate-rrhh-2024.Ate_kaibot_2024.esfuerzo_mental", "id_esfuerzo_mental"),
+    "Especialización": ("ate-rrhh-2024.Ate_kaibot_2024.especializacion", "id_especializacion"),
+    #"Idioma del Proyecto": ("ate-rrhh-2024.Ate_kaibot_2024.idioma_proyecto", "id_idioma_proyecto"),
+    "Idiomas del puesto?": ("ate-rrhh-2024.Ate_kaibot_2024.idiomas", "id_idiomas"),
+    "Idiomas (Euskera)": ("ate-rrhh-2024.Ate_kaibot_2024.idiomas_euskera", "Id_idioma_euskera"),
+    "Importancia Relativa": ("ate-rrhh-2024.Ate_kaibot_2024.importancia_relativa", "id_importancia"),
+    "Incompatibilidad": ("ate-rrhh-2024.Ate_kaibot_2024.incompatibilidad", "id_incompatibilidad"),
+    #"Iniciativa": ("ate-rrhh-2024.Ate_kaibot_2024.iniciativa", "id_iniciativa"),
+    #"Mando": ("ate-rrhh-2024.Ate_kaibot_2024.mando", "id_mando"),
+    #"Nivel de Formación": ("ate-rrhh-2024.Ate_kaibot_2024.nivel_formacion", "id_nivel_formacion"),
+    "Penosidad del Turno": ("ate-rrhh-2024.Ate_kaibot_2024.penosidad_turno", "id_penosidad_turno"),
+    #"Porcentajes Variables": ("ate-rrhh-2024.Ate_kaibot_2024.porcentajes_variables", "id_porcentajes_variables"),
+    #"Proyectos": ("ate-rrhh-2024.Ate_kaibot_2024.proyecto", "id_proyecto"),
+    #"Puestos": ("ate-rrhh-2024.Ate_kaibot_2024.puestos", "id_puesto"),
+    #"Responsabilidad": ("ate-rrhh-2024.Ate_kaibot_2024.responsabilidad", "id_responsabilidad"),
+    #"Salario Base por Categoría y Año": ("ate-rrhh-2024.Ate_kaibot_2024.salario_base_xcategoria_xaño", "id_salario_base"),
+    "Turno": ("ate-rrhh-2024.Ate_kaibot_2024.turno", "id_turno")
+    # Agregar el resto de las tablas aquí
+}
+
+def execute_query_for_page(page_name, id_proyecto):
+    if page_name in PAGES_TABLES_2:
+        table_name, id_field = PAGES_TABLES_2[page_name]
+        query = f"""
+            SELECT * FROM `{table_name}`
+            WHERE {id_field} IN (
+                SELECT {id_field} FROM `ate-rrhh-2024.Ate_kaibot_2024.complementos_especificos_por_proyecto`
+                WHERE id_proyecto = {id_proyecto}
+            )
+        """
+        query_job = client.query(query)
+        results = query_job.result()
+        df = pd.DataFrame(data=[row.values() for row in results], columns=[field.name for field in results.schema])
+        return df
+    else:
+        return None
+
+# Obtener el id_proyecto seleccionado desde un inputbox en Streamlit
+#id_proyecto_seleccionado = st.number_input('Ingrese el ID del proyecto', min_value=1)
+
+# Iterar sobre todas las páginas en el diccionario y ejecutar las consultas
+for page_name in PAGES_TABLES_2:
     st.markdown(f"<h3>{page_name}</h3>", unsafe_allow_html=True)
     df = execute_query_for_page(page_name, id_proyecto_seleccionado)
     if df is not None:
