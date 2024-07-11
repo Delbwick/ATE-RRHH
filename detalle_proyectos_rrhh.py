@@ -61,3 +61,23 @@ client = bigquery.Client(credentials=credentials)
 #>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<
 #CODIGO DE LA APLICACION
 #<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>
+#FUncion para selecciopnar los proyectos
+def get_puestos():
+    query = """
+        SELECT *
+        FROM `ate-rrhh-2024.Ate_kaibot_2024.proyecto`
+    """
+    query_job = client.query(query)
+    results = query_job.result()
+    proyectos = [row.nombre for row in results]
+    id_proyecto_seleccionado = [row.id_projecto for row in results]
+    return proyectos
+
+# Mostrar el selectbox de puestos
+st.markdown("<h2>Datos de Factores</h2>", unsafe_allow_html=True)
+st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
+selected_proyecto = st.selectbox("Selecciona un proyecto", get_proyectos())
+st.write(id_proyecto_seleccionado)
+#mostrar los puestos como checkbox
+# Obtener los puestos
+proyectos = get_proyectos()
