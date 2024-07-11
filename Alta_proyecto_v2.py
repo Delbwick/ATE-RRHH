@@ -422,78 +422,8 @@ if st.button('Insertar en BigQuery'):
 
 
 # Función para abrir otra aplicación
-def abrir_otra_app():
-    url_otra_app = "https://test-analytics-g7zhphce2svtgaye6sgiso.streamlit.app/"
-    webbrowser.open_new_tab(url_otra_app)
+#def abrir_otra_app():
+    #url_otra_app = "https://test-analytics-g7zhphce2svtgaye6sgiso.streamlit.app/"
+    #webbrowser.open_new_tab(url_otra_app)
 
-st.title("Ver listado de clientes")
-
-# Botón para abrir otra aplicación
-if st.button("Clientes"):
-    abrir_otra_app()
-
-if st.button("Ir a Otra App"):
-    st.markdown('[Otra App](https://test-analytics-g7zhphce2svtgaye6sgiso.streamlit.app/)')
-
-
-def ejecutar_consulta():
-    query = """
-    SELECT 
-        p.id_projecto,
-        p.descripcion AS proyecto_descripcion,
-        pd.id_puesto,
-        pu.descripcion AS puesto_descripcion,
-    """
-    
-    # Agregar campos de complemento de destino
-    for nombre, (tabla, id_tabla) in PAGES_TABLES.items():
-        query += f"""
-        cd_{id_tabla}.descripcion AS {id_tabla}_descripcion,
-        """
-    
-    # Agregar campos de complemento específico
-    for nombre, (tabla, id_tabla) in PAGES_TABLES_2.items():
-        query += f"""
-        ce_{id_tabla}.descripcion AS {id_tabla}_descripcion,
-        """
-    
-    # Quitar la última coma
-    query = query.rstrip(",\n")
-    
-    # Agregar el FROM y los JOINs
-    query += """
-    FROM 
-        `ate-rrhh-2024.Ate_kaibot_2024.proyecto` p
-    LEFT JOIN 
-        `ate-rrhh-2024.Ate_kaibot_2024.puestos_seleccionados_por_proyecto` pd ON p.id_projecto = pd.id_proyecto
-    LEFT JOIN 
-        `ate-rrhh-2024.Ate_kaibot_2024.puestos` pu ON pd.id_puesto = pu.id_puesto
-    """
-    
-    # Agregar LEFT JOINs para las tablas de complemento de destino
-    for nombre, (tabla, id_tabla) in PAGES_TABLES.items():
-        query += f"""
-    LEFT JOIN 
-        `{tabla}` cd_{id_tabla} ON p.id_projecto = cd_{id_tabla}.id_proyecto
-        AND cd_{id_tabla}.{id_tabla} = pd.{id_tabla}
-        """
-    
-    # Agregar LEFT JOINs para las tablas de complemento específico
-    for nombre, (tabla, id_tabla) in PAGES_TABLES_2.items():
-        query += f"""
-    LEFT JOIN 
-        `{tabla}` ce_{id_tabla} ON p.id_projecto = ce_{id_tabla}.id_proyecto
-        AND ce_{id_tabla}.{id_tabla} = pd.{id_tabla}
-        """
-    
-    #return query
-    query_job = client.query(query)
-    results = query_job.result().to_dataframe()
-
-    return results
-
-# Mostrar botón para ejecutar la consulta
-if st.button("Ejecutar Consulta"):
-    resultados = ejecutar_consulta()
-    st.write(resultados)
 
