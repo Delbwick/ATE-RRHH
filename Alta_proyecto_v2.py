@@ -430,21 +430,25 @@ if st.button('Insertar en BigQuery'):
 def obtener_datos_por_proyecto(id_proyecto):
     query = f"""
     SELECT 
-        p.descripcion as puesto,
-        cd.descripcion as factor_destino,
-        ce.descripcion as factor_especifico
+        p.descripcion AS puesto,
+        cd.descripcion AS factor_destino,
+        ce.descripcion AS factor_especifico
     FROM 
+        `ate-rrhh-2024.Ate_kaibot_2024.puestos_seleccionados_por_proyecto` ps
+    LEFT JOIN 
         `ate-rrhh-2024.Ate_kaibot_2024.puestos` p
+    ON 
+        ps.id_puesto = p.id_puesto
     LEFT JOIN 
         `ate-rrhh-2024.Ate_kaibot_2024.complementos_de_destino_por_proyecto` cd
     ON 
-        p.id_puesto = cd.id_puesto AND p.id_proyecto = cd.id_proyecto
+        ps.id_proyecto = cd.id_proyecto
     LEFT JOIN 
         `ate-rrhh-2024.Ate_kaibot_2024.complementos_especificos_por_proyecto` ce
     ON 
-        p.id_puesto = ce.id_puesto AND p.id_proyecto = ce.id_proyecto
+        ps.id_proyecto = ce.id_proyecto
     WHERE 
-        p.id_proyecto = {id_proyecto}
+        ps.id_proyecto = {id_proyecto}
     """
     query_job = client.query(query)
     df = query_job.result().to_dataframe()
@@ -460,5 +464,3 @@ if st.button('Mostrar Datos'):
         st.dataframe(df)
     else:
         st.warning('No se encontraron datos para este ID de proyecto.')
-
-
