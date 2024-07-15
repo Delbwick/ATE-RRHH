@@ -279,16 +279,39 @@ valor_especifico_puesto=total_puntos_especificos*total_puntos_especificos
 st.write(f"Valor especifico del puesto de trabajo: {valor_especifico_puesto}")
 
 
+# Esta función genera y ejecuta la consulta SQL para una página específica
+def execute_query_for_page_2(page_name, id_proyecto):
+    if page_name in PAGES_TABLES:
+        table_name, id_field = PAGES_TABLES[page_name]
+        query = f"""
+            SELECT * FROM `{table_name}`
+            WHERE {id_field} IN (
+                SELECT {id_field} FROM `ate-rrhh-2024.Ate_kaibot_2024.complementos_de_destino_por_proyecto`
+                WHERE id_proyecto = {id_proyecto}
+            )
+        """
+        try:
+            query_job = client.query(query)
+            results = query_job.result()
+            df_2 = pd.DataFrame(data=[row.values() for row in results], columns=[field.name for field in results.schema])
+            return df
+        except Exception as e:
+            st.error(f"Error ejecutando la consulta para {page_name}: {e}")
+            return pd.DataFrame()  # Retorna un DataFrame vacío en caso de error
+    else:
+        st.error(f"Página {page_name} no encontrada en PAGES_TABLES.")
+        return pd.DataFrame()  # Retorna un DataFrame vacío si la página no se encuentra
+
 # Ejecuta las consultas para todas las páginas y combina los resultados en una única tabla
 def get_combined_table(id_proyecto):
-    combined_df = pd.DataFrame()
+    combined_df_2 = pd.DataFrame()
     
     for page_name in PAGES_TABLES:
-        df = execute_query_for_page(page_name, id_proyecto)
-        if df is not None and not df.empty:
-            combined_df = pd.concat([combined_df, df], ignore_index=True)
+        df_2 = execute_query_for_page_2(page_name, id_proyecto)
+        if not df.empty:  # Verifica si el DataFrame no está vacío
+            combined_df_2 = pd.concat([combined_df_2, df_2], ignore_index=True)
     
-    return combined_df
+    return combined_df_2
 
 # Interfaz de Streamlit
 st.title("Consulta de Proyectos")
