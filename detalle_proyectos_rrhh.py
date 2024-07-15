@@ -273,7 +273,81 @@ st.write(f"Total acumulado de puntos específicos: {total_puntos_especificos}")
 
 #≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤<
 #Unificamos las tablas por puesto
-if not df_puestos_proyecto.empty:
+# Función para seleccionar los proyectos desde BigQuery
+def get_proyectos():
+    query = """
+        SELECT id_projecto, nombre
+        FROM `ate-rrhh-2024.Ate_kaibot_2024.proyecto`
+    """
+    query_job = client.query(query)
+    results = query_job.result()
+    proyectos = [{'id': row.id_projecto, 'nombre': row.nombre} for row in results]
+    return proyectos
+
+# Función para obtener puestos por proyecto
+def get_puestos_por_proyecto(id_proyecto):
+    query = f"""
+        SELECT * FROM `ate-rrhh-2024.Ate_kaibot_2024.puestos`
+        WHERE id_puesto IN (
+            SELECT id_puesto FROM `ate-rrhh-2024.Ate_kaibot_2024.puestos_seleccionados_por_proyecto`
+            WHERE id_proyecto = {id_proyecto}
+        )
+    """
+    query_job = client.query(query)
+    results = query_job.result()
+    df = pd.DataFrame(data=[row.values() for row in results], columns=[field.name for field in results.schema])
+    return df
+
+# Función para obtener complementos
+def get_complementos(id_proyecto, table_info, page_name):
+    table_name, id_field, query_suffix = table_info
+    query = f"""
+        SELECT *, '{page_name}' as page_name FROM `{table_name}`
+        WHERE {id_field} IN (
+            SELECT {id_field} FROM `{query_suffix}`
+            WHERE id_proyecto = {id_proyecto}
+        )
+    """
+    query_job = client.query(query)
+    results = query_job.result()
+    df = pd.DataFrame(data=[row.values() for row in results], columns=[field.name for field in results.schema] + ['page_name'])
+    return df
+
+# Mostrar el encabezado y línea separadora
+st.markdown("<h2>Selector de Proyectos</h2>", unsafe_allow_html=True)
+st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
+
+# Obtener lista de proyectos
+proyectos = get_proyectos()
+
+# Extraer solo los nombres de los proyectos para el selectbox
+proyectos_nombres = [proyecto['nombre'] for proyecto in proyectos]
+
+# Mostrar el cuadro de selección de proyectos
+index_seleccionado = st.selectbox("Selecciona un proyecto", proyectos_nombres)
+
+# Obtener el ID del proyecto seleccionado
+id_proyecto_seleccionado = None
+for proyecto in proyectos:
+    if proyecto['nombre'] == index_seleccionado:
+        id_proyecto_seleccionado = proyecto['id']
+        break
+
+# Mostrar el ID seleccionado (solo para propósitos de verificación)
+if id_proyecto_seleccionado is not None:
+    st.write(f"ID del proyecto seleccionado: {id_proyecto_seleccionado}")
+else:
+    st.write("Selecciona un proyecto para ver su ID")
+
+if id_proyecto_seleccionado:
+    # Mostrar los puestos asociados al proyecto
+    st.markdown("<h2>Puestos asociados a ese proyecto</h2>", unsafe_allow_html=True)
+    st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
+
+    df_puestos_proyecto = get_puestos_por_proyecto(id_proyecto_seleccionado)
+    st.dataframe(df_puestos_proyecto)
+
+    if not df_puestos_proyecto.empty:
         PAGES_TABLES = {
             "Formación": ("ate-rrhh-2024.Ate_kaibot_2024.formacion", "id_formacion_general", "ate-rrhh-2024.Ate_kaibot_2024.complementos_de_destino_por_proyecto"),
             "Capacidades Necesarias": ("ate-rrhh-2024.Ate_kaibot_2024.capacidades_necesarias", "id_capacidades_necesarias", "ate-rrhh-2024.Ate_kaibot_2024.complementos_de_destino_por_proyecto"),
