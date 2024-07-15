@@ -277,3 +277,29 @@ st.write(f"Total acumulado de puntos específicos: {total_puntos_especificos}")
 valor_punto_especifico_proyecto = st.number_input('valor_punto_especifico_proyecto', min_value=1)
 valor_especifico_puesto=total_puntos_especificos*total_puntos_especificos
 st.write(f"Valor especifico del puesto de trabajo: {valor_especifico_puesto}")
+
+
+# Ejecuta las consultas para todas las páginas y combina los resultados en una única tabla
+def get_combined_table(id_proyecto):
+    combined_df = pd.DataFrame()
+    
+    for page_name in PAGES_TABLES:
+        df = execute_query_for_page(page_name, id_proyecto)
+        if df is not None and not df.empty:
+            combined_df = pd.concat([combined_df, df], ignore_index=True)
+    
+    return combined_df
+
+# Interfaz de Streamlit
+st.title("Consulta de Proyectos")
+id_proyecto = st.text_input("Ingrese el ID del proyecto:")
+
+if id_proyecto:
+    with st.spinner('Ejecutando consultas...'):
+        result_df = get_combined_table(id_proyecto)
+    
+    if not result_df.empty:
+        st.success("Consulta exitosa!")
+        st.dataframe(result_df)
+    else:
+        st.warning("No se encontraron datos para el ID de proyecto proporcionado.")
