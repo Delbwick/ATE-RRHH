@@ -299,7 +299,7 @@ def execute_query_for_page(page_name, id_proyecto):
     if page_name in PAGES_TABLES:
         table_name, id_field = PAGES_TABLES[page_name]
         query = f"""
-            SELECT * FROM `{table_name}`
+            SELECT *, '{page_name}' as tabla_origen FROM `{table_name}`
             WHERE {id_field} IN (
                 SELECT {id_field} FROM `ate-rrhh-2024.Ate_kaibot_2024.complementos_de_destino_por_proyecto`
                 WHERE id_proyecto = {id_proyecto}
@@ -308,7 +308,7 @@ def execute_query_for_page(page_name, id_proyecto):
         try:
             query_job = client.query(query)
             results = query_job.result()
-            df = pd.DataFrame(data=[row.values() for row in results], columns=[field.name for field in results.schema])
+            df = pd.DataFrame(data=[row.values() for row in results], columns=[field.name for field in results.schema] + ['tabla_origen'])
             return df
         except Exception as e:
             st.error(f"Error ejecutando la consulta para {page_name}: {e}")
@@ -338,6 +338,6 @@ if id_proyecto:
     
     if not result_df.empty:
         st.success("Consulta exitosa!")
-        st.dataframe(result_df)
+        st.dataframe(result_df[['tabla_origen', 'puntos'] + [col for col in result_df.columns if col not in ['tabla_origen', 'puntos']]])
     else:
         st.warning("No se encontraron datos para el ID de proyecto proporcionado.")
