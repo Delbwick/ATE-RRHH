@@ -294,7 +294,7 @@ def execute_query_for_page_2(page_name, id_proyecto):
             query_job = client.query(query)
             results = query_job.result()
             df_2 = pd.DataFrame(data=[row.values() for row in results], columns=[field.name for field in results.schema])
-            return df
+            return df_2
         except Exception as e:
             st.error(f"Error ejecutando la consulta para {page_name}: {e}")
             return pd.DataFrame()  # Retorna un DataFrame vacío en caso de error
