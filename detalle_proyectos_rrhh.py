@@ -287,7 +287,7 @@ def execute_query_for_page_2(page_name, id_proyecto):
             SELECT * FROM `{table_name}`
             WHERE {id_field} IN (
                 SELECT {id_field} FROM `ate-rrhh-2024.Ate_kaibot_2024.complementos_de_destino_por_proyecto`
-                WHERE id_proyecto = {id_proyecto}
+                WHERE id_proyecto = {id_proyecto_seleccionado}
             )
         """
         try:
