@@ -316,6 +316,7 @@ def get_combined_table(id_proyecto):
 # Interfaz de Streamlit
 st.title("Consulta de Proyectos")
 id_proyecto = st.text_input("Ingrese el ID del proyecto:")
+id_proyecto=id_proyecto_seleccionado
 
 if id_proyecto:
     with st.spinner('Ejecutando consultas...'):
