@@ -319,7 +319,7 @@ id_proyecto = st.text_input("Ingrese el ID del proyecto:")
 
 if id_proyecto:
     with st.spinner('Ejecutando consultas...'):
-        result_df = get_combined_table(id_proyecto)
+        result_df = get_combined_table(id_proyecto_seleccionado)
     
     if not result_df.empty:
         st.success("Consulta exitosa!")
