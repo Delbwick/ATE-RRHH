@@ -271,6 +271,49 @@ for page_name in PAGES_TABLES_2:
 st.write(f"Total acumulado de puntos específicos: {total_puntos_especificos}")
 
 
+#≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤<
+#Unificamos las tablas por puesto
+if not df_puestos_proyecto.empty:
+        PAGES_TABLES = {
+            "Formación": ("ate-rrhh-2024.Ate_kaibot_2024.formacion", "id_formacion_general", "ate-rrhh-2024.Ate_kaibot_2024.complementos_de_destino_por_proyecto"),
+            "Capacidades Necesarias": ("ate-rrhh-2024.Ate_kaibot_2024.capacidades_necesarias", "id_capacidades_necesarias", "ate-rrhh-2024.Ate_kaibot_2024.complementos_de_destino_por_proyecto"),
+            # Agregar el resto de las tablas aquí
+        }
+
+        PAGES_TABLES_2 = {
+            "Complejidad Técnica": ("ate-rrhh-2024.Ate_kaibot_2024.complejidad_tecnica", "id_complejidad_tecnica", "ate-rrhh-2024.Ate_kaibot_2024.complementos_especificos_por_proyecto"),
+            "Condiciones de Trabajo": ("ate-rrhh-2024.Ate_kaibot_2024.condiciones_de_trabajo", "id_condiciones", "ate-rrhh-2024.Ate_kaibot_2024.complementos_especificos_por_proyecto"),
+            # Agregar el resto de las tablas aquí
+        }
+
+        # Unificar los DataFrames de complementos
+        df_complementos_unificados = pd.DataFrame()
+
+        # Iterar sobre todos los puestos y obtener los complementos asociados
+        for _, puesto in df_puestos_proyecto.iterrows():
+            id_puesto = puesto['id_puesto']
+
+            for page_name, table_info in PAGES_TABLES.items():
+                df_complementos = get_complementos(id_proyecto_seleccionado, table_info, page_name)
+                if not df_complementos.empty:
+                    df_complementos['id_puesto'] = id_puesto  # Añadir id_puesto para mantener la referencia
+                    df_complementos_unificados = pd.concat([df_complementos_unificados, df_complementos])
+
+            for page_name, table_info in PAGES_TABLES_2.items():
+                df_complementos = get_complementos(id_proyecto_seleccionado, table_info, page_name)
+                if not df_complementos.empty:
+                    df_complementos['id_puesto'] = id_puesto  # Añadir id_puesto para mantener la referencia
+                    df_complementos_unificados = pd.concat([df_complementos_unificados, df_complementos])
+
+        # Mostrar el DataFrame unificado
+        if not df_complementos_unificados.empty:
+            st.markdown("<h2>Complementos asociados a los puestos</h2>", unsafe_allow_html=True)
+            st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
+            st.dataframe(df_complementos_unificados)
+        else:
+            st.write("No se encontraron complementos para los puestos del proyecto.")
+
+
 #>>>>>>>>>Valor por punto especifico por poryecto
 #ºel valor por peso especifico por poryecto va variar dependiendo del ayntamiento del año y de la legislacion por lo que tendremos que tener una tabla
 #puntos por peso especifico por año
