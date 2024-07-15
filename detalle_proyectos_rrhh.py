@@ -338,6 +338,11 @@ if id_proyecto:
     
     if not result_df.empty:
         st.success("Consulta exitosa!")
-        st.dataframe(result_df[['tabla_origen', 'puntos'] + [col for col in result_df.columns if col not in ['tabla_origen', 'puntos']]])
+        
+        # Reordenar las columnas para que 'tabla_origen' esté primero
+        cols = ['tabla_origen'] + [col for col in result_df.columns if col != 'tabla_origen']
+        result_df = result_df[cols]
+        
+        st.dataframe(result_df)
     else:
         st.warning("No se encontraron datos para el ID de proyecto proporcionado.")
