@@ -279,8 +279,23 @@ valor_especifico_puesto=total_puntos_especificos*total_puntos_especificos
 st.write(f"Valor especifico del puesto de trabajo: {valor_especifico_puesto}")
 
 
+PAGES_TABLES = {
+    "Formación": ("ate-rrhh-2024.Ate_kaibot_2024.formacion", "id_formacion_general"),
+    "Capacidades Necesarias": ("ate-rrhh-2024.Ate_kaibot_2024.capacidades_necesarias", "id_capacidades_necesarias"),
+    "Autonomía-Complejidad de la Actividad": ("ate-rrhh-2024.Ate_kaibot_2024.complejidad", "id_complejidad"),
+    "Complejidad Técnica destino": ("ate-rrhh-2024.Ate_kaibot_2024.complejidad_tecnica", "id_complejidad_tecnica"),
+    "Complejidad Territorial": ("ate-rrhh-2024.Ate_kaibot_2024.complejidad_territorial", "id_complejidad_territorial"),
+    "Conocimientos básicos de acceso al puesto": ("ate-rrhh-2024.Ate_kaibot_2024.conocimientos_basicos_acceso_al_puesto", "id_conocimientos_basicos"),
+    "Especialización destino /ACTUALIZACIÓN DE CONOCIMIENTOS /ESPECIALIZACIÓN/FICICULTAD TÉCNICA/": ("ate-rrhh-2024.Ate_kaibot_2024.especializacion", "id_especializacion"),
+    "Iniciativa": ("ate-rrhh-2024.Ate_kaibot_2024.iniciativa", "id_iniciativa"),
+    "Mando": ("ate-rrhh-2024.Ate_kaibot_2024.mando", "id_mando"),
+    "Nivel de Formación": ("ate-rrhh-2024.Ate_kaibot_2024.nivel_de_fomacion", "id_formacion"),
+    "Responsabilidad de la Actividad": ("ate-rrhh-2024.Ate_kaibot_2024.responsabilidad_actividad", "id_responsabilidad_actividad"),
+    "Responsabilidad Relacional": ("ate-rrhh-2024.Ate_kaibot_2024.responsabilidad", "id_responsabilidad")
+}
+
 # Esta función genera y ejecuta la consulta SQL para una página específica
-def execute_query_for_page_2(page_name, id_proyecto):
+def execute_query_for_page(page_name, id_proyecto):
     if page_name in PAGES_TABLES:
         table_name, id_field = PAGES_TABLES[page_name]
         query = f"""
@@ -293,8 +308,8 @@ def execute_query_for_page_2(page_name, id_proyecto):
         try:
             query_job = client.query(query)
             results = query_job.result()
-            df_2 = pd.DataFrame(data=[row.values() for row in results], columns=[field.name for field in results.schema])
-            return df_2
+            df = pd.DataFrame(data=[row.values() for row in results], columns=[field.name for field in results.schema])
+            return df
         except Exception as e:
             st.error(f"Error ejecutando la consulta para {page_name}: {e}")
             return pd.DataFrame()  # Retorna un DataFrame vacío en caso de error
@@ -304,19 +319,18 @@ def execute_query_for_page_2(page_name, id_proyecto):
 
 # Ejecuta las consultas para todas las páginas y combina los resultados en una única tabla
 def get_combined_table(id_proyecto):
-    combined_df_2 = pd.DataFrame()
+    combined_df = pd.DataFrame()
     
     for page_name in PAGES_TABLES:
-        df_2 = execute_query_for_page_2(page_name, id_proyecto)
+        df = execute_query_for_page(page_name, id_proyecto)
         if not df.empty:  # Verifica si el DataFrame no está vacío
-            combined_df_2 = pd.concat([combined_df_2, df_2], ignore_index=True)
+            combined_df = pd.concat([combined_df, df], ignore_index=True)
     
-    return combined_df_2
+    return combined_df
 
 # Interfaz de Streamlit
 st.title("Consulta de Proyectos")
 id_proyecto = st.text_input("Ingrese el ID del proyecto:")
-id_proyecto=id_proyecto_seleccionado
 
 if id_proyecto:
     with st.spinner('Ejecutando consultas...'):
