@@ -296,6 +296,7 @@ PAGES_TABLES = {
 
 # Esta función genera y ejecuta la consulta SQL para una página específica
 # Esta función genera y ejecuta la consulta SQL para una página específica
+# Esta función genera y ejecuta la consulta SQL para una página específica
 def execute_query_for_page(page_name, id_proyecto):
     if page_name in PAGES_TABLES:
         table_name, id_field = PAGES_TABLES[page_name]
@@ -309,7 +310,6 @@ def execute_query_for_page(page_name, id_proyecto):
         try:
             query_job = client.query(query)
             results = query_job.result()
-            # Incluye 'tabla_origen' en las columnas
             df = pd.DataFrame(data=[row.values() for row in results], columns=[field.name for field in results.schema] + ['tabla_origen'])
             return df
         except Exception as e:
@@ -326,8 +326,6 @@ def get_combined_table(id_proyecto):
     for page_name in PAGES_TABLES:
         df = execute_query_for_page(page_name, id_proyecto)
         if not df.empty:  # Verifica si el DataFrame no está vacío
-            # Asegura que todas las tablas tengan las mismas columnas
-            df = df.reindex(columns=df.columns.tolist() + ['puntos'], fill_value=None)
             combined_df = pd.concat([combined_df, df], ignore_index=True)
     
     return combined_df
@@ -342,11 +340,6 @@ if id_proyecto:
     
     if not result_df.empty:
         st.success("Consulta exitosa!")
-        
-        # Reordenar las columnas para que 'tabla_origen' esté primero
-        cols = ['tabla_origen'] + [col for col in result_df.columns if col != 'tabla_origen']
-        result_df = result_df[cols]
-        
         st.dataframe(result_df)
     else:
         st.warning("No se encontraron datos para el ID de proyecto proporcionado.")
