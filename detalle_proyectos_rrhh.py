@@ -403,7 +403,7 @@ selected_puestos_ids = []
 # Generar los checkboxes para cada puesto
 for index, row in df_puestos_proyecto.iterrows():
     puesto_id = row['id_puesto']
-    puesto_nombre = row['nombre']  # Asumiendo que hay una columna 'nombre' para el nombre del puesto
+    puesto_nombre = row['descripcion']  # Asumiendo que hay una columna 'nombre' para el nombre del puesto
     if st.checkbox(f"{puesto_nombre} (ID: {puesto_id})"):
         selected_puestos_ids.append(puesto_id)
 
