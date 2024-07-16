@@ -420,7 +420,7 @@ valor_base = 33714.66  # euros
 valor_punto_especifico_proyecto = (total_especifico * puntos_base) / valor_base
 
 # Aseguramos que valor_punto_especifico_proyecto no sea menor que min_value
-valor_punto_especifico_proyecto = max(valor_punto_especifico_proyecto, 1.0)
+#valor_punto_especifico_proyecto = max(valor_punto_especifico_proyecto, 1.0)
 
 # Mensaje markdown para explicar la regla de tres
 st.markdown("<h2>Valoración para regla de 3 para tabla de complemento específico por Año (Variable) son 100 puntos -> 33.714,66 euros</h2>", unsafe_allow_html=True)
