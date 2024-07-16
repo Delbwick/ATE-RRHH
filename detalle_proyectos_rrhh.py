@@ -425,8 +425,8 @@ st.markdown("<h2>Valoración para regla de 3 para tabla de complemento específi
 
 # Input para que el usuario introduzca el valor de puntos
 valor_punto_especifico_proyecto = st.number_input('Introduce el número de puntos específicos del proyecto:',
-                                                  min_value=1,
-                                                  value=valor_punto_especifico_proyecto)
+                                                  min_value=float(1),
+                                                  value=float(valor_punto_especifico_proyecto))
 
 # Calculamos el valor específico del puesto
 valor_especifico_puesto = total_especifico * valor_punto_especifico_proyecto
