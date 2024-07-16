@@ -82,7 +82,8 @@ PAGES_TABLES = {
     "Empresa": ("ate-rrhh-2024.Ate_kaibot_2024.company", "id_empresa"),
     "Calendario?¿?": ("ate-rrhh-2024.Ate_kaibot_2024.calendar", "id_calendario"),
     "Calendario-Jornada-Turno": ("ate-rrhh-2024.Ate_kaibot_2024.calendario_jornada-turno", "id_calendario_jornada_turno"),
-    "complejidad_funcional": ("ate-rrhh-2024.Ate_kaibot_2024.complejidad_funcional", "id_complejidad_funcional")
+    "Complejidad funcional": ("ate-rrhh-2024.Ate_kaibot_2024.complejidad_funcional", "id_complejidad_funcional"),
+    "Valoración complemento de destino por año": ("ate-rrhh-2024.Ate_kaibot_2024.valoracion_destino_puntos_por_ano", "id_valoracion_destino")
     }
 
 def add_custom_css():
