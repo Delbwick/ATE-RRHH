@@ -267,8 +267,7 @@ for page_name in PAGES_TABLES_2:
     else:
         st.write(f"No se encontró la página '{page_name}' en el diccionario o no se pudo ejecutar la consulta.")
 
-# Mostrar el total acumulado de puntos específicos
-st.write(f"Total acumulado de puntos específicos: {total_puntos_especificos}")
+
 
 
 
