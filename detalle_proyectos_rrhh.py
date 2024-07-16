@@ -434,8 +434,29 @@ valor_punto_especifico_proyecto = st.number_input('Introduce el número de punto
                                                   value=valor_punto_especifico_proyecto,
                                                   step=0.01)
 
-# Calculamos el valor específico del puesto
-valor_especifico_puesto = total_especifico * valor_punto_especifico_proyecto
 
 # Mostramos el valor específico del puesto
 st.write(f'El valor específico del puesto es: {valor_especifico_puesto:.2f} euros')
+
+#Valoracion de destino por año 
+
+def get_valoracion_puntos(total_destino):
+    client = bigquery.Client()
+
+    query = f"""
+    SELECT puntos_valoracion_destino
+    FROM `ate-rrhh-2024.Ate_kaibot_2024.valoracion_destino_puntos_por_ano`
+    WHERE total_destino = {total_destino}
+    LIMIT 1
+    """
+    
+    query_job = client.query(query)
+    results = query_job.result()
+    
+    for row in results:
+        return row.puntos_valoracion_destino
+
+# Ejemplo de uso
+  # Ejemplo de valor para total_destino
+puntos_valoracion = get_valoracion_puntos(total_destino)
+st.write(f"Puntos de valoración de destino: {puntos_valoracion}")
