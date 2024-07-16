@@ -358,10 +358,10 @@ if id_proyecto:
         result_df_especifico = get_combined_table(id_proyecto, PAGES_TABLES_2, "ate-rrhh-2024.Ate_kaibot_2024.complementos_especificos_por_proyecto")
     
     if not result_df_general.empty:
-        st.success("Consulta general exitosa!")
+        st.success("Consulta complemento destino exitosa!")
         st.dataframe(result_df_general)
-        total_general = result_df_general['puntos'].sum()
-        st.write(f"Total puntos (General): {total_general}")
+        total_destino = result_df_general['puntos'].sum()
+        st.write(f"Total puntos (General): {total_destino}")
     else:
         st.warning("No se encontraron datos para el ID de proyecto proporcionado en la consulta general.")
     
@@ -370,5 +370,7 @@ if id_proyecto:
         st.dataframe(result_df_especifico)
         total_especifico = result_df_especifico['puntos'].sum()
         st.write(f"Total puntos (Específico): {total_especifico}")
+        st.write((f"Total puntos: {total_especifico}+{total_destino}")
+        total_puntos=total_especifico+total_destino
     else:
         st.warning("No se encontraron datos para el ID de proyecto proporcionado en la consulta de complemento específico.")
