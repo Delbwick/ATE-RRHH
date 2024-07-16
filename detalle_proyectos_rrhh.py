@@ -411,7 +411,7 @@ st.write("Puestos seleccionados:", selected_puestos_ids,puesto_nombre)
 st.markdown("<h2>Calculo puntos de complemento especifico</h2>", unsafe_allow_html=True)
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 # Definimos los valores conocidos
-puntos_base = total_destino
+puntos_base = 100
 valor_base = 33714.66  # euros
 
 # Calculamos el total específico (suponiendo que lo obtienes de alguna manera)
