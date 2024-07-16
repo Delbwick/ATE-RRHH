@@ -295,7 +295,6 @@ PAGES_TABLES = {
 }
 
 # Esta función genera y ejecuta la consulta SQL para una página específica
-# Esta función genera y ejecuta la consulta SQL para una página específica
 def execute_query_for_page(page_name, id_proyecto):
     if page_name in PAGES_TABLES:
         table_name, id_field = PAGES_TABLES[page_name]
@@ -339,6 +338,6 @@ if id_proyecto:
     
     if not result_df.empty:
         st.success("Consulta exitosa!")
-        st.dataframe(result_df)
+        st.dataframe(result_df[['tabla_origen', 'puntos'] + [col for col in result_df.columns if col not in ['tabla_origen', 'puntos']]])
     else:
         st.warning("No se encontraron datos para el ID de proyecto proporcionado.")
