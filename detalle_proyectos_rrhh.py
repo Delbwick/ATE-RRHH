@@ -364,7 +364,7 @@ if id_proyecto:
         total_especifico = result_df_especifico['puntos'].sum()
         st.write(f"Total puntos (Específico): {total_especifico}")
         total_puntos=total_especifico+total_destino
-        st.write(f"Total puntos: {total_especifico}+{total_destino}=" total_puntos)
+        st.write(f"Total puntos: {total_especifico}+{total_destino} = {total_puntos}")
         
     else:
         st.warning("No se encontraron datos para el ID de proyecto proporcionado en la consulta de complemento específico.")
