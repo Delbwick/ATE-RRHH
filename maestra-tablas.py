@@ -81,6 +81,8 @@ PAGES_TABLES = {
     "Cliente": ("ate-rrhh-2024.Ate_kaibot_2024.client", "id_cliente"),
     "Empresa": ("ate-rrhh-2024.Ate_kaibot_2024.company", "id_empresa"),
     "Calendario": ("ate-rrhh-2024.Ate_kaibot_2024.calendar", "id_calendario")
+    "Calendario-Jornada-Turno": ("ate-rrhh-2024.Ate_kaibot_2024.calendario_jornada-turno", "id_calendario_jornada_turno"),
+    "complejidad_funcional": ("ate-rrhh-2024.Ate_kaibot_2024.complejidad_funcional", "id_complejidad_funcional"),
     }
 
 def add_custom_css():
