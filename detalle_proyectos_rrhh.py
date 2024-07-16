@@ -461,6 +461,6 @@ for row in results:
 st.title("Consulta de Puntos de Valoración")
 
 if puntos_valoracion:
-    st.write(f"Puntos de valoración: {puntos_valoracion}")
+    st.write(f"Puntos de valoración de destino: {puntos_valoracion}")
 else:
     st.write("No se encontraron puntos de valoración para el valor introducido.")
