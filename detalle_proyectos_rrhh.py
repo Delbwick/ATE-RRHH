@@ -317,11 +317,15 @@ def execute_query_for_page(page_name, id_proyecto, table_dict):
             SELECT * FROM `{table_name}`
             WHERE {id_field} IN (
                 SELECT {id_field} FROM `ate-rrhh-2024.Ate_kaibot_2024.complementos_de_destino_por_proyecto`
-                WHERE id_proyecto = {id_proyecto}
+                WHERE id_proyecto = @id_proyecto
             )
         """
         try:
-            query_job = client.query(query)
+            query_job = client.query(query, job_config=bigquery.QueryJobConfig(
+                query_parameters=[
+                    bigquery.ScalarQueryParameter("id_proyecto", "INT64", id_proyecto)
+                ]
+            ))
             results = query_job.result()
             df = pd.DataFrame(data=[row.values() for row in results], columns=[field.name for field in results.schema])
             return df
@@ -329,7 +333,7 @@ def execute_query_for_page(page_name, id_proyecto, table_dict):
             st.error(f"Error ejecutando la consulta para {page_name}: {e}")
             return pd.DataFrame()  # Retorna un DataFrame vacío en caso de error
     else:
-        st.error(f"Página {page_name} no encontrada en PAGES_TABLES.")
+        st.error(f"Página {page_name} no encontrada en el diccionario proporcionado.")
         return pd.DataFrame()  # Retorna un DataFrame vacío si la página no se encuentra
 
 # Ejecuta las consultas para todas las páginas y combina los resultados en una única tabla
