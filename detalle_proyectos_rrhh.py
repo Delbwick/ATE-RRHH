@@ -419,7 +419,7 @@ st.write(f"Total puntos (Específico): {total_especifico}")
 # Calculamos el total específico (suponiendo que lo obtienes de alguna manera)
 #total_especifico = 500  # Este valor debería ser el total real de puntos específicos del proyecto
 # Calculamos el valor de puntos específicos del proyecto
-valor_punto_especifico_proyecto = (total_especifico * 100) / valor_base
+valor_punto_especifico_proyecto = (total_especifico * valor_base) / 100
 st.write(f'El valor específico del puesto es: {valor_punto_especifico_proyecto:.2f} euros')
 
 # Aseguramos que valor_punto_especifico_proyecto no sea menor que min_value
