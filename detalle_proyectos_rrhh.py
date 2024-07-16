@@ -440,23 +440,27 @@ st.write(f'El valor específico del puesto para el complemento específico es: {
 
 #Valoracion de destino por año 
 
-def get_valoracion_puntos(total_destino):
-    client = bigquery.Client()
-
-    query = f"""
+# Construir la consulta SQL
+query_valoracion_puntos = f"""
     SELECT puntos_valoracion_destino
     FROM `ate-rrhh-2024.Ate_kaibot_2024.valoracion_destino_puntos_por_ano`
     WHERE puntos_valoracion_destino = {total_destino}
     LIMIT 1
-    """
-    
-    query_job = client.query(query)
-    results = query_job.result()
-    
-    for row in results:
-        return row.puntos_valoracion_destino
+"""
 
-# Ejemplo de uso
-  # Ejemplo de valor para total_destino
-puntos_valoracion = get_valoracion_puntos(total_destino)
-st.write(f"Puntos de valoración de destino: {puntos_valoracion}")
+# Ejecutar la consulta
+query_job = client.query(query_valoracion_puntos)
+results = query_job.result()
+
+# Procesar los resultados
+puntos_valoracion = None
+for row in results:
+    puntos_valoracion = row.puntos_valoracion_destino
+
+# Mostrar el resultado en Streamlit
+st.title("Consulta de Puntos de Valoración")
+
+if puntos_valoracion:
+    st.write(f"Puntos de valoración: {puntos_valoracion}")
+else:
+    st.write("No se encontraron puntos de valoración para el valor introducido.")
