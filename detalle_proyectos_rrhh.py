@@ -416,6 +416,8 @@ valor_base = 33714.66  # euros
 
 # Calculamos el total específico (suponiendo que lo obtienes de alguna manera)
 #total_especifico = 500  # Este valor debería ser el total real de puntos específicos del proyecto
+# Calculamos el valor de puntos específicos del proyecto
+valor_punto_especifico_proyecto = (total_especifico * puntos_base) / valor_base
 
 # Aseguramos que valor_punto_especifico_proyecto no sea menor que min_value
 valor_punto_especifico_proyecto = max(valor_punto_especifico_proyecto, 1.0)
