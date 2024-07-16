@@ -267,7 +267,8 @@ for page_name in PAGES_TABLES_2:
     else:
         st.write(f"No se encontró la página '{page_name}' en el diccionario o no se pudo ejecutar la consulta.")
 
-
+st.markdown("<h2>Caluculo de Valoraciones</h2>", unsafe_allow_html=True)
+st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 
 
 
@@ -375,4 +376,37 @@ if id_proyecto:
 valor_punto_especifico_proyecto = st.number_input('valor_punto_especifico_proyecto', min_value=1)
 valor_especifico_puesto=total_puntos*valor_punto_especifico_proyecto
 st.write(f"Valor especifico del puesto de trabajo: {valor_especifico_puesto}")
+
+#≤≤≤≤≤≤≤≤≤SELECCION PUESTOS CALCULO
+# Encabezado y línea separadora
+st.markdown("<h2>Puestos asociados a ese proyecto; Selecciona para Valoracion</h2>", unsafe_allow_html=True)
+st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
+
+# Consulta SQL para obtener los puestos del proyecto
+query_puestos_proyecto = f"""
+        SELECT * FROM `ate-rrhh-2024.Ate_kaibot_2024.puestos`
+        WHERE id_puesto IN (
+        SELECT id_puesto FROM `ate-rrhh-2024.Ate_kaibot_2024.puestos_seleccionados_por_proyecto`
+        WHERE id_proyecto = {id_proyecto_seleccionado})
+    """
+
+query_job_puestos_proyecto = client.query(query_puestos_proyecto)
+results_puestos_proyecto = query_job_puestos_proyecto.result()
+df_puestos_proyecto = pd.DataFrame(data=[row.values() for row in results_puestos_proyecto], columns=[field.name for field in results_puestos_proyecto.schema])
+
+# Mostrar el dataframe
+st.dataframe(df_puestos_proyecto)
+
+# Crear una lista para almacenar los IDs de los puestos seleccionados
+selected_puestos_ids = []
+
+# Generar los checkboxes para cada puesto
+for index, row in df_puestos_proyecto.iterrows():
+    puesto_id = row['id_puesto']
+    puesto_nombre = row['nombre']  # Asumiendo que hay una columna 'nombre' para el nombre del puesto
+    if st.checkbox(f"{puesto_nombre} (ID: {puesto_id})"):
+        selected_puestos_ids.append(puesto_id)
+
+# Mostrar los IDs de los puestos seleccionados
+st.write("Puestos seleccionados:", selected_puestos_ids,puesto_nombre)
 
