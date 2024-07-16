@@ -355,7 +355,7 @@ if id_proyecto:
         st.success("Consulta complemento destino exitosa!")
         st.dataframe(result_df_general)
         total_destino = result_df_general['puntos'].sum()
-        st.write(f"Total puntos (General): {total_destino}")
+        st.write(f"Total puntos (Destino): {total_destino}")
     else:
         st.warning("No se encontraron datos para el ID de proyecto proporcionado en la consulta general.")
     
@@ -408,8 +408,8 @@ st.write("Puestos seleccionados:", selected_puestos_ids,puesto_nombre)
 #>>>>>>>>>Valor por punto especifico por poryecto
 #ºel valor por peso especifico por poryecto va variar dependiendo del ayntamiento del año y de la legislacion por lo que tendremos que tener una tabla
 #puntos por peso especifico por año
-st.markdown("<h2>Calculo puntos de destino</h2>", unsafe_allow_html=True)
+st.markdown("<h2>Calculo puntos de complemento especifico</h2>", unsafe_allow_html=True)
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
-valor_punto_destino_proyecto = st.number_input('valor_punto_destino_proyecto', min_value=1)
-valor_destino_puesto=total_destino*valor_punto_destino_proyecto
-st.write(f"Valor destino del puesto de trabajo: {valor_destino_puesto}")
+valor_punto_especifico_proyecto = st.number_input('valor_punto_especifico_proyecto', min_value=1)
+valor_especifico_puesto=total_especifico*valor_punto_especifico_proyecto
+st.write(f"Valor destino del puesto de trabajo: {valor_especifico_puesto}")
