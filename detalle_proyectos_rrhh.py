@@ -436,7 +436,7 @@ valor_punto_especifico_proyecto = st.number_input('Introduce el número de punto
 
 
 # Mostramos el valor específico del puesto
-st.write(f'El valor específico del puesto es: {valor_especifico_puesto:.2f} euros')
+st.write(f'El valor específico del puesto es: {valor_punto_especifico_proyecto:.2f} euros')
 
 #Valoracion de destino por año 
 
