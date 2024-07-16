@@ -412,4 +412,4 @@ st.markdown("<h2>Calculo puntos de complemento especifico</h2>", unsafe_allow_ht
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 valor_punto_especifico_proyecto = st.number_input('valor_punto_especifico_proyecto', min_value=1)
 valor_especifico_puesto=total_especifico*valor_punto_especifico_proyecto
-st.write(f"Valor destino del puesto de trabajo: {valor_especifico_puesto}")
+st.write(f"Valor especifico del puesto de trabajo: {valor_especifico_puesto}")
