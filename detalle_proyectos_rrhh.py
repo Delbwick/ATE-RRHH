@@ -410,6 +410,26 @@ st.write("Puestos seleccionados:", selected_puestos_ids,puesto_nombre)
 #puntos por peso especifico por año
 st.markdown("<h2>Calculo puntos de complemento especifico</h2>", unsafe_allow_html=True)
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
-valor_punto_especifico_proyecto = st.number_input('valor_punto_especifico_proyecto', min_value=1)
-valor_especifico_puesto=total_especifico*valor_punto_especifico_proyecto
-st.write(f"Valor especifico del puesto de trabajo: {valor_especifico_puesto}")
+# Definimos los valores conocidos
+puntos_base = 100
+valor_base = 33714.66  # euros
+
+# Calculamos el total específico (suponiendo que lo obtienes de alguna manera)
+total_especifico = 500  # Este valor debería ser el total real de puntos específicos del proyecto
+
+# Calculamos el valor de puntos específicos del proyecto
+valor_punto_especifico_proyecto = (total_especifico * puntos_base) / valor_base
+
+# Mensaje markdown para explicar la regla de tres
+st.markdown("<h2>Valoración para regla de 3 para tabla de complemento específico por Año (Variable) son 100 puntos -> 33.714,66 euros</h2>", unsafe_allow_html=True)
+
+# Input para que el usuario introduzca el valor de puntos
+valor_punto_especifico_proyecto = st.number_input('Introduce el número de puntos específicos del proyecto:',
+                                                  min_value=1,
+                                                  value=valor_punto_especifico_proyecto)
+
+# Calculamos el valor específico del puesto
+valor_especifico_puesto = total_especifico * valor_punto_especifico_proyecto
+
+# Mostramos el valor específico del puesto
+st.write(f'El valor específico del puesto es: {valor_especifico_puesto} euros')
