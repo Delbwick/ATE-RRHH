@@ -271,12 +271,6 @@ for page_name in PAGES_TABLES_2:
 st.write(f"Total acumulado de puntos específicos: {total_puntos_especificos}")
 
 
-#>>>>>>>>>Valor por punto especifico por poryecto
-#ºel valor por peso especifico por poryecto va variar dependiendo del ayntamiento del año y de la legislacion por lo que tendremos que tener una tabla
-#puntos por peso especifico por año
-valor_punto_especifico_proyecto = st.number_input('valor_punto_especifico_proyecto', min_value=1)
-valor_especifico_puesto=total_puntos_especificos*total_puntos_especificos
-st.write(f"Valor especifico del puesto de trabajo: {valor_especifico_puesto}")
 
 
 PAGES_TABLES = {
@@ -370,7 +364,15 @@ if id_proyecto:
         st.dataframe(result_df_especifico)
         total_especifico = result_df_especifico['puntos'].sum()
         st.write(f"Total puntos (Específico): {total_especifico}")
-        st.write((f"Total puntos: {total_especifico}+{total_destino}")
+        st.write(f"Total puntos: {total_especifico}+{total_destino}")
         total_puntos=total_especifico+total_destino
     else:
         st.warning("No se encontraron datos para el ID de proyecto proporcionado en la consulta de complemento específico.")
+
+#>>>>>>>>>Valor por punto especifico por poryecto
+#ºel valor por peso especifico por poryecto va variar dependiendo del ayntamiento del año y de la legislacion por lo que tendremos que tener una tabla
+#puntos por peso especifico por año
+valor_punto_especifico_proyecto = st.number_input('valor_punto_especifico_proyecto', min_value=1)
+valor_especifico_puesto=total_puntos*valor_punto_especifico_proyecto
+st.write(f"Valor especifico del puesto de trabajo: {valor_especifico_puesto}")
+
