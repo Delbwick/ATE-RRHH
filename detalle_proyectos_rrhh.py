@@ -370,12 +370,7 @@ if id_proyecto:
     else:
         st.warning("No se encontraron datos para el ID de proyecto proporcionado en la consulta de complemento específico.")
 
-#>>>>>>>>>Valor por punto especifico por poryecto
-#ºel valor por peso especifico por poryecto va variar dependiendo del ayntamiento del año y de la legislacion por lo que tendremos que tener una tabla
-#puntos por peso especifico por año
-valor_punto_especifico_proyecto = st.number_input('valor_punto_especifico_proyecto', min_value=1)
-valor_especifico_puesto=total_puntos*valor_punto_especifico_proyecto
-st.write(f"Valor especifico del puesto de trabajo: {valor_especifico_puesto}")
+
 
 #≤≤≤≤≤≤≤≤≤SELECCION PUESTOS CALCULO
 # Encabezado y línea separadora
@@ -410,3 +405,11 @@ for index, row in df_puestos_proyecto.iterrows():
 # Mostrar los IDs de los puestos seleccionados
 st.write("Puestos seleccionados:", selected_puestos_ids,puesto_nombre)
 
+#>>>>>>>>>Valor por punto especifico por poryecto
+#ºel valor por peso especifico por poryecto va variar dependiendo del ayntamiento del año y de la legislacion por lo que tendremos que tener una tabla
+#puntos por peso especifico por año
+st.markdown("<h2>Calculo puntos de destino</h2>", unsafe_allow_html=True)
+st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
+valor_punto_destino_proyecto = st.number_input('valor_punto_destino_proyecto', min_value=1)
+valor_destino_puesto=total_destino*valor_punto_destino_proyecto
+st.write(f"Valor destino del puesto de trabajo: {valor_destino_puesto}")
