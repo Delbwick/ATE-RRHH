@@ -446,7 +446,7 @@ def get_valoracion_puntos(total_destino):
     query = f"""
     SELECT puntos_valoracion_destino
     FROM `ate-rrhh-2024.Ate_kaibot_2024.valoracion_destino_puntos_por_ano`
-    WHERE total_destino = {total_destino}
+    WHERE puntos_valoracion_destino = {total_destino}
     LIMIT 1
     """
     
