@@ -310,34 +310,38 @@ PAGES_TABLES = {
 }
 
 # Esta función genera y ejecuta la consulta SQL para una página específica
-def execute_query_for_page(page_name, id_proyecto):
-    if page_name in PAGES_TABLES:
-        table_name, id_field = PAGES_TABLES[page_name]
+def execute_query_for_page(page_name, id_proyecto, table_dict):
+    if page_name in table_dict:
+        table_name, id_field = table_dict[page_name]
         query = f"""
             SELECT * FROM `{table_name}`
             WHERE {id_field} IN (
                 SELECT {id_field} FROM `ate-rrhh-2024.Ate_kaibot_2024.complementos_de_destino_por_proyecto`
-                WHERE id_proyecto = {id_proyecto}
+                WHERE id_proyecto = @id_proyecto
             )
         """
         try:
-            query_job = client.query(query)
+            query_job = client.query(query, job_config=bigquery.QueryJobConfig(
+                query_parameters=[
+                    bigquery.ScalarQueryParameter("id_proyecto", "INT64", int(id_proyecto))
+                ]
+            ))
             results = query_job.result()
-            df = pd.DataFrame(data=[row.values() for row in results], columns=[field.name for field in results.schema])
+            df = pd.DataFrame(data=[list(row.values()) for row in results], columns=[field.name for field in results.schema])
             return df
         except Exception as e:
             st.error(f"Error ejecutando la consulta para {page_name}: {e}")
             return pd.DataFrame()  # Retorna un DataFrame vacío en caso de error
     else:
-        st.error(f"Página {page_name} no encontrada en PAGES_TABLES.")
+        st.error(f"Página {page_name} no encontrada en el diccionario proporcionado.")
         return pd.DataFrame()  # Retorna un DataFrame vacío si la página no se encuentra
 
 # Ejecuta las consultas para todas las páginas y combina los resultados en una única tabla
-def get_combined_table(id_proyecto):
+def get_combined_table(id_proyecto, table_dict):
     combined_df = pd.DataFrame()
     
-    for page_name in PAGES_TABLES:
-        df = execute_query_for_page(page_name, id_proyecto)
+    for page_name in table_dict:
+        df = execute_query_for_page(page_name, id_proyecto, table_dict)
         if not df.empty:  # Verifica si el DataFrame no está vacío
             combined_df = pd.concat([combined_df, df], ignore_index=True)
     
@@ -349,10 +353,17 @@ id_proyecto = st.text_input("Ingrese el ID del proyecto:")
 
 if id_proyecto:
     with st.spinner('Ejecutando consultas...'):
-        result_df = get_combined_table(id_proyecto)
+        result_df_general = get_combined_table(id_proyecto, PAGES_TABLES)
+        result_df_especifico = get_combined_table(id_proyecto, PAGES_TABLES_2)
     
-    if not result_df.empty:
-        st.success("Consulta exitosa!")
-        st.dataframe(result_df)
+    if not result_df_general.empty:
+        st.success("Consulta general exitosa!")
+        st.dataframe(result_df_general)
     else:
-        st.warning("No se encontraron datos para el ID de proyecto proporcionado.")
+        st.warning("No se encontraron datos para el ID de proyecto proporcionado en la consulta general.")
+    
+    if not result_df_especifico.empty:
+        st.success("Consulta de complemento específico exitosa!")
+        st.dataframe(result_df_especifico)
+    else:
+        st.warning("No se encontraron datos para el ID de proyecto proporcionado en la consulta de complemento específico.")
