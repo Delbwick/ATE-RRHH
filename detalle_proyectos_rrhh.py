@@ -310,6 +310,7 @@ PAGES_TABLES_2 = {
 }
 
 # Esta función genera y ejecuta la consulta SQL para una página específica
+# Esta función genera y ejecuta la consulta SQL para una página específica
 def execute_query_for_page(page_name, id_proyecto, table_dict, complementos_table):
     if page_name in table_dict:
         table_name, id_field = table_dict[page_name]
@@ -359,11 +360,15 @@ if id_proyecto:
     if not result_df_general.empty:
         st.success("Consulta general exitosa!")
         st.dataframe(result_df_general)
+        total_general = result_df_general['puntos'].sum()
+        st.write(f"Total puntos (General): {total_general}")
     else:
         st.warning("No se encontraron datos para el ID de proyecto proporcionado en la consulta general.")
     
     if not result_df_especifico.empty:
         st.success("Consulta de complemento específico exitosa!")
         st.dataframe(result_df_especifico)
+        total_especifico = result_df_especifico['puntos'].sum()
+        st.write(f"Total puntos (Específico): {total_especifico}")
     else:
         st.warning("No se encontraron datos para el ID de proyecto proporcionado en la consulta de complemento específico.")
