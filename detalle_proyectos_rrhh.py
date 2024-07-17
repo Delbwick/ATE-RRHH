@@ -468,6 +468,6 @@ else:
 valoracion_puesto=puntos_valoracion+valor_punto_especifico_proyecto
 
 st.title("Consulta Valoración total puesto:")
-st.write(f"Complemento de destino + complemento especíufico: {valoracion_puesto}")
+st.write(f"COmplemento de destino + complemento especíufico: {valoracion_puesto}")
 
 st.button('Insertar datos provisionales')
