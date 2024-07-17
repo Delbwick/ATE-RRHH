@@ -458,9 +458,16 @@ for row in results:
     puntos_valoracion = row.puntos_valoracion_destino
 
 # Mostrar el resultado en Streamlit
-st.title("Consulta de Puntos de Valoración")
+st.title("Consulta de Puntos de Valoración COmplemento de destino")
 
 if puntos_valoracion:
     st.write(f"Puntos de valoración de destino: {puntos_valoracion}")
 else:
     st.write("No se encontraron puntos de valoración para el valor introducido.")
+
+valoracion_puesto=puntos_valoracion+valor_punto_especifico_proyecto
+
+st.title("Consulta Valoración total puesto:")
+st.write(f"COmplemento de destino + complemento especíufico: {valoracion_puesto}")
+
+st.button('Insertar datos provisionales')
