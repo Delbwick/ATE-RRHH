@@ -337,9 +337,9 @@ if submit:
         for nombre_completo, id_tabla in selected_factores:
             query_factores_insert = f"""
                 INSERT INTO `{nombre_completo}` 
-                (id_tabla, descripcion, porcentaje_de_total, puntos) 
+                (id_tabla, letra, descripcion, porcentaje_de_total, puntos) 
                 VALUES 
-                ({new_id_proyecto},  '{descripcion}', {porcentaje_de_total}, {puntos})
+                ({new_id_proyecto}, '{letra}', '{descripcion}', {porcentaje_de_total}, {puntos})
             """
             query_job_factores_insert = client.query(query_factores_insert)
             query_job_factores_insert.result()  # Asegurarse de que la consulta se complete
