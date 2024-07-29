@@ -231,6 +231,30 @@ if selected_factores:
     st.write("Valores seleccionados:")
     st.write(valores_seleccionados)
 
+if selected_factores:
+    st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
+    st.write("Selecciona los valores específicos de las tablas seleccionadas:")
+
+    valores_seleccionados = {}
+    for nombre_completo, id_tabla in selected_factores:
+        st.write(f"Tabla: {nombre_completo.split('.')[-1]}")
+        df = obtener_datos_bigquery(nombre_completo)
+        if not df.empty:
+            # Crear lista de opciones para st.radio
+            opciones = [f"{row['descripcion']} ({row['letra']})" for index, row in df.iterrows()]
+            opciones.insert(0, 'Ninguno')  # Añadir opción 'Ninguno' al inicio
+
+            # Mostrar radio buttons para seleccionar una opción
+            seleccion = st.radio(f"Seleccione una opción para {nombre_completo.split('.')[-1]}:", opciones, key=f"radio_{id_tabla}")
+
+            if seleccion != 'Ninguno':
+                # Encontrar el valor seleccionado
+                fila_seleccionada = df.loc[opciones.index(seleccion) - 1]  # -1 para compensar 'Ninguno'
+                valores_seleccionados[id_tabla] = fila_seleccionada[id_tabla]
+
+    st.write("Valores seleccionados:")
+    st.write(valores_seleccionados)
+
 
 
         
