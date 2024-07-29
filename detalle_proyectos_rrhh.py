@@ -195,7 +195,7 @@ def execute_query_for_page(page_name, id_proyecto):
         return None
 
 # Obtener el id_proyecto seleccionado desde un inputbox en Streamlit
-#id_proyecto_seleccionado = st.number_input('Ingrese el ID del proyecto', min_value=1)
+# id_proyecto_seleccionado = st.number_input('Ingrese el ID del proyecto', min_value=1)
 
 # Iterar sobre todas las páginas en el diccionario y ejecutar las consultas
 for page_name in PAGES_TABLES:
@@ -203,12 +203,9 @@ for page_name in PAGES_TABLES:
     df = execute_query_for_page(page_name, id_proyecto_seleccionado)
     if df is not None:
         st.dataframe(df)
+        peso_especifico_por_proyecto = st.number_input('Peso del complemento específico', min_value=0.0)
     else:
         st.write(f"No se encontró la página '{page_name}' en el diccionario o no se pudo ejecutar la consulta.")
-
-
-st.markdown("<h2>Complementos Especificos</h2>", unsafe_allow_html=True)
-st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 
 
 
