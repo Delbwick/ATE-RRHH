@@ -203,8 +203,8 @@ for page_name in PAGES_TABLES:
     df = execute_query_for_page(page_name, id_proyecto_seleccionado)
     if df is not None:
        # st.dataframe(df) Ocultamos las tablas
+    else:
         st.write(f"No se encontró la página '{page_name}' en el diccionario o no se pudo ejecutar la consulta.")
-   
 
 
 st.markdown("<h2>Complementos Especificos</h2>", unsafe_allow_html=True)
