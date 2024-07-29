@@ -210,10 +210,14 @@ for nombre_tabla, (nombre_completo, id_tabla) in PAGES_TABLES.items():
     if st.checkbox(nombre_tabla):
         selected_factores.append((nombre_completo, id_tabla))
         
-selected_factor = st.radio(
-    "Seleccione un factor de complemento destino",
-    list(PAGES_TABLES.keys())
-)
+selected_factores = {}
+for nombre_tabla, (nombre_completo, id_tabla) in PAGES_TABLES.items():
+    selected_factores[nombre_tabla] = st.selectbox(f"Seleccione {nombre_tabla}", [nombre_completo, "Ninguno"])
+
+# Filtrar seleccionados
+selecciones_finales = {k: v for k, v in selected_factores.items() if v != "Ninguno"}
+
+st.write("Selecciones:", selecciones_finales)
 
 
 # Mostrar los datos seleccionados
