@@ -212,24 +212,24 @@ for nombre_tabla, (nombre_completo, id_tabla) in PAGES_TABLES.items():
 
 
 # Mostrar los datos seleccionados
-if selected_factores:
-    st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
-    st.write("Selecciona los valores específicos de las tablas seleccionadas:")
+#if selected_factores:
+  #  st.write("Selecciona los valores específicos de las tablas seleccionadas:")
+ #   st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 
-    valores_seleccionados = {}
-    for nombre_completo, id_tabla in selected_factores:
-        st.write(f"Tabla: {nombre_completo.split('.')[-1]}")
-        df = obtener_datos_bigquery(nombre_completo)
-        if not df.empty:
-            valores_seleccionados[id_tabla] = []
-            for index, row in df.iterrows():
+#    valores_seleccionados = {}
+ #   for nombre_completo, id_tabla in selected_factores:
+  #      st.write(f"Tabla: {nombre_completo.split('.')[-1]}")
+   #     df = obtener_datos_bigquery(nombre_completo)
+    #    if not df.empty:
+     #       valores_seleccionados[id_tabla] = []
+      #      for index, row in df.iterrows():
                 # Crear la etiqueta del checkbox usando descripcion y letra
-                etiqueta_checkbox = f"{row['descripcion']} ({row['letra']})"
-                if st.checkbox(etiqueta_checkbox, key=f"{id_tabla}_{index}"):
-                    valores_seleccionados[id_tabla].append(row[id_tabla])
+       #         etiqueta_checkbox = f"{row['descripcion']} ({row['letra']})"
+        #        if st.checkbox(etiqueta_checkbox, key=f"{id_tabla}_{index}"):
+         #           valores_seleccionados[id_tabla].append(row[id_tabla])
 
-    st.write("Valores seleccionados:")
-    st.write(valores_seleccionados)
+  #  st.write("Valores seleccionados:")
+   # st.write(valores_seleccionados)
 
 if selected_factores:
     st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
