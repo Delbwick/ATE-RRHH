@@ -209,6 +209,11 @@ selected_factores = []
 for nombre_tabla, (nombre_completo, id_tabla) in PAGES_TABLES.items():
     if st.checkbox(nombre_tabla):
         selected_factores.append((nombre_completo, id_tabla))
+        
+selected_factor = st.radio(
+    "Seleccione un factor de complemento destino",
+    list(PAGES_TABLES.keys())
+)
 
 
 # Mostrar los datos seleccionados
