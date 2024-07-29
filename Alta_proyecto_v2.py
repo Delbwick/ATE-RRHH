@@ -210,14 +210,17 @@ for nombre_tabla, (nombre_completo, id_tabla) in PAGES_TABLES.items():
     if st.checkbox(nombre_tabla):
         selected_factores.append((nombre_completo, id_tabla))
         
+# Mostrar selectboxes para seleccionar una fila por tabla
 selected_factores = {}
-for nombre_tabla, (nombre_completo, id_tabla) in PAGES_TABLES.items():
-    selected_factores[nombre_tabla] = st.selectbox(f"Seleccione {nombre_tabla}", [nombre_completo, "Ninguno"])
+for nombre_tabla, filas in PAGES_TABLES.items():
+    opciones = [fila[0] for fila in filas]
+    selected_opcion = st.selectbox(f"Seleccione una opción de {nombre_tabla}", ["Ninguno"] + opciones)
+    
+    if selected_opcion != "Ninguno":
+        # Encontrar la fila seleccionada
+        selected_fila = next(fila for fila in filas if fila[0] == selected_opcion)
+        selected_factores[nombre_tabla] = selected_fila
 
-# Filtrar seleccionados
-selecciones_finales = {k: v for k, v in selected_factores.items() if v != "Ninguno"}
-
-st.write("Selecciones:", selecciones_finales)
 
 
 # Mostrar los datos seleccionados
