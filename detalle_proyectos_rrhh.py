@@ -199,10 +199,10 @@ def execute_query_for_page(page_name, id_proyecto):
 
 # Iterar sobre todas las páginas en el diccionario y ejecutar las consultas
 for page_name in PAGES_TABLES:
-    st.markdown(f"<h3>{page_name}</h3>", unsafe_allow_html=True)
+    #st.markdown(f"<h3>{page_name}</h3>", unsafe_allow_html=True)
     df = execute_query_for_page(page_name, id_proyecto_seleccionado)
     if df is not None:
-       # st.dataframe(df) Ocultamos las tablas
+        st.dataframe(df) Ocultamos las tablas
     else:
         st.write(f"No se encontró la página '{page_name}' en el diccionario o no se pudo ejecutar la consulta.")
 
@@ -257,7 +257,7 @@ total_puntos_especificos = 0
 
 # Iterar sobre todas las páginas en el diccionario y ejecutar las consultas
 for page_name in PAGES_TABLES_2:
-    st.markdown(f"<h3>{page_name}</h3>", unsafe_allow_html=True)
+    #st.markdown(f"<h3>{page_name}</h3>", unsafe_allow_html=True)
     df = execute_query_for_page(page_name, id_proyecto_seleccionado)
     df, total_puntos = execute_query_for_page(page_name, id_proyecto_seleccionado)
     if df is not None:
