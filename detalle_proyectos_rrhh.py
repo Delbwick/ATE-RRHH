@@ -198,14 +198,21 @@ def execute_query_for_page(page_name, id_proyecto):
 # id_proyecto_seleccionado = st.number_input('Ingrese el ID del proyecto', min_value=1)
 
 # Iterar sobre todas las páginas en el diccionario y ejecutar las consultas
+peso_especifico_por_proyecto = {}  # Diccionario para almacenar los pesos por página
+
 for page_name in PAGES_TABLES:
     st.markdown(f"<h3>{page_name}</h3>", unsafe_allow_html=True)
     df = execute_query_for_page(page_name, id_proyecto_seleccionado)
     if df is not None:
         st.dataframe(df)
-        peso_especifico_por_proyecto = st.number_input('Peso del complemento específico', min_value=0.0)
+        peso_especifico_por_proyecto[page_name] = st.number_input(
+            f'Peso del complemento específico para {page_name}', 
+            min_value=0.0,
+            key=f'{page_name}_peso'
+        )
     else:
         st.write(f"No se encontró la página '{page_name}' en el diccionario o no se pudo ejecutar la consulta.")
+
 
 
 
