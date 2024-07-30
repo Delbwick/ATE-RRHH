@@ -461,7 +461,7 @@ valor_punto_especifico_proyecto = st.number_input('Introduce el número de punto
 st.write(f'El valor específico del puesto para el complemento específico es: {valor_punto_especifico_proyecto:.2f} euros')
 
 #Valoracion de destino por año 
-
+puntos_destino_peso_total=round(puntos_destino_peso_total)
 # Construir la consulta SQL
 query_valoracion_puntos = f"""
     SELECT puntos_valoracion_destino
