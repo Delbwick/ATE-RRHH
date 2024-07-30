@@ -216,10 +216,10 @@ for page_name in PAGES_TABLES:
         peso_especifico_por_proyecto[page_name] = st.number_input(
             f'Peso del complemento específico para {page_name}', 
             min_value=0.0,
-            key=f'{page_name}_peso',
+            key=f'{page_name}_peso'
+        )
         puntos_destino_peso=total_puntos_destino_1*peso_especifico_por_proyecto[page_name]
         st.write(f"Total de puntos con el peso especifico: {puntos_destino_peso}")
-        )
     else:
         # No mostramos nada o mostramos un mensaje específico si la tabla no tiene datos
         st.write(f"No se encontraron datos para '{page_name}' en la consulta.")
