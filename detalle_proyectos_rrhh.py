@@ -477,7 +477,7 @@ results = query_job.result()
 # Procesar los resultados
 puntos_valoracion = None
 for row in results:
-    puntos_valoracion = row.puntos_valoracion_destino
+    puntos_valoracion = row.complemento_destino_anual
 
 # Mostrar el resultado en Streamlit
 st.title("Consulta de Puntos de Valoración")
