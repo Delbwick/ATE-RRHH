@@ -204,6 +204,7 @@ def execute_query_for_page(page_name, id_proyecto):
 
 # Iterar sobre todas las páginas en el diccionario y ejecutar las consultas
 # Iterar sobre todas las páginas en el diccionario y ejecutar las consultas
+puntos_destino_peso_total=0
 peso_especifico_por_proyecto = {}  # Diccionario para almacenar los pesos por página
 
 for page_name in PAGES_TABLES:
@@ -222,6 +223,8 @@ for page_name in PAGES_TABLES:
         )
         puntos_destino_peso=total_puntos_destino_1*peso_especifico_por_proyecto[page_name]
         st.write(f"Total de puntos con el peso especifico: {puntos_destino_peso}")
+        puntos_destino_peso_total+=puntos_destino_peso
+        
     else:
         # No mostramos nada o mostramos un mensaje específico si la tabla no tiene datos
         st.write(f"No se encontraron datos para '{page_name}' en la consulta.")
@@ -373,6 +376,8 @@ if id_proyecto:
         st.dataframe(result_df_general)
         total_destino = result_df_general['puntos'].sum()
         st.write(f"Total puntos (Destino): {total_destino}")
+        st.write(f"Total puntos (Destino) con peso especifico: {puntos_destino_peso_total}")
+        
     else:
         st.warning("No se encontraron datos para el ID de proyecto proporcionado en la consulta general.")
     
