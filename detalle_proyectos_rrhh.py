@@ -466,7 +466,7 @@ st.write(f'El valor específico del puesto para el complemento específico es: {
 query_valoracion_puntos = f"""
     SELECT puntos_valoracion_destino
     FROM `ate-rrhh-2024.Ate_kaibot_2024.valoracion_destino_puntos_por_ano`
-    WHERE puntos_valoracion_destino = {total_destino}
+    WHERE puntos_valoracion_destino = {puntos_destino_peso_total}
     LIMIT 1
 """
 
