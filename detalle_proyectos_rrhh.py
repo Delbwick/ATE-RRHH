@@ -208,6 +208,8 @@ peso_especifico_por_proyecto = {}  # Diccionario para almacenar los pesos por p�
 
 for page_name in PAGES_TABLES:
     df = execute_query_for_page(page_name, id_proyecto_seleccionado)
+    df,total_puntos_destino_1 = execute_query_for_page(page_name, id_proyecto_seleccionado)
+
     if df is not None and not df.empty:  # Verificar si el DataFrame no está vacío
         st.markdown(f"<h3>{page_name}</h3>", unsafe_allow_html=True)
         st.dataframe(df)
