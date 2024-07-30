@@ -527,3 +527,9 @@ else:
     st.write("No se encontraron puntos de valoración para el valor introducido.")
 
 
+# Mostrar el resultado en Streamlit
+st.title("Total calculo de SUeldo : Complemento de destino + complemento específico + sueldo base por categoría")
+st.write(f"Sueldo total: {sueldo}+{valor_punto_especifico_proyecto}+{puntos_valoracion}euros")
+
+
+
