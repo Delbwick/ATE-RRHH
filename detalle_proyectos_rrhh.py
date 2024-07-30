@@ -490,6 +490,8 @@ valor_punto_especifico_proyecto = st.number_input('Introduce el número de punto
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
+st.markdown("<h2>Calculo para el puesto {puesto_nombre}</h2>", unsafe_allow_html=True)
+
 
 
 
