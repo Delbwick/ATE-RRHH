@@ -486,12 +486,12 @@ valor_punto_especifico_proyecto = st.number_input('Introduce el número de punto
                                                   value=valor_punto_especifico_proyecto,
                                                   step=0.01)
 
+#vamos a organizar los datos como en las tablas
+st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
+st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
+st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 
-# Mostramos el valor específico del puesto
-st.title("Consulta de Complemento especifico")
-st.dataframe(result_df_especifico)       
-st.write(f"Total puntos (Específico): {total_especifico}")
-st.write(f'El valor específico del puesto para el complemento específico es: {valor_punto_especifico_proyecto:.2f} euros')
+
 
 
 #Valoracion de destino por año 
@@ -514,7 +514,8 @@ for row in results:
     puntos_valoracion = row.complemento_destino_anual
 
 # Mostrar el resultado en Streamlit
-st.title("Consulta de Puntos de Valoración de destino con el peso específico")
+st.title("Consulta de Puntos de Valoración de destino con el peso asignado")
+st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 
 if puntos_valoracion:
     st.dataframe(result_df_general)
@@ -524,9 +525,17 @@ if puntos_valoracion:
 else:
     st.write("No se encontraron puntos de valoración para el valor introducido.")
 
+# Mostramos el valor específico del puesto
+st.title("Consulta de Complemento especifico")
+st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
+st.dataframe(result_df_especifico)       
+st.write(f"Total puntos (Específico): {total_especifico}")
+st.write(f'El valor específico del puesto para el complemento específico es: {valor_punto_especifico_proyecto:.2f} euros')
+
 
 # Mostrar el resultado en Streamlit
 st.title("Consulta de Sueldo base por categoría")
+st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 
 if sueldo:
     st.write(f"Sueldo base por categoría para el puesto de trabajo: {sueldo}")
@@ -536,7 +545,8 @@ else:
 
 # Mostrar el resultado en Streamlit
 st.title("Total calculo de Sueldo : Complemento de destino + complemento específico + sueldo base por categoría")
-st.write(f"Sueldo total: {sueldo}+{valor_punto_especifico_proyecto}+{puntos_valoracion}euros")
+sueldo_total=sueldo+valor_punto_especifico_proyecto+puntos_valoracion
+st.write(f"Sueldo total: {sueldo}+{valor_punto_especifico_proyecto}+{puntos_valoracion} = {sueldo_total} euros")
 
 
 
