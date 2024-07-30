@@ -488,7 +488,11 @@ valor_punto_especifico_proyecto = st.number_input('Introduce el número de punto
 
 
 # Mostramos el valor específico del puesto
+st.title("Consulta de Complemento especifico")
+st.dataframe(result_df_especifico)       
+st.write(f"Total puntos (Específico): {total_especifico}")
 st.write(f'El valor específico del puesto para el complemento específico es: {valor_punto_especifico_proyecto:.2f} euros')
+
 
 #Valoracion de destino por año 
 puntos_destino_peso_total=round(puntos_destino_peso_total)
@@ -513,6 +517,9 @@ for row in results:
 st.title("Consulta de Puntos de Valoración de destino con el peso específico")
 
 if puntos_valoracion:
+    st.dataframe(result_df_general)
+    st.write(f"Total puntos (Destino): {total_destino}")
+    st.write(f"Total puntos (Destino) con peso especifico: {puntos_destino_peso_total}")
     st.write(f"Puntos de valoración de destino con el porcentaje de importancia: {puntos_valoracion}")
 else:
     st.write("No se encontraron puntos de valoración para el valor introducido.")
@@ -528,7 +535,7 @@ else:
 
 
 # Mostrar el resultado en Streamlit
-st.title("Total calculo de SUeldo : Complemento de destino + complemento específico + sueldo base por categoría")
+st.title("Total calculo de Sueldo : Complemento de destino + complemento específico + sueldo base por categoría")
 st.write(f"Sueldo total: {sueldo}+{valor_punto_especifico_proyecto}+{puntos_valoracion}euros")
 
 
