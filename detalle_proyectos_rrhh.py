@@ -411,21 +411,51 @@ query_job_puestos_proyecto = client.query(query_puestos_proyecto)
 results_puestos_proyecto = query_job_puestos_proyecto.result()
 df_puestos_proyecto = pd.DataFrame(data=[row.values() for row in results_puestos_proyecto], columns=[field.name for field in results_puestos_proyecto.schema])
 
-# Mostrar el dataframe
+# Consulta para obtener las categorías de sueldo
+query_categorias_sueldo = """
+    SELECT nombre_categoria, sueldo
+    FROM `ate-rrhh-2024.Ate_kaibot_2024.valoracion_categoria_sueldo_por_ano`
+"""
+
+# Ejecutar la consulta para obtener las categorías de sueldo
+query_job_categorias_sueldo = client.query(query_categorias_sueldo)
+results_categorias_sueldo = query_job_categorias_sueldo.result()
+df_categorias_sueldo = pd.DataFrame(data=[row.values() for row in results_categorias_sueldo], columns=[field.name for field in results_categorias_sueldo.schema])
+
+# Convertir el DataFrame de categorías de sueldo en un diccionario para fácil acceso
+categorias_sueldo_dict = df_categorias_sueldo.set_index('nombre_categoria')['sueldo'].to_dict()
+
+# Mostrar el dataframe de puestos del proyecto
 st.dataframe(df_puestos_proyecto)
 
-# Crear una lista para almacenar los IDs de los puestos seleccionados
+# Lista para almacenar los IDs de los puestos seleccionados y los sueldos
 selected_puestos_ids = []
+sueldo_categoria_puesto = {}
 
-# Generar los checkboxes para cada puesto
+# Generar los checkboxes y selectboxes para cada puesto
 for index, row in df_puestos_proyecto.iterrows():
     puesto_id = row['id_puesto']
-    puesto_nombre = row['descripcion']  # Asumiendo que hay una columna 'nombre' para el nombre del puesto
+    puesto_nombre = row['descripcion']
     if st.checkbox(f"{puesto_nombre} (ID: {puesto_id})"):
         selected_puestos_ids.append(puesto_id)
+        
+        # Selectbox para elegir la categoría de sueldo
+        categoria_seleccionada = st.selectbox(
+            f"Seleccione la categoría de sueldo para {puesto_nombre}",
+            list(categorias_sueldo_dict.keys()),
+            key=f"{puesto_id}_categoria"
+        )
+        
+        # Obtener el sueldo de la categoría seleccionada
+        sueldo = categorias_sueldo_dict[categoria_seleccionada]
+        st.write(f"Sueldo: {sueldo}")
+        
+        # Almacenar el sueldo en la variable
+        sueldo_categoria_puesto[puesto_id] = sueldo
 
-# Mostrar los IDs de los puestos seleccionados
-st.write("Puestos seleccionados:", selected_puestos_ids,puesto_nombre)
+# Mostrar los IDs de los puestos seleccionados y sus sueldos correspondientes
+st.write("Puestos seleccionados:", selected_puestos_ids)
+st.write("Sueldos por categoría de puesto:", sueldo_categoria_puesto)
 
 #>>>>>>>>>Valor por punto especifico por poryecto
 #ºel valor por peso especifico por poryecto va variar dependiendo del ayntamiento del año y de la legislacion por lo que tendremos que tener una tabla
