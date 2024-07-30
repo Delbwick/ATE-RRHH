@@ -464,7 +464,7 @@ st.write(f'El valor específico del puesto para el complemento específico es: {
 puntos_destino_peso_total=round(puntos_destino_peso_total)
 # Construir la consulta SQL
 query_valoracion_puntos = f"""
-    SELECT puntos_valoracion_destino
+    SELECT complemento_destino_anual
     FROM `ate-rrhh-2024.Ate_kaibot_2024.valoracion_destino_puntos_por_ano`
     WHERE puntos_valoracion_destino = {puntos_destino_peso_total}
     LIMIT 1
