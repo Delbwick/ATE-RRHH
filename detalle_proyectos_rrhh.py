@@ -510,9 +510,20 @@ for row in results:
     puntos_valoracion = row.complemento_destino_anual
 
 # Mostrar el resultado en Streamlit
-st.title("Consulta de Puntos de Valoración")
+st.title("Consulta de Puntos de Valoración de destino con el peso específico")
 
 if puntos_valoracion:
-    st.write(f"Puntos de valoración de destino: {puntos_valoracion}")
+    st.write(f"Puntos de valoración de destino con el porcentaje de importancia: {puntos_valoracion}")
 else:
     st.write("No se encontraron puntos de valoración para el valor introducido.")
+
+
+# Mostrar el resultado en Streamlit
+st.title("Consulta de Sueldo base por categoría")
+
+if sueldo:
+    st.write(f"Sueldo base por categoría para el puesto de trabajo: {sueldo}")
+else:
+    st.write("No se encontraron puntos de valoración para el valor introducido.")
+
+
