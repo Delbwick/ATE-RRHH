@@ -190,9 +190,14 @@ def execute_query_for_page(page_name, id_proyecto):
         query_job = client.query(query)
         results = query_job.result()
         df = pd.DataFrame(data=[row.values() for row in results], columns=[field.name for field in results.schema])
-        return df
+        if not df.empty:
+            total_puntos_destino_1 = df['puntos'].iloc[0]
+            
+        else:
+            total_puntos_destino_1 = 0
+        return df, total_puntos_destino_1
     else:
-        return None
+        return None, 0
 
 # Obtener el id_proyecto seleccionado desde un inputbox en Streamlit
 # id_proyecto_seleccionado = st.number_input('Ingrese el ID del proyecto', min_value=1)
@@ -206,10 +211,14 @@ for page_name in PAGES_TABLES:
     if df is not None and not df.empty:  # Verificar si el DataFrame no está vacío
         st.markdown(f"<h3>{page_name}</h3>", unsafe_allow_html=True)
         st.dataframe(df)
+        st.write(f"Total de puntos: {total_puntos_destino_1}")
+        total_puntos_destino_2 += total_puntos_destino_1
         peso_especifico_por_proyecto[page_name] = st.number_input(
             f'Peso del complemento específico para {page_name}', 
             min_value=0.0,
             key=f'{page_name}_peso'
+        puntos_destino_peso=total_puntos_destino_1*peso_especifico_por_proyecto[page_name]
+        st.write(f"Total de puntos con el peso especifico: {puntos_destino_peso}")
         )
     else:
         # No mostramos nada o mostramos un mensaje específico si la tabla no tiene datos
