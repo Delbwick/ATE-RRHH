@@ -7,8 +7,8 @@ import uuid
 
 
 # Configurar la página de Streamlit
-st.set_page_config(page_title="ATE-Alta nuevos proyectos", page_icon="🆕")
-st.title("¡Bienvenido a ATE! 👷")
+st.set_page_config(page_title="RRHH del Norte-Alta nuevos proyectos-beta2", page_icon="🆕")
+st.title("¡Bienvenido a RRHH del Norte! 👷")
 st.header("¡Empieza tu Proyecto!")
 
 # HTML personalizado para el encabezado
