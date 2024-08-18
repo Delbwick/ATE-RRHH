@@ -4,6 +4,7 @@ from google.oauth2 import service_account
 from google.cloud import bigquery
 import pandas as pd
 import uuid
+import numpy as np
 
 
 # Configurar la página de Streamlit
