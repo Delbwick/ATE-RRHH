@@ -419,7 +419,7 @@ if st.button('Insertar en BigQuery'):
     for id_tabla, valores in valores_seleccionados_2.items():
          if isinstance(valores, (int, np.int64)):  # Si es un solo número
             valores = [valores]  # Lo convertimos en una lista con un único elemento
-        for valor in valores:
+         for valor in valores:
             row = {id_tabla: valor, 'id_proyecto': new_id_proyecto}
             rows_to_insert_2.append(row)
 
