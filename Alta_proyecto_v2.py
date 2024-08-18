@@ -407,6 +407,9 @@ if st.button('Insertar en BigQuery'):
 
     # Procesar valores seleccionados para la primera tabla
     for id_tabla, valores in valores_seleccionados.items():
+    # Verifica si valores es un iterable o un valor único
+        if isinstance(valores, (int, np.int64)):  # Si es un solo número
+            valores = [valores]  # Lo convertimos en una lista con un único elemento
         for valor in valores:
             row = {id_tabla: valor, 'id_proyecto': new_id_proyecto}
             rows_to_insert_1.append(row)
