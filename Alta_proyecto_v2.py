@@ -412,7 +412,9 @@ if st.button('Insertar en BigQuery'):
         if isinstance(valores, (int, np.int64)):  # Si es un solo número
             valores = [valores]  # Lo convertimos en una lista con un único elemento
         for valor in valores:
-            row = {id_tabla: valor, 'id_proyecto': new_id_proyecto}
+            row = {id_tabla: int(valor), 'id_proyecto': int(new_id_proyecto)}  # Convertimos a int
+
+            #row = {id_tabla: valor, 'id_proyecto': new_id_proyecto}
             rows_to_insert_1.append(row)
 
     # Procesar valores seleccionados para la segunda tabla
@@ -420,7 +422,9 @@ if st.button('Insertar en BigQuery'):
          if isinstance(valores, (int, np.int64)):  # Si es un solo número
             valores = [valores]  # Lo convertimos en una lista con un único elemento
          for valor in valores:
-            row = {id_tabla: valor, 'id_proyecto': new_id_proyecto}
+            row = {id_tabla: int(valor), 'id_proyecto': int(new_id_proyecto)}  # Convertimos a int
+
+            #row = {id_tabla: valor, 'id_proyecto': new_id_proyecto}
             rows_to_insert_2.append(row)
 
     # Procesar puestos seleccionados
