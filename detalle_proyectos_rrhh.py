@@ -213,7 +213,7 @@ for page_name in PAGES_TABLES:
 
    if df is not None and not df.empty:  # Verificar si el DataFrame no está vacío
     # Crear tres columnas con anchos 50%, 25%, 25%
-    col1, col2, col3 = st.columns([2, 1, 1])
+        col1, col2, col3 = st.columns([2, 1, 1])
 
     # Contenido de la primera columna (50%)
         with col1:
