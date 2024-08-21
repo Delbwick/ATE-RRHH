@@ -369,6 +369,10 @@ for page_name in PAGES_TABLES_2:
             # Actualizar el total acumulado de puntos destino peso
             puntos_especifico_peso_total += puntos_especifico_peso
 
+     else:
+        # No mostramos nada o mostramos un mensaje específico si la tabla no tiene datos
+        st.write(f"No se encontraron datos para '{page_name}' en la consulta.")
+
 # Mostrar el total acumulado de puntos específicos al final de todas las iteraciones
 st.markdown(f"<h3>Total acumulado de puntos específicos: {total_puntos_especificos}</h3>", unsafe_allow_html=True)
 st.markdown("<h2>Caluculo de Valoraciones</h2>", unsafe_allow_html=True)
