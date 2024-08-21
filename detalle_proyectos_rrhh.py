@@ -322,7 +322,7 @@ def execute_query_for_page(page_name, id_proyecto):
 total_puntos_especificos = 0
 
 # Iterar sobre todas las páginas en el diccionario y ejecutar las consultas
-or page_name in PAGES_TABLES_2:
+for page_name in PAGES_TABLES_2:
     st.markdown(f"<h3>{page_name}</h3>", unsafe_allow_html=True)
     
     # Ejecutar la consulta para obtener el DataFrame y los puntos
