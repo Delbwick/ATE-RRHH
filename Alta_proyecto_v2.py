@@ -380,24 +380,11 @@ if submit:
         query_job_kai_insert = client.query(query_kai_insert)
         query_job_kai_insert.result()  # Asegurarse de que la consulta se complete
 
-        # Insertar datos seleccionados de las tablas de factores
-        for nombre_completo, id_tabla in selected_factores:
-            query_factores_insert = f"""
-                INSERT INTO `{nombre_completo}` 
-                (id_tabla, letra, descripcion, porcentaje_de_total, puntos) 
-                VALUES 
-                ({new_id_proyecto}, '{letra}', '{descripcion}', {porcentaje_de_total}, {puntos})
-            """
-            query_job_factores_insert = client.query(query_factores_insert)
-            query_job_factores_insert.result()  # Asegurarse de que la consulta se complete
-
-        st.success('Registro añadido correctamente')
-    except Exception as e:
-        st.error(f"Error al insertar el registro: {e}")
+       
 
 # Insertar los valores seleccionados en BigQuery
 # Generar un nuevo ID de proyecto
-new_id_proyecto = st.number_input('Nuevo ID de Proyecto', min_value=1, step=1)
+new_id_proyecto = st.number_input('Nuevo ID de Proyecto', min_value=1, step=1, value={new_id_proyecto})
 
 
 # Insertar los valores seleccionados en BigQuery
