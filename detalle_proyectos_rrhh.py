@@ -320,6 +320,7 @@ def execute_query_for_page(page_name, id_proyecto):
 #id_proyecto_seleccionado = st.number_input('Ingrese el ID del proyecto', min_value=1)
 # Variable para acumular los puntos totales
 total_puntos_especificos = 0
+puntos_especifico_peso_total=0
 
 # Iterar sobre todas las páginas en el diccionario y ejecutar las consultas
 for page_name in PAGES_TABLES_2:
@@ -367,7 +368,7 @@ for page_name in PAGES_TABLES_2:
             st.markdown(f"<div class='cell'>{puntos_especifico_peso}</div>", unsafe_allow_html=True)
 
             # Actualizar el total acumulado de puntos destino peso
-            #puntos_especifico_peso_total += puntos_especifico_peso
+            puntos_especifico_peso_total += puntos_especifico_peso
 
     else:
         # No mostramos nada o mostramos un mensaje específico si la tabla no tiene datos
@@ -375,7 +376,7 @@ for page_name in PAGES_TABLES_2:
 
 # Mostrar el total acumulado de puntos específicos al final de todas las iteraciones
 st.markdown(f"<h3>Total acumulado de puntos específicos: {total_puntos_especificos}</h3>", unsafe_allow_html=True)
-st.markdown(f"<h3valoracion complemento especifico : {puntos_destino_peso_total}</h3>", unsafe_allow_html=True)
+st.markdown(f"<h3>valoracion complemento especifico : {puntos_destino_peso_total}</h3>", unsafe_allow_html=True)
 st.markdown("<h2>Caluculo de Valoraciones</h2>", unsafe_allow_html=True)
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 
