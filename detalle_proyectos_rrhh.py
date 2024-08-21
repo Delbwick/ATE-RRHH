@@ -56,6 +56,10 @@ header_html = """
         padding: 10px;
         text-align: center;
     }
+    .dataframe-cell {
+        overflow-x: auto;  /* Habilita scroll horizontal */
+        max-width: 100%;    /* Limita el ancho al 100% del contenedor */
+    }
     </style>
 """
 
@@ -231,8 +235,13 @@ for page_name in PAGES_TABLES:
     # Contenido de la primera columna (50%)
         with col1:
             st.markdown(f"<div class='header-cell'><h3>{page_name}</h3></div>", unsafe_allow_html=True)
-            st.markdown(f"<div class='cell'>{df.to_html(index=False)}</div>", unsafe_allow_html=True)
+        
+            # Ajuste del DataFrame con scroll horizontal
+            st.markdown(f"<div class='cell dataframe-cell'>{df.to_html(index=False)}</div>", unsafe_allow_html=True)
+        
+            # Total de puntos
             st.markdown(f"<div class='cell'><b>Total de puntos: {total_puntos_destino_1}</b></div>", unsafe_allow_html=True)
+
     # Contenido de la segunda columna (25%)
         with col2:
             st.markdown(f"<div class='header-cell'><b>Peso del complemento específico para {page_name}</b></div>", unsafe_allow_html=True)
