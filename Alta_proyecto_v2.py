@@ -380,7 +380,7 @@ if submit:
         query_job_kai_insert = client.query(query_kai_insert)
         query_job_kai_insert.result()  # Asegurarse de que la consulta se complete
 
-    st.write(new_id_proyecto)
+        st.write(new_id_proyecto)
         
     except Exception as e:
         st.error(f"Error al insertar el registro: {e}")
