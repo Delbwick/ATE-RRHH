@@ -48,6 +48,7 @@ header_html = """
         padding: 10px;
         text-align: center;
         background-color: #f9f9f9;
+        margin-bottom: 20px; /* Margen inferior para toda la "tabla" */
     }
     .header-cell {
         background-color: #e0e0e0;
@@ -58,7 +59,9 @@ header_html = """
     }
     .dataframe-cell {
         overflow-x: auto;  /* Habilita scroll horizontal */
-        max-width: 100%;    /* Limita el ancho al 100% del contenedor */
+        overflow-y: auto;  /* Habilita scroll vertical */
+        max-width: 100%;   /* Limita el ancho al 100% del contenedor */
+        max-height: 300px; /* Limita la altura a 300px y habilita scroll */
     }
     </style>
 """
