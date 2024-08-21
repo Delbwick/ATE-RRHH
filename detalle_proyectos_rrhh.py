@@ -369,7 +369,7 @@ for page_name in PAGES_TABLES_2:
             # Actualizar el total acumulado de puntos destino peso
             puntos_especifico_peso_total += puntos_especifico_peso
 
-     else:
+    else:
         # No mostramos nada o mostramos un mensaje específico si la tabla no tiene datos
         st.write(f"No se encontraron datos para '{page_name}' en la consulta.")
 
