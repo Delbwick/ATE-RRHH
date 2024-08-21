@@ -380,13 +380,14 @@ if submit:
         query_job_kai_insert = client.query(query_kai_insert)
         query_job_kai_insert.result()  # Asegurarse de que la consulta se complete
 
+    st.write(new_id_proyecto)
         
     except Exception as e:
         st.error(f"Error al insertar el registro: {e}")
 
 # Insertar los valores seleccionados en BigQuery
 # Generar un nuevo ID de proyecto
-st.write(new_id_proyecto)
+
 new_id_proyecto = st.number_input('Nuevo ID de Proyecto', min_value=1, step=1)
 
 
