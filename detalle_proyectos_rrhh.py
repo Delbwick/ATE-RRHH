@@ -323,7 +323,7 @@ total_puntos_especificos = 0
 
 # Iterar sobre todas las páginas en el diccionario y ejecutar las consultas
 for page_name in PAGES_TABLES_2:
-    st.markdown(f"<h3>{page_name}</h3>", unsafe_allow_html=True)
+    #st.markdown(f"<h3>{page_name}</h3>", unsafe_allow_html=True)
     
     # Ejecutar la consulta para obtener el DataFrame y los puntos
     df, total_puntos = execute_query_for_page(page_name, id_proyecto_seleccionado)
@@ -375,6 +375,7 @@ for page_name in PAGES_TABLES_2:
 
 # Mostrar el total acumulado de puntos específicos al final de todas las iteraciones
 st.markdown(f"<h3>Total acumulado de puntos específicos: {total_puntos_especificos}</h3>", unsafe_allow_html=True)
+st.markdown(f"<h3valoracion complemento especifico : {puntos_destino_peso_total}</h3>", unsafe_allow_html=True)
 st.markdown("<h2>Caluculo de Valoraciones</h2>", unsafe_allow_html=True)
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 
