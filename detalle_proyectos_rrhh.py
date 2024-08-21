@@ -61,7 +61,7 @@ header_html = """
         overflow-x: auto;  /* Habilita scroll horizontal */
         overflow-y: auto;  /* Habilita scroll vertical */
         max-width: 100%;   /* Limita el ancho al 100% del contenedor */
-        max-height: 300px; /* Limita la altura a 300px y habilita scroll */
+        max-height: 200px; /* Limita la altura a 300px y habilita scroll */
     }
     </style>
 """
@@ -265,6 +265,15 @@ for page_name in PAGES_TABLES:
     else:
         # No mostramos nada o mostramos un mensaje específico si la tabla no tiene datos
         st.write(f"No se encontraron datos para '{page_name}' en la consulta.")
+
+#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+#COMPLEMENTOS Especificos POR PROYECTO
+#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+#Vamos extraer los datos de puestos de ese proyecto
+# Mostrar el encabezado y línea separadora
+st.markdown("<h2>Complementos específicos asociados a ese proyecto</h2>", unsafe_allow_html=True)
+st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 
 
 
