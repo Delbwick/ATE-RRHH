@@ -221,7 +221,7 @@ for page_name in PAGES_TABLES:
             min_value=0.0,
             key=f'{page_name}_peso'
         )
-        puntos_destino_peso=total_puntos_destino_1*peso_especifico_por_proyecto[page_name]
+        puntos_destino_peso=total_puntos_destino_1*peso_especifico_por_proyecto[page_name]/100
         st.write(f"Total de puntos con el peso especifico: {puntos_destino_peso}")
         puntos_destino_peso_total+=puntos_destino_peso
         
