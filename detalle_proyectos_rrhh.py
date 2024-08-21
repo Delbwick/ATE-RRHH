@@ -333,7 +333,7 @@ for page_name in PAGES_TABLES_2:
         total_puntos_especificos += total_puntos
 
         # Crear las columnas (50%, 25%, 25%)
-        col1, col2, col3 = st.columns([2, 1, 1])
+        col1, col2, col3 = st.columns([6, 3, 1])
 
         # Contenido en la primera columna (50%)
         with col1:
