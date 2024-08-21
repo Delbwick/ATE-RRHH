@@ -364,7 +364,7 @@ for page_name in PAGES_TABLES_2:
             st.markdown(f"<div class='header-cell'><b>Total puntos con peso</b></div>", unsafe_allow_html=True)
             
             # Mostrar puntos con peso
-            st.markdown(f"<div class='cell'>{puntos_destino_peso}</div>", unsafe_allow_html=True)
+            st.markdown(f"<div class='cell'>{puntos_especifico_peso}</div>", unsafe_allow_html=True)
 
             # Actualizar el total acumulado de puntos destino peso
             #puntos_especifico_peso_total += puntos_especifico_peso
