@@ -397,7 +397,7 @@ if submit:
 
 # Insertar los valores seleccionados en BigQuery
 # Generar un nuevo ID de proyecto
-new_id_proyecto = st.number_input('Nuevo ID de Proyecto', min_value=1, step=1,value=new_id_proyecto)
+new_id_proyecto = st.number_input('Nuevo ID de Proyecto', min_value=1, step=1,value=max_id)
 
 
 # Insertar los valores seleccionados en BigQuery
