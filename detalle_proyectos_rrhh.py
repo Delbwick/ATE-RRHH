@@ -260,7 +260,7 @@ for page_name in PAGES_TABLES:
             puntos_destino_peso = total_puntos_destino_1 * peso_especifico_por_proyecto[page_name] / 100
             st.markdown(f"<div class='header-cell'><b>Total de puntos de destino con el peso específico</b></div>", unsafe_allow_html=True)
             st.markdown(f"<div class='cell'>{puntos_destino_peso}</div>", unsafe_allow_html=True)
-            #puntos_destino_peso_total += puntos_destino_peso
+            puntos_destino_peso_total += puntos_destino_peso
             
     else:
         # No mostramos nada o mostramos un mensaje específico si la tabla no tiene datos
@@ -359,7 +359,7 @@ for page_name in PAGES_TABLES_2:
         # Contenido en la tercera columna (25%)
         with col3:
             # Calcular puntos con el peso específico
-            puntos_especifico_peso = total_puntos_especificos * peso_especifico_por_proyecto / 100
+            puntos_especifico_peso = total_puntos * peso_especifico_por_proyecto / 100
             
             st.markdown(f"<div class='header-cell'><b>Total puntos con peso</b></div>", unsafe_allow_html=True)
             
@@ -367,7 +367,7 @@ for page_name in PAGES_TABLES_2:
             st.markdown(f"<div class='cell'>{puntos_destino_peso}</div>", unsafe_allow_html=True)
 
             # Actualizar el total acumulado de puntos destino peso
-            puntos_especifico_peso_total += puntos_especifico_peso
+            #puntos_especifico_peso_total += puntos_especifico_peso
 
     else:
         # No mostramos nada o mostramos un mensaje específico si la tabla no tiene datos
