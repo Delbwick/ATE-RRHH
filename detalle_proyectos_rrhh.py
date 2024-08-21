@@ -43,6 +43,19 @@ header_html = """
         text-align: left;
         color: #333333;
     }
+    .cell {
+        border: 1px solid black;
+        padding: 10px;
+        text-align: center;
+        background-color: #f9f9f9;
+    }
+    .header-cell {
+        background-color: #e0e0e0;
+        font-weight: bold;
+        border: 1px solid black;
+        padding: 10px;
+        text-align: center;
+    }
     </style>
 """
 
@@ -217,24 +230,26 @@ for page_name in PAGES_TABLES:
 
     # Contenido de la primera columna (50%)
         with col1:
-            st.markdown(f"<h3>{page_name}</h3>", unsafe_allow_html=True)
-            st.dataframe(df)
-            st.write(f"Total de puntos: {total_puntos_destino_1}")
-
+            st.markdown(f"<div class='header-cell'><h3>{page_name}</h3></div>", unsafe_allow_html=True)
+            st.markdown(f"<div class='cell'>{df.to_html(index=False)}</div>", unsafe_allow_html=True)
+            st.markdown(f"<div class='cell'><b>Total de puntos: {total_puntos_destino_1}</b></div>", unsafe_allow_html=True)
     # Contenido de la segunda columna (25%)
         with col2:
+            st.markdown(f"<div class='header-cell'><b>Peso del complemento específico para {page_name}</b></div>", unsafe_allow_html=True)
             peso_especifico_por_proyecto[page_name] = st.number_input(
                 f'Peso del complemento específico para {page_name}', 
                 min_value=0.0,
                 key=f'{page_name}_peso'
             )
 
+
     # Contenido de la tercera columna (25%)
         with col3:
             puntos_destino_peso = total_puntos_destino_1 * peso_especifico_por_proyecto[page_name] / 100
-            st.write(f"Total de puntos con el peso especifico: {puntos_destino_peso}")
+            st.markdown(f"<div class='header-cell'><b>Total de puntos con el peso específico</b></div>", unsafe_allow_html=True)
+            st.markdown(f"<div class='cell'>{puntos_destino_peso}</div>", unsafe_allow_html=True)
             puntos_destino_peso_total += puntos_destino_peso
-        
+            
     else:
         # No mostramos nada o mostramos un mensaje específico si la tabla no tiene datos
         st.write(f"No se encontraron datos para '{page_name}' en la consulta.")
