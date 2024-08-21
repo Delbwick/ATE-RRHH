@@ -347,11 +347,11 @@ for page_name in PAGES_TABLES_2:
 
         # Contenido en la segunda columna (25%)
         with col2:
-            st.markdown(f"<div class='header-cell'><b>Peso del complemento específico</b></div>", unsafe_allow_html=True)
+            st.markdown(f"<div class='header-cell'><b>Peso del complemento especifico</b></div>", unsafe_allow_html=True)
             
             # Input para el peso del destino por proyecto
             peso_de_destino_por_proyecto = st.number_input(
-                f'Peso del complemento específico para {page_name}', 
+                f'Peso del complemento especifico para {page_name}', 
                 min_value=0.0,
                 key=f'{page_name}_peso'
             )
@@ -359,15 +359,15 @@ for page_name in PAGES_TABLES_2:
         # Contenido en la tercera columna (25%)
         with col3:
             # Calcular puntos con el peso específico
-            puntos_destino_peso = total_puntos_especificos * peso_de_destino_por_proyecto / 100
+            puntos_especifico_peso = total_puntos_especificos * peso_de_destino_por_proyecto / 100
             
             st.markdown(f"<div class='header-cell'><b>Total puntos con peso</b></div>", unsafe_allow_html=True)
             
             # Mostrar puntos con peso
-            st.markdown(f"<div class='cell'>{puntos_destino_peso}</div>", unsafe_allow_html=True)
+            st.markdown(f"<div class='cell'>{puntos_especifico_peso}</div>", unsafe_allow_html=True)
 
             # Actualizar el total acumulado de puntos destino peso
-            puntos_destino_peso_total += puntos_destino_peso
+            puntos_especifico_peso_total += puntos_especifico_peso
 
 # Mostrar el total acumulado de puntos específicos al final de todas las iteraciones
 st.markdown(f"<h3>Total acumulado de puntos específicos: {total_puntos_especificos}</h3>", unsafe_allow_html=True)
