@@ -211,19 +211,29 @@ for page_name in PAGES_TABLES:
     df = execute_query_for_page(page_name, id_proyecto_seleccionado)
     df,total_puntos_destino_1 = execute_query_for_page(page_name, id_proyecto_seleccionado)
 
-    if df is not None and not df.empty:  # Verificar si el DataFrame no está vacío
-        st.markdown(f"<h3>{page_name}</h3>", unsafe_allow_html=True)
-        st.dataframe(df)
-        st.write(f"Total de puntos: {total_puntos_destino_1}")
-        
-        peso_especifico_por_proyecto[page_name] = st.number_input(
-            f'Peso del complemento específico para {page_name}', 
-            min_value=0.0,
-            key=f'{page_name}_peso'
-        )
-        puntos_destino_peso=total_puntos_destino_1*peso_especifico_por_proyecto[page_name]/100
-        st.write(f"Total de puntos con el peso especifico: {puntos_destino_peso}")
-        puntos_destino_peso_total+=puntos_destino_peso
+   if df is not None and not df.empty:  # Verificar si el DataFrame no está vacío
+    # Crear tres columnas con anchos 50%, 25%, 25%
+    col1, col2, col3 = st.columns([2, 1, 1])
+
+    # Contenido de la primera columna (50%)
+        with col1:
+            st.markdown(f"<h3>{page_name}</h3>", unsafe_allow_html=True)
+            st.dataframe(df)
+            st.write(f"Total de puntos: {total_puntos_destino_1}")
+
+    # Contenido de la segunda columna (25%)
+        with col2:
+            peso_especifico_por_proyecto[page_name] = st.number_input(
+                f'Peso del complemento específico para {page_name}', 
+                min_value=0.0,
+                key=f'{page_name}_peso'
+            )
+
+    # Contenido de la tercera columna (25%)
+        with col3:
+            puntos_destino_peso = total_puntos_destino_1 * peso_especifico_por_proyecto[page_name] / 100
+            st.write(f"Total de puntos con el peso especifico: {puntos_destino_peso}")
+            puntos_destino_peso_total += puntos_destino_peso
         
     else:
         # No mostramos nada o mostramos un mensaje específico si la tabla no tiene datos
