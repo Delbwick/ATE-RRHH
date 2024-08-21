@@ -43,22 +43,6 @@ header_html = """
         text-align: left;
         color: #333333;
     }
-    .tabla-custom {
-        width: 100%;
-        border-collapse: collapse;
-    }
-    .tabla-custom th, .tabla-custom td {
-        border: 1px solid black;
-        padding: 10px;
-        text-align: center;
-    }
-    .tabla-custom th {
-        background-color: #f2f2f2;
-    }
-    .tabla-custom h3 {
-        margin: 0;
-    }
-    </style>
     </style>
 """
 
@@ -228,40 +212,28 @@ for page_name in PAGES_TABLES:
     df,total_puntos_destino_1 = execute_query_for_page(page_name, id_proyecto_seleccionado)
 
     if df is not None and not df.empty:  # Verificar si el DataFrame no está vacío
-    # Crear el contenido como una tabla HTML con clases CSS globales
-        table_html = f"""
-        <table class="tabla-custom">
-            <tr>
-                <th colspan="3"><h3>{page_name}</h3></th>
-            </tr>
-            <tr>
-                <td style="width: 50%;">{df.to_html(index=False)}</td>
-                <td style="width: 25%;">
-                    <b>Peso del complemento específico para {page_name}</b><br>
-                    {peso_especifico_por_proyecto.get(page_name, 'N/A')}
-                </td>
-                <td style="width: 25%;">
-                    <b>Total de puntos con el peso específico</b><br>
-                    {puntos_destino_peso}
-                </td>
-            </tr>
-            <tr>
-                <td colspan="3"><b>Total de puntos: {total_puntos_destino_1}</b></td>
-            </tr>
-        </table>
-        """
+    # Crear tres columnas con anchos 50%, 25%, 25%
+        col1, col2, col3 = st.columns([2, 1, 1])
 
-        # Mostrar la tabla con Streamlit usando markdown
-        st.markdown(table_html, unsafe_allow_html=True)
+    # Contenido de la primera columna (50%)
+        with col1:
+            st.markdown(f"<h3>{page_name}</h3>", unsafe_allow_html=True)
+            st.dataframe(df)
+            st.write(f"Total de puntos: {total_puntos_destino_1}")
 
-        # Inputs y cálculos que se hacen normalmente
-        peso_especifico_por_proyecto[page_name] = st.number_input(
-            f'Peso del complemento específico para {page_name}', 
-            min_value=0.0,
-            key=f'{page_name}_peso'
-        )
-        puntos_destino_peso = total_puntos_destino_1 * peso_especifico_por_proyecto[page_name] / 100
-        puntos_destino_peso_total += puntos_destino_peso
+    # Contenido de la segunda columna (25%)
+        with col2:
+            peso_especifico_por_proyecto[page_name] = st.number_input(
+                f'Peso del complemento específico para {page_name}', 
+                min_value=0.0,
+                key=f'{page_name}_peso'
+            )
+
+    # Contenido de la tercera columna (25%)
+        with col3:
+            puntos_destino_peso = total_puntos_destino_1 * peso_especifico_por_proyecto[page_name] / 100
+            st.write(f"Total de puntos con el peso especifico: {puntos_destino_peso}")
+            puntos_destino_peso_total += puntos_destino_peso
         
     else:
         # No mostramos nada o mostramos un mensaje específico si la tabla no tiene datos
@@ -587,6 +559,3 @@ else:
 st.title("Total calculo de Sueldo : Complemento de destino + complemento específico + sueldo base por categoría")
 sueldo_total=sueldo+valor_punto_especifico_proyecto+puntos_valoracion
 st.write(f"Sueldo total: {sueldo}+{valor_punto_especifico_proyecto}+{puntos_valoracion} = {sueldo_total} euros")
-
-
-
