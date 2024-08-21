@@ -260,7 +260,7 @@ for page_name in PAGES_TABLES:
             puntos_destino_peso = total_puntos_destino_1 * peso_especifico_por_proyecto[page_name] / 100
             st.markdown(f"<div class='header-cell'><b>Total de puntos de destino con el peso específico</b></div>", unsafe_allow_html=True)
             st.markdown(f"<div class='cell'>{puntos_destino_peso}</div>", unsafe_allow_html=True)
-            puntos_destino_peso_total += puntos_destino_peso
+            #puntos_destino_peso_total += puntos_destino_peso
             
     else:
         # No mostramos nada o mostramos un mensaje específico si la tabla no tiene datos
