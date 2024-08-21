@@ -322,17 +322,55 @@ def execute_query_for_page(page_name, id_proyecto):
 total_puntos_especificos = 0
 
 # Iterar sobre todas las páginas en el diccionario y ejecutar las consultas
-for page_name in PAGES_TABLES_2:
+or page_name in PAGES_TABLES_2:
     st.markdown(f"<h3>{page_name}</h3>", unsafe_allow_html=True)
-    df = execute_query_for_page(page_name, id_proyecto_seleccionado)
+    
+    # Ejecutar la consulta para obtener el DataFrame y los puntos
     df, total_puntos = execute_query_for_page(page_name, id_proyecto_seleccionado)
-    if df is not None:
-        st.dataframe(df)
-        st.write(f"Total de puntos: {total_puntos}")
+    
+    if df is not None and not df.empty:
+        # Incrementar el total acumulado de puntos específicos
         total_puntos_especificos += total_puntos
-    else:
-        st.write(f"No se encontró la página '{page_name}' en el diccionario o no se pudo ejecutar la consulta.")
 
+        # Crear las columnas (50%, 25%, 25%)
+        col1, col2, col3 = st.columns([2, 1, 1])
+
+        # Contenido en la primera columna (50%)
+        with col1:
+            st.markdown(f"<div class='header-cell'><h3>{page_name}</h3></div>", unsafe_allow_html=True)
+            
+            # Mostrar DataFrame con límite de tamaño
+            st.markdown(f"<div class='cell dataframe-cell'>{df.to_html(index=False)}</div>", unsafe_allow_html=True)
+            
+            # Mostrar el total de puntos de la página
+            st.markdown(f"<div class='cell'><b>Total de puntos: {total_puntos}</b></div>", unsafe_allow_html=True)
+
+        # Contenido en la segunda columna (25%)
+        with col2:
+            st.markdown(f"<div class='header-cell'><b>Peso del complemento específico</b></div>", unsafe_allow_html=True)
+            
+            # Input para el peso del destino por proyecto
+            peso_de_destino_por_proyecto = st.number_input(
+                f'Peso del complemento específico para {page_name}', 
+                min_value=0.0,
+                key=f'{page_name}_peso'
+            )
+
+        # Contenido en la tercera columna (25%)
+        with col3:
+            # Calcular puntos con el peso específico
+            puntos_destino_peso = total_puntos_especificos * peso_de_destino_por_proyecto / 100
+            
+            st.markdown(f"<div class='header-cell'><b>Total puntos con peso</b></div>", unsafe_allow_html=True)
+            
+            # Mostrar puntos con peso
+            st.markdown(f"<div class='cell'>{puntos_destino_peso}</div>", unsafe_allow_html=True)
+
+            # Actualizar el total acumulado de puntos destino peso
+            puntos_destino_peso_total += puntos_destino_peso
+
+# Mostrar el total acumulado de puntos específicos al final de todas las iteraciones
+st.markdown(f"<h3>Total acumulado de puntos específicos: {total_puntos_especificos}</h3>", unsafe_allow_html=True)
 st.markdown("<h2>Caluculo de Valoraciones</h2>", unsafe_allow_html=True)
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 
