@@ -247,9 +247,9 @@ for page_name in PAGES_TABLES:
 
     # Contenido de la segunda columna (25%)
         with col2:
-            st.markdown(f"<div class='header-cell'><b>Peso del complemento específico para {page_name}</b></div>", unsafe_allow_html=True)
+            st.markdown(f"<div class='header-cell'><b>Peso del complemento de destino para {page_name}</b></div>", unsafe_allow_html=True)
             peso_especifico_por_proyecto[page_name] = st.number_input(
-                f'Peso del complemento específico para {page_name}', 
+                f'Peso del complemento de destino para {page_name}', 
                 min_value=0.0,
                 key=f'{page_name}_peso'
             )
@@ -258,7 +258,7 @@ for page_name in PAGES_TABLES:
     # Contenido de la tercera columna (25%)
         with col3:
             puntos_destino_peso = total_puntos_destino_1 * peso_especifico_por_proyecto[page_name] / 100
-            st.markdown(f"<div class='header-cell'><b>Total de puntos con el peso específico</b></div>", unsafe_allow_html=True)
+            st.markdown(f"<div class='header-cell'><b>Total de puntos de destino con el peso específico</b></div>", unsafe_allow_html=True)
             st.markdown(f"<div class='cell'>{puntos_destino_peso}</div>", unsafe_allow_html=True)
             puntos_destino_peso_total += puntos_destino_peso
             
