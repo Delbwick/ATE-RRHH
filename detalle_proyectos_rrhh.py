@@ -588,7 +588,7 @@ valor_punto_especifico_proyecto = st.number_input('Introduce el número de punto
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
-st.markdown("<h2>Calculo para el puesto {puesto_nombre}</h2>", unsafe_allow_html=True)
+st.markdown("<h2>Calculo para el puesto: {puesto_nombre}</h2>", unsafe_allow_html=True)
 
 
 
@@ -648,3 +648,81 @@ else:
 st.title("Total calculo de Sueldo : Complemento de destino + complemento específico + sueldo base por categoría")
 sueldo_total=sueldo+valor_punto_especifico_proyecto+puntos_valoracion
 st.write(f"Sueldo total: {sueldo}+{valor_punto_especifico_proyecto}+{puntos_valoracion} = {sueldo_total} euros")
+
+#≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤
+#≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤
+#≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤
+#creacion de tabalas un poco más roganizadas
+
+# Título para la consulta de puntos
+st.title("Consulta de Puntos de Valoración de destino con el peso asignado")
+st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
+
+# Mostrar información si hay puntos de valoración
+if puntos_valoracion:
+    col1, col2, col3 = st.columns([6, 3, 3])  # Proporciones 60%, 30%, 10%
+
+    # Columna 1: Mostrar el DataFrame
+    with col1:
+        st.markdown(f"<div class='header-cell'>Datos de Puntos de Valoración</div>", unsafe_allow_html=True)
+        st.dataframe(result_df_general)
+
+    # Columna 2: Mostrar totales de puntos
+    with col2:
+        st.markdown(f"<div class='header-cell'>Totales</div>", unsafe_allow_html=True)
+        st.write(f"Total puntos (Destino): {total_destino}")
+        st.write(f"Total puntos (Destino) con peso específico: {puntos_destino_peso_total}")
+        st.write(f"Puntos de valoración de destino con el porcentaje de importancia: {puntos_valoracion}")
+
+    # Columna 3: Mostrar otros cálculos
+    with col3:
+        st.markdown(f"<div class='header-cell'>Cálculos</div>", unsafe_allow_html=True)
+        # Aquí puedes añadir más cálculos o cualquier otro dato que quieras mostrar.
+
+else:
+    st.write("No se encontraron puntos de valoración para el valor introducido.")
+
+# Título para la consulta del complemento específico
+st.title("Consulta de Complemento específico")
+st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
+
+# Mostrar información relacionada con el complemento específico
+col1, col2, col3 = st.columns([6, 3, 3])  # Proporciones 60%, 30%, 10%
+
+# Columna 1: Mostrar el DataFrame del complemento específico
+with col1:
+    st.markdown(f"<div class='header-cell'>Datos de Complemento Específico</div>", unsafe_allow_html=True)
+    st.dataframe(result_df_especifico)
+
+# Columna 2: Mostrar totales de puntos específicos
+with col2:
+    st.markdown(f"<div class='header-cell'>Totales</div>", unsafe_allow_html=True)
+    st.write(f"Total puntos (Específico): {total_especifico}")
+
+# Columna 3: Mostrar valor específico del puesto
+with col3:
+    st.markdown(f"<div class='header-cell'>Cálculos</div>", unsafe_allow_html=True)
+    st.write(f"El valor específico del puesto para el complemento específico es: {valor_punto_especifico_proyecto:.2f} euros")
+    st.write(f"El valor específico del puesto con el cálculo en puntos es: {puntos_específico_sueldo:.2f} euros")
+
+# Título para la consulta de sueldo base por categoría
+st.title("Consulta de Sueldo base por categoría")
+st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
+
+# Mostrar sueldo base si existe
+if sueldo:
+    st.write(f"Sueldo base por categoría para el puesto de trabajo: {sueldo}")
+else:
+    st.write("No se encontraron puntos de valoración para el valor introducido.")
+
+# Título para el cálculo final del sueldo total
+st.title("Total calculo de Sueldo: Complemento de destino + complemento específico + sueldo base por categoría")
+st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
+
+# Calcular y mostrar el sueldo total
+sueldo_total = sueldo + valor_punto_especifico_proyecto + puntos_valoracion
+st.write(f"Sueldo total: {sueldo} + {valor_punto_especifico_proyecto} + {puntos_valoracion} = {sueldo_total:.2f} euros")
+
+# Fila final: Mostrar el resultado total en una única fila
+st.markdown(f"<div class='header-cell'>Sueldo Total Final</div>", unsafe_allow_html=True)
+st.write(f"Sueldo total final calculado: {sueldo_total:.2f} euros")
