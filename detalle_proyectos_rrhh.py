@@ -43,6 +43,12 @@ header_html = """
         text-align: left;
         color: #333333;
     }
+    h3 {
+        font-family: 'Arial', sans-serif;
+        font-size: 14pt;
+        text-align: left;
+        color: #333333;
+    }
     .cell {
         border: 1px solid black;
         padding: 10px;
@@ -56,8 +62,7 @@ header_html = """
         border: 1px solid black;
         padding: 10px;
         text-align: center;
-        font-family: 'Arial', sans-serif;
-        font-size: 17pt;
+       
     }
     .dataframe-cell {
         overflow-x: auto;  /* Habilita scroll horizontal */
