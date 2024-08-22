@@ -535,7 +535,7 @@ sueldo_categoria_puesto = {}
 for index, row in df_puestos_proyecto.iterrows():
     puesto_id = row['id_puesto']
     puesto_nombre = row['descripcion']
-    if st.checkbox(f"{puesto_nombre} (ID: {puesto_id})",value=is_checked):
+    if st.checkbox(f"{puesto_nombre} (ID: {puesto_id})",value=True):
         selected_puestos_ids.append(puesto_id)
         
         # Selectbox para elegir la categoría de sueldo
