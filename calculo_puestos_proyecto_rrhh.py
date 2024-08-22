@@ -486,7 +486,7 @@ if id_proyecto:
         st.write(f"Total puntos (Específico) con peso especifico: {puntos_especifico_peso_total}")
 
         total_puntos=total_especifico+total_destino
-        st.write(f"Total puntos Globales Especifico + Destino: {total_especifico}+{total_destino} = {total_puntos}")
+        st.write(f"Total puntos Factores  de Compelmentos Especifico + Destino: {total_especifico}+{total_destino} = {total_puntos}")
         
     else:
         st.warning("No se encontraron datos para el ID de proyecto proporcionado en la consulta de complemento específico.")
