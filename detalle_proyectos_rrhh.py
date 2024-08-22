@@ -571,6 +571,7 @@ st.write(f"Total puntos (Específico): {total_especifico}")
 valor_punto_especifico_proyecto = (total_especifico * valor_base) / 100
 st.write(f'El valor específico del puesto es: {valor_punto_especifico_proyecto:.2f} euros')
 
+puntos_específico_sueldo = (puntos_especifico_peso_total * valor_base) / 100
 # Aseguramos que valor_punto_especifico_proyecto no sea menor que min_value
 #valor_punto_especifico_proyecto = max(valor_punto_especifico_proyecto, 1.0)
 
@@ -629,7 +630,8 @@ st.title("Consulta de Complemento especifico")
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 st.dataframe(result_df_especifico)       
 st.write(f"Total puntos (Específico): {total_especifico}")
-st.write(f'El valor específico del puesto para el complemento específico es: {valor_punto_especifico_proyecto:.2f} euros')
+st.write(f'El valor específico del puesto para el complemento específico si el peso es: {valor_punto_especifico_proyecto:.2f} euros')
+st.write(f'El valor específico del puesto para el complemento específico con el calculo con puntos es: {puntos_específico_sueldo:.2f} euros')
 
 
 # Mostrar el resultado en Streamlit
