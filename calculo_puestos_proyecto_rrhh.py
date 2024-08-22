@@ -382,8 +382,8 @@ for page_name in PAGES_TABLES_2:
         st.write(f"No se encontraron datos para '{page_name}' en la consulta.")
 
 # Mostrar el total acumulado de puntos específicos al final de todas las iteraciones
-st.markdown(f"<h4>Total acumulado de puntos específicos: {total_puntos_especificos}</h4>", unsafe_allow_html=True)
-st.markdown(f"<h4>valoracion complemento especifico con los puntos aplicados : {puntos_especifico_peso_total}</h4>", unsafe_allow_html=True)
+#st.markdown(f"<h4>Total acumulado de puntos específicos: {total_puntos_especificos}</h4>", unsafe_allow_html=True)
+#st.markdown(f"<h4>valoracion complemento especifico con los puntos aplicados : {puntos_especifico_peso_total}</h4>", unsafe_allow_html=True)
 st.markdown("<h2>Caluculo de Valoraciones</h2>", unsafe_allow_html=True)
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 
@@ -470,7 +470,7 @@ if id_proyecto:
     
     if not result_df_general.empty:
         st.success("Consulta complemento destino exitosa!")
-        st.dataframe(result_df_general)
+        #st.dataframe(result_df_general)
         total_destino = result_df_general['puntos'].sum()
         st.write(f"Total puntos (Destino): {total_destino}")
         st.write(f"Total puntos (Destino) con peso especifico: {puntos_destino_peso_total}")
@@ -480,11 +480,13 @@ if id_proyecto:
     
     if not result_df_especifico.empty:
         st.success("Consulta de complemento específico exitosa!")
-        st.dataframe(result_df_especifico)
+        #st.dataframe(result_df_especifico)
         total_especifico = result_df_especifico['puntos'].sum()
         st.write(f"Total puntos (Específico): {total_especifico}")
+        st.write(f"Total puntos (Específico) con peso especifico: {puntos_especifico_peso_total}")
+
         total_puntos=total_especifico+total_destino
-        st.write(f"Total puntos: {total_especifico}+{total_destino} = {total_puntos}")
+        st.write(f"Total puntos Globales Especifico + Destino: {total_especifico}+{total_destino} = {total_puntos}")
         
     else:
         st.warning("No se encontraron datos para el ID de proyecto proporcionado en la consulta de complemento específico.")
@@ -533,7 +535,7 @@ sueldo_categoria_puesto = {}
 for index, row in df_puestos_proyecto.iterrows():
     puesto_id = row['id_puesto']
     puesto_nombre = row['descripcion']
-    if st.checkbox(f"{puesto_nombre} (ID: {puesto_id})"):
+    if st.checkbox(f"{puesto_nombre} (ID: {puesto_id})",value=is_checked):
         selected_puestos_ids.append(puesto_id)
         
         # Selectbox para elegir la categoría de sueldo
