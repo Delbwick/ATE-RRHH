@@ -623,7 +623,7 @@ if puntos_valoracion:
     st.dataframe(result_df_general)
     st.write(f"Total puntos (Destino): {total_destino}")
     st.write(f"Total puntos (Destino) con peso especifico: {puntos_destino_peso_total}")
-    st.write(f"Puntos de valoración de destino con el porcentaje de importancia: {puntos_valoracion}")
+    st.write(f"Puntos de valoración de destino con el porcentaje de importancia: {puntos_valoracion:.2f} euros")
 else:
     st.write("No se encontraron puntos de valoración para el valor introducido.")
 
@@ -632,7 +632,7 @@ st.title("Consulta de Complemento especifico")
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 st.dataframe(result_df_especifico)       
 st.write(f"Total puntos (Específico): {total_especifico}")
-st.write(f'El valor específico del puesto para el complemento específico si el peso es: {valor_punto_especifico_proyecto:.2f} euros')
+st.write(f'El valor específico del puesto para el complemento específico sin el peso es: {valor_punto_especifico_proyecto:.2f} euros')
 st.write(f'El valor específico del puesto para el complemento específico con el calculo con puntos es: {puntos_específico_sueldo:.2f} euros')
 
 
