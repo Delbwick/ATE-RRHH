@@ -56,6 +56,8 @@ header_html = """
         border: 1px solid black;
         padding: 10px;
         text-align: center;
+        font-family: 'Arial', sans-serif;
+        font-size: 17pt;
     }
     .dataframe-cell {
         overflow-x: auto;  /* Habilita scroll horizontal */
