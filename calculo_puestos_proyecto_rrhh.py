@@ -679,7 +679,7 @@ if puntos_valoracion:
     with col3:
         st.markdown(f"<div class='header-cell'>Cálculos</div>", unsafe_allow_html=True)
         # Aquí puedes añadir más cálculos o cualquier otro dato que quieras mostrar.
-    st.write(f"Puntos de valoración de destino con el porcentaje de importancia: {puntos_valoracion:.2f} euros")
+        st.write(f"Puntos de valoración de destino con el porcentaje de importancia: {puntos_valoracion:.2f} euros")
 
 
 else:
