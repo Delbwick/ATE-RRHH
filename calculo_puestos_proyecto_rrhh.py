@@ -590,7 +590,7 @@ valor_punto_especifico_proyecto = st.number_input('Introduce el número de punto
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
-st.markdown("<h2>Calculo para el puesto: {puesto_nombre}</h2>", unsafe_allow_html=True)
+st.markdown(f"<h2>Calculo para el puesto: {puesto_nombre}</h2>", unsafe_allow_html=True)
 
 
 
@@ -620,7 +620,7 @@ st.title("Consulta de Puntos de Valoración de destino con el peso asignado")
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 
 if puntos_valoracion:
-    st.dataframe(result_df_general)
+    #st.dataframe(result_df_general)
     st.write(f"Total puntos (Destino): {total_destino}")
     st.write(f"Total puntos (Destino) con peso especifico: {puntos_destino_peso_total}")
     st.write(f"Puntos de valoración de destino con el porcentaje de importancia: {puntos_valoracion:.2f} euros")
@@ -630,7 +630,7 @@ else:
 # Mostramos el valor específico del puesto
 st.title("Consulta de Complemento especifico")
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
-st.dataframe(result_df_especifico)       
+#st.dataframe(result_df_especifico)       
 st.write(f"Total puntos (Específico): {total_especifico}")
 st.write(f'El valor específico del puesto para el complemento específico sin el peso es: {valor_punto_especifico_proyecto:.2f} euros')
 st.write(f'El valor específico del puesto para el complemento específico con el calculo con puntos es: {puntos_específico_sueldo:.2f} euros')
