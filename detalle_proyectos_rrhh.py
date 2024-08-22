@@ -46,7 +46,7 @@ header_html = """
     h3 {
         font-family: 'Arial', sans-serif;
         font-size: 14pt;
-        text-align: left;
+        text-align: center;
         color: #333333;
     }
     .cell {
