@@ -674,12 +674,13 @@ if puntos_valoracion:
         st.markdown(f"<div class='header-cell'>Totales</div>", unsafe_allow_html=True)
         st.write(f"Total puntos (Destino): {total_destino}")
         st.write(f"Total puntos (Destino) con peso específico: {puntos_destino_peso_total}")
-        st.write(f"Puntos de valoración de destino con el porcentaje de importancia: {puntos_valoracion}")
-
+        
     # Columna 3: Mostrar otros cálculos
     with col3:
         st.markdown(f"<div class='header-cell'>Cálculos</div>", unsafe_allow_html=True)
         # Aquí puedes añadir más cálculos o cualquier otro dato que quieras mostrar.
+    st.write(f"Puntos de valoración de destino con el porcentaje de importancia: {puntos_valoracion:.2f} euros")
+
 
 else:
     st.write("No se encontraron puntos de valoración para el valor introducido.")
