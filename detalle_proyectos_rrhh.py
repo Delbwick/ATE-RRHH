@@ -382,8 +382,8 @@ for page_name in PAGES_TABLES_2:
         st.write(f"No se encontraron datos para '{page_name}' en la consulta.")
 
 # Mostrar el total acumulado de puntos específicos al final de todas las iteraciones
-st.markdown(f"<h3>Total acumulado de puntos específicos: {total_puntos_especificos}</h3>", unsafe_allow_html=True)
-st.markdown(f"<h3>valoracion complemento especifico : {puntos_especifico_peso_total}</h3>", unsafe_allow_html=True)
+st.markdown(f"<h4>Total acumulado de puntos específicos: {total_puntos_especificos}</h4>", unsafe_allow_html=True)
+st.markdown(f"<h4>valoracion complemento especifico con los puntos aplicados : {puntos_especifico_peso_total}</h4>", unsafe_allow_html=True)
 st.markdown("<h2>Caluculo de Valoraciones</h2>", unsafe_allow_html=True)
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 
