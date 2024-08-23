@@ -561,7 +561,7 @@ st.write("Sueldos por categoría de puesto:", sueldo_categoria_puesto)
 # Mensaje markdown para explicar la regla de tres
 st.markdown("<h2>Valoración para regla de 3 para tabla de complemento específico por Año (Variable) son 100 puntos -> 33.714,66 euros</h2>", unsafe_allow_html=True)
 puntos_base = 100
-valor_base = 33714.66  # euros
+valor_base = 33714.66  # euros habria que recogerlo de la tabla
 valor_punto_especifico_proyecto = (total_especifico * valor_base) / 100
 
 # Input para que el usuario introduzca el valor de puntos
@@ -575,8 +575,8 @@ valor_punto_especifico_proyecto = st.number_input('Introduce el número de punto
 st.markdown("<h2>Calculo puntos de complemento especifico</h2>", unsafe_allow_html=True)
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 # Definimos los valores conocidos
-puntos_base = 100
-valor_base = 33714.66  # euros
+#puntos_base = 100
+#valor_base = 33714.66  # euros
 st.write(f"Total puntos (Específico): {total_especifico}")
 st.write(f"Total puntos (Destino) con peso especifico: {puntos_destino_peso_total}")
 
