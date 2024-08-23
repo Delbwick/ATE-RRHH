@@ -557,6 +557,16 @@ st.write("Puestos seleccionados:", selected_puestos_ids)
 st.write("Sueldos por categoría de puesto:", sueldo_categoria_puesto)
 
 #>>>>>>>>>Valor por punto especifico por poryecto
+
+# Mensaje markdown para explicar la regla de tres
+st.markdown("<h2>Valoración para regla de 3 para tabla de complemento específico por Año (Variable) son 100 puntos -> 33.714,66 euros</h2>", unsafe_allow_html=True)
+
+# Input para que el usuario introduzca el valor de puntos
+valor_punto_especifico_proyecto = st.number_input('Introduce el número de puntos específicos del proyecto:',
+                                                  min_value=1.0,
+                                                  value=valor_punto_especifico_proyecto,
+                                                  step=0.01)
+
 #ºel valor por peso especifico por poryecto va variar dependiendo del ayntamiento del año y de la legislacion por lo que tendremos que tener una tabla
 #puntos por peso especifico por año
 st.markdown("<h2>Calculo puntos de complemento especifico</h2>", unsafe_allow_html=True)
@@ -582,14 +592,7 @@ st.write(f'El valor específico del puesto con la asignacion de peso es: {puntos
 # Aseguramos que valor_punto_especifico_proyecto no sea menor que min_value
 #valor_punto_especifico_proyecto = max(valor_punto_especifico_proyecto, 1.0)
 
-# Mensaje markdown para explicar la regla de tres
-st.markdown("<h2>Valoración para regla de 3 para tabla de complemento específico por Año (Variable) son 100 puntos -> 33.714,66 euros</h2>", unsafe_allow_html=True)
 
-# Input para que el usuario introduzca el valor de puntos
-valor_punto_especifico_proyecto = st.number_input('Introduce el número de puntos específicos del proyecto:',
-                                                  min_value=1.0,
-                                                  value=valor_punto_especifico_proyecto,
-                                                  step=0.01)
 
 #vamos a organizar los datos como en las tablas
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
