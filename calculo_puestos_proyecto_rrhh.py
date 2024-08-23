@@ -472,8 +472,8 @@ if id_proyecto:
         st.success("Consulta complemento destino exitosa!")
         #st.dataframe(result_df_general)
         total_destino = result_df_general['puntos'].sum()
-        st.write(f"Total puntos (Destino): {total_destino}")
-        st.write(f"Total puntos (Destino) con peso especifico: {puntos_destino_peso_total}")
+        #st.write(f"Total puntos (Destino): {total_destino}")
+        #st.write(f"Total puntos (Destino) con peso especifico: {puntos_destino_peso_total}")
         
     else:
         st.warning("No se encontraron datos para el ID de proyecto proporcionado en la consulta general.")
@@ -482,8 +482,8 @@ if id_proyecto:
         st.success("Consulta de complemento específico exitosa!")
         #st.dataframe(result_df_especifico)
         total_especifico = result_df_especifico['puntos'].sum()
-        st.write(f"Total puntos (Específico): {total_especifico}")
-        st.write(f"Total puntos (Específico) con peso especifico: {puntos_especifico_peso_total}")
+        #st.write(f"Total puntos (Específico): {total_especifico}")
+        #st.write(f"Total puntos (Específico) con peso especifico: {puntos_especifico_peso_total}")
 
         total_puntos=total_especifico+total_destino
         st.write(f"Total puntos Factores  de Compelmentos Especifico + Destino: {total_especifico}+{total_destino} = {total_puntos}")
