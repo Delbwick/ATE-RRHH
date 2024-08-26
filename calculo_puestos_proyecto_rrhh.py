@@ -7,7 +7,7 @@ import uuid
 
 
 # Configurar la página de Streamlit
-st.set_page_config(page_title="RRHH Cálculo de Puestos por Proyecto", page_icon="👨🏻‍🏫")
+st.set_page_config(page_title="RRHH Cálculo de Puestos por Proyecto", page_icon="🧑‍🏫")
 st.title("¡Bienvenido a RRHH! ")
 st.header("¡Calcula tu Proyecto!")
 
