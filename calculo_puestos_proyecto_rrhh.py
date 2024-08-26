@@ -734,8 +734,8 @@ st.title("Total calculo de Sueldo: Complemento de destino + complemento específ
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 
 # Calcular y mostrar el sueldo total
-sueldo_total = sueldo + valor_punto_especifico_proyecto + puntos_valoracion
-st.write(f"Sueldo total: {sueldo} + {valor_punto_especifico_proyecto} + {puntos_valoracion} = {sueldo_total:.2f} euros")
+sueldo_total = sueldo + puntos_específico_sueldo + puntos_valoracion
+st.write(f"Sueldo total: {sueldo} + {puntos_específico_sueldo} + {puntos_valoracion} = {sueldo_total:.2f} euros")
 
 # Fila final: Mostrar el resultado total en una única fila
 st.markdown(f"<div class='header-cell'>Sueldo Total Final</div>", unsafe_allow_html=True)
