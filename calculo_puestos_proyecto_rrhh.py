@@ -274,9 +274,8 @@ for page_name in PAGES_TABLES:
         # No mostramos nada o mostramos un mensaje específico si la tabla no tiene datos
         st.write(f"No se encontraron datos para '{page_name}' en la consulta.")
 
-st.write(puntos_destino_peso_total)
-st.write(f"Suma de Puntos con el peso específico->VALORACION: {puntos_destino_peso_total}")
-st.markdown(f"<div class='cell'><b>Suma de Puntos con el peso específico->VALORACIÓN: {puntos_destino_peso_total}</b></div>", unsafe_allow_html=True)
+st.markdown(f"<div class='cell'><b>Suma de % de Peso Específico(Ha de ser Igual a 100%: {peso_especifico_por_proyecto}</b></div>", unsafe_allow_html=True)
+st.markdown(f"<div class='cell'><b>Suma de Puntos x el peso específico->VALORACIÓN: {puntos_destino_peso_total}</b></div>", unsafe_allow_html=True)
 
 
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
