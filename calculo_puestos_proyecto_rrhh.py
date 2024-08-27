@@ -646,7 +646,7 @@ if puntos_valoracion:
     #st.write(f"Total puntos (Destino) con peso especifico: {puntos_destino_peso_total}")
     #st.write(f"Puntos de valoración de destino con el porcentaje de importancia: {puntos_valoracion:.2f} euros")
 else:
-    #st.write("No se encontraron puntos de valoración para el valor introducido.")
+    st.write("No se encontraron puntos de valoración para el valor introducido.")
 
 # Mostramos el valor específico del puesto
 #st.title("Consulta de Complemento especifico")
@@ -664,7 +664,7 @@ else:
 if sueldo:
  #   st.write(f"Sueldo base por categoría para el puesto de trabajo: {sueldo}")
 else:
-  #  st.write("No se encontraron puntos de valoración para el valor introducido.")
+      st.write("No se encontraron puntos de valoración para el valor introducido.")
 
 
 # Mostrar el resultado en Streamlit
