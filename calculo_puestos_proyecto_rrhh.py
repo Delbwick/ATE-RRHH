@@ -700,7 +700,7 @@ if puntos_valoracion:
     with col3:
         st.markdown(f"<div class='header-cell'>Valoración</div>", unsafe_allow_html=True)
         # Aquí puedes añadir más cálculos o cualquier otro dato que quieras mostrar.
-        st.write(f"Puntos de valoración (Peso x Puntos%): {puntos_destino_peso_total")
+        st.write(f"Puntos de valoración (Peso x Puntos%): {puntos_destino_peso_total}")
 
     with col4:
         st.markdown(f"<div class='header-cell'>Importes</div>", unsafe_allow_html=True)
