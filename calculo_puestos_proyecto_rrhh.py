@@ -9,7 +9,7 @@ import uuid
 # Configurar la página de Streamlit
 st.set_page_config(page_title="RRHH Cálculo de Puestos por Proyecto", page_icon="🧑‍🏫")
 st.title("¡Bienvenido a RRHH! ")
-st.header("¡Calcula tu Proyecto!")
+st.header("¡Calcula los Salarios Por Poryecto!")
 
 # HTML personalizado para el encabezado
 header_html = """
@@ -78,7 +78,7 @@ st.markdown(header_html, unsafe_allow_html=True)
 
 # Agregar la imagen (logo) y el texto al encabezado
 st.markdown('<div class="header-container"><img class="logo" src="https://www.rrhhdelnorte.es/-_-/res/702f8fd0-46a5-4f0d-9c65-afb737164745/images/files/702f8fd0-46a5-4f0d-9c65-afb737164745/e0e4dc73-78c2-4413-b62c-250cbeea83fa/683-683/3b3822cd156fd081c427cc6b35617e4031b98c63" alt="Logo"></div>', unsafe_allow_html=True)
-st.write("Detalle de proyectos")
+#st.write("Detalle de proyectos")
 # Crear API client para BigQuery
 credentials = service_account.Credentials.from_service_account_info(
     st.secrets["gcp_service_account"]
@@ -100,7 +100,7 @@ def get_proyectos():
     return proyectos
 
 # Mostrar el encabezado y línea separadora
-st.markdown("<h2>Selector de Proyectos</h2>", unsafe_allow_html=True)
+st.markdown("<h2>Selecciona el proyecto que quieres calcular</h2>", unsafe_allow_html=True)
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 
 # Obtener lista de proyectos
@@ -152,6 +152,7 @@ query_job_puestos_proyecto = client.query(query_puestos_proyecto)
 results_puestos_proyecto = query_job_puestos_proyecto.result()
 df_puestos_proyecto = pd.DataFrame(data=[row.values() for row in results_puestos_proyecto], columns=[field.name for field in results_puestos_proyecto.schema])
 st.dataframe(df_puestos_proyecto)
+st.markdown(f"<div class='cell dataframe-cell'>{df_puestos_proyecto.to_html(index=False)}</div>", unsafe_allow_html=True)
 
 
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
