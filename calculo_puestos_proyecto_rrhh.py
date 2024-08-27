@@ -275,6 +275,7 @@ for page_name in PAGES_TABLES:
         st.write(f"No se encontraron datos para '{page_name}' en la consulta.")
 
 st.write(puntos_destino_peso_total)
+st.write(f"Suma de Puntos con el peso específico->VALORACION: {puntos_destino_peso_total}")
 
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #COMPLEMENTOS Especificos POR PROYECTO
