@@ -151,7 +151,7 @@ query_puestos_proyecto = f"""
 query_job_puestos_proyecto = client.query(query_puestos_proyecto)
 results_puestos_proyecto = query_job_puestos_proyecto.result()
 df_puestos_proyecto = pd.DataFrame(data=[row.values() for row in results_puestos_proyecto], columns=[field.name for field in results_puestos_proyecto.schema])
-st.dataframe(df_puestos_proyecto)
+#st.dataframe(df_puestos_proyecto)
 st.markdown(f"<div class='cell dataframe-cell'>{df_puestos_proyecto.to_html(index=False)}</div>", unsafe_allow_html=True)
 
 
@@ -161,7 +161,7 @@ st.markdown(f"<div class='cell dataframe-cell'>{df_puestos_proyecto.to_html(inde
 
 #Vamos extraer los datos de puestos de ese proyecto
 # Mostrar el encabezado y línea separadora
-st.markdown("<h2>Complementos de destino asociados a ese proyecto</h2>", unsafe_allow_html=True)
+st.markdown("<h1>Complementos de destino asociados a ese proyecto</h1>", unsafe_allow_html=True)
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 
 
