@@ -274,6 +274,8 @@ for page_name in PAGES_TABLES:
         # No mostramos nada o mostramos un mensaje específico si la tabla no tiene datos
         st.write(f"No se encontraron datos para '{page_name}' en la consulta.")
 
+st.write(puntos_destino_peso_total)
+
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #COMPLEMENTOS Especificos POR PROYECTO
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
