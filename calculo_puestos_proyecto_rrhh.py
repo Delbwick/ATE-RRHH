@@ -583,22 +583,22 @@ valor_punto_especifico_proyecto = st.number_input('Introduce el número de punto
 
 #ºel valor por peso especifico por poryecto va variar dependiendo del ayntamiento del año y de la legislacion por lo que tendremos que tener una tabla
 #puntos por peso especifico por año
-st.markdown("<h2>Calculo puntos de complemento especifico</h2>", unsafe_allow_html=True)
-st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
+#st.markdown("<h2>Calculo puntos de complemento especifico</h2>", unsafe_allow_html=True)
+#st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 # Definimos los valores conocidos
 #puntos_base = 100
 #valor_base = 33714.66  # euros
-st.write(f"Total puntos (Específico): {total_especifico}")
-st.write(f"Total puntos (Destino) con peso especifico: {puntos_destino_peso_total}")
+#st.write(f"Total puntos (Específico): {total_especifico}")
+#st.write(f"Total puntos (Destino) con peso especifico: {puntos_destino_peso_total}")
 
 
 # Calculamos el total específico (suponiendo que lo obtienes de alguna manera)
 #total_especifico = 500  # Este valor debería ser el total real de puntos específicos del proyecto
 # Calculamos el valor de puntos específicos del proyecto
 valor_punto_especifico_proyecto = (total_especifico * valor_base) / 100
-st.write(f'El valor específico del puesto con el total de puntos es: {valor_punto_especifico_proyecto:.2f} euros')
+#st.write(f'El valor específico del puesto con el total de puntos es: {valor_punto_especifico_proyecto:.2f} euros')
 puntos_específico_sueldo = (puntos_especifico_peso_total * valor_base) / 100
-st.write(f'El valor específico del puesto con la asignacion de peso es: {puntos_específico_sueldo:.2f} euros')
+#st.write(f'El valor específico del puesto con la asignacion de peso es: {puntos_específico_sueldo:.2f} euros')
 
 
 
