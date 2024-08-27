@@ -272,7 +272,7 @@ for page_name in PAGES_TABLES:
             
     else:
         # No mostramos nada o mostramos un mensaje específico si la tabla no tiene datos
-        st.write(f"No se encontraron datos para '{page_name}' en la consulta.")
+        #st.write(f"No se encontraron datos para '{page_name}' en la consulta.")
 
 st.markdown(f"<div class='cell'><b>Suma de % de Peso Específico(Ha de ser Igual a 100%: {peso_especifico_por_proyecto}</b></div>", unsafe_allow_html=True)
 st.markdown(f"<div class='cell'><b>Suma de Puntos x el peso específico->VALORACIÓN: {puntos_destino_peso_total}</b></div>", unsafe_allow_html=True)
@@ -385,7 +385,7 @@ for page_name in PAGES_TABLES_2:
 
     else:
         # No mostramos nada o mostramos un mensaje específico si la tabla no tiene datos
-        st.write(f"No se encontraron datos para '{page_name}' en la consulta.")
+        #st.write(f"No se encontraron datos para '{page_name}' en la consulta.")
 
 st.markdown(f"<div class='cell'><b>Suma de % de Peso Específico(Ha de ser Igual a 100%: {peso_complemento_especifico_por_proyecto}</b></div>", unsafe_allow_html=True)
 st.markdown(f"<div class='cell'><b>Suma de Puntos x el peso específico->VALORACIÓN: {puntos_especifico_peso_total}</b></div>", unsafe_allow_html=True)
@@ -393,7 +393,7 @@ st.markdown(f"<div class='cell'><b>Suma de Puntos x el peso específico->VALORAC
 #CAluculo de Sueldo
 #≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤
 
-st.markdown("<h2>Caluculo de Valoraciones</h2>", unsafe_allow_html=True)
+st.markdown("<h2>Caluculo de Importes para la Valoración del Puesto de trabajo</h2>", unsafe_allow_html=True)
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 
 
@@ -548,6 +548,8 @@ for index, row in df_puestos_proyecto.iterrows():
         selected_puestos_ids.append(puesto_id)
         
         # Selectbox para elegir la categoría de sueldo
+        st.markdown("<h2>Selecciona la Categoría para el Puesto</h2>", unsafe_allow_html=True)
+        st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
         categoria_seleccionada = st.selectbox(
             f"Seleccione la categoría de sueldo para {puesto_nombre}",
             list(categorias_sueldo_dict.keys()),
@@ -608,9 +610,8 @@ st.write(f'El valor específico del puesto con la asignacion de peso es: {puntos
 
 #vamos a organizar los datos como en las tablas
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
-st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
-st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 st.markdown(f"<h2>Calculo para el puesto: {puesto_nombre}</h2>", unsafe_allow_html=True)
+st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 
 
 
@@ -636,40 +637,40 @@ for row in results:
     puntos_valoracion = row.complemento_destino_anual
 
 # Mostrar el resultado en Streamlit
-st.title("Consulta de Puntos de Valoración de destino con el peso asignado")
-st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
+#st.title("Consulta de Puntos de Valoración de destino con el peso asignado")
+#st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 
 if puntos_valoracion:
     #st.dataframe(result_df_general)
-    st.write(f"Total puntos (Destino): {total_destino}")
-    st.write(f"Total puntos (Destino) con peso especifico: {puntos_destino_peso_total}")
-    st.write(f"Puntos de valoración de destino con el porcentaje de importancia: {puntos_valoracion:.2f} euros")
+    #st.write(f"Total puntos (Destino): {total_destino}")
+    #st.write(f"Total puntos (Destino) con peso especifico: {puntos_destino_peso_total}")
+    #st.write(f"Puntos de valoración de destino con el porcentaje de importancia: {puntos_valoracion:.2f} euros")
 else:
-    st.write("No se encontraron puntos de valoración para el valor introducido.")
+    #st.write("No se encontraron puntos de valoración para el valor introducido.")
 
 # Mostramos el valor específico del puesto
-st.title("Consulta de Complemento especifico")
-st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
+#st.title("Consulta de Complemento especifico")
+#st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 #st.dataframe(result_df_especifico)       
-st.write(f"Total puntos (Específico): {total_especifico}")
-st.write(f'El valor específico del puesto para el complemento específico sin el peso es: {valor_punto_especifico_proyecto:.2f} euros')
-st.write(f'El valor específico del puesto para el complemento específico con el calculo con puntos es: {puntos_específico_sueldo:.2f} euros')
+#st.write(f"Total puntos (Específico): {total_especifico}")
+#st.write(f'El valor específico del puesto para el complemento específico sin el peso es: {valor_punto_especifico_proyecto:.2f} euros')
+#st.write(f'El valor específico del puesto para el complemento específico con el calculo con puntos es: {puntos_específico_sueldo:.2f} euros')
 
 
 # Mostrar el resultado en Streamlit
-st.title("Consulta de Sueldo base por categoría")
-st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
+#st.title("Consulta de Sueldo base por categoría")
+#st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 
 if sueldo:
-    st.write(f"Sueldo base por categoría para el puesto de trabajo: {sueldo}")
+ #   st.write(f"Sueldo base por categoría para el puesto de trabajo: {sueldo}")
 else:
-    st.write("No se encontraron puntos de valoración para el valor introducido.")
+  #  st.write("No se encontraron puntos de valoración para el valor introducido.")
 
 
 # Mostrar el resultado en Streamlit
-st.title("Total calculo de Sueldo : Complemento de destino + complemento específico + sueldo base por categoría")
+#st.title("Total calculo de Sueldo : Complemento de destino + complemento específico + sueldo base por categoría")
 sueldo_total=sueldo+valor_punto_especifico_proyecto+puntos_valoracion
-st.write(f"Sueldo total: {sueldo}+{valor_punto_especifico_proyecto}+{puntos_valoracion} = {sueldo_total} euros")
+#st.write(f"Sueldo total: {sueldo}+{valor_punto_especifico_proyecto}+{puntos_valoracion} = {sueldo_total} euros")
 
 #≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤
 #≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤
