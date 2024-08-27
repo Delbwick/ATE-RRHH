@@ -640,13 +640,13 @@ for row in results:
 #st.title("Consulta de Puntos de Valoración de destino con el peso asignado")
 #st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 
-if puntos_valoracion:
+#if puntos_valoracion:
     #st.dataframe(result_df_general)
     #st.write(f"Total puntos (Destino): {total_destino}")
     #st.write(f"Total puntos (Destino) con peso especifico: {puntos_destino_peso_total}")
     #st.write(f"Puntos de valoración de destino con el porcentaje de importancia: {puntos_valoracion:.2f} euros")
-else:
-    st.write("No se encontraron puntos de valoración para el valor introducido.")
+#else:
+    #st.write("No se encontraron puntos de valoración para el valor introducido.")
 
 # Mostramos el valor específico del puesto
 #st.title("Consulta de Complemento especifico")
@@ -661,10 +661,10 @@ else:
 #st.title("Consulta de Sueldo base por categoría")
 #st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 
-if sueldo:
+#if sueldo:
  #   st.write(f"Sueldo base por categoría para el puesto de trabajo: {sueldo}")
-else:
-      st.write("No se encontraron puntos de valoración para el valor introducido.")
+#else:
+      #st.write("No se encontraron puntos de valoración para el valor introducido.")
 
 
 # Mostrar el resultado en Streamlit
