@@ -727,7 +727,7 @@ with col1:
 with col2:
     st.markdown(f"<div class='header-cell'>Pesos Totales</div>", unsafe_allow_html=True)
     st.write(f"Total puntos (Específico): {total_especifico}")
-    st.write(f"Total puntos (Específico) con peso específico: {puntos_destino_peso_total}")
+    
 
 # Columna 3: Mostrar valor específico del puesto
 with col3:
