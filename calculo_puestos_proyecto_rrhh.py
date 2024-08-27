@@ -683,7 +683,7 @@ st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 
 # Mostrar información si hay puntos de valoración
 if puntos_valoracion:
-    col1, col2, col3 = st.columns([6, 3, 3])  # Proporciones 60%, 30%, 10%
+    col1, col2, col3,col4 = st.columns([6, 3, 3,3])  # Proporciones 60%, 30%, 10%
 
     # Columna 1: Mostrar el DataFrame
     with col1:
@@ -692,13 +692,18 @@ if puntos_valoracion:
 
     # Columna 2: Mostrar totales de puntos
     with col2:
-        st.markdown(f"<div class='header-cell'>Totales</div>", unsafe_allow_html=True)
+        st.markdown(f"<div class='header-cell'>Pesos Totales</div>", unsafe_allow_html=True)
         st.write(f"Total puntos (Destino): {total_destino}")
         st.write(f"Total puntos (Destino) con peso específico: {puntos_destino_peso_total}")
         
     # Columna 3: Mostrar otros cálculos
     with col3:
-        st.markdown(f"<div class='header-cell'>Cálculos</div>", unsafe_allow_html=True)
+        st.markdown(f"<div class='header-cell'>Valoración</div>", unsafe_allow_html=True)
+        # Aquí puedes añadir más cálculos o cualquier otro dato que quieras mostrar.
+        st.write(f"Puntos de valoración (Peso x Puntos%): {puntos_destino_peso_total")
+
+    with col4:
+        st.markdown(f"<div class='header-cell'>Importes</div>", unsafe_allow_html=True)
         # Aquí puedes añadir más cálculos o cualquier otro dato que quieras mostrar.
         st.write(f"Puntos de valoración de destino con el porcentaje de importancia: {puntos_valoracion:.2f} euros")
 
