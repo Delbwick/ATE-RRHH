@@ -364,7 +364,7 @@ for page_name in PAGES_TABLES_2:
             st.markdown(f"<div class='header-cell'><b>Peso del complemento específico</b></div>", unsafe_allow_html=True)
             
             # Input para el peso del destino por proyecto
-            peso_complemento_especifico_por_proyecto = st.number_input(
+            peso_complemento_especifico_por_proyecto[page_name] = st.number_input(
                 f'Peso del complemento específico para {page_name}', 
                 min_value=0.0,
                 key=f'{page_name}_peso'
@@ -373,7 +373,7 @@ for page_name in PAGES_TABLES_2:
         # Contenido en la tercera columna (25%)
         with col3:
             # Calcular puntos con el peso específico
-            puntos_especifico_peso = total_puntos * peso_complemento_especifico_por_proyecto / 100
+            puntos_especifico_peso = total_puntos * peso_complemento_especifico_por_proyecto[page_name] / 100
             
             st.markdown(f"<div class='header-cell'><b>Total puntos con peso</b></div>", unsafe_allow_html=True)
             
