@@ -386,9 +386,12 @@ for page_name in PAGES_TABLES_2:
         # No mostramos nada o mostramos un mensaje específico si la tabla no tiene datos
         st.write(f"No se encontraron datos para '{page_name}' en la consulta.")
 
-# Mostrar el total acumulado de puntos específicos al final de todas las iteraciones
-#st.markdown(f"<h4>Total acumulado de puntos específicos: {total_puntos_especificos}</h4>", unsafe_allow_html=True)
-#st.markdown(f"<h4>valoracion complemento especifico con los puntos aplicados : {puntos_especifico_peso_total}</h4>", unsafe_allow_html=True)
+st.markdown(f"<div class='cell'><b>Suma de % de Peso Específico(Ha de ser Igual a 100%: {peso_especifico_por_proyecto}</b></div>", unsafe_allow_html=True)
+st.markdown(f"<div class='cell'><b>Suma de Puntos x el peso específico->VALORACIÓN: {puntos_especifico_peso_total}</b></div>", unsafe_allow_html=True)
+
+#CAluculo de Sueldo
+#≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤
+
 st.markdown("<h2>Caluculo de Valoraciones</h2>", unsafe_allow_html=True)
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 
