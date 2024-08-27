@@ -716,7 +716,7 @@ st.title("Consulta de Complemento específico")
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 
 # Mostrar información relacionada con el complemento específico
-col1, col2, col3 = st.columns([6, 3, 3])  # Proporciones 60%, 30%, 10%
+col1, col2, col3,col4 = st.columns([6, 3, 3,3])  # Proporciones 60%, 30%, 10%
 
 # Columna 1: Mostrar el DataFrame del complemento específico
 with col1:
@@ -725,12 +725,18 @@ with col1:
 
 # Columna 2: Mostrar totales de puntos específicos
 with col2:
-    st.markdown(f"<div class='header-cell'>Totales</div>", unsafe_allow_html=True)
+    st.markdown(f"<div class='header-cell'>Pesos Totales</div>", unsafe_allow_html=True)
     st.write(f"Total puntos (Específico): {total_especifico}")
+    st.write(f"Total puntos (Específico) con peso específico: {puntos_destino_peso_total}")
 
 # Columna 3: Mostrar valor específico del puesto
 with col3:
-    st.markdown(f"<div class='header-cell'>Cálculos</div>", unsafe_allow_html=True)
+    st.markdown(f"<div class='header-cell'>Valoración</div>", unsafe_allow_html=True)
+    st.write(f"Puntos de valoración (Peso x Puntos%): {puntos_especifico_peso_total}")
+    #st.write(f"El valor específico del puesto con el cálculo en puntos es: {puntos_específico_sueldo:.2f} euros")
+
+with col4:
+    st.markdown(f"<div class='header-cell'>Importes</div>", unsafe_allow_html=True)
     st.write(f"El valor específico del puesto para el complemento específico es: {valor_punto_especifico_proyecto:.2f} euros")
     st.write(f"El valor específico del puesto con el cálculo en puntos es: {puntos_específico_sueldo:.2f} euros")
 
