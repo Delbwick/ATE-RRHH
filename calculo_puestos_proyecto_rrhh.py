@@ -333,6 +333,7 @@ def execute_query_for_page(page_name, id_proyecto):
 # Variable para acumular los puntos totales
 total_puntos_especificos = 0
 puntos_especifico_peso_total=0
+peso_complemento_especifico_por_proyecto = {}  # Diccionario para almacenar los pesos por página
 
 # Iterar sobre todas las páginas en el diccionario y ejecutar las consultas
 for page_name in PAGES_TABLES_2:
@@ -363,7 +364,7 @@ for page_name in PAGES_TABLES_2:
             st.markdown(f"<div class='header-cell'><b>Peso del complemento específico</b></div>", unsafe_allow_html=True)
             
             # Input para el peso del destino por proyecto
-            peso_especifico_por_proyecto = st.number_input(
+            peso_complemento_especifico_por_proyecto = st.number_input(
                 f'Peso del complemento específico para {page_name}', 
                 min_value=0.0,
                 key=f'{page_name}_peso'
@@ -372,7 +373,7 @@ for page_name in PAGES_TABLES_2:
         # Contenido en la tercera columna (25%)
         with col3:
             # Calcular puntos con el peso específico
-            puntos_especifico_peso = total_puntos * peso_especifico_por_proyecto / 100
+            puntos_especifico_peso = total_puntos * peso_complemento_especifico_por_proyecto / 100
             
             st.markdown(f"<div class='header-cell'><b>Total puntos con peso</b></div>", unsafe_allow_html=True)
             
@@ -386,7 +387,7 @@ for page_name in PAGES_TABLES_2:
         # No mostramos nada o mostramos un mensaje específico si la tabla no tiene datos
         st.write(f"No se encontraron datos para '{page_name}' en la consulta.")
 
-st.markdown(f"<div class='cell'><b>Suma de % de Peso Específico(Ha de ser Igual a 100%: {peso_especifico_por_proyecto}</b></div>", unsafe_allow_html=True)
+st.markdown(f"<div class='cell'><b>Suma de % de Peso Específico(Ha de ser Igual a 100%: {peso_complemento_especifico_por_proyecto}</b></div>", unsafe_allow_html=True)
 st.markdown(f"<div class='cell'><b>Suma de Puntos x el peso específico->VALORACIÓN: {puntos_especifico_peso_total}</b></div>", unsafe_allow_html=True)
 
 #CAluculo de Sueldo
