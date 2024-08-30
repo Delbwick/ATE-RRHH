@@ -753,7 +753,7 @@ with col4:
 #st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 
 # Título para el cálculo final del sueldo total
-st.markdown(f"<div class='header-cell'>Sueldo Total Final</div>", unsafe_allow_html=True)
+st.markdown(f"<div class='header-cell'>Valoración preliminar Sueldo Total Final</div>", unsafe_allow_html=True)
 st.title("Total calculo de Sueldo: Complemento de destino + complemento específico + sueldo base por categoría y por puesto")
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 
@@ -769,4 +769,6 @@ for puesto_id in selected_puestos_ids:
     # Mostrar el cálculo para cada puesto
     st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
     st.markdown(f"<h2>Calculo para el puesto: {puesto_nombre}</h2>", unsafe_allow_html=True)
-    st.write(f"Sueldo total: {sueldo} + {puntos_específico_sueldo} + {puntos_valoracion} = {sueldo_total_puesto:.2f} euros")
+    st.write(f"Sueldo Bruto Anual total: {sueldo} + {puntos_específico_sueldo} + {puntos_valoracion} = {sueldo_total_puesto:.2f} euros")
+
+
