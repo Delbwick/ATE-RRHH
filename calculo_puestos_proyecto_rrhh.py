@@ -772,3 +772,36 @@ for puesto_id in selected_puestos_ids:
     st.write(f"Sueldo Bruto Anual total: {sueldo} + {puntos_específico_sueldo} + {puntos_valoracion} = {sueldo_total_puesto:.2f} euros")
 
 
+# Formulario de envío
+with st.form('addition'):
+    submit = st.form_submit_button('Confirmar Valoración preliminar')
+
+if submit:
+    try:
+        # Consulta para obtener el último ID de proyecto
+        query_max_id = """
+        SELECT MAX(Id_valoracion_preliminar) FROM `ate-rrhh-2024.Ate_kaibot_2024.valoracion_preliminar_por_proyecto`
+        """
+        query_job_max_id = client.query(query_max_id)
+        max_id_result = query_job_max_id.result()
+
+        max_id = 0
+        for row in max_id_result:
+            max_id = row[0]
+
+        # Incrementar el máximo ID en 1 para obtener el nuevo ID de proyecto
+        new_id_valoracion_preliminar = max_id + 1 if max_id is not None else 1
+
+        # Consulta para insertar datos básicos en BigQuery
+        query_kai_insert = f"""
+            INSERT INTO `ate-rrhh-2024.Ate_kaibot_2024.valoracion_preliminar_por_proyecto`
+            (Id_valoracion_preliminar, id_proyecto, id_puesto, nombre_puesto, puntos_destino, puntos_espceifico, sueldo_base_puesto, importe_destino,importe_especifico,bruto_anual_puesto) 
+            VALUES 
+            ({new_id_valoracion_preliminar},{new_id_proyecto}, {puesto_id}, '{puesto_nombre}', {puntos_destino_peso_total}, {puntos_especifico_peso_total}, {sueldo},{puntos_valoracion},{puntos_específico_sueldo},{sueldo_total_puesto})
+        """
+        query_job_kai_insert = client.query(query_kai_insert)
+        query_job_kai_insert.result()  # Asegurarse de que la consulta se complete
+
+        
+    except Exception as e:
+        st.error(f"Error al insertar el registro: {e}")
