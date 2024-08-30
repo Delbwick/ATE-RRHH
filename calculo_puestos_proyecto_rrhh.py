@@ -760,8 +760,9 @@ st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 sueldo_total = sueldo + puntos_específico_sueldo + puntos_valoracion
 st.write(f"Sueldo total: {sueldo} + {puntos_específico_sueldo} + {puntos_valoracion} = {sueldo_total:.2f} euros")
 
-sueldo_total_puesto = sueldo_categoria_puesto[puesto_id] + puntos_específico_sueldo + puntos_valoracion
-st.write(f"Sueldo total: {sueldo_categoria_puesto[puesto_id]} + {puntos_específico_sueldo} + {puntos_valoracion} = {sueldo_total_puesto:.2f} euros")
+for index, row in df_puestos_proyecto.iterrows():
+    sueldo_total_puesto = sueldo_categoria_puesto[puesto_id] + puntos_específico_sueldo + puntos_valoracion
+    st.write(f"Sueldo total: {sueldo_categoria_puesto[puesto_id]} + {puntos_específico_sueldo} + {puntos_valoracion} = {sueldo_total_puesto:.2f} euros")
 
 # Fila final: Mostrar el resultado total en una única fila
 st.markdown(f"<div class='header-cell'>Sueldo Total Final</div>", unsafe_allow_html=True)
