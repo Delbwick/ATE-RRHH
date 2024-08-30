@@ -748,26 +748,13 @@ else:
     st.write("No se encontraron puntos de valoración para el valor introducido.")
 
 #vamos a organizar los datos como en las tablas
-st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
-st.markdown(f"<h2>Calculo para el puesto: {puesto_nombre}</h2>", unsafe_allow_html=True)
-st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
+#st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
+#st.markdown(f"<h2>Calculo para el puesto: {puesto_nombre}</h2>", unsafe_allow_html=True)
+#st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 
 # Título para el cálculo final del sueldo total
-st.title("Total calculo de Sueldo: Complemento de destino + complemento específico + sueldo base por categoría")
+st.title("Total calculo de Sueldo: Complemento de destino + complemento específico + sueldo base por categoría y por puesto")
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
-
-# Calcular y mostrar el sueldo total
-sueldo_total = sueldo + puntos_específico_sueldo + puntos_valoracion
-st.write(f"Sueldo total: {sueldo} + {puntos_específico_sueldo} + {puntos_valoracion} = {sueldo_total:.2f} euros")
-
-for index, row in df_puestos_proyecto.iterrows():
-    sueldo_total_puesto = sueldo_categoria_puesto[puesto_id] + puntos_específico_sueldo + puntos_valoracion
-    st.write(f"Sueldo total: {sueldo_categoria_puesto[puesto_id]} + {puntos_específico_sueldo} + {puntos_valoracion} = {sueldo_total_puesto:.2f} euros")
-
-# Fila final: Mostrar el resultado total en una única fila
-st.markdown(f"<div class='header-cell'>Sueldo Total Final</div>", unsafe_allow_html=True)
-st.write(f"Sueldo total final calculado: {sueldo_total:.2f} euros")
-
 
 
 # Iterar sobre los puestos seleccionados y calcular el sueldo total para cada uno
