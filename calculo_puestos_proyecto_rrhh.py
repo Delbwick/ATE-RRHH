@@ -738,14 +738,14 @@ with col4:
     st.write(f"El valor específico del puesto con el cálculo en puntos es: {puntos_específico_sueldo:.2f} euros")
 
 # Título para la consulta de sueldo base por categoría
-st.title("Consulta de Sueldo base por categoría")
-st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
+#st.title("Consulta de Sueldo base por categoría")
+#st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 
 # Mostrar sueldo base si existe
-if sueldo:
-    st.write(f"Sueldo base por categoría para el puesto de trabajo: {sueldo}")
-else:
-    st.write("No se encontraron puntos de valoración para el valor introducido.")
+#if sueldo:
+ #   st.write(f"Sueldo base por categoría para el puesto de trabajo: {sueldo}")
+#else:
+ #   st.write("No se encontraron puntos de valoración para el valor introducido.")
 
 #vamos a organizar los datos como en las tablas
 #st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
@@ -753,6 +753,7 @@ else:
 #st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 
 # Título para el cálculo final del sueldo total
+st.markdown(f"<div class='header-cell'>Sueldo Total Final</div>", unsafe_allow_html=True)
 st.title("Total calculo de Sueldo: Complemento de destino + complemento específico + sueldo base por categoría y por puesto")
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 
