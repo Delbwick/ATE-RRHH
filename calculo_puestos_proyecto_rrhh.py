@@ -797,7 +797,7 @@ if submit:
             INSERT INTO `ate-rrhh-2024.Ate_kaibot_2024.valoracion_preliminar_por_proyecto`
             (Id_valoracion_preliminar, id_proyecto, id_puesto, nombre_puesto, puntos_destino, puntos_espceifico, sueldo_base_puesto, importe_destino,importe_especifico,bruto_anual_puesto) 
             VALUES 
-            ({new_id_valoracion_preliminar},{new_id_proyecto}, {puesto_id}, '{puesto_nombre}', {puntos_destino_peso_total}, {puntos_especifico_peso_total}, {sueldo},{puntos_valoracion},{puntos_específico_sueldo},{sueldo_total_puesto})
+            ({new_id_valoracion_preliminar},{id_proyecto_seleccionado}, {puesto_id}, '{puesto_nombre}', {puntos_destino_peso_total}, {puntos_especifico_peso_total}, {sueldo},{puntos_valoracion},{puntos_específico_sueldo},{sueldo_total_puesto})
         """
         query_job_kai_insert = client.query(query_kai_insert)
         query_job_kai_insert.result()  # Asegurarse de que la consulta se complete
