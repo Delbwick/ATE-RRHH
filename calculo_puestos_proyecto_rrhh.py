@@ -767,3 +767,18 @@ for index, row in df_puestos_proyecto.iterrows():
 # Fila final: Mostrar el resultado total en una única fila
 st.markdown(f"<div class='header-cell'>Sueldo Total Final</div>", unsafe_allow_html=True)
 st.write(f"Sueldo total final calculado: {sueldo_total:.2f} euros")
+
+
+
+# Iterar sobre los puestos seleccionados y calcular el sueldo total para cada uno
+for puesto_id in selected_puestos_ids:
+    puesto_nombre = df_puestos_proyecto.loc[df_puestos_proyecto['id_puesto'] == puesto_id, 'descripcion'].values[0]
+    sueldo = sueldo_categoria_puesto[puesto_id]
+    
+    # Suponiendo que `puntos_específico_sueldo` y `puntos_valoracion` están definidos y son valores fijos.
+    sueldo_total_puesto = sueldo + puntos_específico_sueldo + puntos_valoracion
+    
+    # Mostrar el cálculo para cada puesto
+    st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
+    st.markdown(f"<h2>Calculo para el puesto: {puesto_nombre}</h2>", unsafe_allow_html=True)
+    st.write(f"Sueldo total: {sueldo} + {puntos_específico_sueldo} + {puntos_valoracion} = {sueldo_total_puesto:.2f} euros")
