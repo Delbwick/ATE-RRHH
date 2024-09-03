@@ -801,6 +801,8 @@ if submit:
         """
         query_job_kai_insert = client.query(query_kai_insert)
         query_job_kai_insert.result()  # Asegurarse de que la consulta se complete
+        # Mensaje de éxito
+        st.success("Registro insertado correctamente")
 
         
     except Exception as e:
