@@ -522,7 +522,10 @@ if st.button('Mostrar Datos'):
 
 
 # Crear un botón
-if st.button('Ir a la Aplicación de cálculo de valoraciones'):
-    # Redirigir a la URL específica
-    js = "window.open('https://ate-rrhh-kteamujjqmdfat49uwhmzy.streamlit.app/')"  # Código Javascript para abrir la URL
-    st.markdown(f'<script>{js}</script>', unsafe_allow_html=True)
+st.markdown("""
+    <a href="https://ate-rrhh-kteamujjqmdfat49uwhmzy.streamlit.app/" target="_blank">
+        <button style="background-color:Green;padding:10px;border-radius:5px;color:white;border:none;">
+            Ir a la URL
+        </button>
+    </a>
+    """, unsafe_allow_html=True)
