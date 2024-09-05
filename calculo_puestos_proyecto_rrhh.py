@@ -241,7 +241,7 @@ for page_name in PAGES_TABLES:
 
     if df is not None and not df.empty:  # Verificar si el DataFrame no está vacío
     # Crear tres columnas con anchos 50%, 25%, 25%
-        col1, col2, col3 = st.columns([2, 1, 1])
+        col1, col2, col3,col4 = st.columns([2, 1, 1,1])
 
     # Contenido de la primera columna (50%)
         with col1:
@@ -269,6 +269,17 @@ for page_name in PAGES_TABLES:
             st.markdown(f"<div class='header-cell'><b>Total de puntos de destino con el peso específico</b></div>", unsafe_allow_html=True)
             st.markdown(f"<div class='cell'>{puntos_destino_peso}</div>", unsafe_allow_html=True)
             puntos_destino_peso_total += puntos_destino_peso
+        
+        with col4:
+         # Diccionario para almacenar las notas específicas
+            nota_especifico = {}
+            st.markdown(f"<div class='header-cell'><b>Notas</b></div>", unsafe_allow_html=True)
+    
+    # Input de texto para la nota específica por proyecto
+            nota_especifico[page_name] = st.text_input(
+                f'Nota específica para {page_name}',
+                key=f'{page_name}_nota'
+            )
             
     else:
         # No mostramos nada o mostramos un mensaje específico si la tabla no tiene datos
