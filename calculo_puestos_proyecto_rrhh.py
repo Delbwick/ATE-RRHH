@@ -778,7 +778,7 @@ with col4:
 
 # Título para el cálculo final del sueldo total
 st.markdown(f"<div class='header-cell'>Valoración preliminar Sueldo Total Final</div>", unsafe_allow_html=True)
-st.title("Total calculo de Sueldo: Complemento de destino + complemento específico + sueldo base por categoría y por puesto")
+st.title("Total calculo de Sueldo: sueldo base por categoría y por puesto +Complemento específico + complemento de destino")
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 
 
