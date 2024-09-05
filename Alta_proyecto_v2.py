@@ -519,3 +519,10 @@ if st.button('Mostrar Datos'):
         st.dataframe(df)
     else:
         st.warning('No se encontraron datos para este ID de proyecto.')
+
+
+# Crear un botón
+if st.button('Ir a la Aplicación de cálculo de valoraciones'):
+    # Redirigir a la URL específica
+    js = "window.open('https://ate-rrhh-kteamujjqmdfat49uwhmzy.streamlit.app/')"  # Código Javascript para abrir la URL
+    st.markdown(f'<script>{js}</script>', unsafe_allow_html=True)
