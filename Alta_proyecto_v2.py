@@ -525,7 +525,7 @@ if st.button('Mostrar Datos'):
 st.markdown("""
     <a href="https://ate-rrhh-kteamujjqmdfat49uwhmzy.streamlit.app/" target="_blank">
         <button style="background-color:Green;padding:10px;border-radius:5px;color:white;border:none;">
-            Ir a la URL
+            Ir a la APP de Cálculo de Valoraciones
         </button>
     </a>
     """, unsafe_allow_html=True)
