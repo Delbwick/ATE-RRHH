@@ -347,7 +347,7 @@ for page_name in PAGES_TABLES_2:
         total_puntos_especificos += total_puntos
 
         # Crear las columnas (50%, 25%, 25%)
-        col1, col2, col3 = st.columns([6, 3, 1])
+        col1, col2, col3,col4 = st.columns([6, 3, 1,1])
 
         # Contenido en la primera columna (50%)
         with col1:
@@ -382,6 +382,19 @@ for page_name in PAGES_TABLES_2:
 
             # Actualizar el total acumulado de puntos destino peso
             puntos_especifico_peso_total += puntos_especifico_peso
+
+        
+
+        with col4:
+         # Diccionario para almacenar las notas específicas
+            nota_especifico = {}
+            st.markdown(f"<div class='header-cell'><b>Notas</b></div>", unsafe_allow_html=True)
+    
+    # Input de texto para la nota específica por proyecto
+            nota_especifico[page_name] = st.text_input(
+                f'Nota específica para {page_name}',
+                key=f'{page_name}_nota'
+            )
 
     else:
         # No mostramos nada o mostramos un mensaje específico si la tabla no tiene datos
