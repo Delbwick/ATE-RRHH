@@ -131,44 +131,27 @@ def get_next_id(table_name, id_column):
 PAGES_TABLAS_NUEVAS = {}
 
 def main():
+
     st.sidebar.title("Tablas de Factores")
+    selection = st.sidebar.radio("Ir a", list(PAGES_TABLES.keys()))
 
-    # Verificar si el diccionario PAGES_TABLAS_NUEVAS existe en el session_state
-    if "PAGES_TABLAS_NUEVAS" not in st.session_state:
-        st.session_state.PAGES_TABLAS_NUEVAS = {}
-
-    # Botones para crear tablas
-    if st.sidebar.button("Crear Nueva Tabla"):
-        create_new_table()  # Función para crear tabla personalizada
-
-    if st.sidebar.button("Crear Tabla Predefinida"):
-        create_predefined_table()  # Función para crear tabla predefinida
-
-    # Mostrar tablas del diccionario original y las nuevas
-    st.sidebar.subheader("Gestionar Tablas Existentes")
-
-    # Combinar las tablas originales y las nuevas
-    all_tables = {**PAGES_TABLES, **st.session_state.PAGES_TABLAS_NUEVAS}
-
-    # Seleccionar una tabla
-    selection = st.sidebar.selectbox("Selecciona una tabla para gestionar", list(all_tables.keys()))
-
-    # Verificar si la tabla está en el diccionario de tablas nuevas o en el original
-    table_name, id_column = all_tables[selection]
-
-    # Llamar a la función de gestión para la tabla seleccionada, con claves únicas para widgets
-    manage_table(table_name, id_column, key=selection)
+    table_name, id_column = PAGES_TABLES[selection]
+    manage_table(table_name, id_column)
     
 # Función para obtener la descripción de una tabla
 def get_table_description(table_name):
     table = client.get_table(table_name)  # Obtener la tabla
     return table.description
 
-def manage_table(table_name, id_column, key):
+def manage_table(table_name, id_column):
     st.title(f"Gestión de {table_name.split('.')[-1].replace('_', ' ').title()}")
+    action = st.radio("Acción", ["Ver", "Insertar", "Modificar", "Eliminar","Crear Nueva Tabla Especial", "Crear Tabla Predefinida"])
+    if action == "Crear Nueva Tabla":
+        create_new_table()
 
-    # Usar el parámetro "key" en los widgets para evitar duplicación de claves
-    action = st.radio("Acción", ["Ver", "Insertar", "Modificar", "Eliminar"], key=f"radio_{key}")
+    elif action == "Crear Tabla Predefinida":
+        create_predefined_table()
+
 
     if action == "Ver":
         description = get_table_description(table_name)
@@ -178,25 +161,24 @@ def manage_table(table_name, id_column, key):
         st.dataframe(df)
 
     elif action == "Insertar":
-        # Usar el parámetro "key" en cada widget para evitar duplicación
+    # Especifica los campos de la tabla, excluyendo el id autoincremental y id_proyecto
         fields = {
-            "letra": st.text_input("Letra", key=f"letra_{key}"),
-            "descripcion": st.text_input("Descripción", key=f"descripcion_{key}"),
-            "porcentaje_de_total": st.number_input("Porcentaje del Total", min_value=0.0, max_value=100.0, step=0.1, key=f"porcentaje_{key}"),
-            "puntos": st.number_input("Puntos", min_value=0.0, step=0.1, key=f"puntos_{key}"),
-            "id_idioma_registro": st.number_input("ID Idioma (1-ESp;2-EUS)", min_value=1, step=1, key=f"idioma_{key}")
+            "letra": st.text_input("Letra"),
+            "descripcion": st.text_input("Descripción"),
+            "porcentaje_de_total": st.number_input("Porcentaje del Total", min_value=0.0, max_value=100.0, step=0.1),
+            "puntos": st.number_input("Puntos", min_value=0.0, step=0.1),
+            "id_idioma_registro": st.number_input("id_idioma (1-ESp;2-EUS)", min_value=1, step=1)
         }
-        if st.button("Insertar", key=f"insertar_{key}"):
-            # Lógica de inserción en la tabla
+        if st.button("Insertar"):
             next_id = get_next_id(table_name, id_column)
             columns = [id_column] + list(fields.keys())
             values = [next_id] + list(fields.values())
             columns_str = ", ".join(columns)
             values_str = ", ".join([f"'{value}'" if isinstance(value, str) else str(value) for value in values])
-
+            # Mostrar la consulta que se va a ejecutar
             st.write("Consulta SQL que se va a ejecutar:")
             st.code(f"INSERT INTO `{table_name}` ({columns_str}) VALUES ({values_str})")
-
+        
             # Ejecutar la consulta
             query = f"""
                 INSERT INTO `{table_name}` ({columns_str})
