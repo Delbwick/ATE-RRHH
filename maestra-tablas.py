@@ -32,7 +32,8 @@ st.markdown(header_html, unsafe_allow_html=True)
 
 # Agregar la imagen (logo) y el texto al encabezado
 st.markdown('<div class="header-container"><img class="logo" src="https://www.rrhhdelnorte.es/-_-/res/702f8fd0-46a5-4f0d-9c65-afb737164745/images/files/702f8fd0-46a5-4f0d-9c65-afb737164745/e0e4dc73-78c2-4413-b62c-250cbeea83fa/683-683/3b3822cd156fd081c427cc6b35617e4031b98c63" alt="Logo"></div>', unsafe_allow_html=True)
-st.write("Tablas de Factores")
+sst.markdown("<h2>Tablas de Factores - Maestras detalle</h2>", unsafe_allow_html=True)
+st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 
 # Create API client.
 credentials = service_account.Credentials.from_service_account_info(
@@ -128,7 +129,7 @@ def get_next_id(table_name, id_column):
     #return random.randint(1, 1000)
 
 def main():
-    st.sidebar.title("Menú")
+    st.sidebar.title("Tablas de Factores")
     selection = st.sidebar.radio("Ir a", list(PAGES_TABLES.keys()))
 
     table_name, id_column = PAGES_TABLES[selection]
