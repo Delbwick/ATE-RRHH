@@ -380,27 +380,22 @@ if __name__ == "__main__":
     main()
 
 
-# Verificar si el diccionario PAGES_TABLAS_NUEVAS existe en session_state, si no, inicializarlo
-if "PAGES_TABLAS_NUEVAS" not in st.session_state:
-    st.session_state.PAGES_TABLAS_NUEVAS = {}
-
 # Menú lateral con las tablas originales y las nuevas
 st.sidebar.title("Menú")
 
-# Botones para crear tablas
-if st.sidebar.button("Crear Nueva Tabla"):
-    create_new_table()  # Función para crear tabla personalizada
+# Diccionario de tablas originales
 
-if st.sidebar.button("Crear Tabla Predefinida"):
-    create_predefined_table()  # Función para crear tabla predefinida
 
-# Combinar las tablas originales y las nuevas para mostrarlas
-all_tables = {**PAGES_TABLES, **st.session_state.PAGES_TABLAS_NUEVAS}
+# Mostrar tablas del diccionario original
+page = st.sidebar.selectbox("Selecciona una tabla para gestionar",list(PAGES_TABLAS_NUEVAS.keys()))
+#page = st.sidebar.selectbox("Selecciona una tabla para gestionar", list(PAGES_TABLES.keys()) + list(PAGES_TABLAS_NUEVAS.keys()))
 
-# Mostrar tablas combinadas en el menú lateral
-page = st.sidebar.selectbox("Selecciona una tabla para gestionar", list(all_tables.keys()))
+# Gestionar tabla seleccionada del diccionario original
+#if page in PAGES_TABLES:
+ #   table_name, id_column = PAGES_TABLES[page]
+  #  manage_table(table_name, id_column)
 
-# Gestionar tabla seleccionada
-if page in all_tables:
-    table_name, id_column = all_tables[page]
+# Gestionar tabla seleccionada del diccionario de tablas nuevas
+if page in PAGES_TABLAS_NUEVAS:
+    table_name, id_column = PAGES_TABLAS_NUEVAS[page]
     manage_table(table_name, id_column)
