@@ -406,12 +406,13 @@ st.sidebar.title("Menú")
 
 
 # Mostrar tablas del diccionario original
-page = st.sidebar.selectbox("Selecciona una tabla para gestionar", list(PAGES_TABLES.keys()) + list(PAGES_TABLAS_NUEVAS.keys()))
+page = st.sidebar.selectbox("Selecciona una tabla para gestionar",list(PAGES_TABLAS_NUEVAS.keys()))
+#page = st.sidebar.selectbox("Selecciona una tabla para gestionar", list(PAGES_TABLES.keys()) + list(PAGES_TABLAS_NUEVAS.keys()))
 
 # Gestionar tabla seleccionada del diccionario original
-if page in PAGES_TABLES:
-    table_name, id_column = PAGES_TABLES[page]
-    manage_table(table_name, id_column)
+#if page in PAGES_TABLES:
+ #   table_name, id_column = PAGES_TABLES[page]
+  #  manage_table(table_name, id_column)
 
 # Gestionar tabla seleccionada del diccionario de tablas nuevas
 elif page in PAGES_TABLAS_NUEVAS:
