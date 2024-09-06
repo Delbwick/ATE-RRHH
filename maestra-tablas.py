@@ -131,7 +131,7 @@ def get_next_id(table_name, id_column):
 PAGES_TABLAS_NUEVAS = {}
 
 def main():
-    def main():
+
     st.sidebar.title("Tablas de Factores")
     selection = st.sidebar.radio("Ir a", list(PAGES_TABLES.keys()))
 
