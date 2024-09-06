@@ -415,6 +415,6 @@ page = st.sidebar.selectbox("Selecciona una tabla para gestionar",list(PAGES_TAB
   #  manage_table(table_name, id_column)
 
 # Gestionar tabla seleccionada del diccionario de tablas nuevas
-elif page in PAGES_TABLAS_NUEVAS:
+if page in PAGES_TABLAS_NUEVAS:
     table_name, id_column = PAGES_TABLAS_NUEVAS[page]
     manage_table(table_name, id_column)
