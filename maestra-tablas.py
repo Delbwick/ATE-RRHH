@@ -129,6 +129,17 @@ def get_next_id(table_name, id_column):
     #return random.randint(1, 1000)
 
 def main():
+    def main():
+    st.sidebar.title("Tablas de Factores")
+
+    # Botones de acción en la parte superior del sidebar
+    if st.sidebar.button("Crear Nueva Tabla"):
+        create_new_table()  # Función para crear una tabla personalizada
+
+    if st.sidebar.button("Crear Tabla Predefinida"):
+        create_predefined_table()  # Función para crear una tabla predefinida
+
+    
     st.sidebar.title("Tablas de Factores")
 
     # Combinar las tablas originales y las nuevas para mostrarlas en el sidebar
@@ -150,12 +161,8 @@ def get_table_description(table_name):
 
 def manage_table(table_name, id_column):
     st.title(f"Gestión de {table_name.split('.')[-1].replace('_', ' ').title()}")
-    action = st.radio("Acción", ["Ver", "Insertar", "Modificar", "Eliminar","Crear Nueva Tabla Especial", "Crear Tabla Predefinida"])
-    if action == "Crear Nueva Tabla":
-        create_new_table()
-
-    elif action == "Crear Tabla Predefinida":
-        create_predefined_table()
+    action = st.radio("Acción", ["Ver", "Insertar", "Modificar", "Eliminar"])
+    
 
 
     if action == "Ver":
