@@ -127,9 +127,15 @@ def get_next_id(table_name, id_column):
     # Suponiendo que esta función obtiene el id_proyecto de alguna manera
     # Aquí se retorna un valor fijo para fines de demostración
     #return random.randint(1, 1000)
+# Diccionario para las nuevas tablas creadas
+PAGES_TABLAS_NUEVAS = {}
 
 def main():
     st.sidebar.title("Tablas de Factores")
+
+    # Verificar si PAGES_TABLAS_NUEVAS existe en el estado de sesión, si no, inicializarlo
+    if "PAGES_TABLAS_NUEVAS" not in st.session_state:
+        st.session_state.PAGES_TABLAS_NUEVAS = {}
 
     # Botones de acción en la parte superior del sidebar
     if st.sidebar.button("Crear Nueva Tabla"):
@@ -141,8 +147,8 @@ def main():
     # Mostrar tablas después de los botones
     st.sidebar.subheader("Gestionar Tablas Existentes")
 
-    # Combinar las tablas originales y las nuevas para mostrarlas en el sidebar
-    all_tables = {**PAGES_TABLES, **PAGES_TABLAS_NUEVAS}
+    # Combinar las tablas originales y las nuevas (del estado de sesión) para mostrarlas en el sidebar
+    all_tables = {**PAGES_TABLES, **st.session_state.PAGES_TABLAS_NUEVAS}
     selection = st.sidebar.radio("Ir a", list(all_tables.keys()))
 
     # Obtener el nombre de la tabla y la columna ID según la selección
@@ -150,6 +156,7 @@ def main():
 
     # Llamar a la función de gestión para la tabla seleccionada
     manage_table(table_name, id_column)
+    
 # Función para obtener la descripción de una tabla
 def get_table_description(table_name):
     table = client.get_table(table_name)  # Obtener la tabla
@@ -341,8 +348,7 @@ def create_new_table():
                 st.error(f"Error al crear la tabla: {e}")
 
 
-# Diccionario para las nuevas tablas creadas
-PAGES_TABLAS_NUEVAS = {}
+
 
 def create_predefined_table():
     st.title("Crear Nueva Tabla con Estructura Predefinida")
