@@ -130,9 +130,17 @@ def get_next_id(table_name, id_column):
 
 def main():
     st.sidebar.title("Tablas de Factores")
-    selection = st.sidebar.radio("Ir a", list(PAGES_TABLES.keys()))
 
-    table_name, id_column = PAGES_TABLES[selection]
+    # Combinar las tablas originales y las nuevas para mostrarlas en el sidebar
+    all_tables = {**PAGES_TABLES, **PAGES_TABLAS_NUEVAS}
+
+    # Menú en el sidebar para seleccionar tablas
+    selection = st.sidebar.radio("Ir a", list(all_tables.keys()))
+
+    # Obtener el nombre de la tabla y la columna ID según la selección
+    table_name, id_column = all_tables[selection]
+
+    # Llamar a la función de gestión para la tabla seleccionada
     manage_table(table_name, id_column)
 
 # Función para obtener la descripción de una tabla
@@ -142,7 +150,12 @@ def get_table_description(table_name):
 
 def manage_table(table_name, id_column):
     st.title(f"Gestión de {table_name.split('.')[-1].replace('_', ' ').title()}")
-    action = st.radio("Acción", ["Ver", "Insertar", "Modificar", "Eliminar"])
+    action = st.radio("Acción", ["Ver", "Insertar", "Modificar", "Eliminar","Crear Nueva Tabla Especial", "Crear Tabla Predefinida"])
+    if action == "Crear Nueva Tabla":
+        create_new_table()
+
+    elif action == "Crear Tabla Predefinida":
+        create_predefined_table()
 
 
     if action == "Ver":
@@ -274,6 +287,98 @@ def manage_table(table_name, id_column):
                 st.error(f"Error al eliminar el registro: {e}")
 
 
+def create_new_table():
+    st.title("Crear Nueva Tabla no estándard")
+    
+    # Ingresar el nombre de la nueva tabla
+    table_name = st.text_input("Nombre de la nueva tabla (formato dataset.tabla)", "ate-rrhh-2024.Ate_kaibot_2024.")
+
+    # Validar que el nombre de la tabla no esté vacío
+    if not table_name:
+        st.error("Por favor, ingresa un nombre para la tabla.")
+        return
+
+    # Especificar las columnas y sus tipos de datos
+    st.write("Especifica las columnas y sus tipos de datos para la nueva tabla:")
+    
+    # Definir los tipos de datos permitidos
+    data_types = ["STRING", "INTEGER", "FLOAT", "BOOLEAN", "TIMESTAMP"]
+
+    # Definir la estructura de la tabla: nombre de columna y tipo de dato
+    num_columns = st.number_input("Número de columnas", min_value=1, max_value=20, step=1, value=1)
+    columns = []
+
+    for i in range(num_columns):
+        col_name = st.text_input(f"Nombre de la columna {i+1}", key=f"col_name_{i}")
+        col_type = st.selectbox(f"Tipo de dato de la columna {i+1}", data_types, key=f"col_type_{i}")
+        columns.append((col_name, col_type))
+
+    # Botón para crear la tabla
+    if st.button("Crear Tabla"):
+        if any(not col[0] for col in columns):
+            st.error("Todos los nombres de columna son obligatorios.")
+        else:
+            # Crear la consulta SQL
+            columns_str = ", ".join([f"{col_name} {col_type}" for col_name, col_type in columns])
+            create_table_query = f"CREATE TABLE `{table_name}` ({columns_str})"
+            
+            # Mostrar la consulta SQL
+            st.write("Consulta SQL que se va a ejecutar:")
+            st.code(create_table_query)
+
+            # Ejecutar la consulta en BigQuery
+            try:
+                client.query(create_table_query)
+                st.success(f"Tabla `{table_name}` creada exitosamente.")
+            except Exception as e:
+                st.error(f"Error al crear la tabla: {e}")
+
+
+# Diccionario para las nuevas tablas creadas
+PAGES_TABLAS_NUEVAS = {}
+
+def create_predefined_table():
+    st.title("Crear Nueva Tabla con Estructura Predefinida")
+    
+    # Ingresar el nombre de la nueva tabla
+    table_name = st.text_input("Nombre de la nueva tabla (formato dataset.tabla)", "ate-rrhh-2024.Ate_kaibot_2024.")
+
+    # Validar que el nombre de la tabla no esté vacío
+    if not table_name:
+        st.error("Por favor, ingresa un nombre para la tabla.")
+        return
+
+    # Estructura predefinida de las columnas
+    columns = [
+        (f"id_{table_name.split('.')[-1]}", "INTEGER"),
+        ("letra", "STRING"),
+        ("descripcion", "STRING"),
+        ("porcentaje_de_total", "FLOAT"),
+        ("puntos", "FLOAT"),
+        ("id_idioma_registro", "INTEGER")
+    ]
+    
+    # Botón para crear la tabla
+    if st.button("Crear Tabla"):
+        # Crear la consulta SQL
+        columns_str = ", ".join([f"{col_name} {col_type}" for col_name, col_type in columns])
+        create_table_query = f"CREATE TABLE `{table_name}` ({columns_str})"
+
+        # Mostrar la consulta SQL
+        st.write("Consulta SQL que se va a ejecutar:")
+        st.code(create_table_query)
+
+        # Ejecutar la consulta en BigQuery
+        try:
+            client.query(create_table_query)
+            st.success(f"Tabla `{table_name}` creada exitosamente.")
+
+            # Añadir la nueva tabla al diccionario PAGES_TABLAS_NUEVAS
+            PAGES_TABLAS_NUEVAS[table_name.split('.')[-1]] = (table_name, f"id_{table_name.split('.')[-1]}")
+            st.sidebar.success(f"Tabla {table_name} añadida al diccionario de nuevas tablas.")
+        
+        except Exception as e:
+            st.error(f"Error al crear la tabla: {e}")
 if __name__ == "__main__":
     add_custom_css()
     main()
