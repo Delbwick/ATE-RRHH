@@ -129,7 +129,6 @@ def get_next_id(table_name, id_column):
     #return random.randint(1, 1000)
 
 def main():
-    def main():
     st.sidebar.title("Tablas de Factores")
 
     # Botones de acción en la parte superior del sidebar
