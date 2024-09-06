@@ -131,18 +131,10 @@ def get_next_id(table_name, id_column):
 def main():
     st.sidebar.title("Tablas de Factores")
 
-    # Botones de acción en la parte superior del sidebar
-    if st.sidebar.button("Crear Nueva Tabla"):
-        create_new_table()  # Función para crear una tabla personalizada
-
-    if st.sidebar.button("Crear Tabla Predefinida"):
-        create_predefined_table()  # Función para crear una tabla predefinida
-
-    # Mostrar tablas después de los botones
-    st.sidebar.subheader("Gestionar Tablas Existentes")
-
     # Combinar las tablas originales y las nuevas para mostrarlas en el sidebar
     all_tables = {**PAGES_TABLES, **PAGES_TABLAS_NUEVAS}
+
+    # Menú en el sidebar para seleccionar tablas
     selection = st.sidebar.radio("Ir a", list(all_tables.keys()))
 
     # Obtener el nombre de la tabla y la columna ID según la selección
@@ -150,17 +142,20 @@ def main():
 
     # Llamar a la función de gestión para la tabla seleccionada
     manage_table(table_name, id_column)
+
 # Función para obtener la descripción de una tabla
-
-
 def get_table_description(table_name):
     table = client.get_table(table_name)  # Obtener la tabla
     return table.description
 
 def manage_table(table_name, id_column):
     st.title(f"Gestión de {table_name.split('.')[-1].replace('_', ' ').title()}")
-    action = st.radio("Acción", ["Ver", "Insertar", "Modificar", "Eliminar"])
-    
+    action = st.radio("Acción", ["Ver", "Insertar", "Modificar", "Eliminar","Crear Nueva Tabla Especial", "Crear Tabla Predefinida"])
+    if action == "Crear Nueva Tabla":
+        create_new_table()
+
+    elif action == "Crear Tabla Predefinida":
+        create_predefined_table()
 
 
     if action == "Ver":
