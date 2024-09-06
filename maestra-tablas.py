@@ -302,7 +302,7 @@ def create_new_table():
     st.write("Especifica las columnas y sus tipos de datos para la nueva tabla:")
     
     # Definir los tipos de datos permitidos
-    data_types = ["STRING", "INTEGER", "FLOAT", "BOOLEAN", "TIMESTAMP"]
+    data_types = ["STRING", "INTEGER", "FLOAT64", "BOOLEAN", "TIMESTAMP"]
 
     # Definir la estructura de la tabla: nombre de columna y tipo de dato
     num_columns = st.number_input("Número de columnas", min_value=1, max_value=20, step=1, value=1)
@@ -353,8 +353,8 @@ def create_predefined_table():
         (f"id_{table_name.split('.')[-1]}", "INTEGER"),
         ("letra", "STRING"),
         ("descripcion", "STRING"),
-        ("porcentaje_de_total", "FLOAT"),
-        ("puntos", "FLOAT"),
+        ("porcentaje_de_total", "FLOAT64"),
+        ("puntos", "FLOAT64"),
         ("id_idioma_registro", "INTEGER")
     ]
     
@@ -379,6 +379,8 @@ def create_predefined_table():
         
         except Exception as e:
             st.error(f"Error al crear la tabla: {e}")
+
+
 if __name__ == "__main__":
     add_custom_css()
     main()
