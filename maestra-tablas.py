@@ -74,7 +74,7 @@ PAGES_TABLES = {
     #"Salario Base por Categoría y Año - TABLA CALCULADA?¿?": ("ate-rrhh-2024.Ate_kaibot_2024.salario_base_xcategoria_xaño", "id_salario_base"),
     "Turno": ("ate-rrhh-2024.Ate_kaibot_2024.turno", "id_turno"),
     "Mando no cuantificado sobre personas": ("ate-rrhh-2024.Ate_kaibot_2024.mando_no_cuantificado_personas", "id_mando_no_cuantificado_personas"),
-    #"Valoración Técnica Previa?¿?": ("ate-rrhh-2024.Ate_kaibot_2024.valoracion_tecnica_previa", "id_valoracion_tecnica_previa"),
+    "Mando Cuantificado sobre Personas": ("ate-rrhh-2024.mando_cuantificado_personas", "id_mando_cuantificado_personas"),
     "Calendario-Jornada-Turno": ("ate-rrhh-2024.Ate_kaibot_2024.calendario_jornada-turno", "id_calendario_jornada_turno"),
     "Complejidad funcional": ("ate-rrhh-2024.Ate_kaibot_2024.complejidad_funcional", "id_complejidad_funcional"),
     "Documentos del Proyecto HACER CONSULTA ESPECÏFICA": ("ate-rrhh-2024.Ate_kaibot_2024.project_document", "id_documento"),
