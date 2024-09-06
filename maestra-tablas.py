@@ -131,30 +131,11 @@ def get_next_id(table_name, id_column):
 PAGES_TABLAS_NUEVAS = {}
 
 def main():
+    def main():
     st.sidebar.title("Tablas de Factores")
+    selection = st.sidebar.radio("Ir a", list(PAGES_TABLES.keys()))
 
-    # Verificar si PAGES_TABLAS_NUEVAS existe en el estado de sesión, si no, inicializarlo
-    if "PAGES_TABLAS_NUEVAS" not in st.session_state:
-        st.session_state.PAGES_TABLAS_NUEVAS = {}
-
-    # Botones de acción en la parte superior del sidebar
-    if st.sidebar.button("Crear Nueva Tabla"):
-        create_new_table()  # Función para crear una tabla personalizada
-
-    if st.sidebar.button("Crear Tabla Predefinida"):
-        create_predefined_table()  # Función para crear una tabla predefinida
-
-    # Mostrar tablas después de los botones
-    st.sidebar.subheader("Gestionar Tablas Existentes")
-
-    # Combinar las tablas originales y las nuevas (del estado de sesión) para mostrarlas en el sidebar
-    all_tables = {**PAGES_TABLES, **st.session_state.PAGES_TABLAS_NUEVAS}
-    selection = st.sidebar.radio("Ir a", list(all_tables.keys()))
-
-    # Obtener el nombre de la tabla y la columna ID según la selección
-    table_name, id_column = all_tables[selection]
-
-    # Llamar a la función de gestión para la tabla seleccionada
+    table_name, id_column = PAGES_TABLES[selection]
     manage_table(table_name, id_column)
     
 # Función para obtener la descripción de una tabla
