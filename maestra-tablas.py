@@ -397,3 +397,23 @@ def create_predefined_table():
 if __name__ == "__main__":
     add_custom_css()
     main()
+
+
+# Menú lateral con las tablas originales y las nuevas
+st.sidebar.title("Menú")
+
+# Diccionario de tablas originales
+
+
+# Mostrar tablas del diccionario original
+page = st.sidebar.selectbox("Selecciona una tabla para gestionar", list(PAGES_TABLES.keys()) + list(PAGES_TABLAS_NUEVAS.keys()))
+
+# Gestionar tabla seleccionada del diccionario original
+if page in PAGES_TABLES:
+    table_name, id_column = PAGES_TABLES[page]
+    manage_table(table_name, id_column)
+
+# Gestionar tabla seleccionada del diccionario de tablas nuevas
+elif page in PAGES_TABLAS_NUEVAS:
+    table_name, id_column = PAGES_TABLAS_NUEVAS[page]
+    manage_table(table_name, id_column)
