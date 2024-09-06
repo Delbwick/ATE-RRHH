@@ -51,7 +51,7 @@ PAGES_TABLES = {
     "Condiciones de Trabajo": ("ate-rrhh-2024.Ate_kaibot_2024.condiciones_de_trabajo", "id_condiciones"),
     "Conocimientos básicos de acceso al puesto": ("ate-rrhh-2024.Ate_kaibot_2024.conocimientos_basicos_acceso_al_puesto", "id_conocimientos_basicos"),
     "Conocimientos específicos al puesto": ("ate-rrhh-2024.Ate_kaibot_2024.conocimientos_especificos", "id_conocimientos_especificos"),
-    "Definitivo?¿ ": ("ate-rrhh-2024.Ate_kaibot_2024.definitivo", "id_definitivo"),
+   # "Definitivo?¿ ": ("ate-rrhh-2024.Ate_kaibot_2024.definitivo", "id_definitivo"),
     "Esfuerzo Emocional": ("ate-rrhh-2024.Ate_kaibot_2024.esfuerzo_emocional", "id_esfuerzo"),
     "Esfuerzo Físico": ("ate-rrhh-2024.Ate_kaibot_2024.esfuerzo_fisico", "id_esfuerzo_fisico"),
     "Esfuerzo Mental": ("ate-rrhh-2024.Ate_kaibot_2024.esfuerzo_mental", "id_esfuerzo_mental"),
@@ -66,13 +66,13 @@ PAGES_TABLES = {
     "Mando": ("ate-rrhh-2024.Ate_kaibot_2024.mando", "id_mando"),
     "Nivel de Formación": ("ate-rrhh-2024.Ate_kaibot_2024.nivel_de_fomacion", "id_formacion"),
     "Penosidad del Turno": ("ate-rrhh-2024.Ate_kaibot_2024.penosidad_turno", "id_penosidad"),
-    "Porcentajes Variables?¿": ("ate-rrhh-2024.Ate_kaibot_2024.porcentajes_variables", "id_porcentajes_variables"),
+   # "Porcentajes Variables?¿": ("ate-rrhh-2024.Ate_kaibot_2024.porcentajes_variables", "id_porcentajes_variables"),
     "Proyectos": ("ate-rrhh-2024.Ate_kaibot_2024.proyecto", "id_proyecto"),
     "Puestos": ("ate-rrhh-2024.Ate_kaibot_2024.puestos", "id_puesto"),
     "Responsabilidad": ("ate-rrhh-2024.Ate_kaibot_2024.responsabilidad", "id_responsabilidad"),
     "Salario Base por Categoría y Año - TABLA CALCULADA?¿?": ("ate-rrhh-2024.Ate_kaibot_2024.salario_base_xcategoria_xaño", "id_salario_base"),
     "Turno": ("ate-rrhh-2024.Ate_kaibot_2024.turno", "id_turno"),
-    "Valoración Definitiva?¿?": ("ate-rrhh-2024.Ate_kaibot_2024.valoracion_definitiva", "id_valoracion_definitiva"),
+   # "Valoración Definitiva?¿?": ("ate-rrhh-2024.Ate_kaibot_2024.valoracion_definitiva", "id_valoracion_definitiva"),
     "Valoración Técnica Previa?¿?": ("ate-rrhh-2024.Ate_kaibot_2024.valoracion_tecnica_previa", "id_valoracion_tecnica_previa"),
     "Documentos del Proyecto": ("ate-rrhh-2024.Ate_kaibot_2024.project_document", "id_documento"),
     "Role": ("ate-rrhh-2024.Ate_kaibot_2024.role", "id_role"),
@@ -80,12 +80,12 @@ PAGES_TABLES = {
     "Usuario": ("ate-rrhh-2024.Ate_kaibot_2024.usuario", "id_usuario"),
     "Cliente": ("ate-rrhh-2024.Ate_kaibot_2024.client", "id_cliente"),
     "Empresa": ("ate-rrhh-2024.Ate_kaibot_2024.company", "id_empresa"),
-    "Calendario?¿?": ("ate-rrhh-2024.Ate_kaibot_2024.calendar", "id_calendario"),
+  #  "Calendario?¿?": ("ate-rrhh-2024.Ate_kaibot_2024.calendar", "id_calendario"),
     "Calendario-Jornada-Turno": ("ate-rrhh-2024.Ate_kaibot_2024.calendario_jornada-turno", "id_calendario_jornada_turno"),
     "Complejidad funcional": ("ate-rrhh-2024.Ate_kaibot_2024.complejidad_funcional", "id_complejidad_funcional"),
     "Valoración complemento de destino por año HACER CONSULTA ESPECÏFICA": ("ate-rrhh-2024.Ate_kaibot_2024.valoracion_destino_puntos_por_ano", "id_valoracion_destino"),
-    "Complemento de destino por poryecto": ("ate-rrhh-2024.Ate_kaibot_2024.complementos_de_destino_por_proyecto","id_proyecto"),
-    "Valoración preliminar por poryecto": ("ate-rrhh-2024.Ate_kaibot_2024.valoracion_preliminar_por_proyecto","id_valoracion_preliminar")
+    "Complemento de destino por poryecto HACER CONSULTA ESPECÏFICA": ("ate-rrhh-2024.Ate_kaibot_2024.complementos_de_destino_por_proyecto","id_proyecto"),
+    "Valoración preliminar por poryecto HACER CONSULTA ESPECÏFICA": ("ate-rrhh-2024.Ate_kaibot_2024.valoracion_preliminar_por_proyecto","id_valoracion_preliminar")
     
     }
 
