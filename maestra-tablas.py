@@ -75,6 +75,8 @@ PAGES_TABLES = {
     "Turno": ("ate-rrhh-2024.Ate_kaibot_2024.turno", "id_turno"),
    # "Valoración Definitiva?¿?": ("ate-rrhh-2024.Ate_kaibot_2024.valoracion_definitiva", "id_valoracion_definitiva"),
     #"Valoración Técnica Previa?¿?": ("ate-rrhh-2024.Ate_kaibot_2024.valoracion_tecnica_previa", "id_valoracion_tecnica_previa"),
+    "Calendario-Jornada-Turno": ("ate-rrhh-2024.Ate_kaibot_2024.calendario_jornada-turno", "id_calendario_jornada_turno"),
+    "Complejidad funcional": ("ate-rrhh-2024.Ate_kaibot_2024.complejidad_funcional", "id_complejidad_funcional"),
     "Documentos del Proyecto HACER CONSULTA ESPECÏFICA": ("ate-rrhh-2024.Ate_kaibot_2024.project_document", "id_documento"),
     "Role HACER CONSULTA ESPECÏFICA": ("ate-rrhh-2024.Ate_kaibot_2024.role", "id_role"),
     "User HACER CONSULTA ESPECÏFICA": ("ate-rrhh-2024.Ate_kaibot_2024.user", "id_user"),
@@ -82,8 +84,7 @@ PAGES_TABLES = {
     "Cliente HACER CONSULTA ESPECÏFICA": ("ate-rrhh-2024.Ate_kaibot_2024.client", "id_cliente"),
     "Empresa HACER CONSULTA ESPECÏFICA": ("ate-rrhh-2024.Ate_kaibot_2024.company", "id_empresa"),
   #  "Calendario?¿?": ("ate-rrhh-2024.Ate_kaibot_2024.calendar", "id_calendario"),
-    "Calendario-Jornada-Turno": ("ate-rrhh-2024.Ate_kaibot_2024.calendario_jornada-turno", "id_calendario_jornada_turno"),
-    "Complejidad funcional": ("ate-rrhh-2024.Ate_kaibot_2024.complejidad_funcional", "id_complejidad_funcional"),
+    
     "Valoración complemento de destino por año HACER CONSULTA ESPECÏFICA": ("ate-rrhh-2024.Ate_kaibot_2024.valoracion_destino_puntos_por_ano", "id_valoracion_destino"),
     "Complemento de destino por poryecto HACER CONSULTA ESPECÏFICA": ("ate-rrhh-2024.Ate_kaibot_2024.complementos_de_destino_por_proyecto","id_proyecto"),
     "Valoración preliminar por poryecto HACER CONSULTA ESPECÏFICA": ("ate-rrhh-2024.Ate_kaibot_2024.valoracion_preliminar_por_proyecto","id_valoracion_preliminar")
