@@ -73,8 +73,10 @@ PAGES_TABLES = {
     "Responsabilidad": ("ate-rrhh-2024.Ate_kaibot_2024.responsabilidad", "id_responsabilidad"),
     #"Salario Base por Categoría y Año - TABLA CALCULADA?¿?": ("ate-rrhh-2024.Ate_kaibot_2024.salario_base_xcategoria_xaño", "id_salario_base"),
     "Turno": ("ate-rrhh-2024.Ate_kaibot_2024.turno", "id_turno"),
+    #tablas nuevas
     "Mando no cuantificado sobre personas": ("ate-rrhh-2024.Ate_kaibot_2024.mando_no_cuantificado_personas", "id_mando_no_cuantificado_personas"),
     "Mando Cuantificado sobre Personas": ("ate-rrhh-2024.Ate_kaibot_2024.mando_cuantificado_personas", "id_mando_cuantificado_personas"),
+    #fin tablas nuevas
     "Calendario-Jornada-Turno": ("ate-rrhh-2024.Ate_kaibot_2024.calendario_jornada-turno", "id_calendario_jornada_turno"),
     "Complejidad funcional": ("ate-rrhh-2024.Ate_kaibot_2024.complejidad_funcional", "id_complejidad_funcional"),
     "Documentos del Proyecto HACER CONSULTA ESPECÏFICA": ("ate-rrhh-2024.Ate_kaibot_2024.project_document", "id_documento"),
@@ -333,7 +335,7 @@ def create_new_table():
 
 
 def create_predefined_table():
-    st.title("Crear Nueva Tabla con Estructura Predefinida")
+    st.title("Crear Nueva Tabla con Estructura Predefinida (Factores)")
     
     # Ingresar el nombre de la nueva tabla
     table_name = st.text_input("Nombre de la nueva tabla (formato dataset.tabla)", "ate-rrhh-2024.Ate_kaibot_2024.")
