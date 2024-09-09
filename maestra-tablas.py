@@ -158,7 +158,7 @@ def manage_table(table_name, id_column):
     if action == "Crear Nueva Tabla":
         create_new_table()
 
-    elif action == "Crear Tabla Predefinida":
+    elif action == "Crear Tabla Predefinida-Factores":
         create_predefined_table()
 
 
