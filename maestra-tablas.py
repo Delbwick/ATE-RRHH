@@ -298,7 +298,7 @@ def create_new_table():
     st.title("Crear Nueva Tabla no estándard")
     
     # Ingresar el nombre de la nueva tabla
-    table_name = st.text_input("Nombre de la nueva tabla (formato dataset.tabla)", "ate-rrhh-2024.Ate_kaibot_2024.")
+    table_name = st.text_input("Nombre de la nueva tabla (formato dataset.tabla)", "ate-rrhh-2024.Ate_kaibot_2024.tabla_no_factor_")
 
     # Validar que el nombre de la tabla no esté vacío
     if not table_name:
@@ -340,7 +340,7 @@ def create_new_table():
             except Exception as e:
                 st.error(f"Error al crear la tabla: {e}")
 
-
+##creamos las consultas para las tablas que nos son factores, todas tienen que tener el prefijo tabla_no_factor_
 
 
 def create_predefined_table():
@@ -387,9 +387,141 @@ def create_predefined_table():
             st.error(f"Error al crear la tabla: {e}")
 
 
+
+def get_table_names_with_prefix(prefix):
+    """Función para obtener todas las tablas que empiezan con un prefijo específico"""
+    query = f"""
+        SELECT table_name 
+        FROM `{client.project}.{client.dataset_id}.INFORMATION_SCHEMA.TABLES`
+        WHERE table_name LIKE '{prefix}%'
+    """
+    result = client.query(query).result()
+    return [row['table_name'] for row in result]
+
+def main():
+    st.sidebar.title("Tablas de Factores")
+
+    # Obtener todas las tablas que empiecen con 'tabla_no_factor'
+    table_prefix = 'tabla_no_factor'
+    available_tables = get_table_names_with_prefix(table_prefix)
+
+    if not available_tables:
+        st.write("No se encontraron tablas que comiencen con 'tabla_no_factor'.")
+        return
+
+    # Mostrar las tablas en un selector
+    selected_table = st.sidebar.selectbox("Selecciona una tabla", available_tables)
+
+    if selected_table:
+        st.sidebar.write(f"Tabla seleccionada: {selected_table}")
+        
+        # Checkbox para acciones
+        actions = {
+            "Insertar": st.sidebar.checkbox("Insertar"),
+            "Modificar": st.sidebar.checkbox("Modificar"),
+            "Eliminar": st.sidebar.checkbox("Eliminar")
+        }
+
+        # Mostrar opciones de gestión según las acciones seleccionadas
+        if actions["Insertar"]:
+            manage_table(selected_table, "id", "insertar")
+        if actions["Modificar"]:
+            manage_table(selected_table, "id", "modificar")
+        if actions["Eliminar"]:
+            manage_table(selected_table, "id", "eliminar")
+
+
+def manage_table(table_name, id_column, action):
+    st.title(f"Gestión de la tabla {table_name}")
+
+    if action == "insertar":
+        # Especificar los campos de la tabla
+        fields = {
+            "letra": st.text_input("Letra"),
+            "descripcion": st.text_input("Descripción"),
+            "porcentaje_de_total": st.number_input("Porcentaje del Total", min_value=0.0, max_value=100.0, step=0.1),
+            "puntos": st.number_input("Puntos", min_value=0.0, step=0.1),
+            "id_idioma_registro": st.number_input("id_idioma (1-ESp;2-EUS)", min_value=1, step=1)
+        }
+        if st.button("Insertar"):
+            next_id = get_next_id(table_name, id_column)
+            columns = [id_column] + list(fields.keys())
+            values = [next_id] + list(fields.values())
+            columns_str = ", ".join(columns)
+            values_str = ", ".join([f"'{value}'" if isinstance(value, str) else str(value) for value in values])
+            
+            query = f"""
+                INSERT INTO `{table_name}` ({columns_str})
+                VALUES ({values_str})
+            """
+            try:
+                client.query(query)
+                st.success("Registro insertado correctamente")
+            except Exception as e:
+                st.error(f"Error al insertar el registro: {e}")
+
+    elif action == "modificar":
+        # Consulta registros y permite modificar
+        query = f"SELECT * FROM {table_name}"
+        results = client.query(query).result()
+        records = [dict(row) for row in results]
+
+        if records:
+            selected_id = st.selectbox("Selecciona el ID del registro a modificar", [record[id_column] for record in records])
+            selected_record = next(record for record in records if record[id_column] == selected_id)
+            updated_record = {}
+
+            for key, value in selected_record.items():
+                if key != id_column:
+                    if isinstance(value, int):
+                        updated_record[key] = st.number_input(f"Nuevo valor para {key}", value=value)
+                    elif isinstance(value, float):
+                        updated_record[key] = st.number_input(f"Nuevo valor para {key}", value=value, format="%f")
+                    else:
+                        updated_record[key] = st.text_input(f"Nuevo valor para {key}", value)
+                else:
+                    updated_record[key] = value
+
+            if st.button("Actualizar registro"):
+                update_query = f"""
+                    UPDATE {table_name}
+                    SET {', '.join([f"{k} = {v}" for k, v in updated_record.items() if k != id_column])}
+                    WHERE {id_column} = {selected_id}
+                """
+                try:
+                    client.query(update_query).result()
+                    st.success("Registro actualizado correctamente")
+                except Exception as e:
+                    st.error(f"Error al actualizar el registro: {e}")
+
+    elif action == "eliminar":
+        # Consulta registros y permite eliminar
+        query = f"SELECT * FROM {table_name}"
+        results = client.query(query).result()
+        records = [dict(row) for row in results]
+
+        if records:
+            selected_id = st.selectbox("Selecciona el ID del registro a eliminar", [record[id_column] for record in records])
+            selected_record = next(record for record in records if record[id_column] == selected_id)
+            st.write("Registro seleccionado para eliminar:", selected_record)
+
+            if st.button("Eliminar registro"):
+                delete_query = f"""
+                    DELETE FROM {table_name}
+                    WHERE {id_column} = {selected_id}
+                """
+                try:
+                    client.query(delete_query)
+                    st.success("Registro eliminado correctamente")
+                except Exception as e:
+                    st.error(f"Error al eliminar el registro: {e}")
+
+
 if __name__ == "__main__":
     add_custom_css()
     main()
+
+
 
 
 # Menú lateral con las tablas originales y las nuevas
