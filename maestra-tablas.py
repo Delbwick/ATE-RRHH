@@ -452,8 +452,8 @@ if page in PAGES_TABLAS_NUEVAS:
 def get_table_names_with_prefix(prefix):
     query = f"""
         SELECT table_name 
-        FROM `ate-rrhh-2024.Ate_kaibot_2024.INFORMATION_SCHEMA.TABLES`
-        WHERE table_name LIKE '%{prefix}%'
+FROM `ate-rrhh-2024.Ate_kaibot_2024.INFORMATION_SCHEMA.TABLES`
+WHERE table_name LIKE '%tabla_no_factor_%'
     """
     
     result = client.query(query).result()
