@@ -390,6 +390,7 @@ def create_predefined_table():
 if __name__ == "__main__":
     add_custom_css()
     main()
+    app()
 
 
 # Menú lateral con las tablas originales y las nuevas
