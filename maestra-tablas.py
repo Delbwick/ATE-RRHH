@@ -83,6 +83,7 @@ PAGES_TABLES = {
     "CONDICIONES DE TRABAJO FÍSICO": ("ate-rrhh-2024.Ate_kaibot_2024.condiciones_de_trabajo", "id_condiciones"),
     "RESPONSABILIDAD SOBRE USUARIOS DE RESIDENCIA": ("ate-rrhh-2024.Ate_kaibot_2024.responsabilidad_residencia", "id_responsabilidad_residencia"),
     "POLIVALENCIA": ("ate-rrhh-2024.Ate_kaibot_2024.polivalencia", "id_polivalencia"),
+    "RESPONSABILIDAD PARCIAL SOBRE EL PRESUPUESTO": ("ate-rrhh-2024.Ate_kaibot_2024.responsabilidad_presupuesto", "id_responsabilidad_presupuesto"),
 
     #fin tablas nuevas
     "Calendario-Jornada-Turno": ("ate-rrhh-2024.Ate_kaibot_2024.calendario_jornada-turno", "id_calendario_jornada_turno"),
