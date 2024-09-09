@@ -149,6 +149,36 @@ def main():
 
     table_name, id_column = PAGES_TABLES[selection]
     manage_table(table_name, id_column)
+    st.sidebar.title("Tablas de Factores")
+    
+    # Obtener todas las tablas que empiecen con 'tabla_no_factor'
+    table_prefix = 'tabla_no_factor'
+    available_tables = get_table_names_with_prefix(table_prefix)
+
+    if not available_tables:
+        st.write("No se encontraron tablas que comiencen con 'tabla_no_factor'.")
+        return
+
+    # Mostrar las tablas en un selector (selectbox)
+    selected_table = st.sidebar.selectbox("Selecciona una tabla", available_tables)
+
+    if selected_table:
+        st.sidebar.write(f"Tabla seleccionada: {selected_table}")
+        
+        # Checkbox para las acciones de Insertar, Modificar, Eliminar
+        actions = {
+            "Insertar": st.sidebar.checkbox("Insertar"),
+            "Modificar": st.sidebar.checkbox("Modificar"),
+            "Eliminar": st.sidebar.checkbox("Eliminar")
+        }
+
+        # Mostrar las opciones de gestión según la acción seleccionada
+        if actions["Insertar"]:
+            manage_table(selected_table, "id", "insertar")
+        if actions["Modificar"]:
+            manage_table(selected_table, "id", "modificar")
+        if actions["Eliminar"]:
+            manage_table(selected_table, "id", "eliminar")
     
 # Función para obtener la descripción de una tabla
 def get_table_description(table_name):
@@ -390,7 +420,7 @@ def create_predefined_table():
 if __name__ == "__main__":
     add_custom_css()
     main()
-    app()
+    
 
 
 # Menú lateral con las tablas originales y las nuevas
