@@ -154,7 +154,7 @@ def get_table_description(table_name):
 
 def manage_table(table_name, id_column):
     st.title(f"Gestión de {table_name.split('.')[-1].replace('_', ' ').title()}")
-    action = st.radio("Acción", ["Ver", "Insertar", "Modificar", "Eliminar","Crear Nueva Tabla Especial", "Crear Tabla Predefinida"])
+    action = st.radio("Acción", ["Ver", "Insertar", "Modificar", "Eliminar","Crear Nueva Tabla Especial", "Crear Tabla Predefinida-Factores"])
     if action == "Crear Nueva Tabla":
         create_new_table()
 
