@@ -144,15 +144,15 @@ PAGES_TABLAS_NUEVAS = {}
 
 def main():
 
-    st.sidebar.title("Tablas de Factores")
+    st.sidebar.title("Tablas de NO Factores")
     selection = st.sidebar.radio("Ir a", list(PAGES_TABLES.keys()))
 
     table_name, id_column = PAGES_TABLES[selection]
     manage_table(table_name, id_column)
-    st.sidebar.title("Tablas de Factores")
+    st.sidebar.title("Tablas de NO Factores")
     
     # Obtener todas las tablas que empiecen con 'tabla_no_factor'
-    table_prefix = 'tabla_no_factor'
+    table_prefix = 'tabla_no_factor_'
     available_tables = get_table_names_with_prefix(table_prefix)
 
     if not available_tables:
