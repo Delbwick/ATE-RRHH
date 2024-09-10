@@ -286,7 +286,7 @@ if selected_factores:
 
 
 
-        
+st.markdown("<h2>Selecciona los Factores de complemento específico:</h2>", unsafe_allow_html=True)        
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 st.write("Selecciona los Factores de complemento específico:")
 # Diccionario de tablas de factores de compelemto específico
