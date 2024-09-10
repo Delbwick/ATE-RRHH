@@ -343,11 +343,16 @@ def main():
         if selected_table:
             st.sidebar.write(f"Tabla seleccionada: {selected_table}")
 
-            # Acción (insertar, modificar, eliminar)
-            action = st.sidebar.radio("Selecciona una acción", ("insertar", "modificar", "eliminar"))
+            # Acción (ver, insertar, modificar, eliminar)
+            action = st.sidebar.radio("Selecciona una acción", ("ver", "insertar", "modificar", "eliminar"))
 
-            # Gestionar la tabla de no factores de manera dinámica
-            manage_no_factor_table(selected_table, "id", action)
+            # Si la acción es 'ver', mostrar el contenido de la tabla
+            if action == "ver":
+                view_table_content(selected_table)  # Función para mostrar la tabla
+
+            # Para insertar, modificar, eliminar
+            else:
+                manage_no_factor_table(selected_table, "id", action)
 
     # 3. Opción para crear una nueva tabla
     elif choice == "Crear Nueva Tabla":
@@ -369,9 +374,7 @@ def main():
 
 # Función para manejar dinámicamente tablas de no factores
 def manage_no_factor_table(table_name, id_column, action):
-    # Asumiendo que las columnas de las tablas no factores pueden ser dinámicas o diferentes
-    # aquí se debería consultar el esquema de la tabla para obtener las columnas dinámicamente.
-    
+    # Consultar el esquema de la tabla para obtener las columnas dinámicamente
     query = f"""
         SELECT column_name
         FROM `ate-rrhh-2024.Ate_kaibot_2024.INFORMATION_SCHEMA.COLUMNS`
@@ -380,8 +383,11 @@ def manage_no_factor_table(table_name, id_column, action):
     result = client.query(query).result()
     columns = [row.column_name for row in result]
 
-    # Verificar la acción solicitada (insertar, modificar, eliminar)
-    if action == 'insertar':
+    # Verificar la acción solicitada
+    if action == 'ver':
+        view_table_content(table_name, columns)
+        
+    elif action == 'insertar':
         values = {col: st.text_input(f'Ingresa {col}') for col in columns}
         if st.button('Insertar'):
             # Código para insertar los valores en la tabla
@@ -402,6 +408,26 @@ def manage_no_factor_table(table_name, id_column, action):
     
     else:
         st.error(f"Acción {action} no reconocida.")
+
+def view_table_content(table_name, columns):
+    """
+    Función para mostrar el contenido de una tabla.
+    """
+    st.write(f"Mostrando contenido de la tabla: {table_name}")
+
+    # Consulta para obtener los datos de la tabla seleccionada
+    query = f"SELECT * FROM `ate-rrhh-2024.Ate_kaibot_2024.{table_name}`"
+    result = client.query(query).result()
+
+    # Convertir los resultados en una lista de diccionarios
+    rows = [dict(row) for row in result]
+
+    # Si hay datos, mostrarlos en una tabla
+    if rows:
+        df = pd.DataFrame(rows, columns=columns)
+        st.write(df)  # Mostrar los datos en formato tabla
+    else:
+        st.write("La tabla está vacía.")
 
 if __name__ == "__main__":
     main()
