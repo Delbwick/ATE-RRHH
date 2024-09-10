@@ -134,19 +134,31 @@ def get_puestos():
     return puestos
 
 # Mostrar el selectbox de puestos
-st.markdown("<h2>Datos de Factores</h2>", unsafe_allow_html=True)
+st.markdown("<h2>Puestos</h2>", unsafe_allow_html=True)
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 selected_puesto = st.selectbox("Selecciona un puesto", get_puestos())
 #mostrar los puestos como checkbox
 # Obtener los puestos
 puestos = get_puestos()
 
-# Mostrar los puestos como checkboxes
-st.write("Selecciona los puestos:")
+
+# Crear dos columnas
+col1, col2 = st.columns(2)
+
+# Mostrar los puestos como checkboxes en dos columnas
 selected_puestos = []
-for descripcion in puestos:
-    if st.checkbox(descripcion):
-        selected_puestos.append((descripcion))
+
+with col1:
+    st.write("Columna 1")
+    for descripcion in puestos[:len(puestos)//2]:
+        if st.checkbox(descripcion):
+            selected_puestos.append(descripcion)
+
+with col2:
+    st.write("Columna 2")
+    for descripcion in puestos[len(puestos)//2:]:
+        if st.checkbox(descripcion):
+            selected_puestos.append(descripcion)
 
 # Mostrar los puestos seleccionados
 if selected_puestos:
