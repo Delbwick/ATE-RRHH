@@ -123,12 +123,6 @@ def add_custom_css():
         </style>
     """, unsafe_allow_html=True)
 
-#vamos a crear de manera dinamica los campos
-def get_table_schema(table_name):
-    table = client.get_table(table_name)
-    schema = [(field.name, field.field_type) for field in table.schema]
-    return schema
-
 # Diccionario para las nuevas tablas creadas
 PAGES_TABLAS_NUEVAS = {}
 
@@ -154,41 +148,39 @@ def get_table_description(table_name):
     table = client.get_table(table_name)
     return table.description
 
-def manage_table(table_name, id_column, action):
-    st.title(f"Gestión de la tabla {table_name}")
+def manage_table(table_name, id_column):
+    st.title(f"Gestión de {table_name.split('.')[-1].replace('_', ' ').title()}")
+    action = st.radio("Acción", ["Ver", "Insertar", "Modificar", "Eliminar", "Crear Nueva Tabla", "Crear Tabla Predefinida-Factores"])
+    
+    if action == "Crear Nueva Tabla":
+        create_new_table()
+        return  # Salir de la función para evitar conflictos
 
-    # Obtener el esquema de la tabla
-    schema = get_table_schema(table_name)
+    elif action == "Crear Tabla Predefinida-Factores":
+        create_predefined_table()
+        return  # Salir de la función para evitar conflictos
 
-    # Acción de insertar registros
-    if action == "insertar":
-        fields = {}
-        for column_name, column_type in schema:
-            if column_name != id_column:  # No mostrar el campo del ID
-                if column_type == "STRING":
-                    fields[column_name] = st.text_input(f"{column_name}")
-                elif column_type == "FLOAT64":
-                    fields[column_name] = st.number_input(f"{column_name}", min_value=0.0, step=0.1)
-                elif column_type == "INTEGER":
-                    fields[column_name] = st.number_input(f"{column_name}", min_value=0, step=1)
-                elif column_type == "BOOLEAN":
-                    fields[column_name] = st.selectbox(f"{column_name}", [True, False])
-                elif column_type == "TIMESTAMP":
-                    fields[column_name] = st.date_input(f"{column_name}")
+    if action == "Ver":
+        description = get_table_description(table_name)
+        st.write(f"**Descripción de la tabla**: {description}")
+        query = f"SELECT * FROM `{table_name}`"
+        df = client.query(query).to_dataframe()
+        st.dataframe(df)
 
+    elif action == "Insertar":
+        fields = {
+            "letra": st.text_input("Letra"),
+            "descripcion": st.text_input("Descripción"),
+            "porcentaje_de_total": st.number_input("Porcentaje del Total", min_value=0.0, max_value=100.0, step=0.1),
+            "puntos": st.number_input("Puntos", min_value=0.0, step=0.1),
+            "id_idioma_registro": st.number_input("id_idioma (1-ESp;2-EUS)", min_value=1, step=1)
+        }
         if st.button("Insertar"):
-            # Obtener el siguiente ID utilizando la función get_next_id
             next_id = get_next_id(table_name, id_column)
-
-            # Definir las columnas y valores a insertar
             columns = [id_column] + list(fields.keys())
             values = [next_id] + list(fields.values())
-
-            # Preparar los valores de la consulta, con manejo de tipos
             columns_str = ", ".join(columns)
             values_str = ", ".join([f"'{value}'" if isinstance(value, str) else str(value) for value in values])
-
-            # Ejecutar la consulta de inserción
             query = f"""
                 INSERT INTO `{table_name}` ({columns_str})
                 VALUES ({values_str})
@@ -199,68 +191,65 @@ def manage_table(table_name, id_column, action):
             except Exception as e:
                 st.error(f"Error al insertar el registro: {e}")
 
-    # Acción de modificar registros
-    elif action == "modificar":
-        # Consultar los registros existentes
+    elif action == "Modificar":
         query = f"SELECT * FROM `{table_name}`"
         results = client.query(query).result()
         records = [dict(row) for row in results]
+        if not records:
+            st.error("No se encontraron registros en la tabla.")
+            return
+        selected_id = st.selectbox("Selecciona el ID del registro a modificar", [record[id_column] for record in records])
+        selected_record = next(record for record in records if record[id_column] == selected_id)
+        updated_record = {}
+        for key, value in selected_record.items():
+            if key != id_column:
+                if isinstance(value, int):
+                    updated_record[key] = st.number_input(f"Nuevo valor para {key}", value=value)
+                elif isinstance(value, float):
+                    updated_record[key] = st.number_input(f"Nuevo valor para {key}", value=value, format="%f")
+                else:
+                    updated_record[key] = st.text_input(f"Nuevo valor para {key}", value=value)
+            else:
+                updated_record[key] = value
+        if st.button("Actualizar registro"):
+            update_query_parts = []
+            for key, value in updated_record.items():
+                if key != id_column:
+                    if isinstance(value, (int, float)):
+                        update_query_parts.append(f"{key} = {value}")
+                    else:
+                        update_query_parts.append(f"{key} = '{value}'")
+            update_query = f"""
+                UPDATE `{table_name}`
+                SET {', '.join(update_query_parts)}
+                WHERE {id_column} = {selected_id}
+            """
+            try:
+                client.query(update_query)
+                st.success("Registro actualizado correctamente")
+            except Exception as e:
+                st.error(f"Error al actualizar el registro: {e}")
 
-        if records:
-            selected_id = st.selectbox("Selecciona el ID del registro a modificar", [record[id_column] for record in records])
-            selected_record = next(record for record in records if record[id_column] == selected_id)
-            updated_record = {}
-
-            # Actualizar los campos del registro seleccionado
-            for key, value in selected_record.items():
-                if key != id_column:  # No permitir modificar el ID
-                    for column_name, column_type in schema:
-                        if column_name == key:
-                            if column_type == "STRING":
-                                updated_record[key] = st.text_input(f"Nuevo valor para {key}", value=value)
-                            elif column_type == "FLOAT64":
-                                updated_record[key] = st.number_input(f"Nuevo valor para {key}", value=value, format="%f")
-                            elif column_type == "INTEGER":
-                                updated_record[key] = st.number_input(f"Nuevo valor para {key}", value=value, step=1)
-                            elif column_type == "BOOLEAN":
-                                updated_record[key] = st.selectbox(f"Nuevo valor para {key}", [True, False], index=int(value))
-                            elif column_type == "TIMESTAMP":
-                                updated_record[key] = st.date_input(f"Nuevo valor para {key}", value=value)
-
-            # Botón para actualizar el registro
-            if st.button("Actualizar registro"):
-                update_query = f"""
-                    UPDATE `{table_name}`
-                    SET {', '.join([f"{k} = '{v}'" if isinstance(v, str) else f"{k} = {v}" for k, v in updated_record.items()])}
-                    WHERE {id_column} = {selected_id}
-                """
-                try:
-                    client.query(update_query).result()
-                    st.success("Registro actualizado correctamente")
-                except Exception as e:
-                    st.error(f"Error al actualizar el registro: {e}")
-
-    # Acción de eliminar registros
-    elif action == "eliminar":
+    elif action == "Eliminar":
         query = f"SELECT * FROM `{table_name}`"
         results = client.query(query).result()
         records = [dict(row) for row in results]
-
-        if records:
-            selected_id = st.selectbox("Selecciona el ID del registro a eliminar", [record[id_column] for record in records])
-            selected_record = next(record for record in records if record[id_column] == selected_id)
-            st.write("Registro seleccionado para eliminar:", selected_record)
-
-            if st.button("Eliminar registro"):
-                delete_query = f"""
-                    DELETE FROM `{table_name}`
-                    WHERE {id_column} = {selected_id}
-                """
-                try:
-                    client.query(delete_query)
-                    st.success("Registro eliminado correctamente")
-                except Exception as e:
-                    st.error(f"Error al eliminar el registro: {e}")
+        if not records:
+            st.error("No se encontraron registros en la tabla.")
+            return
+        selected_id = st.selectbox("Selecciona el ID del registro a eliminar", [record[id_column] for record in records])
+        selected_record = next(record for record in records if record[id_column] == selected_id)
+        st.write("Registro seleccionado para eliminar:", selected_record)
+        if st.button("Eliminar registro"):
+            delete_query = f"""
+                DELETE FROM `{table_name}`
+                WHERE {id_column} = {selected_id}
+            """
+            try:
+                client.query(delete_query)
+                st.success("Registro eliminado correctamente")
+            except Exception as e:
+                st.error(f"Error al eliminar el registro: {e}")
 
 def create_new_table():
     st.title("Crear Nueva Tabla no estándar")
