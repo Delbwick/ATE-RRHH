@@ -156,7 +156,7 @@ def main():
     available_tables = get_table_names_with_prefix(table_prefix)
 
     if not available_tables:
-        st.write("No se encontraron tablas que comiencen con 'tabla_no_factor'.")
+        st.write("No se encontraron tablas que comiencen con 'tabla_no_factor_'.")
         return
 
     # Mostrar las tablas en un selector (selectbox)
@@ -420,6 +420,7 @@ def create_predefined_table():
 if __name__ == "__main__":
     add_custom_css()
     main()
+    app()
     
 
 
