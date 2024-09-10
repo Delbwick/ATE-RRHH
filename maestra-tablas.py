@@ -310,12 +310,10 @@ def create_predefined_table():
 
 def main():
     st.sidebar.title("Menú Principal")
-    
     # Opciones del menú
     menu_options = ["Tablas Predefinidas", "Tablas de NO Factores", "Crear Nueva Tabla", "Crear Tabla Predefinida-Factores"]
     choice = st.sidebar.selectbox("Seleccione una opción", menu_options)
 
-    # 1. Opción para manejar tablas predefinidas (factores)
     if choice == "Tablas Predefinidas":
         st.sidebar.title("Tablas Predefinidas")
         if not PAGES_TABLES:
@@ -323,53 +321,36 @@ def main():
             return
         selection = st.sidebar.radio("Selecciona una tabla", list(PAGES_TABLES.keys()))
         table_name, id_column = PAGES_TABLES[selection]
-        manage_table(table_name, id_column)
+        action = st.sidebar.selectbox("Selecciona una acción", ["Ver", "Insertar", "Modificar", "Eliminar"])
+        manage_table(table_name, id_column, action)
 
-    # 2. Opción para manejar tablas de NO Factores (dinámicas)
     elif choice == "Tablas de NO Factores":
         st.sidebar.title("Tablas de NO Factores")
-
-        # Obtener las tablas con el prefijo 'tabla_no_factor_'
         table_prefix = 'tabla_no_factor_'
         available_tables = get_table_names_with_prefix(table_prefix)
-
         if not available_tables:
             st.write("No se encontraron tablas que comiencen con 'tabla_no_factor_'.")
             return
-
-        # Seleccionar la tabla de no factores
         selected_table = st.sidebar.selectbox("Selecciona una tabla", available_tables)
-
         if selected_table:
             st.sidebar.write(f"Tabla seleccionada: {selected_table}")
+            action = st.sidebar.selectbox("Selecciona una acción", ["Ver", "Insertar", "Modificar", "Eliminar"])
+            manage_no_factor_table(selected_table, "id", action)
 
-            # Acción (ver, insertar, modificar, eliminar)
-            action = st.sidebar.radio("Selecciona una acción", ("ver", "insertar", "modificar", "eliminar"))
-
-            # Si la acción es 'ver', mostrar el contenido de la tabla
-            if action == "ver":
-                view_table_content(selected_table)  # Función para mostrar la tabla
-
-            # Para insertar, modificar, eliminar
-            else:
-                manage_no_factor_table(selected_table, "id", action)
-
-    # 3. Opción para crear una nueva tabla
     elif choice == "Crear Nueva Tabla":
         create_new_table()
 
-    # 4. Opción para crear una tabla predefinida de factores
     elif choice == "Crear Tabla Predefinida-Factores":
         create_predefined_table()
 
-    # 5. Mostrar las tablas nuevas creadas (si existen)
+    # Mostrar tablas nuevas creadas
     if PAGES_TABLAS_NUEVAS:
         st.sidebar.title("Tablas Nuevas Creadas")
         new_table = st.sidebar.selectbox("Selecciona una tabla nueva", list(PAGES_TABLAS_NUEVAS.keys()))
-
         if new_table:
             table_name, id_column = PAGES_TABLAS_NUEVAS[new_table]
-            manage_table(table_name, id_column)
+            action = st.sidebar.selectbox("Selecciona una acción", ["Ver", "Insertar", "Modificar", "Eliminar"])
+            manage_table(table_name, id_column, action)
 
 
 # Función para manejar dinámicamente tablas de no factores
