@@ -214,7 +214,7 @@ PAGES_TABLES = {
     #"Turno": ("ate-rrhh-2024.Ate_kaibot_2024.turno", "id_turno")
     # Agregar el resto de las tablas aquí
 }
-# Mostrar checkboxes para seleccionar las tablas de factores de compleemnto de destino
+# Mostrar checkboxes para seleccionar las tablas de factores de complemento de destino
 selected_factores = []
 for nombre_tabla, (nombre_completo, id_tabla) in PAGES_TABLES.items():
     if st.checkbox(nombre_tabla):
