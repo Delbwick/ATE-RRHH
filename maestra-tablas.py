@@ -344,7 +344,7 @@ def main():
             st.sidebar.write(f"Tabla seleccionada: {selected_table}")
 
             # Acción (insertar, modificar, eliminar)
-            action = st.sidebar.radio("Selecciona una acción", ("insertar", "modificar", "eliminar"))
+            action = st.sidebar.radio("Selecciona una acción", ("ver","insertar", "modificar", "eliminar"))
 
             # Gestionar la tabla de no factores de manera dinámica
             manage_no_factor_table(selected_table, "id", action)
@@ -381,6 +381,14 @@ def manage_no_factor_table(table_name, id_column, action):
     columns = [row.column_name for row in result]
 
     # Verificar la acción solicitada (insertar, modificar, eliminar)
+    if action == "ver":
+        description = get_table_description(table_name)
+        st.write(f"**Descripción de la tabla**: {description}")
+        query = f"SELECT * FROM `{table_name}`"
+        df = client.query(query).to_dataframe()
+        st.dataframe(df)
+
+    
     if action == 'insertar':
         values = {col: st.text_input(f'Ingresa {col}') for col in columns}
         if st.button('Insertar'):
