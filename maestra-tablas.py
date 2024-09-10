@@ -383,10 +383,24 @@ def manage_no_factor_table(table_name, id_column, action):
     result = client.query(query).result()
     columns = [row.column_name for row in result]
 
-    # Verificar la acción solicitada
     if action == 'ver':
-        view_table_content(table_name, columns)
-        
+        # Mostrar el contenido de la tabla
+        st.write(f"Mostrando contenido de la tabla: {table_name}")
+
+        # Consulta para obtener los datos de la tabla seleccionada
+        query = f"SELECT * FROM `ate-rrhh-2024.Ate_kaibot_2024.{table_name}`"
+        result = client.query(query).result()
+
+        # Convertir los resultados en una lista de diccionarios
+        rows = [dict(row) for row in result]
+
+        # Si hay datos, mostrarlos en una tabla
+        if rows:
+            df = pd.DataFrame(rows, columns=columns)
+            st.write(df)  # Mostrar los datos en formato tabla
+        else:
+            st.write("La tabla está vacía.")
+    
     elif action == 'insertar':
         values = {col: st.text_input(f'Ingresa {col}') for col in columns}
         if st.button('Insertar'):
@@ -408,26 +422,6 @@ def manage_no_factor_table(table_name, id_column, action):
     
     else:
         st.error(f"Acción {action} no reconocida.")
-
-def view_table_content(table_name, columns):
-    """
-    Función para mostrar el contenido de una tabla.
-    """
-    st.write(f"Mostrando contenido de la tabla: {table_name}")
-
-    # Consulta para obtener los datos de la tabla seleccionada
-    query = f"SELECT * FROM `ate-rrhh-2024.Ate_kaibot_2024.{table_name}`"
-    result = client.query(query).result()
-
-    # Convertir los resultados en una lista de diccionarios
-    rows = [dict(row) for row in result]
-
-    # Si hay datos, mostrarlos en una tabla
-    if rows:
-        df = pd.DataFrame(rows, columns=columns)
-        st.write(df)  # Mostrar los datos en formato tabla
-    else:
-        st.write("La tabla está vacía.")
 
 if __name__ == "__main__":
     main()
