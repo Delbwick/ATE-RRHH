@@ -179,7 +179,7 @@ def obtener_datos_bigquery(nombre_tabla):
     return df
 
 
-
+st.markdown("<h2>Selecciona los Factores de complemento de destino:</h2>", unsafe_allow_html=True)
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 st.write("Selecciona los Factores de complemento de destino:")
 # Diccionario de tablas de factores de compelemto destino
