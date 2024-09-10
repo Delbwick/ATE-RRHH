@@ -797,6 +797,58 @@ for puesto_id in selected_puestos_ids:
     st.markdown(f"<h2>Calculo para el puesto: {puesto_nombre}</h2>", unsafe_allow_html=True)
     st.write(f"Bruto Anual con Jornada Ordinaria : {sueldo} + {puntos_específico_sueldo} + {puntos_valoracion} = {sueldo_total_puesto:.2f} euros")
 
+#Añadimos los calculos de Jornada
+# Título para el cálculo final del sueldo total
+st.markdown(f"<div class='header-cell'>Valoración preliminar Sueldo Total Final</div>", unsafe_allow_html=True)
+st.title("Total cálculo de Sueldo: sueldo base por categoría y por puesto + Complemento específico + complemento de destino")
+st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
+
+# Selección de la modalidad de disponibilidad especial
+modalidad_disponibilidad = st.selectbox(
+    'Selecciona la modalidad de disponibilidad especial:',
+    options=[
+        'Ninguna',
+        'Jornada ampliada (hasta 10%)',
+        'Disponibilidad absoluta (hasta 15%)',
+        'Jornada ampliada con disponibilidad absoluta (hasta 20%)'
+    ]
+)
+
+# Inicialización del porcentaje según la modalidad seleccionada
+porcentaje_disponibilidad = 0.0
+if modalidad_disponibilidad == 'Jornada ampliada (hasta 10%)':
+    porcentaje_disponibilidad = 10.0
+elif modalidad_disponibilidad == 'Disponibilidad absoluta (hasta 15%)':
+    porcentaje_disponibilidad = 15.0
+elif modalidad_disponibilidad == 'Jornada ampliada con disponibilidad absoluta (hasta 20%)':
+    porcentaje_disponibilidad = 20.0
+
+# Iterar sobre los puestos seleccionados y calcular el sueldo total para cada uno
+for puesto_id in selected_puestos_ids:
+    puesto_nombre = df_puestos_proyecto.loc[df_puestos_proyecto['id_puesto'] == puesto_id, 'descripcion'].values[0]
+    sueldo = sueldo_categoria_puesto[puesto_id]
+    
+    # Suponiendo que `puntos_específico_sueldo` y `puntos_valoracion` están definidos y son valores fijos.
+    sueldo_total_puesto = sueldo + puntos_específico_sueldo + puntos_valoracion
+    
+    # Mostrar el cálculo para cada puesto
+    st.markdown(f"<h2>Cálculo para el puesto: {puesto_nombre}</h2>", unsafe_allow_html=True)
+    st.write(f"Bruto Anual con Jornada Ordinaria: {sueldo} + {puntos_específico_sueldo} + {puntos_valoracion} = {sueldo_total_puesto:.2f} euros")
+
+    # Calcular el complemento específico tramo dedicación especial
+    sueldo_bruto_con_complementos = sueldo + puntos_específico_sueldo + puntos_valoracion
+    if porcentaje_disponibilidad > 0:
+        incremento_disponibilidad = sueldo_bruto_con_complementos * (porcentaje_disponibilidad / 100)
+        sueldo_total_con_disponibilidad = sueldo_total_puesto + incremento_disponibilidad
+        st.write(f"Con la modalidad '{modalidad_disponibilidad}' ({porcentaje_disponibilidad}%), el sueldo total ajustado es: {sueldo_total_con_disponibilidad:.2f} euros")
+    else:
+        st.write("No se ha aplicado ningún complemento de disponibilidad especial.")
+
+# Mostrar la referencia a la última publicación oficial
+st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
+st.markdown("Última publicación oficial: BOPV del 27 de febrero del 2024")
+
+
 
 # Formulario de envío
 with st.form('addition'):
