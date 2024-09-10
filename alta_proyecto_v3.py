@@ -324,6 +324,12 @@ selected_factores_2 = []
 for nombre_tabla, (nombre_completo, id_tabla) in PAGES_TABLES_2.items():
     if st.checkbox(nombre_tabla):
         selected_factores_2.append((nombre_completo, id_tabla))
+        # Obtener la descripción de la tabla
+        table = client.get_table(nombre_completo)  # Asegúrate de usar el nombre correcto para la llamada
+        descripcion = table.description
+        # Mostrar la descripción de la tabla
+        st.write(descripcion)
+
 
 # Mostrar los datos seleccionados
 #if selected_factores_2:
