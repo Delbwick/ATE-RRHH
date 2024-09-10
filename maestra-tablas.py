@@ -312,12 +312,12 @@ def main():
     st.sidebar.title("Menú Principal")
     
     # Opciones del menú
-    menu_options = ["Tablas Predefinidas", "Tablas de NO Factores", "Crear Nueva Tabla", "Crear Tabla Predefinida-Factores"]
+    menu_options = ["Tablas Factores", "Tablas de NO Factores", "Crear Nueva Tabla", "Crear Tabla Predefinida-Factores"]
     choice = st.sidebar.selectbox("Seleccione una opción", menu_options)
 
     # 1. Opción para manejar tablas predefinidas (factores)
-    if choice == "Tablas Predefinidas":
-        st.sidebar.title("Tablas Predefinidas")
+    if choice == "Tablas Factores":
+        st.sidebar.title("Tablas Factores")
         if not PAGES_TABLES:
             st.write("No hay tablas predefinidas disponibles.")
             return
