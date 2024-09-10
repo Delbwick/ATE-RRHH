@@ -384,7 +384,7 @@ def manage_no_factor_table(table_name, id_column, action):
     if action == "ver":
         #description = get_table_description(table_name)
         #st.write(f"**Descripción de la tabla**: {description}")
-        query = f"SELECT * FROM `{table_name}`"
+        query = f"SELECT * FROM `ate-rrhh-2024.Ate_kaibot_2024.{table_name}`"
         df = client.query(query).to_dataframe()
         st.dataframe(df)
 
