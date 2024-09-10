@@ -134,7 +134,7 @@ def get_puestos():
     return puestos
 
 # Mostrar el selectbox de puestos
-st.markdown("<h2>Puestos</h2>", unsafe_allow_html=True)
+st.markdown("<h2>Selecciona los Puestos de Trabajo del Proyecto</h2>", unsafe_allow_html=True)
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 selected_puesto = st.selectbox("Selecciona un puesto", get_puestos())
 #mostrar los puestos como checkbox
