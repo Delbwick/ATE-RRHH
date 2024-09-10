@@ -310,10 +310,12 @@ def create_predefined_table():
 
 def main():
     st.sidebar.title("Menú Principal")
+    
     # Opciones del menú
     menu_options = ["Tablas Predefinidas", "Tablas de NO Factores", "Crear Nueva Tabla", "Crear Tabla Predefinida-Factores"]
     choice = st.sidebar.selectbox("Seleccione una opción", menu_options)
 
+    # 1. Opción para manejar tablas predefinidas (factores)
     if choice == "Tablas Predefinidas":
         st.sidebar.title("Tablas Predefinidas")
         if not PAGES_TABLES:
@@ -321,41 +323,55 @@ def main():
             return
         selection = st.sidebar.radio("Selecciona una tabla", list(PAGES_TABLES.keys()))
         table_name, id_column = PAGES_TABLES[selection]
-        action = st.sidebar.selectbox("Selecciona una acción", ["Ver", "Insertar", "Modificar", "Eliminar"])
-        manage_table(table_name, id_column, action)
+        manage_table(table_name, id_column)
 
+    # 2. Opción para manejar tablas de NO Factores (dinámicas)
     elif choice == "Tablas de NO Factores":
         st.sidebar.title("Tablas de NO Factores")
+
+        # Obtener las tablas con el prefijo 'tabla_no_factor_'
         table_prefix = 'tabla_no_factor_'
         available_tables = get_table_names_with_prefix(table_prefix)
+
         if not available_tables:
             st.write("No se encontraron tablas que comiencen con 'tabla_no_factor_'.")
             return
+
+        # Seleccionar la tabla de no factores
         selected_table = st.sidebar.selectbox("Selecciona una tabla", available_tables)
+
         if selected_table:
             st.sidebar.write(f"Tabla seleccionada: {selected_table}")
-            action = st.sidebar.selectbox("Selecciona una acción", ["Ver", "Insertar", "Modificar", "Eliminar"])
+
+            # Acción (insertar, modificar, eliminar)
+            action = st.sidebar.radio("Selecciona una acción", ("insertar", "modificar", "eliminar"))
+
+            # Gestionar la tabla de no factores de manera dinámica
             manage_no_factor_table(selected_table, "id", action)
 
+    # 3. Opción para crear una nueva tabla
     elif choice == "Crear Nueva Tabla":
         create_new_table()
 
+    # 4. Opción para crear una tabla predefinida de factores
     elif choice == "Crear Tabla Predefinida-Factores":
         create_predefined_table()
 
-    # Mostrar tablas nuevas creadas
+    # 5. Mostrar las tablas nuevas creadas (si existen)
     if PAGES_TABLAS_NUEVAS:
         st.sidebar.title("Tablas Nuevas Creadas")
         new_table = st.sidebar.selectbox("Selecciona una tabla nueva", list(PAGES_TABLAS_NUEVAS.keys()))
+
         if new_table:
             table_name, id_column = PAGES_TABLAS_NUEVAS[new_table]
-            action = st.sidebar.selectbox("Selecciona una acción", ["Ver", "Insertar", "Modificar", "Eliminar"])
-            manage_table(table_name, id_column, action)
+            manage_table(table_name, id_column)
 
 
 # Función para manejar dinámicamente tablas de no factores
 def manage_no_factor_table(table_name, id_column, action):
-    # Consultar el esquema de la tabla para obtener las columnas dinámicamente
+    # Asumiendo que las columnas de las tablas no factores pueden ser dinámicas o diferentes
+    # aquí se debería consultar el esquema de la tabla para obtener las columnas dinámicamente.
+    
     query = f"""
         SELECT column_name
         FROM `ate-rrhh-2024.Ate_kaibot_2024.INFORMATION_SCHEMA.COLUMNS`
@@ -364,25 +380,8 @@ def manage_no_factor_table(table_name, id_column, action):
     result = client.query(query).result()
     columns = [row.column_name for row in result]
 
-    if action == 'ver':
-        # Mostrar el contenido de la tabla
-        st.write(f"Mostrando contenido de la tabla: {table_name}")
-
-        # Consulta para obtener los datos de la tabla seleccionada
-        query = f"SELECT * FROM `ate-rrhh-2024.Ate_kaibot_2024.{table_name}`"
-        result = client.query(query).result()
-
-        # Convertir los resultados en una lista de diccionarios
-        rows = [dict(row) for row in result]
-
-        # Si hay datos, mostrarlos en una tabla
-        if rows:
-            df = pd.DataFrame(rows, columns=columns)
-            st.write(df)  # Mostrar los datos en formato tabla
-        else:
-            st.write("La tabla está vacía.")
-    
-    elif action == 'insertar':
+    # Verificar la acción solicitada (insertar, modificar, eliminar)
+    if action == 'insertar':
         values = {col: st.text_input(f'Ingresa {col}') for col in columns}
         if st.button('Insertar'):
             # Código para insertar los valores en la tabla
@@ -403,26 +402,6 @@ def manage_no_factor_table(table_name, id_column, action):
     
     else:
         st.error(f"Acción {action} no reconocida.")
-
-def view_table_content(table_name, columns):
-    """
-    Función para mostrar el contenido de una tabla.
-    """
-    st.write(f"Mostrando contenido de la tabla: {table_name}")
-
-    # Consulta para obtener los datos de la tabla seleccionada
-    query = f"SELECT * FROM `ate-rrhh-2024.Ate_kaibot_2024.{table_name}`"
-    result = client.query(query).result()
-
-    # Convertir los resultados en una lista de diccionarios
-    rows = [dict(row) for row in result]
-
-    # Si hay datos, mostrarlos en una tabla
-    if rows:
-        df = pd.DataFrame(rows, columns=columns)
-        st.write(df)  # Mostrar los datos en formato tabla
-    else:
-        st.write("La tabla está vacía.")
 
 if __name__ == "__main__":
     main()
