@@ -257,7 +257,7 @@ def create_new_table():
     if not table_name_input:
         st.error("Por favor, ingresa un nombre para la tabla.")
         return
-    dataset_name = "ate-rrhh-2024.Ate_kaibot_2024.tabla_no_factor_"
+    dataset_name = "ate-rrhh-2024.Ate_kaibot_2024"
     table_name = f"{dataset_name}.{table_name_input}"
     data_types = ["STRING", "INTEGER", "FLOAT64", "BOOLEAN", "TIMESTAMP"]
     num_columns = st.number_input("Número de columnas", min_value=1, max_value=20, step=1, value=1)
