@@ -382,8 +382,8 @@ def manage_no_factor_table(table_name, id_column, action):
 
     # Verificar la acción solicitada (insertar, modificar, eliminar)
     if action == "ver":
-        description = get_table_description(table_name)
-        st.write(f"**Descripción de la tabla**: {description}")
+        #description = get_table_description(table_name)
+        #st.write(f"**Descripción de la tabla**: {description}")
         query = f"SELECT * FROM `{table_name}`"
         df = client.query(query).to_dataframe()
         st.dataframe(df)
