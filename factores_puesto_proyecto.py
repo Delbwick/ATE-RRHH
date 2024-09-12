@@ -6,209 +6,105 @@ import pandas as pd
 import uuid
 import numpy as np
 
-# Configurar la página de Streamlit
-st.set_page_config(page_title="RRHH del Norte-Alta nuevos proyectos-beta4", page_icon="✅")
-st.title("¡Bienvenido a RRHH del Norte! 👷")
-st.header("¡Empieza tu Proyecto! - beta4")
+import streamlit as st
+from google.cloud import bigquery
+import pandas as pd
 
-# HTML personalizado para el encabezado
-header_html = """
-    <style>
-        .header-container {
-            background-color: #2596be; /* Color de fondo */
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-        }
-        .logo {
-            max-width: 150px;
-            margin-bottom: 10px;
-        }
-        .wide-line {
-        width: 100%;
-        height: 2px;
-        background-color: #333333;
-        margin-top: 20px;
-        margin-bottom: 20px;
-    }
-    h1 {
-        font-family: 'Arial', sans-serif;
-        font-size: 17pt;
-        text-align: left;
-        color: #333333;
-    }
-    h2 {
-        font-family: 'Arial', sans-serif;
-        font-size: 17pt;
-        text-align: left;
-        color: #333333;
-    }
-    .preview-table th {
-        text-align: left;
-        font-size: 14px;
-        color: #555555;
-    }
-    .preview-table td {
-        font-size: 12px;
-        color: #333333;
-        padding: 5px;
-    }
-    </style>
-"""
-# Agregar el HTML personalizado al encabezado
-st.markdown(header_html, unsafe_allow_html=True)
+# Inicializa el cliente de BigQuery
+client = bigquery.Client()
 
-# Agregar la imagen (logo) y el texto al encabezado
-st.markdown('<div class="header-container"><img class="logo" src="https://www.rrhhdelnorte.es/-_-/res/702f8fd0-46a5-4f0d-9c65-afb737164745/images/files/702f8fd0-46a5-4f0d-9c65-afb737164745/e0e4dc73-78c2-4413-b62c-250cbeea83fa/683-683/3b3822cd156fd081c427cc6b35617e4031b98c63" alt="Logo"></div>', unsafe_allow_html=True)
-st.write("# Alta nuevo Proyecto")
-
-# Crear API client para BigQuery
-credentials = service_account.Credentials.from_service_account_info(
-    st.secrets["gcp_service_account"]
-)
-client = bigquery.Client(credentials=credentials)
-
-# Función para obtener datos de BigQuery
-def obtener_datos_bigquery(query):
+# Función para obtener puestos
+def get_puestos():
+    query = "SELECT descripcion FROM `ate-rrhh-2024.Ate_kaibot_2024.puestos`"
     query_job = client.query(query)
     results = query_job.result()
-    df = pd.DataFrame(data=[row.values() for row in results], columns=[field.name for field in results.schema])
-    return df
+    return [row.descripcion for row in results]
 
-#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-# SELECCION DE PROYECTO
-#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-# Función para seleccionar los proyectos desde BigQuery
-def get_proyectos():
-    query = """
-        SELECT id_projecto, nombre
-        FROM ate-rrhh-2024.Ate_kaibot_2024.proyecto
+# Función para obtener factores seleccionados
+def get_factores_seleccionados(id_proyecto):
+    query = f"""
+    SELECT DISTINCT complementos_especificos, complementos_destino
+    FROM `ate-rrhh-2024.Ate_kaibot_2024.factores_seleccionados_x_puesto_x_proyecto`
+    WHERE id_proyecto = {id_proyecto}
     """
     query_job = client.query(query)
-    results = query_job.result()
-    proyectos = [{'id': row.id_projecto, 'nombre': row.nombre} for row in results]
-    return proyectos
+    df = query_job.result().to_dataframe()
+    return df
 
-# Mostrar el encabezado y línea separadora
-st.markdown("<h2>Selecciona el proyecto que quieres calcular</h2>", unsafe_allow_html=True)
-st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
+# Función para obtener los datos de una tabla específica
+def obtener_datos_tabla(tabla):
+    query = f"SELECT * FROM `{tabla}` LIMIT 100"
+    query_job = client.query(query)
+    df = query_job.result().to_dataframe()
+    return df
 
-# Obtener lista de proyectos
-proyectos = get_proyectos()
+# Función para insertar datos en BigQuery
+def insertar_datos(table_id, rows_to_insert):
+    errors = client.insert_rows_json(table_id, rows_to_insert)
+    if errors:
+        st.error(f"Error al insertar datos en {table_id}: {errors}")
+    else:
+        st.success(f"Datos insertados exitosamente en {table_id}")
 
-# Extraer solo los nombres de los proyectos para el selectbox
-proyectos_nombres = [proyecto['nombre'] for proyecto in proyectos]
+# Aplicación Streamlit
+st.title('Gestión de Proyectos y Factores')
 
-# Mostrar el cuadro de selección de proyectos
-index_seleccionado = st.selectbox("Selecciona un proyecto", proyectos_nombres)
+# Selección de Puestos
+st.markdown("<h2>Selecciona los Puestos de Trabajo</h2>", unsafe_allow_html=True)
+puestos = get_puestos()
+selected_puestos = st.multiselect("Selecciona los puestos", puestos)
 
-# Obtener el ID del proyecto seleccionado
-id_proyecto_seleccionado = None
-for proyecto in proyectos:
-    if proyecto['nombre'] == index_seleccionado:
-        id_proyecto_seleccionado = proyecto['id']
-        break
+# Selección de Proyecto
+id_proyecto = st.number_input('ID de Proyecto', min_value=1, step=1)
 
-# Mostrar el ID seleccionado (solo para propósitos de verificación)
-if id_proyecto_seleccionado is not None:
-    st.write(f"ID del proyecto seleccionado: {id_proyecto_seleccionado}")
-else:
-    st.write("Selecciona un proyecto para ver su ID")
+# Mostrar factores seleccionados para el proyecto
+if id_proyecto:
+    factores_df = get_factores_seleccionados(id_proyecto)
 
-#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-# PUESTOS POR PROYECTO
-#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    if not factores_df.empty:
+        st.write("Factores Seleccionados para el Proyecto")
+        st.dataframe(factores_df)
+        
+        for index, row in factores_df.iterrows():
+            # Obtener los datos de las tablas basadas en los factores
+            tabla_especificos = row['complementos_especificos']
+            tabla_destino = row['complementos_destino']
 
-# Mostrar el encabezado y línea separadora
-st.markdown("<h2>Puestos asociados a ese proyecto</h2>", unsafe_allow_html=True)
-st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
+            st.markdown(f"### Factores Específicos: {tabla_especificos}")
+            df_especificos = obtener_datos_tabla(tabla_especificos)
+            if not df_especificos.empty:
+                opciones = [f"{row['descripcion']} ({row['letra']})" for index, row in df_especificos.iterrows()]
+                seleccion_especifico = st.radio(f"Seleccione un valor para {tabla_especificos.split('.')[-1]}:", opciones, key=f"especifico_{index}")
+                if seleccion_especifico:
+                    selected_value_especifico = df_especificos.loc[opciones.index(seleccion_especifico), df_especificos.columns[0]]
+                    
+            st.markdown(f"### Factores de Destino: {tabla_destino}")
+            df_destino = obtener_datos_tabla(tabla_destino)
+            if not df_destino.empty:
+                opciones = [f"{row['descripcion']} ({row['letra']})" for index, row in df_destino.iterrows()]
+                seleccion_destino = st.radio(f"Seleccione un valor para {tabla_destino.split('.')[-1]}:", opciones, key=f"destino_{index}")
+                if seleccion_destino:
+                    selected_value_destino = df_destino.loc[opciones.index(seleccion_destino), df_destino.columns[0]]
 
-# Consulta SQL para obtener los puestos de trabajo asociados al proyecto
-query_puestos_proyecto = f"""
-    SELECT * FROM ate-rrhh-2024.Ate_kaibot_2024.puestos
-    WHERE id_puesto IN (
-        SELECT id_puesto FROM ate-rrhh-2024.Ate_kaibot_2024.puestos_seleccionados_por_proyecto
-        WHERE id_proyecto = {id_proyecto_seleccionado})
-"""
+            # Aquí podrías agregar lógica para almacenar los valores seleccionados si es necesario
 
-df_puestos_proyecto = obtener_datos_bigquery(query_puestos_proyecto)
-st.markdown(f"<div class='cell dataframe-cell'>{df_puestos_proyecto.to_html(index=False)}</div>", unsafe_allow_html=True)
+# Botón para guardar en BigQuery
+if st.button('Guardar Datos'):
+    rows_to_insert = []
+    for descripcion in selected_puestos:
+        query = f"""
+        SELECT id_puesto FROM `ate-rrhh-2024.Ate_kaibot_2024.puestos` WHERE descripcion = '{descripcion}'
+        """
+        query_job = client.query(query)
+        id_puesto = query_job.result().to_dataframe()['id_puesto'].iloc[0]
+        
+        row = {
+            'id_proyecto': id_proyecto,
+            'id_puesto': id_puesto,
+            # Añadir aquí otros campos necesarios como los valores seleccionados
+        }
+        rows_to_insert.append(row)
+    
+    if rows_to_insert:
+        insertar_datos("ate-rrhh-2024.Ate_kaibot_2024.puestos_seleccionados_por_proyecto", rows_to_insert)
 
-#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-# COMPLEMENTOS ESPECIFICOS Y DE DESTINO
-#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-# Definir las tablas disponibles
-PAGES_TABLES = {
-    "Formación": ("ate-rrhh-2024.Ate_kaibot_2024.formacion", "id_formacion_general"),
-    "Capacidades Necesarias": ("ate-rrhh-2024.Ate_kaibot_2024.capacidades_necesarias", "id_capacidades_necesarias"),
-    "Complejidad Técnica destino": ("ate-rrhh-2024.Ate_kaibot_2024.complejidad_tecnica", "id_complejidad_tecnica"),
-    "Complejidad Territorial": ("ate-rrhh-2024.Ate_kaibot_2024.complejidad_territorial", "id_complejidad_territorial"),
-    "Conocimientos básicos de acceso al puesto": ("ate-rrhh-2024.Ate_kaibot_2024.conocimientos_basicos_acceso_al_puesto", "id_conocimientos_basicos"),
-    "Especialización destino": ("ate-rrhh-2024.Ate_kaibot_2024.especializacion", "id_especializacion"),
-    "Autonomía-Iniciativa-Complejidad": ("ate-rrhh-2024.Ate_kaibot_2024.iniciativa", "id_iniciativa"),
-    "Mando": ("ate-rrhh-2024.Ate_kaibot_2024.mando", "id_mando"),
-    "Nivel de Formación": ("ate-rrhh-2024.Ate_kaibot_2024.nivel_de_fomacion", "id_formacion"),
-    "Responsabilidad de la Actividad": ("ate-rrhh-2024.Ate_kaibot_2024.responsabilidad_actividad", "id_responsabilidad_actividad"),
-    "Responsabilidad Relacional": ("ate-rrhh-2024.Ate_kaibot_2024.responsabilidad", "id_responsabilidad"),
-}
-
-# Mostrar checkboxes para seleccionar las tablas de factores de complemento de destino
-selected_factores = []
-for nombre_tabla, (nombre_completo, id_tabla) in PAGES_TABLES.items():
-    if st.checkbox(nombre_tabla):
-        selected_factores.append((nombre_completo, id_tabla))
-        # Obtener la descripción de la tabla
-        table = client.get_table(nombre_completo)  # Asegúrate de usar el nombre correcto para la llamada
-        descripcion = table.description
-        st.write(descripcion)
-
-# Mostrar los datos seleccionados
-if selected_factores:
-    st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
-    st.write("Selecciona los valores específicos de las tablas seleccionadas:")
-
-    valores_seleccionados = {}
-    for nombre_completo, id_tabla in selected_factores:
-        st.write(f"Tabla: {nombre_completo.split('.')[-1]}")
-        df = obtener_datos_bigquery(f"SELECT * FROM {nombre_completo}")
-        if not df.empty:
-            # Crear lista de opciones para st.radio
-            opciones = [f"{row['descripcion']} ({row['letra']})" for index, row in df.iterrows()]
-            opciones.insert(0, 'Ninguno')  # Añadir opción 'Ninguno' al inicio
-
-            # Mostrar radio buttons para seleccionar opciones
-            seleccion = st.radio(f"Selecciona el valor para {nombre_completo.split('.')[-1]}", opciones)
-            if seleccion != 'Ninguno':
-                fila_seleccionada = df.loc[df['descripcion'] == seleccion.split(' (')[0]]
-                st.write(f"Descripción seleccionada: {fila_seleccionada['descripcion']}")
-                valores_seleccionados[id_tabla] = fila_seleccionada['letra']
-        else:
-            st.write(f"No hay datos disponibles para {nombre_completo}")
-
-    st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
-
-#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-# VISTA PREVIA
-#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-# Función para mostrar la vista previa
-def mostrar_vista_previa():
-    st.markdown("<h2>Vista previa del Proyecto</h2>", unsafe_allow_html=True)
-    for _, row in df_puestos_proyecto.iterrows():
-        st.markdown(f"### {row['nombre_puesto']}")  # Mostrar el nombre del puesto como título
-        st.markdown("#### Complementos Específicos")
-        # Mostrar los valores seleccionados para complementos específicos
-        for id_tabla, letra in valores_seleccionados.items():
-            if "especifico" in id_tabla:
-                st.write(f"{id_tabla}: {letra}")
-        st.markdown("#### Complementos de Destino")
-        # Mostrar los valores seleccionados para complementos de destino
-        for id_tabla, letra in valores_seleccionados.items():
-            if "destino" in id_tabla:
-                st.write(f"{id_tabla}: {letra}")
-
-# Llamar a la función para mostrar la vista previa si hay valores seleccionados
-if valores_seleccionados:
-    mostrar_vista_previa()
