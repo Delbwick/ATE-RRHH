@@ -564,6 +564,12 @@ if st.button('Mostrar Datos'):
 #nueva funcion alta nuevo proyecto
 # Formulario de envío dentro de un botón
 with st.form('alta_nuevo_proyecto'):
+    nombre = st.text_input('Nombre del proyecto')
+    descripcion = st.text_input('Descripción del proyecto')
+    fecha_inicio = st.date_input('Fecha de inicio')
+    fecha_fin = st.date_input('Fecha de fin')
+    proyecto_activo = st.selectbox('Proyecto activo', ('Sí', 'No'))
+
     submit = st.form_submit_button('Alta nuevo proyecto')
 
 # Ejecutar la inserción solo si se presiona el botón
@@ -583,14 +589,28 @@ if submit:
         # Incrementar el máximo ID en 1 para obtener el nuevo ID de proyecto
         new_id_proyecto = max_id + 1 if max_id is not None else 1
 
-        # Consulta para insertar datos básicos en BigQuery
+        # Consulta para insertar datos básicos en BigQuery, usando parámetros seguros
         query_kai_insert = f"""
             INSERT INTO `ate-rrhh-2024.Ate_kaibot_2024.proyecto` 
             (id_projecto, nombre, descripcion, fecha_comienzo, fecha_fin, proyecto_activo_2) 
             VALUES 
-            ({new_id_proyecto}, '{nombre}', '{descripcion}', '{fecha_inicio}', '{fecha_fin}', '{proyecto_activo}')
+            (@new_id_proyecto, @nombre, @descripcion, @fecha_inicio, @fecha_fin, @proyecto_activo)
         """
-        query_job_kai_insert = client.query(query_kai_insert)
+        
+        # Ejecutar la consulta con parámetros
+        query_job_kai_insert = client.query(
+            query_kai_insert,
+            job_config=bigquery.QueryJobConfig(
+                query_parameters=[
+                    bigquery.ScalarQueryParameter("new_id_proyecto", "INT64", new_id_proyecto),
+                    bigquery.ScalarQueryParameter("nombre", "STRING", nombre),
+                    bigquery.ScalarQueryParameter("descripcion", "STRING", descripcion),
+                    bigquery.ScalarQueryParameter("fecha_inicio", "DATE", str(fecha_inicio)),
+                    bigquery.ScalarQueryParameter("fecha_fin", "DATE", str(fecha_fin)),
+                    bigquery.ScalarQueryParameter("proyecto_activo", "STRING", proyecto_activo)
+                ]
+            )
+        )
         query_job_kai_insert.result()  # Asegurarse de que la consulta se complete
 
         st.write(f"Nuevo proyecto creado con ID: {new_id_proyecto}")
@@ -604,9 +624,13 @@ if submit:
             query = f"""
                 SELECT id_puesto
                 FROM `ate-rrhh-2024.Ate_kaibot_2024.puestos`
-                WHERE descripcion = '{descripcion}'
+                WHERE descripcion = @descripcion
             """
-            query_job = client.query(query)
+            query_job = client.query(query, job_config=bigquery.QueryJobConfig(
+                query_parameters=[
+                    bigquery.ScalarQueryParameter("descripcion", "STRING", descripcion)
+                ]
+            ))
             results = query_job.result()
 
             id_puesto = None
@@ -642,13 +666,23 @@ if submit:
                 # Construir los valores de la inserción en base a las filas
                 valores = []
                 for row in rows_to_insert_puestos:
-                    valores.append(f"({row['id_proyecto']}, {row['id_puesto']}, '{row['complementos_especificos']}', '{row['complementos_destino']}')")
+                    valores.append(f"(@id_proyecto, @id_puesto, @complementos_especificos, @complementos_destino)")
 
                 # Unir los valores en la consulta final
                 query_insert_factores += ", ".join(valores)
 
-                # Ejecutar la consulta de inserción
-                query_job_insert = client.query(query_insert_factores)
+                # Ejecutar la consulta de inserción con parámetros
+                query_job_insert = client.query(
+                    query_insert_factores,
+                    job_config=bigquery.QueryJobConfig(
+                        query_parameters=[
+                            bigquery.ScalarQueryParameter("id_proyecto", "INT64", row['id_proyecto']),
+                            bigquery.ScalarQueryParameter("id_puesto", "INT64", row['id_puesto']),
+                            bigquery.ScalarQueryParameter("complementos_especificos", "STRING", row['complementos_especificos']),
+                            bigquery.ScalarQueryParameter("complementos_destino", "STRING", row['complementos_destino'])
+                        ]
+                    )
+                )
                 query_job_insert.result()  # Asegurarse de que la consulta se complete correctamente
 
                 st.success(f"Se han insertado correctamente {len(rows_to_insert_puestos)} registros en la tabla de factores.")
