@@ -14,7 +14,7 @@ credentials = service_account.Credentials.from_service_account_info(
 client = bigquery.Client(credentials=credentials)
 
 # Inicializa el cliente de BigQuery
-client = bigquery.Client()
+#client = bigquery.Client()
 
 # Función para obtener puestos
 def get_puestos():
