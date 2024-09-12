@@ -6,9 +6,7 @@ import pandas as pd
 import uuid
 import numpy as np
 
-import streamlit as st
-from google.cloud import bigquery
-import pandas as pd
+
 
 # Crear API client para BigQuery
 credentials = service_account.Credentials.from_service_account_info(
