@@ -18,7 +18,7 @@ client = bigquery.Client(credentials=credentials)
 def obtener_datos_tabla():
     query = """
     SELECT id_proyecto, id_puesto, complementos_especificos, complementos_destino
-    FROM `nombre_de_tu_proyecto.tu_dataset.tu_tabla`
+    FROM `ate-rrhh-2024.Ate_kaibot_2024.factores_seleccionados_x_puesto_x_proyecto`
     """
     df = client.query(query).to_dataframe()
     return df
