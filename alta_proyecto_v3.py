@@ -639,9 +639,14 @@ if submit:
                 break
 
             if id_puesto is not None:
-                # Obtener los complementos específicos y complementos de destino como cadenas separadas por comas
-                complementos_especificos = ','.join([id_tabla for _, id_tabla in selected_factores])
-                complementos_destino = ','.join([id_tabla for _, id_tabla in selected_factores_2])
+                # **Eliminar duplicados**:
+                # Usar sets para eliminar duplicados en los complementos específicos y de destino
+                complementos_especificos_set = set([nombre_tabla for nombre_tabla, _ in selected_factores])
+                complementos_destino_set = set([nombre_tabla for nombre_tabla, _ in selected_factores_2])
+
+                # Convertir los sets a cadenas separadas por comas
+                complementos_especificos = ','.join(complementos_especificos_set)
+                complementos_destino = ','.join(complementos_destino_set)
 
                 # Preparar la fila para insertar en BigQuery
                 row = {
@@ -663,7 +668,7 @@ if submit:
                     VALUES
                 """
 
-                # Construir los valores de la inserción en base a las filas
+                # Añadir una sola inserción por proyecto y puesto, sin duplicados
                 valores = []
                 for row in rows_to_insert_puestos:
                     valores.append(f"(@id_proyecto, @id_puesto, @complementos_especificos, @complementos_destino)")
@@ -685,13 +690,14 @@ if submit:
                 )
                 query_job_insert.result()  # Asegurarse de que la consulta se complete correctamente
 
-                st.success(f"Se han insertado correctamente {len(rows_to_insert_puestos)} registros en la tabla de factores.")
+                st.success(f"Se han insertado correctamente los registros en la tabla de factores.")
 
             except Exception as e:
                 st.error(f"Error al insertar los registros: {e}")
     
     except Exception as e:
         st.error(f"Error al crear el proyecto: {e}")
+
 
 #fin funcion nueva
 
