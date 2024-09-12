@@ -561,6 +561,110 @@ if st.button('Mostrar Datos'):
     else:
         st.warning('No se encontraron datos para este ID de proyecto.')
 
+#nueva funcion alta nuevo proyecto
+# Formulario de envío dentro de un botón
+with st.form('alta_nuevo_proyecto'):
+    submit = st.form_submit_button('Alta nuevo proyecto')
+
+# Ejecutar la inserción solo si se presiona el botón
+if submit:
+    try:
+        # Consulta para obtener el último ID de proyecto
+        query_max_id = """
+        SELECT MAX(id_projecto) FROM `ate-rrhh-2024.Ate_kaibot_2024.proyecto`
+        """
+        query_job_max_id = client.query(query_max_id)
+        max_id_result = query_job_max_id.result()
+
+        max_id = 0
+        for row in max_id_result:
+            max_id = row[0]
+
+        # Incrementar el máximo ID en 1 para obtener el nuevo ID de proyecto
+        new_id_proyecto = max_id + 1 if max_id is not None else 1
+
+        # Consulta para insertar datos básicos en BigQuery
+        query_kai_insert = f"""
+            INSERT INTO `ate-rrhh-2024.Ate_kaibot_2024.proyecto` 
+            (id_projecto, nombre, descripcion, fecha_comienzo, fecha_fin, proyecto_activo_2) 
+            VALUES 
+            ({new_id_proyecto}, '{nombre}', '{descripcion}', '{fecha_inicio}', '{fecha_fin}', '{proyecto_activo}')
+        """
+        query_job_kai_insert = client.query(query_kai_insert)
+        query_job_kai_insert.result()  # Asegurarse de que la consulta se complete
+
+        st.write(f"Nuevo proyecto creado con ID: {new_id_proyecto}")
+
+        # Lista para almacenar las filas que se insertarán
+        rows_to_insert_puestos = []
+
+        # Recorrer los puestos seleccionados y obtener el id_puesto
+        for descripcion in selected_puestos:
+            # Consulta para obtener el id_puesto basado en la descripción
+            query = f"""
+                SELECT id_puesto
+                FROM `ate-rrhh-2024.Ate_kaibot_2024.puestos`
+                WHERE descripcion = '{descripcion}'
+            """
+            query_job = client.query(query)
+            results = query_job.result()
+
+            id_puesto = None
+            for row in results:
+                id_puesto = row.id_puesto
+                break
+
+            if id_puesto is not None:
+                # Obtener los complementos específicos y complementos de destino como cadenas separadas por comas
+                complementos_especificos = ','.join([id_tabla for _, id_tabla in selected_factores])
+                complementos_destino = ','.join([id_tabla for _, id_tabla in selected_factores_2])
+
+                # Preparar la fila para insertar en BigQuery
+                row = {
+                    'id_proyecto': new_id_proyecto,
+                    'id_puesto': id_puesto,
+                    'complementos_especificos': complementos_especificos,
+                    'complementos_destino': complementos_destino
+                }
+
+                rows_to_insert_puestos.append(row)
+
+        # Si hay filas para insertar, ejecutar la consulta de inserción
+        if rows_to_insert_puestos:
+            try:
+                # Estructura de la consulta de inserción en BigQuery
+                query_insert_factores = """
+                    INSERT INTO `ate-rrhh-2024.Ate_kaibot_2024.factores_seleccionados_x_puesto_x_proyecto`
+                    (id_proyecto, id_puesto, complementos_especificos, complementos_destino)
+                    VALUES
+                """
+
+                # Construir los valores de la inserción en base a las filas
+                valores = []
+                for row in rows_to_insert_puestos:
+                    valores.append(f"({row['id_proyecto']}, {row['id_puesto']}, '{row['complementos_especificos']}', '{row['complementos_destino']}')")
+
+                # Unir los valores en la consulta final
+                query_insert_factores += ", ".join(valores)
+
+                # Ejecutar la consulta de inserción
+                query_job_insert = client.query(query_insert_factores)
+                query_job_insert.result()  # Asegurarse de que la consulta se complete correctamente
+
+                st.success(f"Se han insertado correctamente {len(rows_to_insert_puestos)} registros en la tabla de factores.")
+
+            except Exception as e:
+                st.error(f"Error al insertar los registros: {e}")
+    
+    except Exception as e:
+        st.error(f"Error al crear el proyecto: {e}")
+
+#fin funcion nueva
+ç
+
+
+
+
 
 # Crear un botón
 st.markdown("""
