@@ -561,7 +561,14 @@ if st.button('Mostrar Datos'):
     else:
         st.warning('No se encontraron datos para este ID de proyecto.')
 
+
+
+
+
+
+
 #nueva funcion alta nuevo proyecto
+# Añadir el botón dentro de un formulario
 # Añadir el botón dentro de un formulario
 with st.form("alta_proyecto"):
     st.markdown("### Alta nuevo proyecto")
@@ -595,16 +602,12 @@ with st.form("alta_proyecto"):
             # Insertar el nuevo proyecto en la tabla de proyectos
             query_kai_insert = f"""
                 INSERT INTO `ate-rrhh-2024.Ate_kaibot_2024.proyecto` 
-                (id_projecto, nombre, descripcion, fecha_comienzo, fecha_fin, proyecto_activo) 
+                (id_projecto, nombre, descripcion, fecha_comienzo, fecha_fin, proyecto_activo_2) 
                 VALUES 
-                ({new_id_proyecto}, '{nombre}', '{descripcion}', '{fecha_inicio}', '{fecha_fin}', {proyecto_activo})
+                ({new_id_proyecto}, '{nombre.replace("'", "''")}', '{descripcion.replace("'", "''")}', '{fecha_inicio}', '{fecha_fin}', {int(proyecto_activo)})
             """
             query_job_kai_insert = client.query(query_kai_insert)
             query_job_kai_insert.result()  # Asegurarse de que la consulta se complete
-
-            # Preparar complementos específicos y de destino en formato de cadena
-            complementos_especificos_str = ','.join([nombre_completo for nombre_completo, _ in selected_factores])
-            complementos_destino_str = ','.join([nombre_completo for nombre_completo, _ in selected_factores_2])
 
             # Preparar la inserción de los puestos seleccionados
             rows_to_insert_puestos = []
@@ -628,14 +631,16 @@ with st.form("alta_proyecto"):
                     break
 
                 if id_puesto is not None:
-                    # Preparar fila para la inserción
-                    row = {
-                        'id_proyecto': new_id_proyecto,
-                        'id_puesto': id_puesto,
-                        'complementos_especificos': complementos_especificos_str,
-                        'complementos_destino': complementos_destino_str
-                    }
-                    rows_to_insert_puestos.append(row)
+                    # Insertar cada combinación de factores específicos y de destino
+                    for nombre_completo_f in [nombre_completo for nombre_completo, _ in selected_factores]:
+                        for nombre_completo_d in [nombre_completo for nombre_completo, _ in selected_factores_2]:
+                            row = {
+                                'id_proyecto': new_id_proyecto,
+                                'id_puesto': id_puesto,
+                                'complementos_especificos': nombre_completo_f,
+                                'complementos_destino': nombre_completo_d
+                            }
+                            rows_to_insert_puestos.append(row)
 
             # Insertar en la tabla de factores seleccionados
             if rows_to_insert_puestos:
@@ -647,7 +652,7 @@ with st.form("alta_proyecto"):
                     """
                     valores = []
                     for row in rows_to_insert_puestos:
-                        valores.append(f"({row['id_proyecto']}, {row['id_puesto']}, '{row['complementos_especificos']}', '{row['complementos_destino']}')")
+                        valores.append(f"({row['id_proyecto']}, {row['id_puesto']}, '{row['complementos_especificos'].replace("'", "''")}', '{row['complementos_destino'].replace("'", "''")}')")
 
                     query_insert_factores += ", ".join(valores)
 
