@@ -660,7 +660,7 @@ if submit:
         st.error(f"Error al crear el proyecto: {e}")
 
 #fin funcion nueva
-ç
+
 
 
 
