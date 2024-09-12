@@ -602,9 +602,9 @@ with st.form("alta_proyecto"):
             # Insertar el nuevo proyecto en la tabla de proyectos
             query_kai_insert = f"""
                 INSERT INTO `ate-rrhh-2024.Ate_kaibot_2024.proyecto` 
-                (id_projecto, nombre, descripcion, fecha_comienzo, fecha_fin, proyecto_activo_2) 
+                (id_projecto, nombre, descripcion, fecha_comienzo, fecha_fin, proyecto_activo) 
                 VALUES 
-                ({new_id_proyecto}, '{nombre.replace("'", "''")}', '{descripcion.replace("'", "''")}', '{fecha_inicio}', '{fecha_fin}', {int(proyecto_activo)})
+                ({new_id_proyecto}, '{nombre.replace("'", "''")}', '{descripcion.replace("'", "''")}', '{fecha_inicio}', '{fecha_fin}', {proyecto_activo})
             """
             query_job_kai_insert = client.query(query_kai_insert)
             query_job_kai_insert.result()  # Asegurarse de que la consulta se complete
