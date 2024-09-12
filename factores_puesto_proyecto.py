@@ -10,6 +10,12 @@ import streamlit as st
 from google.cloud import bigquery
 import pandas as pd
 
+# Crear API client para BigQuery
+credentials = service_account.Credentials.from_service_account_info(
+    st.secrets["gcp_service_account"]
+)
+client = bigquery.Client(credentials=credentials)
+
 # Inicializa el cliente de BigQuery
 client = bigquery.Client()
 
