@@ -52,15 +52,28 @@ def get_puestos(id_proyecto):
         return []
 
 def get_factores_seleccionados(id_proyecto, id_puesto):
-    query = f"""
-    SELECT DISTINCT complementos_especificos, complementos_destino
+    # Consulta para obtener valores únicos de complementos_especificos
+    query_especificos = f"""
+    SELECT DISTINCT complementos_especificos
     FROM `ate-rrhh-2024.Ate_kaibot_2024.factores_seleccionados_x_puesto_x_proyecto`
     WHERE id_proyecto = {id_proyecto} AND id_puesto = {id_puesto}
     """
-    query_job = client.query(query)
-    df = query_job.result().to_dataframe()
+    query_job_especificos = client.query(query_especificos)
+    df_especificos = query_job_especificos.result().to_dataframe()
 
-    return df
+    # Consulta para obtener valores únicos de complementos_destino
+    query_destino = f"""
+    SELECT DISTINCT complementos_destino
+    FROM `ate-rrhh-2024.Ate_kaibot_2024.factores_seleccionados_x_puesto_x_proyecto`
+    WHERE id_proyecto = {id_proyecto} AND id_puesto = {id_puesto}
+    """
+    query_job_destino = client.query(query_destino)
+    df_destino = query_job_destino.result().to_dataframe()
+
+    # Combinar los resultados de ambas consultas
+    df_combined = pd.merge(df_especificos, df_destino, how='outer', left_on='complementos_especificos', right_on='complementos_destino')
+
+    return df_combined
 
 def obtener_datos_tabla(tabla):
     query = f"SELECT * FROM `{tabla}` LIMIT 100"
