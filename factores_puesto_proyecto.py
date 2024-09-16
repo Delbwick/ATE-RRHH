@@ -59,12 +59,10 @@ else:
 
 # Función para obtener puestos
 def get_puestos():
-    query = "SELECT id_puesto, descripcion FROM `ate-rrhh-2024.Ate_kaibot_2024.puestos`"
+    query = "SELECT descripcion FROM `ate-rrhh-2024.Ate_kaibot_2024.puestos`"
     query_job = client.query(query)
     results = query_job.result()
-
-    # Retornar los id_puesto junto con su descripción
-    return [(row.id_puesto, row.descripcion) for row in results]
+    return [row.descripcion for row in results]
 
 # Función para obtener factores seleccionados
 def get_factores_seleccionados(id_proyecto, id_puesto):
@@ -110,7 +108,7 @@ id_proyecto = st.number_input('ID de Proyecto', min_value=1,value=id_proyecto_se
 
 # Mostrar factores seleccionados para el proyecto
 if id_proyecto:
-    factores_df = get_factores_seleccionados(id_proyecto,id_puesto)
+    factores_df = get_factores_seleccionados(id_proyecto)
 
     if not factores_df.empty:
         st.write("Factores Seleccionados para el Proyecto")
@@ -158,4 +156,3 @@ if st.button('Guardar Datos'):
     
     if rows_to_insert:
         insertar_datos("ate-rrhh-2024.Ate_kaibot_2024.puestos_seleccionados_por_proyecto", rows_to_insert)
-
