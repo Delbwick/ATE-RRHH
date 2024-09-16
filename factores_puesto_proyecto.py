@@ -78,13 +78,14 @@ def get_factores_seleccionados(id_proyecto, id_puesto):
     df_especificos['tipo'] = 'Especifico'
     df_destino['tipo'] = 'Destino'
 
-    return df_especificos, df_destino
+    
 
 
     # Combinar los resultados de ambas consultas
     df_combined = pd.merge(df_especificos, df_destino, how='outer', left_on='complementos_especificos', right_on='complementos_destino')
 
     return df_combined
+    return df_especificos, df_destino
 
 
 def obtener_datos_tabla(tabla):
