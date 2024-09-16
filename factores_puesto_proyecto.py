@@ -82,9 +82,9 @@ def get_factores_seleccionados(id_proyecto, id_puesto):
 
 
     # Combinar los resultados de ambas consultas
-    df_combined = pd.merge(df_especificos, df_destino, how='outer', left_on='complementos_especificos', right_on='complementos_destino')
+    #df_combined = pd.merge(df_especificos, df_destino, how='outer', left_on='complementos_especificos', right_on='complementos_destino')
 
-    return df_combined
+    #return df_combined
     return df_especificos, df_destino
 
 
