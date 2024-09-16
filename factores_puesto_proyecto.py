@@ -18,6 +18,7 @@ client = bigquery.Client(credentials=credentials)
 
 # Función para mostrar una página específica de un DataFrame
 # Función para mostrar una página específica de un DataFrame
+# Función para mostrar una página específica de un DataFrame
 def mostrar_pagina(df, page_num, page_size):
     start_row = page_num * page_size
     end_row = start_row + page_size
@@ -41,7 +42,6 @@ def mostrar_opciones_paginadas(df, key_prefix, page_size=10):
     
     st.write(df_page)  # Muestra la tabla paginada
     return df_page
-
 
 
 def get_proyectos():
@@ -138,6 +138,7 @@ selected_puestos = st.multiselect("Selecciona los puestos", puestos_descripcione
 # Mostrar factores seleccionados para el proyecto
 # Mostrar factores seleccionados para el proyecto
 # Mostrar factores seleccionados para el proyecto
+# Mostrar factores seleccionados para el proyecto
 if id_proyecto_seleccionado and selected_puestos:
     for descripcion in selected_puestos:
         id_puesto = next(puesto['id'] for puesto in puestos if puesto['descripcion'] == descripcion)
@@ -197,6 +198,7 @@ if id_proyecto_seleccionado and selected_puestos:
                 
         except Exception as e:
             st.error(f"Ocurrió un error al procesar los factores: {e}")
+
 
 
             # Aquí podrías agregar lógica para almacenar los valores seleccionados si es necesario
