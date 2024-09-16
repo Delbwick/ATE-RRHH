@@ -87,7 +87,7 @@ def get_factores_seleccionados(id_proyecto, id_puesto):
     return df_pivot
 
 # Mostrar el DataFrame
-print(factores_df)
+#print(factores_df)
 
 
 
