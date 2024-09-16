@@ -59,10 +59,12 @@ else:
 
 # Función para obtener puestos
 def get_puestos():
-    query = "SELECT descripcion FROM `ate-rrhh-2024.Ate_kaibot_2024.puestos`"
+    query = "SELECT id_puesto, descripcion FROM `ate-rrhh-2024.Ate_kaibot_2024.puestos`"
     query_job = client.query(query)
     results = query_job.result()
-    return [row.descripcion for row in results]
+
+    # Retornar los id_puesto junto con su descripción
+    return [(row.id_puesto, row.descripcion) for row in results]
 
 # Función para obtener factores seleccionados
 def get_factores_seleccionados(id_proyecto, id_puesto):
