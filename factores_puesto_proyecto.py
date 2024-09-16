@@ -16,6 +16,24 @@ client = bigquery.Client(credentials=credentials)
 # Inicializa el cliente de BigQuery
 #client = bigquery.Client()
 
+# Función para mostrar una página específica de un DataFrame
+def mostrar_pagina(df, page_num, page_size):
+    start_row = page_num * page_size
+    end_row = start_row + page_size
+    return df.iloc[start_row:end_row]
+
+# Función para mostrar opciones en una tabla paginada
+def mostrar_opciones_paginadas(df, page_num, page_size, key_prefix):
+    num_pages = int(np.ceil(len(df) / page_size))
+    page_num = st.slider(f"Selecciona la página para {key_prefix}:", 0, num_pages - 1, 0, key=f"{key_prefix}_paginator")
+    df_page = mostrar_pagina(df, page_num, page_size)
+    
+    st.write(df_page)  # Muestra la tabla paginada
+    return df_page
+
+
+
+
 def get_proyectos():
     query = """
         SELECT id_projecto, nombre
@@ -108,6 +126,7 @@ selected_puestos = st.multiselect("Selecciona los puestos", puestos_descripcione
 # Mostrar factores seleccionados para el proyecto
 # Mostrar factores seleccionados para el proyecto
 # Mostrar factores seleccionados para el proyecto
+# Mostrar factores seleccionados para el proyecto
 if id_proyecto_seleccionado and selected_puestos:
     for descripcion in selected_puestos:
         id_puesto = next(puesto['id'] for puesto in puestos if puesto['descripcion'] == descripcion)
@@ -132,10 +151,16 @@ if id_proyecto_seleccionado and selected_puestos:
                         df_especificos = obtener_datos_tabla(tabla_especificos)
                         if not df_especificos.empty:
                             df_especificos = df_especificos.fillna('No disponible')
-                            opciones_especificos = [f"{row['descripcion']} ({row['letra']})" for index, row in df_especificos.iterrows()]
-                            seleccion_especifico = st.radio(f"Seleccione un valor para {tabla_especificos.split('.')[-1]}:", opciones_especificos, key=f"especifico_{index}")
+                            
+                            # Muestra opciones en una tabla paginada
+                            page_size = 10
+                            df_especificos_page = mostrar_opciones_paginadas(df_especificos, 0, page_size, f"especificos_{index}")
+                            
+                            # Selector para elegir una opción de la página mostrada
+                            opciones_especificos = df_especificos_page[['descripcion', 'letra']].apply(lambda row: f"{row['descripcion']} ({row['letra']})", axis=1).tolist()
+                            seleccion_especifico = st.selectbox(f"Seleccione un valor para {tabla_especificos.split('.')[-1]}:", opciones_especificos, key=f"especifico_{index}")
                             if seleccion_especifico:
-                                selected_value_especifico = df_especificos.loc[opciones_especificos.index(seleccion_especifico), df_especificos.columns[0]]
+                                selected_value_especifico = df_especificos_page.loc[opciones_especificos.index(seleccion_especifico), df_especificos_page.columns[0]]
                         else:
                             st.write(f"No se encontraron datos para la tabla de factores específicos {tabla_especificos}.")
                     
@@ -144,10 +169,15 @@ if id_proyecto_seleccionado and selected_puestos:
                         df_destino = obtener_datos_tabla(tabla_destino)
                         if not df_destino.empty:
                             df_destino = df_destino.fillna('No disponible')
-                            opciones_destino = [f"{row['descripcion']} ({row['letra']})" for index, row in df_destino.iterrows()]
-                            seleccion_destino = st.radio(f"Seleccione un valor para {tabla_destino.split('.')[-1]}:", opciones_destino, key=f"destino_{index}")
+                            
+                            # Muestra opciones en una tabla paginada
+                            df_destino_page = mostrar_opciones_paginadas(df_destino, 0, page_size, f"destino_{index}")
+                            
+                            # Selector para elegir una opción de la página mostrada
+                            opciones_destino = df_destino_page[['descripcion', 'letra']].apply(lambda row: f"{row['descripcion']} ({row['letra']})", axis=1).tolist()
+                            seleccion_destino = st.selectbox(f"Seleccione un valor para {tabla_destino.split('.')[-1]}:", opciones_destino, key=f"destino_{index}")
                             if seleccion_destino:
-                                selected_value_destino = df_destino.loc[opciones_destino.index(seleccion_destino), df_destino.columns[0]]
+                                selected_value_destino = df_destino_page.loc[opciones_destino.index(seleccion_seleccionado), df_destino_page.columns[0]]
                         else:
                             st.write(f"No se encontraron datos para la tabla de factores de destino {tabla_destino}.")
             else:
