@@ -85,16 +85,16 @@ def get_puestos(id_proyecto):
 
 
 # Función para obtener factores seleccionados
-def get_factores_seleccionados(id_proyecto):
+def get_factores_seleccionados(id_proyecto, id_puesto):
     query = f"""
-    SELECT complementos_especificos, complementos_destino
+    SELECT DISTINCT complementos_especificos, complementos_destino
     FROM `ate-rrhh-2024.Ate_kaibot_2024.factores_seleccionados_x_puesto_x_proyecto`
-    WHERE id_proyecto = {id_proyecto}
+    WHERE id_proyecto = {id_proyecto} AND id_puesto = {id_puesto}
     """
     query_job = client.query(query)
     df = query_job.result().to_dataframe()
 
-     # Eliminar filas duplicadas, manteniendo solo combinaciones únicas
+    # Eliminar filas duplicadas, manteniendo solo combinaciones únicas
     df = df.drop_duplicates(subset=['complementos_especificos', 'complementos_destino'])
     
     return df
@@ -129,7 +129,7 @@ selected_puestos = st.multiselect("Selecciona los puestos", puestos)
 
 # Mostrar factores seleccionados para el proyecto
 if id_proyecto:
-    factores_df = get_factores_seleccionados(id_proyecto)
+    factores_df = get_factores_seleccionados(id_proyecto, id_puesto)
 
     if not factores_df.empty:
         st.write("Factores Seleccionados para el Proyecto")
