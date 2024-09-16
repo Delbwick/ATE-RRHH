@@ -67,9 +67,10 @@ def get_puestos():
 # Función para obtener factores seleccionados
 def get_factores_seleccionados(id_proyecto):
     query = f"""
-    SELECT complementos_especificos, complementos_destino
+    SELECT DISTINCT complementos_especificos, complementos_destino
     FROM `ate-rrhh-2024.Ate_kaibot_2024.factores_seleccionados_x_puesto_x_proyecto`
     WHERE id_proyecto = {id_proyecto}
+    GROUP BY complementos_especificos, complementos_destino
     """
     query_job = client.query(query)
     df = query_job.result().to_dataframe()
