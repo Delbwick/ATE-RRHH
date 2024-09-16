@@ -65,7 +65,7 @@ def get_puestos():
     return puestos_df
 
 # Función para obtener factores seleccionados
-def get_factores_seleccionados(id_proyecto):
+def get_factores_seleccionados(id_proyecto,selected_puestos_id):
     query = f"""
     SELECT DISTINCT complementos_especificos, complementos_destino
     FROM `ate-rrhh-2024.Ate_kaibot_2024.factores_seleccionados_x_puesto_x_proyecto`
@@ -119,7 +119,7 @@ id_proyecto = st.number_input('ID de Proyecto', min_value=1,value=id_proyecto_se
 
 # Mostrar factores seleccionados para el proyecto
 if id_proyecto:
-    factores_df = get_factores_seleccionados(id_proyecto)
+    factores_df = get_factores_seleccionados(id_proyecto,selected_puestos_id)
 
     if not factores_df.empty:
         st.write("Factores Seleccionados para el Proyecto")
