@@ -76,7 +76,7 @@ def get_factores_seleccionados(id_proyecto):
     df = query_job.result().to_dataframe()
 
      # Eliminar filas duplicadas, manteniendo solo combinaciones únicas
-    df = df.drop_duplicates(subset=['complementos_especificos', 'complementos_destino'])
+    #df = df.drop_duplicates(subset=['complementos_especificos', 'complementos_destino'])
     
     return df
 
