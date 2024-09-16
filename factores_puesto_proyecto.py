@@ -70,6 +70,17 @@ def get_factores_seleccionados(id_proyecto, id_puesto):
     query_job_destino = client.query(query_destino)
     df_destino = query_job_destino.result().to_dataframe()
 
+    # Asegurarse de que las columnas tengan nombres coherentes
+    df_especificos = df_especificos.rename(columns={'complementos_especificos': 'complemento'})
+    df_destino = df_destino.rename(columns={'complementos_destino': 'complemento'})
+
+    # Añadir una columna para identificar el tipo de complemento
+    df_especificos['tipo'] = 'Especifico'
+    df_destino['tipo'] = 'Destino'
+
+    return df_especificos, df_destino
+
+
     # Combinar los resultados de ambas consultas
     df_combined = pd.merge(df_especificos, df_destino, how='outer', left_on='complementos_especificos', right_on='complementos_destino')
 
