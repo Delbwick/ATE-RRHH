@@ -55,27 +55,21 @@ else:
 
 # Puedes usar 'id_proyecto_seleccionado' en tu lógica posterior según sea necesario
 
-def get_puestos_ids():
-    query = "SELECT id_puesto FROM `ate-rrhh-2024.Ate_kaibot_2024.puestos`"
-    query_job = client.query(query)
-    results = query_job.result()
 
-    # Retornar solo los id_puesto
-    return [row.id_puesto for row in results]
 
 # Función para obtener puestos
 def get_puestos():
-    query = "SELECT descripcion FROM `ate-rrhh-2024.Ate_kaibot_2024.puestos`"
+    query = "SELECT id_puesto, descripcion FROM `ate-rrhh-2024.Ate_kaibot_2024.puestos`"
     query_job = client.query(query)
-    results = query_job.result()
-    return [row.descripcion for row in results]
+    puestos_df = query_job.result().to_dataframe()  # Convertimos a DataFrame
+    return puestos_df
 
 # Función para obtener factores seleccionados
 def get_factores_seleccionados(id_proyecto):
     query = f"""
     SELECT DISTINCT complementos_especificos, complementos_destino
     FROM `ate-rrhh-2024.Ate_kaibot_2024.factores_seleccionados_x_puesto_x_proyecto`
-    WHERE id_proyecto = {id_proyecto} AND id_puesto={id_puesto}
+    WHERE id_proyecto = {id_proyecto} AND id_puesto={selected_puestos_id}
     GROUP BY complementos_especificos, complementos_destino
     """
     query_job = client.query(query)
@@ -105,10 +99,21 @@ def insertar_datos(table_id, rows_to_insert):
 st.title('Gestión de Proyectos y Factores')
 
 # Selección de Puestos
-st.markdown("<h2>Selecciona los Puestos de Trabajo</h2>", unsafe_allow_html=True)
-puestos = get_puestos()
-selected_puestos = st.multiselect("Selecciona los puestos", puestos)
+# Obtener los puestos disponibles
+puestos_df = get_puestos()
 
+# Crear un diccionario que mapee descripcion -> id_puesto
+puestos_dict = dict(zip(puestos_df['descripcion'], puestos_df['id_puesto']))
+
+# Mostrar el multiselect para seleccionar los puestos (basado en descripcion)
+st.markdown("<h2>Selecciona los Puestos de Trabajo</h2>", unsafe_allow_html=True)
+selected_puestos_desc = st.multiselect("Selecciona los puestos", puestos_df['descripcion'])
+
+# Obtener los id_puesto correspondientes a las descripciones seleccionadas
+selected_puestos_id = [puestos_dict[desc] for desc in selected_puestos_desc]
+
+# Mostrar los id_puesto seleccionados
+st.write(f"ID de Puestos seleccionados: {selected_puestos_id}")
 # Selección de Proyecto
 id_proyecto = st.number_input('ID de Proyecto', min_value=1,value=id_proyecto_seleccionado, step=1)
 
