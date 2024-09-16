@@ -70,24 +70,21 @@ def get_factores_seleccionados(id_proyecto, id_puesto):
     query_job_destino = client.query(query_destino)
     df_destino = query_job_destino.result().to_dataframe()
 
-    # Asegurarse de que las columnas no tengan valores NaN y renombrar las columnas
-    df_especificos = df_especificos.rename(columns={'complementos_especificos': 'complemento'})
-    df_destino = df_destino.rename(columns={'complementos_destino': 'complemento'})
+    # Eliminar valores vacíos
+    df_especificos = df_especificos.dropna(subset=['complementos_especificos'])
+    df_destino = df_destino.dropna(subset=['complementos_destino'])
 
-    # Crear DataFrames con un índice común
-    df_especificos['tipo'] = 'Especifico'
-    df_destino['tipo'] = 'Destino'
+    # Renombrar columnas para claridad
+    df_especificos.rename(columns={'complementos_especificos': 'complemento'}, inplace=True)
+    df_destino.rename(columns={'complementos_destino': 'complemento'}, inplace=True)
 
-    # Combinar los DataFrames y pivotar para obtener las columnas deseadas
-    df_combined = pd.concat([df_especificos, df_destino], ignore_index=True)
+    # Combinar los resultados de ambas consultas
+    df_combined = pd.merge(df_especificos, df_destino, how='outer', left_on='complemento', right_on='complemento', suffixes=('_especifico', '_destino'))
 
-    # Pivotar el DataFrame combinado para separar en dos columnas
-    df_pivot = df_combined.pivot(columns='tipo', values='complemento').reset_index(drop=True)
+    return df_combined
 
-    return df_pivot
 
-# Mostrar el DataFrame
-#print(factores_df)
+
 
 
 
