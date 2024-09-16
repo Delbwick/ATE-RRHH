@@ -26,14 +26,6 @@ def get_proyectos():
     proyectos = [{'id': row.id_projecto, 'nombre': row.nombre} for row in results]
     return proyectos
 
-
-# Función para mostrar una página específica de un DataFrame
-def mostrar_pagina(df, page_num, page_size):
-    start_row = page_num * page_size
-    end_row = start_row + page_size
-    return df.iloc[start_row:end_row]
-
-
 def get_puestos(id_proyecto):
     # Obtener los IDs de los puestos relacionados con el proyecto
     query_ids = f"""
@@ -140,14 +132,7 @@ if id_proyecto_seleccionado and selected_puestos:
                         df_especificos = obtener_datos_tabla(tabla_especificos)
                         if not df_especificos.empty:
                             df_especificos = df_especificos.fillna('No disponible')
-                            
-                            # Paginación para factores específicos
-                            page_size = 10  # Número de filas por página
-                            num_pages = int(np.ceil(len(df_especificos) / page_size))
-                            page_num = st.slider("Selecciona la página para factores específicos:", 0, num_pages - 1, 0, key=f"especificos_{index}")
-                            df_especificos_page = mostrar_pagina(df_especificos, page_num, page_size)
-                            
-                            opciones_especificos = [f"{row['descripcion']} ({row['letra']})" for index, row in df_especificos_page.iterrows()]
+                            opciones_especificos = [f"{row['descripcion']} ({row['letra']})" for index, row in df_especificos.iterrows()]
                             seleccion_especifico = st.radio(f"Seleccione un valor para {tabla_especificos.split('.')[-1]}:", opciones_especificos, key=f"especifico_{index}")
                             if seleccion_especifico:
                                 selected_value_especifico = df_especificos.loc[opciones_especificos.index(seleccion_especifico), df_especificos.columns[0]]
@@ -159,14 +144,7 @@ if id_proyecto_seleccionado and selected_puestos:
                         df_destino = obtener_datos_tabla(tabla_destino)
                         if not df_destino.empty:
                             df_destino = df_destino.fillna('No disponible')
-                            
-                            # Paginación para factores de destino
-                            page_size = 10  # Número de filas por página
-                            num_pages = int(np.ceil(len(df_destino) / page_size))
-                            page_num = st.slider("Selecciona la página para factores de destino:", 0, num_pages - 1, 0, key=f"destino_{index}")
-                            df_destino_page = mostrar_pagina(df_destino, page_num, page_size)
-                            
-                            opciones_destino = [f"{row['descripcion']} ({row['letra']})" for index, row in df_destino_page.iterrows()]
+                            opciones_destino = [f"{row['descripcion']} ({row['letra']})" for index, row in df_destino.iterrows()]
                             seleccion_destino = st.radio(f"Seleccione un valor para {tabla_destino.split('.')[-1]}:", opciones_destino, key=f"destino_{index}")
                             if seleccion_destino:
                                 selected_value_destino = df_destino.loc[opciones_destino.index(seleccion_destino), df_destino.columns[0]]
