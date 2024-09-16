@@ -118,12 +118,14 @@ def insertar_datos(table_id, rows_to_insert):
 st.title('Gestión de Proyectos y Factores')
 
 # Selección de Puestos
+
+# Selección de Proyecto
+id_proyecto = st.number_input('ID de Proyecto', min_value=1,value=id_proyecto_seleccionado, step=1)
+
 st.markdown("<h2>Selecciona los Puestos de Trabajo</h2>", unsafe_allow_html=True)
 puestos = get_puestos(id_proyecto)
 selected_puestos = st.multiselect("Selecciona los puestos", puestos)
 
-# Selección de Proyecto
-id_proyecto = st.number_input('ID de Proyecto', min_value=1,value=id_proyecto_seleccionado, step=1)
 
 # Mostrar factores seleccionados para el proyecto
 if id_proyecto:
