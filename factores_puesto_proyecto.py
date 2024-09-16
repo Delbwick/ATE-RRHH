@@ -107,6 +107,7 @@ selected_puestos = st.multiselect("Selecciona los puestos", puestos_descripcione
 
 # Mostrar factores seleccionados para el proyecto
 # Mostrar factores seleccionados para el proyecto
+# Mostrar factores seleccionados para el proyecto
 if id_proyecto_seleccionado and selected_puestos:
     for descripcion in selected_puestos:
         id_puesto = next(puesto['id'] for puesto in puestos if puesto['descripcion'] == descripcion)
@@ -115,6 +116,9 @@ if id_proyecto_seleccionado and selected_puestos:
             factores_df = get_factores_seleccionados(id_proyecto_seleccionado, id_puesto)
 
             if not factores_df.empty:
+                # Reemplaza NaN con valores predeterminados
+                factores_df = factores_df.fillna('No disponible')
+                
                 st.write(f"Factores Seleccionados para el Proyecto {id_proyecto_seleccionado} y Puesto {id_puesto}")
                 st.dataframe(factores_df)
                 
@@ -123,21 +127,29 @@ if id_proyecto_seleccionado and selected_puestos:
                     tabla_especificos = row['complementos_especificos']
                     tabla_destino = row['complementos_destino']
 
-                    st.markdown(f"### Factores Específicos: {tabla_especificos}")
-                    df_especificos = obtener_datos_tabla(tabla_especificos)
-                    if not df_especificos.empty:
-                        opciones_especificos = [f"{row['descripcion']} ({row['letra']})" for index, row in df_especificos.iterrows()]
-                        seleccion_especifico = st.radio(f"Seleccione un valor para {tabla_especificos.split('.')[-1]}:", opciones_especificos, key=f"especifico_{index}")
-                        if seleccion_especifico:
-                            selected_value_especifico = df_especificos.loc[opciones_especificos.index(seleccion_especifico), df_especificos.columns[0]]
+                    if tabla_especificos != 'No disponible':
+                        st.markdown(f"### Factores Específicos: {tabla_especificos}")
+                        df_especificos = obtener_datos_tabla(tabla_especificos)
+                        if not df_especificos.empty:
+                            df_especificos = df_especificos.fillna('No disponible')
+                            opciones_especificos = [f"{row['descripcion']} ({row['letra']})" for index, row in df_especificos.iterrows()]
+                            seleccion_especifico = st.radio(f"Seleccione un valor para {tabla_especificos.split('.')[-1]}:", opciones_especificos, key=f"especifico_{index}")
+                            if seleccion_especifico:
+                                selected_value_especifico = df_especificos.loc[opciones_especificos.index(seleccion_especifico), df_especificos.columns[0]]
+                        else:
+                            st.write(f"No se encontraron datos para la tabla de factores específicos {tabla_especificos}.")
                     
-                    st.markdown(f"### Factores de Destino: {tabla_destino}")
-                    df_destino = obtener_datos_tabla(tabla_destino)
-                    if not df_destino.empty:
-                        opciones_destino = [f"{row['descripcion']} ({row['letra']})" for index, row in df_destino.iterrows()]
-                        seleccion_destino = st.radio(f"Seleccione un valor para {tabla_destino.split('.')[-1]}:", opciones_destino, key=f"destino_{index}")
-                        if seleccion_destino:
-                            selected_value_destino = df_destino.loc[opciones_destino.index(seleccion_destino), df_destino.columns[0]]
+                    if tabla_destino != 'No disponible':
+                        st.markdown(f"### Factores de Destino: {tabla_destino}")
+                        df_destino = obtener_datos_tabla(tabla_destino)
+                        if not df_destino.empty:
+                            df_destino = df_destino.fillna('No disponible')
+                            opciones_destino = [f"{row['descripcion']} ({row['letra']})" for index, row in df_destino.iterrows()]
+                            seleccion_destino = st.radio(f"Seleccione un valor para {tabla_destino.split('.')[-1]}:", opciones_destino, key=f"destino_{index}")
+                            if seleccion_destino:
+                                selected_value_destino = df_destino.loc[opciones_destino.index(seleccion_destino), df_destino.columns[0]]
+                        else:
+                            st.write(f"No se encontraron datos para la tabla de factores de destino {tabla_destino}.")
             else:
                 st.write(f"No se encontraron factores para el Proyecto {id_proyecto_seleccionado} y Puesto {id_puesto}.")
                 
