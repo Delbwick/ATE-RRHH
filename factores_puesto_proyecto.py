@@ -74,15 +74,16 @@ def get_factores_seleccionados(id_proyecto, id_puesto):
     df_especificos = df_especificos.dropna(subset=['complementos_especificos'])
     df_destino = df_destino.dropna(subset=['complementos_destino'])
     
-    # Renombrar columnas para que los nombres sean uniformes y fáciles de manejar
+    # Renombrar columnas para facilitar la combinación
     df_especificos.rename(columns={'complementos_especificos': 'complemento'}, inplace=True)
     df_destino.rename(columns={'complementos_destino': 'complemento'}, inplace=True)
 
-    # Devuelve los DataFrames separados
-    return {
-        'especificos': df_especificos,
-        'destino': df_destino
-    }
+    # Combinar los DataFrames en un único DataFrame
+    df_combined = pd.merge(df_especificos, df_destino, how='outer', on='complemento')
+
+    return df_combined
+
+
 def obtener_datos_tabla(tabla):
     query = f"SELECT * FROM `{tabla}` LIMIT 100"
     query_job = client.query(query)
