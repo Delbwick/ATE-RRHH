@@ -110,7 +110,7 @@ id_proyecto = st.number_input('ID de Proyecto', min_value=1,value=id_proyecto_se
 
 # Mostrar factores seleccionados para el proyecto
 if id_proyecto:
-    factores_df = get_factores_seleccionados(id_proyecto)
+    factores_df = get_factores_seleccionados(id_proyecto,id_puesto)
 
     if not factores_df.empty:
         st.write("Factores Seleccionados para el Proyecto")
