@@ -69,7 +69,7 @@ def get_factores_seleccionados(id_proyecto):
     query = f"""
     SELECT DISTINCT complementos_especificos, complementos_destino
     FROM `ate-rrhh-2024.Ate_kaibot_2024.factores_seleccionados_x_puesto_x_proyecto`
-    WHERE id_proyecto = {id_proyecto}
+    WHERE id_proyecto = {id_proyecto} AND id_puesto={id_puesto}
     GROUP BY complementos_especificos, complementos_destino
     """
     query_job = client.query(query)
