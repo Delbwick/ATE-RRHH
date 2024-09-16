@@ -70,11 +70,24 @@ def get_factores_seleccionados(id_proyecto, id_puesto):
     query_job_destino = client.query(query_destino)
     df_destino = query_job_destino.result().to_dataframe()
 
-    # Combinar los resultados de ambas consultas
-    df_combined = pd.merge(df_especificos, df_destino, how='outer', left_on='complementos_especificos', right_on='complementos_destino')
+    # Asegurarse de que las columnas no tengan valores NaN y renombrar las columnas
+    df_especificos = df_especificos.rename(columns={'complementos_especificos': 'complemento'})
+    df_destino = df_destino.rename(columns={'complementos_destino': 'complemento'})
 
-    return df_combined
+    # Crear DataFrames con un índice común
+    df_especificos['tipo'] = 'Especifico'
+    df_destino['tipo'] = 'Destino'
 
+    # Combinar los DataFrames y pivotar para obtener las columnas deseadas
+    df_combined = pd.concat([df_especificos, df_destino], ignore_index=True)
+
+    # Pivotar el DataFrame combinado para separar en dos columnas
+    df_pivot = df_combined.pivot(columns='tipo', values='complemento').reset_index(drop=True)
+
+    return df_pivot
+
+# Mostrar el DataFrame
+print(factores_df)
 
 
 
