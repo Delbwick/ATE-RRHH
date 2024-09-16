@@ -58,11 +58,31 @@ else:
 
 
 # Función para obtener puestos
-def get_puestos():
-    query = "SELECT descripcion FROM `ate-rrhh-2024.Ate_kaibot_2024.puestos`"
-    query_job = client.query(query)
-    results = query_job.result()
-    return [row.descripcion for row in results]
+def get_puestos(id_proyecto):
+    # Obtener los IDs de los puestos relacionados con el proyecto
+    query_ids = f"""
+    SELECT DISTINCT id_puesto
+    FROM `ate-rrhh-2024.Ate_kaibot_2024.factores_seleccionados_x_puesto_x_proyecto`
+    WHERE id_proyecto = {id_proyecto}
+    """
+    query_job_ids = client.query(query_ids)
+    ids_result = query_job_ids.result()
+    ids_puestos = [row.id_puesto for row in ids_result]
+
+    # Obtener las descripciones de los puestos basados en los IDs obtenidos
+    if ids_puestos:
+        query_descripciones = f"""
+        SELECT id_puesto, descripcion
+        FROM `ate-rrhh-2024.Ate_kaibot_2024.puestos`
+        WHERE id_puesto IN UNNEST({ids_puestos})
+        """
+        query_job_descripciones = client.query(query_descripciones)
+        descripciones_result = query_job_descripciones.result()
+        puestos = [{'id': row.id_puesto, 'descripcion': row.descripcion} for row in descripciones_result]
+        return puestos
+    else:
+        return []
+
 
 # Función para obtener factores seleccionados
 def get_factores_seleccionados(id_proyecto):
@@ -99,7 +119,7 @@ st.title('Gestión de Proyectos y Factores')
 
 # Selección de Puestos
 st.markdown("<h2>Selecciona los Puestos de Trabajo</h2>", unsafe_allow_html=True)
-puestos = get_puestos()
+puestos = get_puestos(id_proyecto)
 selected_puestos = st.multiselect("Selecciona los puestos", puestos)
 
 # Selección de Proyecto
