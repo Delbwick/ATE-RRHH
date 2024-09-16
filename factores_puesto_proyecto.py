@@ -58,25 +58,44 @@ else:
 
 
 # Función para obtener puestos
-def get_puestos():
-    query = "SELECT id_puesto, descripcion FROM `ate-rrhh-2024.Ate_kaibot_2024.puestos`"
-    query_job = client.query(query)
-    puestos_df = query_job.result().to_dataframe()  # Convertimos a DataFrame
-    return puestos_df
+def get_puestos(id_proyecto):
+    # Obtener los IDs de los puestos relacionados con el proyecto
+    query_ids = f"""
+    SELECT DISTINCT id_puesto
+    FROM `ate-rrhh-2024.Ate_kaibot_2024.factores_seleccionados_x_puesto_x_proyecto`
+    WHERE id_proyecto = {id_proyecto}
+    """
+    query_job_ids = client.query(query_ids)
+    ids_result = query_job_ids.result()
+    ids_puestos = [row.id_puesto for row in ids_result]
+
+    # Obtener las descripciones de los puestos basados en los IDs obtenidos
+    if ids_puestos:
+        query_descripciones = f"""
+        SELECT id_puesto, descripcion
+        FROM `ate-rrhh-2024.Ate_kaibot_2024.puestos`
+        WHERE id_puesto IN UNNEST({ids_puestos})
+        """
+        query_job_descripciones = client.query(query_descripciones)
+        descripciones_result = query_job_descripciones.result()
+        puestos = [{'id': row.id_puesto, 'descripcion': row.descripcion} for row in descripciones_result]
+        return puestos
+    else:
+        return []
+
 
 # Función para obtener factores seleccionados
 def get_factores_seleccionados(id_proyecto):
     query = f"""
-    SELECT DISTINCT complementos_especificos, complementos_destino
+    SELECT complementos_especificos, complementos_destino
     FROM `ate-rrhh-2024.Ate_kaibot_2024.factores_seleccionados_x_puesto_x_proyecto`
-    WHERE id_proyecto = {id_proyecto} AND id_puesto={selected_puestos_id}
-    GROUP BY complementos_especificos, complementos_destino
+    WHERE id_proyecto = {id_proyecto}
     """
     query_job = client.query(query)
     df = query_job.result().to_dataframe()
 
      # Eliminar filas duplicadas, manteniendo solo combinaciones únicas
-    #df = df.drop_duplicates(subset=['complementos_especificos', 'complementos_destino'])
+    df = df.drop_duplicates(subset=['complementos_especificos', 'complementos_destino'])
     
     return df
 
@@ -99,23 +118,14 @@ def insertar_datos(table_id, rows_to_insert):
 st.title('Gestión de Proyectos y Factores')
 
 # Selección de Puestos
-# Obtener los puestos disponibles
-puestos_df = get_puestos()
 
-# Crear un diccionario que mapee descripcion -> id_puesto
-puestos_dict = dict(zip(puestos_df['descripcion'], puestos_df['id_puesto']))
-
-# Mostrar el multiselect para seleccionar los puestos (basado en descripcion)
-st.markdown("<h2>Selecciona los Puestos de Trabajo</h2>", unsafe_allow_html=True)
-selected_puestos_desc = st.multiselect("Selecciona los puestos", puestos_df['descripcion'])
-
-# Obtener los id_puesto correspondientes a las descripciones seleccionadas
-selected_puestos_id = [puestos_dict[desc] for desc in selected_puestos_desc]
-
-# Mostrar los id_puesto seleccionados
-st.write(f"ID de Puestos seleccionados: {selected_puestos_id}")
 # Selección de Proyecto
 id_proyecto = st.number_input('ID de Proyecto', min_value=1,value=id_proyecto_seleccionado, step=1)
+
+st.markdown("<h2>Selecciona los Puestos de Trabajo</h2>", unsafe_allow_html=True)
+puestos = get_puestos(id_proyecto)
+selected_puestos = st.multiselect("Selecciona los puestos", puestos)
+
 
 # Mostrar factores seleccionados para el proyecto
 if id_proyecto:
