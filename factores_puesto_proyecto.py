@@ -16,6 +16,47 @@ client = bigquery.Client(credentials=credentials)
 # Inicializa el cliente de BigQuery
 #client = bigquery.Client()
 
+# Función para seleccionar los proyectos desde BigQuery
+def get_proyectos():
+    query = """
+        SELECT id_projecto, nombre
+        FROM `ate-rrhh-2024.Ate_kaibot_2024.proyecto`
+    """
+    query_job = client.query(query)
+    results = query_job.result()
+    proyectos = [{'id': row.id_projecto, 'nombre': row.nombre} for row in results]
+    return proyectos
+
+# Mostrar el encabezado y línea separadora
+st.markdown("<h2>Selecciona el proyecto que quieres calcular</h2>", unsafe_allow_html=True)
+st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
+
+# Obtener lista de proyectos
+proyectos = get_proyectos()
+
+# Extraer solo los nombres de los proyectos para el selectbox
+proyectos_nombres = [proyecto['nombre'] for proyecto in proyectos]
+
+# Mostrar el cuadro de selección de proyectos
+index_seleccionado = st.selectbox("Selecciona un proyecto", proyectos_nombres)
+
+# Obtener el ID del proyecto seleccionado
+id_proyecto_seleccionado = None
+for proyecto in proyectos:
+    if proyecto['nombre'] == index_seleccionado:
+        id_proyecto_seleccionado = proyecto['id']
+        break
+
+# Mostrar el ID seleccionado (solo para propósitos de verificación)
+if id_proyecto_seleccionado is not None:
+    st.write(f"ID del proyecto seleccionado: {id_proyecto_seleccionado}")
+else:
+    st.write("Selecciona un proyecto para ver su ID")
+
+# Puedes usar 'id_proyecto_seleccionado' en tu lógica posterior según sea necesario
+
+
+
 # Función para obtener puestos
 def get_puestos():
     query = "SELECT descripcion FROM `ate-rrhh-2024.Ate_kaibot_2024.puestos`"
@@ -58,7 +99,7 @@ puestos = get_puestos()
 selected_puestos = st.multiselect("Selecciona los puestos", puestos)
 
 # Selección de Proyecto
-id_proyecto = st.number_input('ID de Proyecto', min_value=1, step=1)
+id_proyecto = st.number_input('ID de Proyecto', min_value=1,value=id_proyecto_seleccionado, step=1)
 
 # Mostrar factores seleccionados para el proyecto
 if id_proyecto:
