@@ -70,22 +70,10 @@ def get_factores_seleccionados(id_proyecto, id_puesto):
     query_job_destino = client.query(query_destino)
     df_destino = query_job_destino.result().to_dataframe()
 
-    # Eliminar valores vacíos
-    df_especificos = df_especificos.dropna(subset=['complementos_especificos'])
-    df_destino = df_destino.dropna(subset=['complementos_destino'])
-
-    # Renombrar columnas para claridad
-    df_especificos.rename(columns={'complementos_especificos': 'complemento'}, inplace=True)
-    df_destino.rename(columns={'complementos_destino': 'complemento'}, inplace=True)
-
     # Combinar los resultados de ambas consultas
-    df_combined = pd.merge(df_especificos, df_destino, how='outer', left_on='complemento', right_on='complemento', suffixes=('_especifico', '_destino'))
+    df_combined = pd.merge(df_especificos, df_destino, how='outer', left_on='complementos_especificos', right_on='complementos_destino')
 
     return df_combined
-
-
-
-
 
 
 def obtener_datos_tabla(tabla):
