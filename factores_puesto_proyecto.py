@@ -85,31 +85,35 @@ if id_proyecto_seleccionado and selected_puestos:
 
         if not factores_df.empty:
             st.write(f"Factores para el Puesto {id_puesto} ({descripcion})")
+            st.dataframe(factores_df)
 
-            # Mostrar factores en una tabla
-            if 'complementos_especificos' in factores_df.columns:
-                st.subheader("Factores Específicos")
-                df_especificos = pd.DataFrame(factores_df['complementos_especificos'].dropna().unique(), columns=['Factor'])
-                st.dataframe(df_especificos)
-                
-                seleccion_especifico = st.selectbox("Selecciona un factor específico", df_especificos['Factor'].tolist())
-                if seleccion_especifico:
-                    tabla_especificos = seleccion_especifico
-                    df_especificos_detalle = obtener_datos_tabla(tabla_especificos)
-                    st.write(f"Detalles para {tabla_especificos.split('.')[-1]}:")
-                    st.dataframe(df_especificos_detalle)
+            for index, row in factores_df.iterrows():
+                tabla_especificos = row['complementos_especificos']
+                tabla_destino = row['complementos_destino']
 
-            if 'complementos_destino' in factores_df.columns:
-                st.subheader("Factores de Destino")
-                df_destino = pd.DataFrame(factores_df['complementos_destino'].dropna().unique(), columns=['Factor'])
-                st.dataframe(df_destino)
+                if tabla_especificos != 'No disponible':
+                    st.subheader(f"Factores Específicos: {tabla_especificos}")
+                    df_especificos = obtener_datos_tabla(tabla_especificos)
+                    if not df_especificos.empty:
+                        st.dataframe(df_especificos)
+                        opciones_especificos = df_especificos.apply(lambda r: f"{r['descripcion']} ({r['letra']})", axis=1).tolist()
+                        seleccion_especifico = st.radio(f"Selecciona un valor para {tabla_especificos.split('.')[-1]}:", opciones_especificos, key=f"especifico_{index}")
+                        if seleccion_especifico:
+                            selected_value_especifico = df_especificos[df_especificos.apply(lambda r: f"{r['descripcion']} ({r['letra']})", axis=1) == seleccion_especifico].iloc[0, 0]
+                    else:
+                        st.write(f"No se encontraron datos para la tabla de factores específicos {tabla_especificos}.")
                 
-                seleccion_destino = st.selectbox("Selecciona un factor de destino", df_destino['Factor'].tolist())
-                if seleccion_destino:
-                    tabla_destino = seleccion_destino
-                    df_destino_detalle = obtener_datos_tabla(tabla_destino)
-                    st.write(f"Detalles para {tabla_destino.split('.')[-1]}:")
-                    st.dataframe(df_destino_detalle)
+                if tabla_destino != 'No disponible':
+                    st.subheader(f"Factores de Destino: {tabla_destino}")
+                    df_destino = obtener_datos_tabla(tabla_destino)
+                    if not df_destino.empty:
+                        st.dataframe(df_destino)
+                        opciones_destino = df_destino.apply(lambda r: f"{r['descripcion']} ({r['letra']})", axis=1).tolist()
+                        seleccion_destino = st.radio(f"Selecciona un valor para {tabla_destino.split('.')[-1]}:", opciones_destino, key=f"destino_{index}")
+                        if seleccion_destino:
+                            selected_value_destino = df_destino[df_destino.apply(lambda r: f"{r['descripcion']} ({r['letra']})", axis=1) == seleccion_destino].iloc[0, 0]
+                    else:
+                        st.write(f"No se encontraron datos para la tabla de factores de destino {tabla_destino}.")
         else:
             st.write(f"No se encontraron factores para el Puesto {id_puesto} ({descripcion}).")
                 
