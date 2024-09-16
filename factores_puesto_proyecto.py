@@ -55,7 +55,13 @@ else:
 
 # Puedes usar 'id_proyecto_seleccionado' en tu lógica posterior según sea necesario
 
+def get_puestos_ids():
+    query = "SELECT id_puesto FROM `ate-rrhh-2024.Ate_kaibot_2024.puestos`"
+    query_job = client.query(query)
+    results = query_job.result()
 
+    # Retornar solo los id_puesto
+    return [row.id_puesto for row in results]
 
 # Función para obtener puestos
 def get_puestos():
