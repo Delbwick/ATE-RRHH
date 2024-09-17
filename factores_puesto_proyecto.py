@@ -74,10 +74,11 @@ selected_puestos = st.sidebar.multiselect("Selecciona los puestos", puestos_desc
 # Variable para almacenar las selecciones
 selecciones_especificos = []
 selecciones_destino = []
+selected_puestos_ids = puestos_df.query(f"descripcion in {selected_puestos}")['id_puesto'].tolist()
 
 if id_proyecto_seleccionado and selected_puestos:
     st.markdown(f"### Factores Seleccionados para el Proyecto {id_proyecto_seleccionado}")
-    
+
     for descripcion in selected_puestos:
         id_puesto = puestos_df.query(f"descripcion == '{descripcion}'")['id_puesto'].values[0]
         factores_df = get_factores_seleccionados(id_proyecto_seleccionado, id_puesto)
@@ -140,6 +141,63 @@ if id_proyecto_seleccionado and selected_puestos:
         if not df_destino_resumen.empty:
             st.markdown("#### Complementos de Destino")
             st.table(df_destino_resumen[['Letra', 'Descripción', 'Puntos']])
+
+    # Calcular sueldo total
+    st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
+    st.title("Cálculo de Sueldo Total")
+
+    sueldo_categoria_puesto = {id_puesto: 2000 for id_puesto in selected_puestos_ids}  # Dummy values, replace with actual
+    puntos_especifico_sueldo = sum(item['Puntos'] for item in selecciones_especificos)
+    puntos_valoracion = sum(item['Puntos'] for item in selecciones_destino)
+
+    for puesto_id in selected_puestos_ids:
+        puesto_nombre = puestos_df.query(f"id_puesto == {puesto_id}")['descripcion'].values[0]
+        sueldo = sueldo_categoria_puesto[puesto_id]
+        
+        sueldo_total_puesto = sueldo + puntos_especifico_sueldo + puntos_valoracion
+        
+        # Mostrar el cálculo para cada puesto
+        st.markdown(f"<h2>Cálculo para el puesto: {puesto_nombre}</h2>", unsafe_allow_html=True)
+        st.write(f"Bruto Anual con Jornada Ordinaria: {sueldo} + {puntos_especifico_sueldo} + {puntos_valoracion} = {sueldo_total_puesto:.2f} euros")
+
+    # Selección de la modalidad de disponibilidad especial
+    modalidad_disponibilidad = st.selectbox(
+        'Selecciona la modalidad de disponibilidad especial:',
+        options=[
+            'Ninguna',
+            'Jornada ampliada (hasta 10%)',
+            'Disponibilidad absoluta (hasta 15%)',
+            'Jornada ampliada con disponibilidad absoluta (hasta 20%)'
+        ]
+    )
+
+    # Inicialización del porcentaje según la modalidad seleccionada
+    porcentaje_disponibilidad = 0.0
+    if modalidad_disponibilidad == 'Jornada ampliada (hasta 10%)':
+        porcentaje_disponibilidad = 10.0
+    elif modalidad_disponibilidad == 'Disponibilidad absoluta (hasta 15%)':
+        porcentaje_disponibilidad = 15.0
+    elif modalidad_disponibilidad == 'Jornada ampliada con disponibilidad absoluta (hasta 20%)':
+        porcentaje_disponibilidad = 20.0
+
+    # Calcular el sueldo con disponibilidad especial
+    for puesto_id in selected_puestos_ids:
+        puesto_nombre = puestos_df.query(f"id_puesto == {puesto_id}")['descripcion'].values[0]
+        sueldo = sueldo_categoria_puesto[puesto_id]
+        
+        sueldo_total_puesto = sueldo + puntos_especifico_sueldo + puntos_valoracion
+        
+        sueldo_bruto_con_complementos = sueldo + puntos_especifico_sueldo + puntos_valoracion
+        if porcentaje_disponibilidad > 0:
+            incremento_disponibilidad = sueldo_bruto_con_complementos * (porcentaje_disponibilidad / 100)
+            sueldo_total_con_disponibilidad = sueldo_total_puesto + incremento_disponibilidad
+            st.write(f"Con la modalidad '{modalidad_disponibilidad}' ({porcentaje_disponibilidad}%), el sueldo total ajustado es: {sueldo_total_con_disponibilidad:.2f} euros")
+        else:
+            st.write("No se ha aplicado ningún complemento de disponibilidad especial.")
+
+    # Mostrar la referencia a la última publicación oficial
+    st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
+    st.markdown("Última publicación oficial: BOPV del 27 de febrero del 2024")
 
 else:
     st.info("Selecciona un proyecto y puestos para ver los factores seleccionados.")
