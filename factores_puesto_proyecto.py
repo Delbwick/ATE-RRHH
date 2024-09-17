@@ -55,6 +55,30 @@ def obtener_datos_tabla(tabla):
     query = f"SELECT * FROM `{tabla}` LIMIT 100"
     return client.query(query).result().to_dataframe().fillna('No disponible')
 
+def obtener_valoracion_destino(puntos_valoracion_destino):
+    query_valoracion_puntos = f"""
+    SELECT complemento_destino_anual
+    FROM `ate-rrhh-2024.Ate_kaibot_2024.valoracion_destino_puntos_por_ano`
+    WHERE puntos_valoracion_destino = {puntos_valoracion_destino}
+    LIMIT 1
+    """
+    results = client.query(query_valoracion_puntos).result()
+    for row in results:
+        return row.complemento_destino_anual
+    return None
+
+def obtener_complemento_especifico(id_puesto):
+    query_complemento = f"""
+    SELECT valor_punto_especifico_proyecto
+    FROM `ate-rrhh-2024.Ate_kaibot_2024.complemento_especifico`
+    WHERE id_puesto = {id_puesto}
+    LIMIT 1
+    """
+    results = client.query(query_complemento).result()
+    for row in results:
+        return row.valor_punto_especifico_proyecto
+    return None
+
 # Aplicación Streamlit
 st.title('Gestión de Proyectos y Factores')
 
@@ -142,62 +166,35 @@ if id_proyecto_seleccionado and selected_puestos:
             st.markdown("#### Complementos de Destino")
             st.table(df_destino_resumen[['Letra', 'Descripción', 'Puntos']])
 
-    # Calcular sueldo total
-    st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
-    st.title("Cálculo de Sueldo Total")
+    # Calcular puntos de valoración de destino
+    puntos_destino_peso_total = round(puntos_destino_peso_total)
+    puntos_valoracion = obtener_valoracion_destino(puntos_destino_peso_total)
+    if puntos_valoracion:
+        st.markdown("### Consulta de Puntos de Valoración de Destino con el Peso Asignado")
+        st.write(f"Puntos de Valoración de Destino con el peso asignado ({puntos_destino_peso_total} puntos): {puntos_valoracion:.2f} euros")
+    else:
+        st.write("No se encontraron puntos de valoración para el valor introducido.")
 
-    sueldo_categoria_puesto = {id_puesto: 2000 for id_puesto in selected_puestos_ids}  # Dummy values, replace with actual
-    puntos_especifico_sueldo = sum(item['Puntos'] for item in selecciones_especificos)
-    puntos_valoracion = sum(item['Puntos'] for item in selecciones_destino)
-
+    # Calcular el complemento específico
     for puesto_id in selected_puestos_ids:
-        puesto_nombre = puestos_df.query(f"id_puesto == {puesto_id}")['descripcion'].values[0]
-        sueldo = sueldo_categoria_puesto[puesto_id]
-        
-        sueldo_total_puesto = sueldo + puntos_especifico_sueldo + puntos_valoracion
-        
-        # Mostrar el cálculo para cada puesto
-        st.markdown(f"<h2>Cálculo para el puesto: {puesto_nombre}</h2>", unsafe_allow_html=True)
-        st.write(f"Bruto Anual con Jornada Ordinaria: {sueldo} + {puntos_especifico_sueldo} + {puntos_valoracion} = {sueldo_total_puesto:.2f} euros")
-
-    # Selección de la modalidad de disponibilidad especial
-    modalidad_disponibilidad = st.selectbox(
-        'Selecciona la modalidad de disponibilidad especial:',
-        options=[
-            'Ninguna',
-            'Jornada ampliada (hasta 10%)',
-            'Disponibilidad absoluta (hasta 15%)',
-            'Jornada ampliada con disponibilidad absoluta (hasta 20%)'
-        ]
-    )
-
-    # Inicialización del porcentaje según la modalidad seleccionada
-    porcentaje_disponibilidad = 0.0
-    if modalidad_disponibilidad == 'Jornada ampliada (hasta 10%)':
-        porcentaje_disponibilidad = 10.0
-    elif modalidad_disponibilidad == 'Disponibilidad absoluta (hasta 15%)':
-        porcentaje_disponibilidad = 15.0
-    elif modalidad_disponibilidad == 'Jornada ampliada con disponibilidad absoluta (hasta 20%)':
-        porcentaje_disponibilidad = 20.0
-
-    # Calcular el sueldo con disponibilidad especial
-    for puesto_id in selected_puestos_ids:
-        puesto_nombre = puestos_df.query(f"id_puesto == {puesto_id}")['descripcion'].values[0]
-        sueldo = sueldo_categoria_puesto[puesto_id]
-        
-        sueldo_total_puesto = sueldo + puntos_especifico_sueldo + puntos_valoracion
-        
-        sueldo_bruto_con_complementos = sueldo + puntos_especifico_sueldo + puntos_valoracion
-        if porcentaje_disponibilidad > 0:
-            incremento_disponibilidad = sueldo_bruto_con_complementos * (porcentaje_disponibilidad / 100)
-            sueldo_total_con_disponibilidad = sueldo_total_puesto + incremento_disponibilidad
-            st.write(f"Con la modalidad '{modalidad_disponibilidad}' ({porcentaje_disponibilidad}%), el sueldo total ajustado es: {sueldo_total_con_disponibilidad:.2f} euros")
+        valor_punto_especifico_proyecto = obtener_complemento_especifico(puesto_id)
+        if valor_punto_especifico_proyecto:
+            st.write(f"Valor específico del puesto para el complemento específico: {valor_punto_especifico_proyecto:.2f} euros")
         else:
-            st.write("No se ha aplicado ningún complemento de disponibilidad especial.")
+            st.write("No se encontró valor específico para el puesto.")
 
-    # Mostrar la referencia a la última publicación oficial
-    st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
-    st.markdown("Última publicación oficial: BOPV del 27 de febrero del 2024")
-
+    # Calcular el sueldo base y total
+    for puesto_id in selected_puestos_ids:
+        sueldo = sueldo_categoria_puesto[puesto_id]  # Supone que esta variable está definida en otro lugar
+        valor_punto_especifico_proyecto = obtener_complemento_especifico(puesto_id)
+        if valor_punto_especifico_proyecto:
+            valor_punto_especifico_proyecto = valor_punto_especifico_proyecto
+        puntos_valoracion = obtener_valoracion_destino(puntos_destino_peso_total)
+        
+        if puntos_valoracion is not None:
+            sueldo_total = sueldo + valor_punto_especifico_proyecto + puntos_valoracion
+            st.write(f"Sueldo total (base + complemento específico + valoración): {sueldo_total:.2f} euros")
+        else:
+            st.write("No se encontraron puntos de valoración para calcular el sueldo total.")
 else:
     st.info("Selecciona un proyecto y puestos para ver los factores seleccionados.")
