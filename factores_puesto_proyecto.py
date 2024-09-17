@@ -72,7 +72,8 @@ puestos_descripciones = puestos_df['descripcion'].tolist()
 selected_puestos = st.sidebar.multiselect("Selecciona los puestos", puestos_descripciones)
 
 # Variable para almacenar las selecciones
-selecciones_resumen = []
+selecciones_especificos = []
+selecciones_destino = []
 
 if id_proyecto_seleccionado and selected_puestos:
     st.markdown(f"### Factores Seleccionados para el Proyecto {id_proyecto_seleccionado}")
@@ -92,19 +93,16 @@ if id_proyecto_seleccionado and selected_puestos:
                     st.subheader(f"Factores Específicos: {tabla_especificos}")
                     df_especificos = obtener_datos_tabla(tabla_especificos)
                     if not df_especificos.empty:
-                        # Mostrar tabla completa del dataframe
                         st.write("Tabla de Factores Específicos")
                         st.dataframe(df_especificos)
                         
-                        # Crear el selector para elegir `letra` y `descripcion` juntas
                         opciones_especificos = df_especificos.apply(lambda r: f"{r['letra']} - {r['descripcion']}", axis=1).tolist()
                         seleccion_especifico = st.selectbox(f"Selecciona un valor para {tabla_especificos.split('.')[-1]}:", opciones_especificos, key=f"especifico_{index}")
                         if seleccion_especifico:
-                            # Dividimos la selección en letra y descripción
                             selected_letra, selected_descripcion = seleccion_especifico.split(" - ")
                             st.write(f"Seleccionaste la letra: {selected_letra} y la descripción: {selected_descripcion}")
                             puntos = df_especificos.query(f"letra == '{selected_letra}'")['puntos'].values[0]
-                            selecciones_resumen.append({'Letra': selected_letra, 'Descripción': selected_descripcion, 'Puntos': puntos})
+                            selecciones_especificos.append({'Puesto': descripcion, 'Letra': selected_letra, 'Descripción': selected_descripcion, 'Puntos': puntos})
                     else:
                         st.write(f"No se encontraron datos para la tabla de factores específicos {tabla_especificos}.")
                 
@@ -112,28 +110,36 @@ if id_proyecto_seleccionado and selected_puestos:
                     st.subheader(f"Factores de Destino: {tabla_destino}")
                     df_destino = obtener_datos_tabla(tabla_destino)
                     if not df_destino.empty:
-                        # Mostrar tabla completa del dataframe
                         st.write("Tabla de Factores de Destino")
                         st.dataframe(df_destino)
                         
-                        # Crear el selector para elegir `letra` y `descripcion` juntas
                         opciones_destino = df_destino.apply(lambda r: f"{r['letra']} - {r['descripcion']}", axis=1).tolist()
                         seleccion_destino = st.selectbox(f"Selecciona un valor para {tabla_destino.split('.')[-1]}:", opciones_destino, key=f"destino_{index}")
                         if seleccion_destino:
-                            # Dividimos la selección en letra y descripción
                             selected_letra_destino, selected_descripcion_destino = seleccion_destino.split(" - ")
                             st.write(f"Seleccionaste la letra: {selected_letra_destino} y la descripción: {selected_descripcion_destino}")
                             puntos_destino = df_destino.query(f"letra == '{selected_letra_destino}'")['puntos'].values[0]
-                            selecciones_resumen.append({'Letra': selected_letra_destino, 'Descripción': selected_descripcion_destino, 'Puntos': puntos_destino})
+                            selecciones_destino.append({'Puesto': descripcion, 'Letra': selected_letra_destino, 'Descripción': selected_descripcion_destino, 'Puntos': puntos_destino})
                     else:
                         st.write(f"No se encontraron datos para la tabla de factores de destino {tabla_destino}.")
         else:
             st.write(f"No se encontraron factores para el Puesto {id_puesto} ({descripcion}).")
 
     # Mostrar la tabla de resumen final
-    if selecciones_resumen:
-        st.subheader("Resumen de Selecciones")
-        df_resumen = pd.DataFrame(selecciones_resumen)
-        st.table(df_resumen[['Letra', 'Descripción', 'Puntos']])
+    for descripcion in selected_puestos:
+        st.subheader(f"Resumen de Selecciones para el Puesto: {descripcion}")
+        
+        # Mostrar complementos específicos
+        df_especificos_resumen = pd.DataFrame([item for item in selecciones_especificos if item['Puesto'] == descripcion])
+        if not df_especificos_resumen.empty:
+            st.markdown("#### Complementos Específicos")
+            st.table(df_especificos_resumen[['Letra', 'Descripción', 'Puntos']])
+        
+        # Mostrar complementos de destino
+        df_destino_resumen = pd.DataFrame([item for item in selecciones_destino if item['Puesto'] == descripcion])
+        if not df_destino_resumen.empty:
+            st.markdown("#### Complementos de Destino")
+            st.table(df_destino_resumen[['Letra', 'Descripción', 'Puntos']])
+
 else:
     st.info("Selecciona un proyecto y puestos para ver los factores seleccionados.")
