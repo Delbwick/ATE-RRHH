@@ -9,7 +9,7 @@ credentials = service_account.Credentials.from_service_account_info(
 )
 client = bigquery.Client(credentials=credentials)
 
-# Funciones para BigQuery (como en tu código original)
+# Funciones para BigQuery
 def get_proyectos():
     query = """
         SELECT id_projecto, nombre
@@ -71,22 +71,14 @@ puestos_df = get_puestos(id_proyecto_seleccionado)
 puestos_descripciones = puestos_df['descripcion'].tolist()
 selected_puestos = st.sidebar.multiselect("Selecciona los puestos", puestos_descripciones)
 
-# Variables para almacenar las selecciones
+# Variable para almacenar las selecciones
 selecciones_especificos = []
 selecciones_destino = []
 selected_puestos_ids = puestos_df.query(f"descripcion in {selected_puestos}")['id_puesto'].tolist()
 
-# Función para calcular el valor de los puntos específicos
-def calcular_valor_puntos(puntos, valor_base):
-    return (puntos * valor_base) / 100
-
 if id_proyecto_seleccionado and selected_puestos:
     st.markdown(f"### Factores Seleccionados para el Proyecto {id_proyecto_seleccionado}")
 
-    total_puntos_especificos = 0
-    puntos_especifico_peso_total = 0
-    peso_complemento_especifico_por_proyecto = {}
-    
     for descripcion in selected_puestos:
         id_puesto = puestos_df.query(f"descripcion == '{descripcion}'")['id_puesto'].values[0]
         factores_df = get_factores_seleccionados(id_proyecto_seleccionado, id_puesto)
@@ -104,33 +96,30 @@ if id_proyecto_seleccionado and selected_puestos:
                     if not df_especificos.empty:
                         st.write("Tabla de Factores Específicos")
                         st.dataframe(df_especificos)
-
+                        
                         opciones_especificos = df_especificos.apply(lambda r: f"{r['letra']} - {r['descripcion']}", axis=1).tolist()
                         seleccion_especifico = st.selectbox(f"Selecciona un valor para {tabla_especificos.split('.')[-1]}:", opciones_especificos, key=f"especifico_{index}")
                         if seleccion_especifico:
                             selected_letra, selected_descripcion = seleccion_especifico.split(" - ")
                             st.write(f"Seleccionaste la letra: {selected_letra} y la descripción: {selected_descripcion}")
                             puntos = df_especificos.query(f"letra == '{selected_letra}'")['puntos'].values[0]
-                            total_puntos_especificos += puntos
-                            puntos_especifico_peso_total += puntos * peso_complemento_especifico_por_proyecto.get(tabla_especificos, 0) / 100
                             selecciones_especificos.append({'Puesto': descripcion, 'Letra': selected_letra, 'Descripción': selected_descripcion, 'Puntos': puntos})
                     else:
                         st.write(f"No se encontraron datos para la tabla de factores específicos {tabla_especificos}.")
-
+                
                 if tabla_destino != 'No disponible':
                     st.subheader(f"Factores de Destino: {tabla_destino}")
                     df_destino = obtener_datos_tabla(tabla_destino)
                     if not df_destino.empty:
                         st.write("Tabla de Factores de Destino")
                         st.dataframe(df_destino)
-
+                        
                         opciones_destino = df_destino.apply(lambda r: f"{r['letra']} - {r['descripcion']}", axis=1).tolist()
                         seleccion_destino = st.selectbox(f"Selecciona un valor para {tabla_destino.split('.')[-1]}:", opciones_destino, key=f"destino_{index}")
                         if seleccion_destino:
                             selected_letra_destino, selected_descripcion_destino = seleccion_destino.split(" - ")
                             st.write(f"Seleccionaste la letra: {selected_letra_destino} y la descripción: {selected_descripcion_destino}")
                             puntos_destino = df_destino.query(f"letra == '{selected_letra_destino}'")['puntos'].values[0]
-                            puntos_especifico_peso_total += puntos_destino * peso_complemento_especifico_por_proyecto.get(tabla_destino, 0) / 100
                             selecciones_destino.append({'Puesto': descripcion, 'Letra': selected_letra_destino, 'Descripción': selected_descripcion_destino, 'Puntos': puntos_destino})
                     else:
                         st.write(f"No se encontraron datos para la tabla de factores de destino {tabla_destino}.")
@@ -153,9 +142,62 @@ if id_proyecto_seleccionado and selected_puestos:
             st.markdown("#### Complementos de Destino")
             st.table(df_destino_resumen[['Letra', 'Descripción', 'Puntos']])
 
-    # Cálculo de sueldo total
-    st.markdown("<div class='sueldo-total'>", unsafe_allow_html=True)
-    valor_base = 1000  # Ajusta este valor según tu sistema
-    sueldo_total = calcular_valor_puntos(total_puntos_especificos, valor_base) + puntos_especifico_peso_total
-    st.write(f"**Sueldo Total Estimado:** {sueldo_total:.2f}")
-    st.markdown("</div>", unsafe_allow_html=True)
+    # Calcular sueldo total
+    st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
+    st.title("Cálculo de Sueldo Total")
+
+    sueldo_categoria_puesto = {id_puesto: 2000 for id_puesto in selected_puestos_ids}  # Dummy values, replace with actual
+    puntos_especifico_sueldo = sum(item['Puntos'] for item in selecciones_especificos)
+    puntos_valoracion = sum(item['Puntos'] for item in selecciones_destino)
+
+    for puesto_id in selected_puestos_ids:
+        puesto_nombre = puestos_df.query(f"id_puesto == {puesto_id}")['descripcion'].values[0]
+        sueldo = sueldo_categoria_puesto[puesto_id]
+        
+        sueldo_total_puesto = sueldo + puntos_especifico_sueldo + puntos_valoracion
+        
+        # Mostrar el cálculo para cada puesto
+        st.markdown(f"<h2>Cálculo para el puesto: {puesto_nombre}</h2>", unsafe_allow_html=True)
+        st.write(f"Bruto Anual con Jornada Ordinaria: {sueldo} + {puntos_especifico_sueldo} + {puntos_valoracion} = {sueldo_total_puesto:.2f} euros")
+
+    # Selección de la modalidad de disponibilidad especial
+    modalidad_disponibilidad = st.selectbox(
+        'Selecciona la modalidad de disponibilidad especial:',
+        options=[
+            'Ninguna',
+            'Jornada ampliada (hasta 10%)',
+            'Disponibilidad absoluta (hasta 15%)',
+            'Jornada ampliada con disponibilidad absoluta (hasta 20%)'
+        ]
+    )
+
+    # Inicialización del porcentaje según la modalidad seleccionada
+    porcentaje_disponibilidad = 0.0
+    if modalidad_disponibilidad == 'Jornada ampliada (hasta 10%)':
+        porcentaje_disponibilidad = 10.0
+    elif modalidad_disponibilidad == 'Disponibilidad absoluta (hasta 15%)':
+        porcentaje_disponibilidad = 15.0
+    elif modalidad_disponibilidad == 'Jornada ampliada con disponibilidad absoluta (hasta 20%)':
+        porcentaje_disponibilidad = 20.0
+
+    # Calcular el sueldo con disponibilidad especial
+    for puesto_id in selected_puestos_ids:
+        puesto_nombre = puestos_df.query(f"id_puesto == {puesto_id}")['descripcion'].values[0]
+        sueldo = sueldo_categoria_puesto[puesto_id]
+        
+        sueldo_total_puesto = sueldo + puntos_especifico_sueldo + puntos_valoracion
+        
+        sueldo_bruto_con_complementos = sueldo + puntos_especifico_sueldo + puntos_valoracion
+        if porcentaje_disponibilidad > 0:
+            incremento_disponibilidad = sueldo_bruto_con_complementos * (porcentaje_disponibilidad / 100)
+            sueldo_total_con_disponibilidad = sueldo_total_puesto + incremento_disponibilidad
+            st.write(f"Con la modalidad '{modalidad_disponibilidad}' ({porcentaje_disponibilidad}%), el sueldo total ajustado es: {sueldo_total_con_disponibilidad:.2f} euros")
+        else:
+            st.write("No se ha aplicado ningún complemento de disponibilidad especial.")
+
+    # Mostrar la referencia a la última publicación oficial
+    st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
+    st.markdown("Última publicación oficial: BOPV del 27 de febrero del 2024")
+
+else:
+    st.info("Selecciona un proyecto y puestos para ver los factores seleccionados.")
