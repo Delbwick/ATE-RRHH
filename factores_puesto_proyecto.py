@@ -98,11 +98,13 @@ if id_proyecto_seleccionado and selected_puestos:
                         st.write("Tabla de Factores Específicos")
                         st.dataframe(df_especificos)
                         
-                        # Crear el selector para elegir `letra` y `descripcion`
-                        opciones_especificos = df_especificos.apply(lambda r: f"{r['descripcion']} ({r['letra']})", axis=1).tolist()
+                        # Crear el selector para elegir `letra` y `descripcion` juntas
+                        opciones_especificos = df_especificos.apply(lambda r: f"{r['letra']} - {r['descripcion']}", axis=1).tolist()
                         seleccion_especifico = st.selectbox(f"Selecciona un valor para {tabla_especificos.split('.')[-1]}:", opciones_especificos, key=f"especifico_{index}")
                         if seleccion_especifico:
-                            selected_value_especifico = df_especificos[df_especificos.apply(lambda r: f"{r['descripcion']} ({r['letra']})", axis=1) == seleccion_especifico].iloc[0, 0]
+                            # Dividimos la selección en letra y descripción
+                            selected_letra, selected_descripcion = seleccion_especifico.split(" - ")
+                            st.write(f"Seleccionaste la letra: {selected_letra} y la descripción: {selected_descripcion}")
                     else:
                         st.write(f"No se encontraron datos para la tabla de factores específicos {tabla_especificos}.")
                 
@@ -114,11 +116,13 @@ if id_proyecto_seleccionado and selected_puestos:
                         st.write("Tabla de Factores de Destino")
                         st.dataframe(df_destino)
                         
-                        # Crear el selector para elegir `letra` y `descripcion`
-                        opciones_destino = df_destino.apply(lambda r: f"{r['descripcion']} ({r['letra']})", axis=1).tolist()
+                        # Crear el selector para elegir `letra` y `descripcion` juntas
+                        opciones_destino = df_destino.apply(lambda r: f"{r['letra']} - {r['descripcion']}", axis=1).tolist()
                         seleccion_destino = st.selectbox(f"Selecciona un valor para {tabla_destino.split('.')[-1]}:", opciones_destino, key=f"destino_{index}")
                         if seleccion_destino:
-                            selected_value_destino = df_destino[df_destino.apply(lambda r: f"{r['descripcion']} ({r['letra']})", axis=1) == seleccion_destino].iloc[0, 0]
+                            # Dividimos la selección en letra y descripción
+                            selected_letra_destino, selected_descripcion_destino = seleccion_destino.split(" - ")
+                            st.write(f"Seleccionaste la letra: {selected_letra_destino} y la descripción: {selected_descripcion_destino}")
                     else:
                         st.write(f"No se encontraron datos para la tabla de factores de destino {tabla_destino}.")
         else:
