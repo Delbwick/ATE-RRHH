@@ -9,6 +9,7 @@ credentials = service_account.Credentials.from_service_account_info(
 )
 client = bigquery.Client(credentials=credentials)
 
+# Funciones para BigQuery
 def get_proyectos():
     query = """
         SELECT id_projecto, nombre
@@ -54,13 +55,6 @@ def obtener_datos_tabla(tabla):
     query = f"SELECT * FROM `{tabla}` LIMIT 100"
     return client.query(query).result().to_dataframe().fillna('No disponible')
 
-def insertar_datos(table_id, rows_to_insert):
-    errors = client.insert_rows_json(table_id, rows_to_insert)
-    if errors:
-        st.error(f"Error al insertar datos en {table_id}: {errors}")
-    else:
-        st.success(f"Datos insertados exitosamente en {table_id}")
-
 # Aplicación Streamlit
 st.title('Gestión de Proyectos y Factores')
 
@@ -77,8 +71,12 @@ puestos_df = get_puestos(id_proyecto_seleccionado)
 puestos_descripciones = puestos_df['descripcion'].tolist()
 selected_puestos = st.sidebar.multiselect("Selecciona los puestos", puestos_descripciones)
 
+# Variable para almacenar las selecciones
+selecciones_resumen = []
+
 if id_proyecto_seleccionado and selected_puestos:
     st.markdown(f"### Factores Seleccionados para el Proyecto {id_proyecto_seleccionado}")
+    
     for descripcion in selected_puestos:
         id_puesto = puestos_df.query(f"descripcion == '{descripcion}'")['id_puesto'].values[0]
         factores_df = get_factores_seleccionados(id_proyecto_seleccionado, id_puesto)
@@ -105,6 +103,8 @@ if id_proyecto_seleccionado and selected_puestos:
                             # Dividimos la selección en letra y descripción
                             selected_letra, selected_descripcion = seleccion_especifico.split(" - ")
                             st.write(f"Seleccionaste la letra: {selected_letra} y la descripción: {selected_descripcion}")
+                            puntos = df_especificos.query(f"letra == '{selected_letra}'")['puntos'].values[0]
+                            selecciones_resumen.append({'Letra': selected_letra, 'Descripción': selected_descripcion, 'Puntos': puntos})
                     else:
                         st.write(f"No se encontraron datos para la tabla de factores específicos {tabla_especificos}.")
                 
@@ -123,25 +123,17 @@ if id_proyecto_seleccionado and selected_puestos:
                             # Dividimos la selección en letra y descripción
                             selected_letra_destino, selected_descripcion_destino = seleccion_destino.split(" - ")
                             st.write(f"Seleccionaste la letra: {selected_letra_destino} y la descripción: {selected_descripcion_destino}")
+                            puntos_destino = df_destino.query(f"letra == '{selected_letra_destino}'")['puntos'].values[0]
+                            selecciones_resumen.append({'Letra': selected_letra_destino, 'Descripción': selected_descripcion_destino, 'Puntos': puntos_destino})
                     else:
                         st.write(f"No se encontraron datos para la tabla de factores de destino {tabla_destino}.")
         else:
             st.write(f"No se encontraron factores para el Puesto {id_puesto} ({descripcion}).")
-                
-    if st.sidebar.button('Guardar Datos'):
-        rows_to_insert = []
-        for descripcion in selected_puestos:
-            id_puesto = puestos_df.query(f"descripcion == '{descripcion}'")['id_puesto'].values[0]
-            row = {
-                'id_proyecto': id_proyecto_seleccionado,
-                'id_puesto': id_puesto,
-                # Añadir aquí otros campos necesarios
-            }
-            rows_to_insert.append(row)
-        
-        if rows_to_insert:
-            insertar_datos("ate-rrhh-2024.Ate_kaibot_2024.puestos_seleccionados_por_proyecto", rows_to_insert)
-        else:
-            st.warning("No hay datos para guardar.")
+
+    # Mostrar la tabla de resumen final
+    if selecciones_resumen:
+        st.subheader("Resumen de Selecciones")
+        df_resumen = pd.DataFrame(selecciones_resumen)
+        st.table(df_resumen[['Letra', 'Descripción', 'Puntos']])
 else:
     st.info("Selecciona un proyecto y puestos para ver los factores seleccionados.")
