@@ -85,7 +85,6 @@ if id_proyecto_seleccionado and selected_puestos:
 
         if not factores_df.empty:
             st.write(f"Factores para el Puesto {id_puesto} ({descripcion})")
-            st.dataframe(factores_df)
 
             for index, row in factores_df.iterrows():
                 tabla_especificos = row['complementos_especificos']
@@ -95,9 +94,9 @@ if id_proyecto_seleccionado and selected_puestos:
                     st.subheader(f"Factores Específicos: {tabla_especificos}")
                     df_especificos = obtener_datos_tabla(tabla_especificos)
                     if not df_especificos.empty:
-                        st.dataframe(df_especificos)
+                        # Crear el selector para elegir `letra` y `descripcion`
                         opciones_especificos = df_especificos.apply(lambda r: f"{r['descripcion']} ({r['letra']})", axis=1).tolist()
-                        seleccion_especifico = st.radio(f"Selecciona un valor para {tabla_especificos.split('.')[-1]}:", opciones_especificos, key=f"especifico_{index}")
+                        seleccion_especifico = st.selectbox(f"Selecciona un valor para {tabla_especificos.split('.')[-1]}:", opciones_especificos, key=f"especifico_{index}")
                         if seleccion_especifico:
                             selected_value_especifico = df_especificos[df_especificos.apply(lambda r: f"{r['descripcion']} ({r['letra']})", axis=1) == seleccion_especifico].iloc[0, 0]
                     else:
@@ -107,9 +106,9 @@ if id_proyecto_seleccionado and selected_puestos:
                     st.subheader(f"Factores de Destino: {tabla_destino}")
                     df_destino = obtener_datos_tabla(tabla_destino)
                     if not df_destino.empty:
-                        st.dataframe(df_destino)
+                        # Crear el selector para elegir `letra` y `descripcion`
                         opciones_destino = df_destino.apply(lambda r: f"{r['descripcion']} ({r['letra']})", axis=1).tolist()
-                        seleccion_destino = st.radio(f"Selecciona un valor para {tabla_destino.split('.')[-1]}:", opciones_destino, key=f"destino_{index}")
+                        seleccion_destino = st.selectbox(f"Selecciona un valor para {tabla_destino.split('.')[-1]}:", opciones_destino, key=f"destino_{index}")
                         if seleccion_destino:
                             selected_value_destino = df_destino[df_destino.apply(lambda r: f"{r['descripcion']} ({r['letra']})", axis=1) == seleccion_destino].iloc[0, 0]
                     else:
