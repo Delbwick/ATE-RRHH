@@ -1,38 +1,85 @@
 import streamlit as st
+from google.oauth2 import service_account
+from google.cloud import bigquery
 import pandas as pd
 
-# Función para obtener los factores seleccionados (placeholder)
+# Crear API client para BigQuery
+credentials = service_account.Credentials.from_service_account_info(
+    st.secrets["gcp_service_account"]
+)
+client = bigquery.Client(credentials=credentials)
+
+# Funciones para BigQuery
+def get_proyectos():
+    query = """
+        SELECT id_projecto, nombre
+        FROM `ate-rrhh-2024.Ate_kaibot_2024.proyecto`
+    """
+    return client.query(query).result().to_dataframe()
+
+def get_puestos(id_proyecto):
+    query_ids = f"""
+    SELECT DISTINCT id_puesto
+    FROM `ate-rrhh-2024.Ate_kaibot_2024.factores_seleccionados_x_puesto_x_proyecto`
+    WHERE id_proyecto = {id_proyecto}
+    """
+    ids_puestos = client.query(query_ids).result().to_dataframe()['id_puesto'].tolist()
+    if ids_puestos:
+        query_descripciones = f"""
+        SELECT id_puesto, descripcion
+        FROM `ate-rrhh-2024.Ate_kaibot_2024.puestos`
+        WHERE id_puesto IN UNNEST({ids_puestos})
+        """
+        return client.query(query_descripciones).result().to_dataframe()
+    return pd.DataFrame(columns=['id_puesto', 'descripcion'])
+
 def get_factores_seleccionados(id_proyecto, id_puesto):
-    # Aquí podrías implementar la consulta a la base de datos para obtener los factores
-    return pd.DataFrame()
+    query_especificos = f"""
+    SELECT DISTINCT complementos_especificos
+    FROM `ate-rrhh-2024.Ate_kaibot_2024.factores_seleccionados_x_puesto_x_proyecto`
+    WHERE id_proyecto = {id_proyecto} AND id_puesto = {id_puesto}
+    """
+    df_especificos = client.query(query_especificos).result().to_dataframe()
 
-# Función para obtener los datos de la tabla (placeholder)
-def obtener_datos_tabla(tabla_nombre):
-    # Aquí podrías implementar la consulta a la base de datos para obtener los datos de la tabla
-    return pd.DataFrame({
-        'letra': ['A', 'B', 'C'],
-        'descripcion': ['Descripción A', 'Descripción B', 'Descripción C'],
-        'puntos': [100, 200, 300]
-    })
+    query_destino = f"""
+    SELECT DISTINCT complementos_destino
+    FROM `ate-rrhh-2024.Ate_kaibot_2024.factores_seleccionados_x_puesto_x_proyecto`
+    WHERE id_proyecto = {id_proyecto} AND id_puesto = {id_puesto}
+    """
+    df_destino = client.query(query_destino).result().to_dataframe()
 
-# Datos de ejemplo
-puestos_df = pd.DataFrame({
-    'id_puesto': [1, 2, 3],
-    'descripcion': ['Puesto 1', 'Puesto 2', 'Puesto 3']
-})
+    df_combined = pd.merge(df_especificos, df_destino, how='outer', left_on='complementos_especificos', right_on='complementos_destino')
+    return df_combined.fillna('No disponible')
 
-# ID de proyecto seleccionado (placeholder)
-id_proyecto_seleccionado = 1
+def obtener_datos_tabla(tabla):
+    query = f"SELECT * FROM `{tabla}` LIMIT 100"
+    return client.query(query).result().to_dataframe().fillna('No disponible')
 
-# Lista de selecciones para factores específicos y de destino
+# Aplicación Streamlit
+st.title('Gestión de Proyectos y Factores')
+
+# Selección de Proyecto
+st.sidebar.markdown("### Selecciona el proyecto")
+proyectos_df = get_proyectos()
+proyectos_nombres = proyectos_df['nombre'].tolist()
+index_seleccionado = st.sidebar.selectbox("Selecciona un proyecto", proyectos_nombres)
+id_proyecto_seleccionado = proyectos_df.query(f"nombre == '{index_seleccionado}'")['id_projecto'].values[0]
+
+# Selección de Puestos
+st.sidebar.markdown("### Selecciona los Puestos de Trabajo")
+puestos_df = get_puestos(id_proyecto_seleccionado)
+puestos_descripciones = puestos_df['descripcion'].tolist()
+selected_puestos = st.sidebar.multiselect("Selecciona los puestos", puestos_descripciones)
+
+# Variable para almacenar las selecciones
 selecciones_especificos = []
 selecciones_destino = []
+selected_puestos_ids = puestos_df.query(f"descripcion in {selected_puestos}")['id_puesto'].tolist()
 
-# Selección de puestos
-selected_puestos = st.multiselect("Selecciona uno o más puestos", puestos_df['descripcion'])
+if id_proyecto_seleccionado and selected_puestos:
+    st.markdown(f"### Factores Seleccionados para el Proyecto {id_proyecto_seleccionado}")
 
-# Iterar sobre cada puesto seleccionado
-for descripcion in selected_puestos:
+    for descripcion in selected_puestos:
     id_puesto = puestos_df.query(f"descripcion == '{descripcion}'")['id_puesto'].values[0]
     factores_df = get_factores_seleccionados(id_proyecto_seleccionado, id_puesto)
 
