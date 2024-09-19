@@ -147,3 +147,79 @@ if id_proyecto_seleccionado and selected_puestos:
                             selecciones_destino.append({'Puesto': descripcion, 'Letra': selected_letra_destino, 'Descripción': selected_descripcion_destino, 'Puntos': puntos_ajustados_destino})
                     else:
                         st.write(f"No se encontraron datos para la tabla de factores de destino {tabla_destino}.")
+
+# Mostrar la tabla de resumen final
+    for descripcion in selected_puestos:
+        st.subheader(f"Resumen de Selecciones para el Puesto: {descripcion}")
+        
+        # Mostrar complementos específicos
+        df_especificos_resumen = pd.DataFrame([item for item in selecciones_especificos if item['Puesto'] == descripcion])
+        if not df_especificos_resumen.empty:
+            st.markdown("#### Complementos Específicos")
+            st.table(df_especificos_resumen[['Letra', 'Descripción', 'Puntos']])
+        
+        # Mostrar complementos de destino
+        df_destino_resumen = pd.DataFrame([item for item in selecciones_destino if item['Puesto'] == descripcion])
+        if not df_destino_resumen.empty:
+            st.markdown("#### Complementos de Destino")
+            st.table(df_destino_resumen[['Letra', 'Descripción', 'Puntos']])
+
+    # Calcular sueldo total
+    st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
+    st.title("Cálculo de Sueldo Total")
+
+    sueldo_categoria_puesto = {id_puesto: 2000 for id_puesto in selected_puestos_ids}  # Dummy values, replace with actual
+    puntos_especifico_sueldo = sum(item['Puntos'] for item in selecciones_especificos)
+    puntos_valoracion = sum(item['Puntos'] for item in selecciones_destino)
+
+    for puesto_id in selected_puestos_ids:
+        puesto_nombre = puestos_df.query(f"id_puesto == {puesto_id}")['descripcion'].values[0]
+        sueldo = sueldo_categoria_puesto[puesto_id]
+        
+        sueldo_total_puesto = sueldo + puntos_especifico_sueldo + puntos_valoracion
+        
+        # Mostrar el cálculo para cada puesto
+        st.markdown(f"<h2>Cálculo para el puesto: {puesto_nombre}</h2>", unsafe_allow_html=True)
+        st.write(f"Bruto Anual con Jornada Ordinaria: {sueldo} + {puntos_especifico_sueldo} + {puntos_valoracion} = {sueldo_total_puesto:.2f} euros")
+
+    # Selección de la modalidad de disponibilidad especial
+    modalidad_disponibilidad = st.selectbox(
+        'Selecciona la modalidad de disponibilidad especial:',
+        options=[
+            'Ninguna',
+            'Jornada ampliada (hasta 10%)',
+            'Disponibilidad absoluta (hasta 15%)',
+            'Jornada ampliada con disponibilidad absoluta (hasta 20%)'
+        ]
+    )
+
+    # Inicialización del porcentaje según la modalidad seleccionada
+    porcentaje_disponibilidad = 0.0
+    if modalidad_disponibilidad == 'Jornada ampliada (hasta 10%)':
+        porcentaje_disponibilidad = 10.0
+    elif modalidad_disponibilidad == 'Disponibilidad absoluta (hasta 15%)':
+        porcentaje_disponibilidad = 15.0
+    elif modalidad_disponibilidad == 'Jornada ampliada con disponibilidad absoluta (hasta 20%)':
+        porcentaje_disponibilidad = 20.0
+
+    # Calcular el sueldo con disponibilidad especial
+    for puesto_id in selected_puestos_ids:
+        puesto_nombre = puestos_df.query(f"id_puesto == {puesto_id}")['descripcion'].values[0]
+        sueldo = sueldo_categoria_puesto[puesto_id]
+        
+        sueldo_total_puesto = sueldo + puntos_especifico_sueldo + puntos_valoracion
+        
+        sueldo_bruto_con_complementos = sueldo + puntos_especifico_sueldo + puntos_valoracion
+        if porcentaje_disponibilidad > 0:
+            incremento_disponibilidad = sueldo_bruto_con_complementos * (porcentaje_disponibilidad / 100)
+            sueldo_total_con_disponibilidad = sueldo_total_puesto + incremento_disponibilidad
+            st.write(f"Con la modalidad '{modalidad_disponibilidad}' ({porcentaje_disponibilidad}%), el sueldo total ajustado es: {sueldo_total_con_disponibilidad:.2f} euros")
+        else:
+            st.write("No se ha aplicado ningún complemento de disponibilidad especial.")
+
+    # Mostrar la referencia a la última publicación oficial
+    st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
+    st.markdown("Última publicación oficial: BOPV del 27 de febrero del 2024")
+
+else:
+    st.info("Selecciona un proyecto y puestos para ver los factores seleccionados.")
