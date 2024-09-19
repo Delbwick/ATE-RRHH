@@ -55,6 +55,23 @@ def obtener_datos_tabla(tabla):
     query = f"SELECT * FROM `{tabla}` LIMIT 100"
     return client.query(query).result().to_dataframe().fillna('No disponible')
 
+# Función para ejecutar consulta con las nuevas columnas y pesos
+def execute_query_for_page(page_name, id_proyecto):
+    table_name, id_field = page_name  # Ejemplo: obtener el nombre de la tabla y el campo ID
+    
+    query = f"""
+        SELECT * FROM `{table_name}`
+        WHERE {id_field} IN (
+            SELECT {id_field} FROM `ate-rrhh-2024.Ate_kaibot_2024.complementos_de_destino_por_proyecto`
+            WHERE id_proyecto = {id_proyecto}
+        )
+    """
+    
+    df = client.query(query).result().to_dataframe()
+
+    total_puntos_destino_1 = df['puntos'].iloc[0] if not df.empty else 0
+    return df, total_puntos_destino_1
+
 # Aplicación Streamlit
 st.title('Gestión de Proyectos y Factores')
 
@@ -71,13 +88,12 @@ puestos_df = get_puestos(id_proyecto_seleccionado)
 puestos_descripciones = puestos_df['descripcion'].tolist()
 selected_puestos = st.sidebar.multiselect("Selecciona los puestos", puestos_descripciones)
 
-# Variable para almacenar las selecciones
-selecciones_especificos = []
-selecciones_destino = []
-selected_puestos_ids = puestos_df.query(f"descripcion in {selected_puestos}")['id_puesto'].tolist()
-
 if id_proyecto_seleccionado and selected_puestos:
     st.markdown(f"### Factores Seleccionados para el Proyecto {id_proyecto_seleccionado}")
+
+    # Diccionario de pesos específicos por puesto
+    peso_especifico_por_proyecto = {}
+    puntos_destino_peso_total = 0
 
     for descripcion in selected_puestos:
         id_puesto = puestos_df.query(f"descripcion == '{descripcion}'")['id_puesto'].values[0]
@@ -90,114 +106,31 @@ if id_proyecto_seleccionado and selected_puestos:
                 tabla_especificos = row['complementos_especificos']
                 tabla_destino = row['complementos_destino']
 
-                if tabla_especificos != 'No disponible':
+                col1, col2, col3, col4 = st.columns([2, 1, 1, 1])
+
+                # Contenido de la primera columna (50%)
+                with col1:
                     st.subheader(f"Factores Específicos: {tabla_especificos}")
                     df_especificos = obtener_datos_tabla(tabla_especificos)
                     if not df_especificos.empty:
-                        st.write("Tabla de Factores Específicos")
                         st.dataframe(df_especificos)
-                        
-                        opciones_especificos = df_especificos.apply(lambda r: f"{r['letra']} - {r['descripcion']}", axis=1).tolist()
-                        seleccion_especifico = st.selectbox(f"Selecciona un valor para {tabla_especificos.split('.')[-1]}:", opciones_especificos, key=f"especifico_{index}")
-                        if seleccion_especifico:
-                            selected_letra, selected_descripcion = seleccion_especifico.split(" - ")
-                            st.write(f"Seleccionaste la letra: {selected_letra} y la descripción: {selected_descripcion}")
-                            puntos = df_especificos.query(f"letra == '{selected_letra}'")['puntos'].values[0]
-                            selecciones_especificos.append({'Puesto': descripcion, 'Letra': selected_letra, 'Descripción': selected_descripcion, 'Puntos': puntos})
-                    else:
-                        st.write(f"No se encontraron datos para la tabla de factores específicos {tabla_especificos}.")
-                
-                if tabla_destino != 'No disponible':
-                    st.subheader(f"Factores de Destino: {tabla_destino}")
-                    df_destino = obtener_datos_tabla(tabla_destino)
-                    if not df_destino.empty:
-                        st.write("Tabla de Factores de Destino")
-                        st.dataframe(df_destino)
-                        
-                        opciones_destino = df_destino.apply(lambda r: f"{r['letra']} - {r['descripcion']}", axis=1).tolist()
-                        seleccion_destino = st.selectbox(f"Selecciona un valor para {tabla_destino.split('.')[-1]}:", opciones_destino, key=f"destino_{index}")
-                        if seleccion_destino:
-                            selected_letra_destino, selected_descripcion_destino = seleccion_destino.split(" - ")
-                            st.write(f"Seleccionaste la letra: {selected_letra_destino} y la descripción: {selected_descripcion_destino}")
-                            puntos_destino = df_destino.query(f"letra == '{selected_letra_destino}'")['puntos'].values[0]
-                            selecciones_destino.append({'Puesto': descripcion, 'Letra': selected_letra_destino, 'Descripción': selected_descripcion_destino, 'Puntos': puntos_destino})
-                    else:
-                        st.write(f"No se encontraron datos para la tabla de factores de destino {tabla_destino}.")
-        else:
-            st.write(f"No se encontraron factores para el Puesto {id_puesto} ({descripcion}).")
 
-    # Mostrar la tabla de resumen final
-    for descripcion in selected_puestos:
-        st.subheader(f"Resumen de Selecciones para el Puesto: {descripcion}")
-        
-        # Mostrar complementos específicos
-        df_especificos_resumen = pd.DataFrame([item for item in selecciones_especificos if item['Puesto'] == descripcion])
-        if not df_especificos_resumen.empty:
-            st.markdown("#### Complementos Específicos")
-            st.table(df_especificos_resumen[['Letra', 'Descripción', 'Puntos']])
-        
-        # Mostrar complementos de destino
-        df_destino_resumen = pd.DataFrame([item for item in selecciones_destino if item['Puesto'] == descripcion])
-        if not df_destino_resumen.empty:
-            st.markdown("#### Complementos de Destino")
-            st.table(df_destino_resumen[['Letra', 'Descripción', 'Puntos']])
+                with col2:
+                    st.subheader(f"Peso del Complemento de Destino ({tabla_destino})")
+                    peso_especifico_por_proyecto[tabla_destino] = st.number_input(
+                        f'Peso del complemento de destino para {descripcion}', 
+                        min_value=0.0,
+                        key=f'{tabla_destino}_peso'
+                    )
 
-    # Calcular sueldo total
-    st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
-    st.title("Cálculo de Sueldo Total")
+                with col3:
+                    puntos_destino_peso = df_especificos['puntos'].sum() * peso_especifico_por_proyecto[tabla_destino] / 100
+                    puntos_destino_peso_total += puntos_destino_peso
+                    st.write(f"Puntos de destino con peso específico: {puntos_destino_peso}")
 
-    sueldo_categoria_puesto = {id_puesto: 2000 for id_puesto in selected_puestos_ids}  # Dummy values, replace with actual
-    puntos_especifico_sueldo = sum(item['Puntos'] for item in selecciones_especificos)
-    puntos_valoracion = sum(item['Puntos'] for item in selecciones_destino)
+                with col4:
+                    st.text_input(f'Nota específica para {descripcion}', key=f'{descripcion}_nota')
 
-    for puesto_id in selected_puestos_ids:
-        puesto_nombre = puestos_df.query(f"id_puesto == {puesto_id}")['descripcion'].values[0]
-        sueldo = sueldo_categoria_puesto[puesto_id]
-        
-        sueldo_total_puesto = sueldo + puntos_especifico_sueldo + puntos_valoracion
-        
-        # Mostrar el cálculo para cada puesto
-        st.markdown(f"<h2>Cálculo para el puesto: {puesto_nombre}</h2>", unsafe_allow_html=True)
-        st.write(f"Bruto Anual con Jornada Ordinaria: {sueldo} + {puntos_especifico_sueldo} + {puntos_valoracion} = {sueldo_total_puesto:.2f} euros")
-
-    # Selección de la modalidad de disponibilidad especial
-    modalidad_disponibilidad = st.selectbox(
-        'Selecciona la modalidad de disponibilidad especial:',
-        options=[
-            'Ninguna',
-            'Jornada ampliada (hasta 10%)',
-            'Disponibilidad absoluta (hasta 15%)',
-            'Jornada ampliada con disponibilidad absoluta (hasta 20%)'
-        ]
-    )
-
-    # Inicialización del porcentaje según la modalidad seleccionada
-    porcentaje_disponibilidad = 0.0
-    if modalidad_disponibilidad == 'Jornada ampliada (hasta 10%)':
-        porcentaje_disponibilidad = 10.0
-    elif modalidad_disponibilidad == 'Disponibilidad absoluta (hasta 15%)':
-        porcentaje_disponibilidad = 15.0
-    elif modalidad_disponibilidad == 'Jornada ampliada con disponibilidad absoluta (hasta 20%)':
-        porcentaje_disponibilidad = 20.0
-
-    # Calcular el sueldo con disponibilidad especial
-    for puesto_id in selected_puestos_ids:
-        puesto_nombre = puestos_df.query(f"id_puesto == {puesto_id}")['descripcion'].values[0]
-        sueldo = sueldo_categoria_puesto[puesto_id]
-        
-        sueldo_total_puesto = sueldo + puntos_especifico_sueldo + puntos_valoracion
-        
-        sueldo_bruto_con_complementos = sueldo + puntos_especifico_sueldo + puntos_valoracion
-        if porcentaje_disponibilidad > 0:
-            incremento_disponibilidad = sueldo_bruto_con_complementos * (porcentaje_disponibilidad / 100)
-            sueldo_total_con_disponibilidad = sueldo_total_puesto + incremento_disponibilidad
-            st.write(f"Con la modalidad '{modalidad_disponibilidad}' ({porcentaje_disponibilidad}%), el sueldo total ajustado es: {sueldo_total_con_disponibilidad:.2f} euros")
-        else:
-            st.write("No se ha aplicado ningún complemento de disponibilidad especial.")
-
-    # Mostrar la referencia a la última publicación oficial
-    st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
-    st.markdown("Última publicación oficial: BOPV del 27 de febrero del 2024")
-
+    st.write(f"Suma de Puntos de Destino Total: {puntos_destino_peso_total}")
 else:
     st.info("Selecciona un proyecto y puestos para ver los factores seleccionados.")
