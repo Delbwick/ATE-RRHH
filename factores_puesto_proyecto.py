@@ -98,15 +98,22 @@ if id_proyecto_seleccionado and selected_puestos:
                         st.write("Tabla de Factores Específicos")
                         st.dataframe(df_especificos)
 
-                        # Selección de un valor específico
+                        # Selección de un valor específico en dos columnas (75% y 25%)
                         opciones_especificos = df_especificos.apply(lambda r: f"{r['letra']} - {r['descripcion']}", axis=1).tolist()
-                        seleccion_especifico = st.selectbox(f"Selecciona un valor para {tabla_especificos.split('.')[-1]}:", opciones_especificos, key=f"especifico_{index}")
+
+                        # Dividimos la UI en dos columnas
+                        col1, col2 = st.columns([3, 1])  # 75% y 25%
+
+                        with col1:
+                            seleccion_especifico = st.selectbox(f"Selecciona un valor para {tabla_especificos.split('.')[-1]}:", opciones_especificos, key=f"especifico_{index}")
+
                         if seleccion_especifico:
                             selected_letra, selected_descripcion = seleccion_especifico.split(" - ")
                             puntos = df_especificos.query(f"letra == '{selected_letra}'")['puntos'].values[0]
 
-                            # Input para porcentaje
-                            porcentaje_especifico = st.number_input(f"Introduce el porcentaje para {selected_descripcion}:", min_value=0.0, max_value=100.0, value=100.0, step=1.0, key=f'porcentaje_especifico_{index}')
+                            # Input para porcentaje en la segunda columna
+                            with col2:
+                                porcentaje_especifico = st.number_input(f"% {selected_descripcion}", min_value=0.0, max_value=100.0, value=100.0, step=1.0, key=f'porcentaje_especifico_{index}')
 
                             # Calcular puntos ajustados
                             puntos_ajustados = puntos * (porcentaje_especifico / 100)
@@ -127,15 +134,22 @@ if id_proyecto_seleccionado and selected_puestos:
                         st.write("Tabla de Factores de Destino")
                         st.dataframe(df_destino)
 
-                        # Selección de un valor destino
+                        # Selección de un valor destino en dos columnas (75% y 25%)
                         opciones_destino = df_destino.apply(lambda r: f"{r['letra']} - {r['descripcion']}", axis=1).tolist()
-                        seleccion_destino = st.selectbox(f"Selecciona un valor para {tabla_destino.split('.')[-1]}:", opciones_destino, key=f"destino_{index}")
+
+                        # Dividimos la UI en dos columnas
+                        col1, col2 = st.columns([3, 1])  # 75% y 25%
+
+                        with col1:
+                            seleccion_destino = st.selectbox(f"Selecciona un valor para {tabla_destino.split('.')[-1]}:", opciones_destino, key=f"destino_{index}")
+
                         if seleccion_destino:
                             selected_letra_destino, selected_descripcion_destino = seleccion_destino.split(" - ")
                             puntos_destino = df_destino.query(f"letra == '{selected_letra_destino}'")['puntos'].values[0]
 
-                            # Input para porcentaje
-                            porcentaje_destino = st.number_input(f"Introduce el porcentaje para {selected_descripcion_destino}:", min_value=0.0, max_value=100.0, value=100.0, step=1.0, key=f'porcentaje_destino_{index}')
+                            # Input para porcentaje en la segunda columna
+                            with col2:
+                                porcentaje_destino = st.number_input(f"% {selected_descripcion_destino}", min_value=0.0, max_value=100.0, value=100.0, step=1.0, key=f'porcentaje_destino_{index}')
 
                             # Calcular puntos ajustados
                             puntos_ajustados_destino = puntos_destino * (porcentaje_destino / 100)
@@ -147,6 +161,7 @@ if id_proyecto_seleccionado and selected_puestos:
                             selecciones_destino.append({'Puesto': descripcion, 'Letra': selected_letra_destino, 'Descripción': selected_descripcion_destino, 'Puntos': puntos_ajustados_destino})
                     else:
                         st.write(f"No se encontraron datos para la tabla de factores de destino {tabla_destino}.")
+
 
 # Mostrar la tabla de resumen final
     for descripcion in selected_puestos:
