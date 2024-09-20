@@ -133,6 +133,9 @@ def obtener_datos_tabla(tabla):
 
 # Aplicación Streamlit
 st.title('Gestión de Proyectos y Factores')
+# Mostrar el encabezado y línea separadora
+st.markdown("<h2>Selecciona el proyecto que quieres calcular</h2>", unsafe_allow_html=True)
+st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 
 # Selección de Proyecto
 st.sidebar.markdown("### Selecciona el proyecto")
@@ -160,6 +163,7 @@ if id_proyecto_seleccionado and selected_puestos:
         factores_df = get_factores_seleccionados(id_proyecto_seleccionado, id_puesto)
 
         if not factores_df.empty:
+            st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
             st.write(f"Factores para el Puesto {id_puesto} ({descripcion})")
 
             for index, row in factores_df.iterrows():
