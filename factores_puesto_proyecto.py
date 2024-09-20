@@ -323,17 +323,18 @@ st.markdown("<h2>Valoración para regla de 3 para tabla de complemento específi
 puntos_base = 100
 valor_base = 34388.95  # euros, deberías actualizarlo si es necesario obtener de la tabla
 
-# Cálculo de puntos específicos para el proyecto
+# Cálculo inicial del valor de puntos específicos para el proyecto
 valor_punto_especifico_proyecto = (puntos_especifico_sueldo * valor_base) / puntos_base
 
 # Input para que el usuario introduzca el valor de puntos específicos si es necesario modificar
+# Si el usuario introduce un valor, sobreescribimos valor_punto_especifico_proyecto
 valor_punto_especifico_proyecto = st.number_input('Introduce el número de puntos específicos del proyecto:',
                                                   min_value=1.0,
                                                   value=valor_punto_especifico_proyecto,
                                                   step=0.01)
 
-# Cálculo ajustado del sueldo específico
-puntos_específico_sueldo = (puntos_especifico_sueldo * valor_base) / puntos_base
+# Cálculo ajustado del sueldo específico, utilizando el valor final de valor_punto_especifico_proyecto
+sueldo_especifico_ajustado = (valor_punto_especifico_proyecto * valor_base) / puntos_base
 
 # Cálculo de los puntos de destino
 puntos_destino_peso_total = round(puntos_valoracion)
@@ -357,12 +358,16 @@ for row in results:
 
 # Cálculo final del sueldo total
 if puntos_valoracion_anual:
-    sueldo_total = sueldo + valor_punto_especifico_proyecto + puntos_valoracion_anual
+    sueldo_total = sueldo + sueldo_especifico_ajustado + puntos_valoracion_anual
     st.write(f"Sueldo total con complementos específicos y valoración destino: {sueldo_total:.2f} euros")
 else:
     st.write("No se pudo obtener el complemento destino anual.")
     
 # Continuación del código anterior...
+
+# Mostrar el cálculo para cada puesto
+    st.markdown(f"<h2>Cálculo para el puesto: {puesto_nombre}</h2>", unsafe_allow_html=True)
+    st.write(f"Bruto Anual con Jornada Ordinaria: {sueldo} + {sueldo_especifico_ajustado} + {puntos_valoracion} = {sueldo_total_puesto:.2f} euros")
 
 # --- Cálculo de la modalidad de disponibilidad especial ---
 # Selección de la modalidad de disponibilidad especial
