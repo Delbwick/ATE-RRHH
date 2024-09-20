@@ -409,6 +409,17 @@ st.write(f"sueldo base: {sueldo}")
 st.write(f"complemento especifico: {valor_punto_especifico_proyecto}")
 st.write(f"complemento de destino: {puntos_valoracion_anual}")
 
+# Datos a mostrar
+data = {
+    'Concepto': ['Puntos Valoración Complemento Destino', 'Sueldo Base', 'Complemento Específico', 'Complemento de Destino'],
+    'Valor': [puntos_valoracion_anual, sueldo, valor_punto_especifico_proyecto, puntos_valoracion_anual]
+}
+
+# Crear un DataFrame
+df_resumen = pd.DataFrame(data)
+
+# Mostrar tabla con st.table o st.dataframe
+st.table(df_resumen)
 
 # Cálculo final del sueldo total
 if puntos_valoracion_anual:
