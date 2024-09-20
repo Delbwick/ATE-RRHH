@@ -189,7 +189,7 @@ if id_proyecto_seleccionado and selected_puestos:
                             
                             st.write("Tabla de Factores Específicos")
                             st.dataframe(df_especificos)
-                            st.markdown(f"<div class='cell dataframe-cell'>{df_especificos.to_html}</div>", unsafe_allow_html=True)
+                            st.markdown(f"<div class='cell dataframe-cell'>{df_especificos.to_html(index=False)}</div>", unsafe_allow_html=True)
                             # Ajuste del DataFrame con scroll horizontal
                             #st.markdown(f"<div class='cell dataframe-cell'>{df_especificos.to_html(index=False)}</div>", unsafe_allow_html=True)
                             seleccion_especifico = st.selectbox(f"Selecciona un valor para {tabla_especificos.split('.')[-1]}:", opciones_especificos, key=f"especifico_{index}")
