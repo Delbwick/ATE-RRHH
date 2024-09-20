@@ -95,8 +95,8 @@ if id_proyecto_seleccionado and selected_puestos:
                     st.subheader(f"Factores Específicos: {tabla_especificos}")
                     df_especificos = obtener_datos_tabla(tabla_especificos)
                     if not df_especificos.empty:
-                        st.write("Tabla de Factores Específicos")
-                        st.dataframe(df_especificos)
+                        #st.write("Tabla de Factores Específicos")
+                        #st.dataframe(df_especificos)
 
                         # Selección de un valor específico en dos columnas (75% y 25%)
                         opciones_especificos = df_especificos.apply(lambda r: f"{r['letra']} - {r['descripcion']}", axis=1).tolist()
