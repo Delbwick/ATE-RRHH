@@ -284,8 +284,8 @@ st.markdown("<h2>Caluculo de Importes para la Valoración del Puesto de trabajo<
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
     
     # Calcular sueldo total
-    st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
-    st.title("Cálculo de Sueldo Total")
+st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
+st.title("Cálculo de Sueldo Total")
 
 # Consulta para obtener las categorías de sueldo
 query_categorias_sueldo = """
