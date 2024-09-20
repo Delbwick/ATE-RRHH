@@ -364,6 +364,8 @@ puntos_valoracion_anual = None
 for row in results:
     puntos_valoracion_anual = row.complemento_destino_anual
 
+st.write(f"puntos valoracion complemento destino: {puntos_valoracion_anual}")
+
 # Cálculo final del sueldo total
 if puntos_valoracion_anual:
     sueldo_total = sueldo + sueldo_especifico_ajustado + puntos_valoracion_anual
