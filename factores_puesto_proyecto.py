@@ -156,7 +156,7 @@ selecciones_destino = []
 selected_puestos_ids = puestos_df.query(f"descripcion in {selected_puestos}")['id_puesto'].tolist()
 
 if id_proyecto_seleccionado and selected_puestos:
-    st.markdown(f"### Factores Seleccionados para el Proyecto {id_proyecto_seleccionado} {index_seleccionado}")
+    st.markdown(f"### Factores Seleccionados para el Proyecto {id_proyecto_seleccionado} {index_seleccionado} y el puesto {descripcion}")
 
     for descripcion in selected_puestos:
         id_puesto = puestos_df.query(f"descripcion == '{descripcion}'")['id_puesto'].values[0]
