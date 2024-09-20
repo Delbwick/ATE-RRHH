@@ -105,6 +105,8 @@ if id_proyecto_seleccionado and selected_puestos:
                         col1, col2 = st.columns([3, 1])  # 75% y 25%
 
                         with col1:
+                            st.write("Tabla de Factores Específicos")
+                            st.dataframe(df_especificos)
                             seleccion_especifico = st.selectbox(f"Selecciona un valor para {tabla_especificos.split('.')[-1]}:", opciones_especificos, key=f"especifico_{index}")
 
                         if seleccion_especifico:
@@ -113,7 +115,9 @@ if id_proyecto_seleccionado and selected_puestos:
 
                             # Input para porcentaje en la segunda columna
                             with col2:
-                                porcentaje_especifico = st.number_input(f"% {selected_descripcion}", min_value=0.0, max_value=100.0, value=100.0, step=1.0, key=f'porcentaje_especifico_{index}')
+                                #porcentaje_especifico = st.number_input(f"% {selected_descripcion}", min_value=0.0, max_value=100.0, value=100.0, step=1.0, key=f'porcentaje_especifico_{index}')
+                                porcentaje_especifico = st.number_input(f"%Peso del complemento de destino para {tabla_especificos}", min_value=0.0, max_value=100.0, value=100.0, step=1.0, key=f'porcentaje_especifico_{index}')
+
 
                             # Calcular puntos ajustados
                             puntos_ajustados = puntos * (porcentaje_especifico / 100)
