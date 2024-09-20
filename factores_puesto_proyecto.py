@@ -260,21 +260,29 @@ if id_proyecto_seleccionado and selected_puestos:
                         st.write(f"No se encontraron datos para la tabla de factores de destino {tabla_destino}.")
 
 
-# Mostrar la tabla de resumen final
-    for descripcion in selected_puestos:
-        st.subheader(f"Resumen de Selecciones para el Puesto: {descripcion}")
+for descripcion in selected_puestos:
+    st.subheader(f"Resumen de Selecciones para el Puesto: {descripcion}")
+    
+    # Mostrar complementos específicos
+    df_especificos_resumen = pd.DataFrame([item for item in selecciones_especificos if item['Puesto'] == descripcion])
+    if not df_especificos_resumen.empty:
+        st.markdown("#### Complementos Específicos")
+        st.table(df_especificos_resumen[['Letra', 'Descripción', 'Puntos']])
         
-        # Mostrar complementos específicos
-        df_especificos_resumen = pd.DataFrame([item for item in selecciones_especificos if item['Puesto'] == descripcion])
-        if not df_especificos_resumen.empty:
-            st.markdown("#### Complementos Específicos")
-            st.table(df_especificos_resumen[['Letra', 'Descripción', 'Puntos']])
+        # Sumar los puntos específicos
+        total_puntos_especificos = df_especificos_resumen['Puntos'].sum()
+        st.markdown(f"**Total de Puntos Específicos: {total_puntos_especificos:.2f}**")  # Mostrar la suma formateada
         
-        # Mostrar complementos de destino
-        df_destino_resumen = pd.DataFrame([item for item in selecciones_destino if item['Puesto'] == descripcion])
-        if not df_destino_resumen.empty:
-            st.markdown("#### Complementos de Destino")
-            st.table(df_destino_resumen[['Letra', 'Descripción', 'Puntos']])
+    # Mostrar complementos de destino
+    df_destino_resumen = pd.DataFrame([item for item in selecciones_destino if item['Puesto'] == descripcion])
+    if not df_destino_resumen.empty:
+        st.markdown("#### Complementos de Destino")
+        st.table(df_destino_resumen[['Letra', 'Descripción', 'Puntos']])
+        
+        # Sumar los puntos de destino
+        total_puntos_destino = df_destino_resumen['Puntos'].sum()
+        st.markdown(f"**Total de Puntos de Destino: {total_puntos_destino:.2f}**")  # Mostrar la suma formateada
+
 
     # Calcular sueldo total
     st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
