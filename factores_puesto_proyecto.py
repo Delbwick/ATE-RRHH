@@ -311,6 +311,63 @@ st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 st.title("Cálculo de Sueldo Total")
 
 sueldo_categoria_puesto = {id_puesto: 2000 for id_puesto in selected_puestos_ids}  # Dummy values, replace with actual
+#calculo sueldo base por puesto
+# Consulta para obtener las categorías de sueldo
+query_categorias_sueldo = """
+    SELECT nombre_categoria, sueldo
+    FROM `ate-rrhh-2024.Ate_kaibot_2024.valoracion_categoria_sueldo_por_ano`
+"""
+
+# Ejecutar la consulta para obtener las categorías de sueldo
+query_job_categorias_sueldo = client.query(query_categorias_sueldo)
+results_categorias_sueldo = query_job_categorias_sueldo.result()
+df_categorias_sueldo = pd.DataFrame(data=[row.values() for row in results_categorias_sueldo], columns=[field.name for field in results_categorias_sueldo.schema])
+
+# Convertir el DataFrame de categorías de sueldo en un diccionario para fácil acceso
+categorias_sueldo_dict = df_categorias_sueldo.set_index('nombre_categoria')['sueldo'].to_dict()
+
+# Crear un diccionario para almacenar el sueldo base de cada puesto según su categoría
+sueldo_categoria_puesto = {}
+
+# Iterar por los puestos seleccionados y asignarles el sueldo de la categoría correspondiente
+for id_puesto in selected_puestos_ids:
+    categoria = puestos_categoria_dict.get(id_puesto)  # Obtener la categoría del puesto
+    if categoria in categorias_sueldo_dict:  # Verificar si la categoría tiene sueldo asociado
+        sueldo_categoria_puesto[id_puesto] = categorias_sueldo_dict[categoria]  # Asignar sueldo base
+    else:
+        sueldo_categoria_puesto[id_puesto] = 0  # Asignar 0 si no se encuentra la categoría
+
+# Mostrar el resultado para ver los sueldos asignados por puesto
+st.write("Sueldo base por puesto:", sueldo_categoria_puesto)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#fin sueldo base
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 puntos_especifico_sueldo = sum(item['Puntos'] for item in selecciones_especificos)
 puntos_valoracion = sum(item['Puntos'] for item in selecciones_destino)
 
