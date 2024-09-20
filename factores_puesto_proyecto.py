@@ -164,7 +164,7 @@ if id_proyecto_seleccionado and selected_puestos:
 
         if not factores_df.empty:
             st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
-            st.markdown(f"Factores para el Puesto {id_puesto} ({descripcion})")
+            st.write(f"Factores para el Puesto {id_puesto} ({descripcion})")
 
             for index, row in factores_df.iterrows():
                 tabla_especificos = row['complementos_especificos']
