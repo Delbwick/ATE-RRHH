@@ -346,6 +346,7 @@ sueldo_especifico_ajustado = (valor_punto_especifico_proyecto * valor_base) / pu
 
 # Cálculo de los puntos de destino
 puntos_destino_peso_total = round(puntos_valoracion)
+st.write(f"puntos valoracion redondeado destino: {puntos_destino_peso_total}")
 
 # Construir la consulta SQL para obtener el complemento destino anual
 query_valoracion_puntos = f"""
