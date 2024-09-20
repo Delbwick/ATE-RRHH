@@ -366,10 +366,14 @@ for row in results:
     puntos_valoracion_anual = row.complemento_destino_anual
 
 st.write(f"puntos valoracion complemento destino: {puntos_valoracion_anual}")
+st.write(f"sueldo base: {sueldo}")
+st.write(f"complemento especifico: {valor_punto_especifico_proyecto}")
+st.write(f"complemento de destino: {puntos_valoracion_anual}")
+
 
 # Cálculo final del sueldo total
 if puntos_valoracion_anual:
-    sueldo_total = sueldo + sueldo_especifico_ajustado + puntos_valoracion_anual
+    sueldo_total = sueldo + valor_punto_especifico_proyecto + puntos_valoracion_anual
     st.write(f"Sueldo total con complementos específicos y valoración destino: {sueldo_total:.2f} euros")
 else:
     st.write("No se pudo obtener el complemento destino anual.")
