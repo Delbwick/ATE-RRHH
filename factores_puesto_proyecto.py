@@ -156,7 +156,7 @@ selecciones_destino = []
 selected_puestos_ids = puestos_df.query(f"descripcion in {selected_puestos}")['id_puesto'].tolist()
 
 if id_proyecto_seleccionado and selected_puestos:
-    st.markdown(f"### Factores Seleccionados para el Proyecto {id_proyecto_seleccionado} {proyectos_nombres}")
+    st.markdown(f"### Factores Seleccionados para el Proyecto {id_proyecto_seleccionado} {index_seleccionado}")
 
     for descripcion in selected_puestos:
         id_puesto = puestos_df.query(f"descripcion == '{descripcion}'")['id_puesto'].values[0]
@@ -190,7 +190,7 @@ if id_proyecto_seleccionado and selected_puestos:
                             st.write("Tabla de Factores Específicos")
                             st.dataframe(df_especificos)
                             # Ajuste del DataFrame con scroll horizontal
-                            st.markdown(f"<div class='cell dataframe-cell'>{df_especificos.to_html(index=False)}</div>", unsafe_allow_html=True)
+                            #st.markdown(f"<div class='cell dataframe-cell'>{df_especificos.to_html(index=False)}</div>", unsafe_allow_html=True)
                             seleccion_especifico = st.selectbox(f"Selecciona un valor para {tabla_especificos.split('.')[-1]}:", opciones_especificos, key=f"especifico_{index}")
 
                         if seleccion_especifico:
