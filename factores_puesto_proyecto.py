@@ -299,8 +299,8 @@ for descripcion in selected_puestos:
         sueldo_total_puesto = sueldo + puntos_especifico_sueldo + puntos_valoracion
         
         # Mostrar el cálculo para cada puesto
-        st.markdown(f"<h2>Cálculo para el puesto: {puesto_nombre}</h2>", unsafe_allow_html=True)
-        st.write(f"Bruto Anual con Jornada Ordinaria: {sueldo} + {puntos_especifico_sueldo} + {puntos_valoracion} = {sueldo_total_puesto:.2f} euros")
+        st.markdown(f"<h1>Cálculo para el puesto: {puesto_nombre}</h1>", unsafe_allow_html=True)
+        #st.write(f"Bruto Anual con Jornada Ordinaria: {sueldo} + {puntos_especifico_sueldo} + {puntos_valoracion} = {sueldo_total_puesto:.2f} euros")
 
 
 #≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤
@@ -308,7 +308,7 @@ for descripcion in selected_puestos:
 #≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤
 # Cálculo de Sueldo Total
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
-st.title("Cálculo de Sueldo Total")
+#st.title("Cálculo de Sueldo Total")
 
 sueldo_categoria_puesto = {id_puesto: 2000 for id_puesto in selected_puestos_ids}  # Dummy values, replace with actual
 #calculo sueldo base por puesto
@@ -349,34 +349,7 @@ for id_puesto in selected_puestos_ids:
 # Mostrar el resultado para ver los sueldos asignados por puesto
 st.write("Sueldo base por puesto:", sueldo_categoria_puesto)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 #fin sueldo base
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 puntos_especifico_sueldo = sum(item['Puntos'] for item in selecciones_especificos)
 puntos_valoracion = sum(item['Puntos'] for item in selecciones_destino)
 
@@ -387,8 +360,8 @@ for puesto_id in selected_puestos_ids:
     sueldo_total_puesto = sueldo + puntos_especifico_sueldo + puntos_valoracion
     
     # Mostrar el cálculo para cada puesto
-    st.markdown(f"<h2>Cálculo para el puesto: {puesto_nombre}</h2>", unsafe_allow_html=True)
-    st.write(f"Bruto Anual con Jornada Ordinaria: {sueldo} + {puntos_especifico_sueldo} + {puntos_valoracion} = {sueldo_total_puesto:.2f} euros")
+    #st.markdown(f"<h2>Cálculo para el puesto: {puesto_nombre}</h2>", unsafe_allow_html=True)
+    #st.write(f"Bruto Anual con Jornada Ordinaria: {sueldo} + {puntos_especifico_sueldo} + {puntos_valoracion} = {sueldo_total_puesto:.2f} euros")
 
 # --- NUEVO CÁLCULO AÑADIDO AQUÍ ---
 st.markdown("<h2>Valoración para regla de 3 para tabla de complemento específico por Año (Variable) son 100 puntos -> 34.388,95 euros</h2>", unsafe_allow_html=True)
@@ -449,6 +422,8 @@ else:
 # Mostrar el cálculo para cada puesto
     st.markdown(f"<h2>Cálculo para el puesto: {puesto_nombre}</h2>", unsafe_allow_html=True)
     st.write(f"Bruto Anual con Jornada Ordinaria: {sueldo} + {valor_punto_especifico_proyecto} + {puntos_valoracion} = {sueldo_total_puesto:.2f} euros")
+    st.markdown(f"Bruto Anual con Jornada Ordinaria:<div class='cell'>{sueldo_total_puesto}</div>", unsafe_allow_html=True)
+
 
 # --- Cálculo de la modalidad de disponibilidad especial ---
 # Selección de la modalidad de disponibilidad especial
