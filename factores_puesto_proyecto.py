@@ -294,6 +294,124 @@ if id_proyecto_seleccionado and selected_puestos:
         st.markdown(f"<h2>Cálculo para el puesto: {puesto_nombre}</h2>", unsafe_allow_html=True)
         st.write(f"Bruto Anual con Jornada Ordinaria: {sueldo} + {puntos_especifico_sueldo} + {puntos_valoracion} = {sueldo_total_puesto:.2f} euros")
 
+
+#≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤
+    #CALUCLO DE SUELDOS v2
+#≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤
+# Cálculo de Sueldo Total
+st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
+st.title("Cálculo de Sueldo Total")
+
+sueldo_categoria_puesto = {id_puesto: 2000 for id_puesto in selected_puestos_ids}  # Dummy values, replace with actual
+puntos_especifico_sueldo = sum(item['Puntos'] for item in selecciones_especificos)
+puntos_valoracion = sum(item['Puntos'] for item in selecciones_destino)
+
+for puesto_id in selected_puestos_ids:
+    puesto_nombre = puestos_df.query(f"id_puesto == {puesto_id}")['descripcion'].values[0]
+    sueldo = sueldo_categoria_puesto[puesto_id]
+    
+    sueldo_total_puesto = sueldo + puntos_especifico_sueldo + puntos_valoracion
+    
+    # Mostrar el cálculo para cada puesto
+    st.markdown(f"<h2>Cálculo para el puesto: {puesto_nombre}</h2>", unsafe_allow_html=True)
+    st.write(f"Bruto Anual con Jornada Ordinaria: {sueldo} + {puntos_especifico_sueldo} + {puntos_valoracion} = {sueldo_total_puesto:.2f} euros")
+
+# --- NUEVO CÁLCULO AÑADIDO AQUÍ ---
+st.markdown("<h2>Valoración para regla de 3 para tabla de complemento específico por Año (Variable) son 100 puntos -> 34.388,95 euros</h2>", unsafe_allow_html=True)
+
+# Definir las variables base para el cálculo
+puntos_base = 100
+valor_base = 34388.95  # euros, deberías actualizarlo si es necesario obtener de la tabla
+
+# Cálculo de puntos específicos para el proyecto
+valor_punto_especifico_proyecto = (puntos_especifico_sueldo * valor_base) / puntos_base
+
+# Input para que el usuario introduzca el valor de puntos específicos si es necesario modificar
+valor_punto_especifico_proyecto = st.number_input('Introduce el número de puntos específicos del proyecto:',
+                                                  min_value=1.0,
+                                                  value=valor_punto_especifico_proyecto,
+                                                  step=0.01)
+
+# Cálculo ajustado del sueldo específico
+puntos_específico_sueldo = (puntos_especifico_sueldo * valor_base) / puntos_base
+
+# Cálculo de los puntos de destino
+puntos_destino_peso_total = round(puntos_valoracion)
+
+# Construir la consulta SQL para obtener el complemento destino anual
+query_valoracion_puntos = f"""
+    SELECT complemento_destino_anual
+    FROM `ate-rrhh-2024.Ate_kaibot_2024.valoracion_destino_puntos_por_ano`
+    WHERE puntos_valoracion_destino = {puntos_destino_peso_total}
+    LIMIT 1
+"""
+
+# Ejecutar la consulta
+query_job = client.query(query_valoracion_puntos)
+results = query_job.result()
+
+# Procesar los resultados para obtener el complemento destino anual
+puntos_valoracion_anual = None
+for row in results:
+    puntos_valoracion_anual = row.complemento_destino_anual
+
+# Cálculo final del sueldo total
+if puntos_valoracion_anual:
+    sueldo_total = sueldo + valor_punto_especifico_proyecto + puntos_valoracion_anual
+    st.write(f"Sueldo total con complementos específicos y valoración destino: {sueldo_total:.2f} euros")
+else:
+    st.write("No se pudo obtener el complemento destino anual.")
+    
+# Continuación del código anterior...
+
+# --- Cálculo de la modalidad de disponibilidad especial ---
+# Selección de la modalidad de disponibilidad especial
+modalidad_disponibilidad = st.selectbox(
+    'Selecciona la modalidad de disponibilidad especial:',
+    options=[
+        'Ninguna',
+        'Jornada ampliada (hasta 10%)',
+        'Disponibilidad absoluta (hasta 15%)',
+        'Jornada ampliada con disponibilidad absoluta (hasta 20%)'
+    ]
+)
+
+# Inicialización del porcentaje según la modalidad seleccionada
+porcentaje_disponibilidad = 0.0
+if modalidad_disponibilidad == 'Jornada ampliada (hasta 10%)':
+    porcentaje_disponibilidad = 10.0
+elif modalidad_disponibilidad == 'Disponibilidad absoluta (hasta 15%)':
+    porcentaje_disponibilidad = 15.0
+elif modalidad_disponibilidad == 'Jornada ampliada con disponibilidad absoluta (hasta 20%)':
+    porcentaje_disponibilidad = 20.0
+
+# Calcular el sueldo con disponibilidad especial
+for puesto_id in selected_puestos_ids:
+    puesto_nombre = puestos_df.query(f"id_puesto == {puesto_id}")['descripcion'].values[0]
+    sueldo = sueldo_categoria_puesto[puesto_id]
+    
+    sueldo_total_puesto = sueldo + puntos_especifico_sueldo + puntos_valoracion
+    
+    sueldo_bruto_con_complementos = sueldo + puntos_especifico_sueldo + puntos_valoracion
+    if porcentaje_disponibilidad > 0:
+        incremento_disponibilidad = sueldo_bruto_con_complementos * (porcentaje_disponibilidad / 100)
+        sueldo_total_con_disponibilidad = sueldo_total_puesto + incremento_disponibilidad
+        st.write(f"Con la modalidad '{modalidad_disponibilidad}' ({porcentaje_disponibilidad}%), el sueldo total ajustado es: {sueldo_total_con_disponibilidad:.2f} euros")
+    else:
+        st.write("No se ha aplicado ningún complemento de disponibilidad especial.")
+
+# Mostrar la referencia a la última publicación oficial
+st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
+st.markdown("Última publicación oficial: BOPV del 27 de febrero del 2024")
+
+
+
+
+
+#≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤
+    #Fin CALUCLO DE SUELDOS v2
+#≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤
+    
     # Selección de la modalidad de disponibilidad especial
     modalidad_disponibilidad = st.selectbox(
         'Selecciona la modalidad de disponibilidad especial:',
