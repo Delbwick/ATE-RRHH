@@ -208,7 +208,9 @@ if id_proyecto_seleccionado and selected_puestos:
                             puntos_ajustados = puntos * (porcentaje_especifico / 100)
 
                             # Mostrar resultado
-                            st.write(f"Seleccionaste la letra: {selected_letra} y la descripción: {selected_descripcion}")
+                            #st.write(f"Seleccionaste la letra: {selected_letra} y la descripción: {selected_descripcion}")
+                            st.write(f"Seleccionaste la letra: {selected_letra}")
+
                             st.write(f"Puntos originales: {puntos}")
                             st.write(f"Puntos ajustados (con {porcentaje_especifico}%): {puntos_ajustados:.2f}")
                             selecciones_especificos.append({'Puesto': descripcion, 'Letra': selected_letra, 'Descripción': selected_descripcion, 'Puntos': puntos_ajustados})
