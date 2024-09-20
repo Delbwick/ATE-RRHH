@@ -276,32 +276,9 @@ if id_proyecto_seleccionado and selected_puestos:
             st.markdown("#### Complementos de Destino")
             st.table(df_destino_resumen[['Letra', 'Descripción', 'Puntos']])
 
-#≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤   
-    #CAluculo de Sueldo
-#≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤
-
-st.markdown("<h2>Caluculo de Importes para la Valoración del Puesto de trabajo</h2>", unsafe_allow_html=True)
-st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
-    
     # Calcular sueldo total
-st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
-st.title("Cálculo de Sueldo Total")
-
-# Consulta para obtener las categorías de sueldo
-query_categorias_sueldo = """
-    SELECT nombre_categoria, sueldo
-    FROM `ate-rrhh-2024.Ate_kaibot_2024.valoracion_categoria_sueldo_por_ano`
-"""
-
-# Ejecutar la consulta para obtener las categorías de sueldo
-query_job_categorias_sueldo = client.query(query_categorias_sueldo)
-results_categorias_sueldo = query_job_categorias_sueldo.result()
-df_categorias_sueldo = pd.DataFrame(data=[row.values() for row in results_categorias_sueldo], columns=[field.name for field in results_categorias_sueldo.schema])
-
-# Convertir el DataFrame de categorías de sueldo en un diccionario para fácil acceso
-categorias_sueldo_dict = df_categorias_sueldo.set_index('nombre_categoria')['sueldo'].to_dict()
-
-
+    st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
+    st.title("Cálculo de Sueldo Total")
 
     sueldo_categoria_puesto = {id_puesto: 2000 for id_puesto in selected_puestos_ids}  # Dummy values, replace with actual
     puntos_especifico_sueldo = sum(item['Puntos'] for item in selecciones_especificos)
