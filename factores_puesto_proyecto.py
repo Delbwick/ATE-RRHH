@@ -12,7 +12,7 @@ st.header("¡Calcula los Salarios Por Poryecto!")
 header_html = """
     <style>
         .header-container {
-            background-color: #2596be; /* Color de fondo */
+            background-color: #2596be;
             padding: 20px;
             border-radius: 10px;
             text-align: center;
@@ -22,51 +22,61 @@ header_html = """
             margin-bottom: 10px;
         }
         .wide-line {
-        width: 100%;
-        height: 2px;
-        background-color: #333333;
-        margin-top: 20px;
-        margin-bottom: 20px;
-    }
-    h1 {
-        font-family: 'Arial', sans-serif;
-        font-size: 17pt;
-        text-align: left;
-        color: #333333;
-    }
-    h2 {
-        font-family: 'Arial', sans-serif;
-        font-size: 17pt;
-        text-align: left;
-        color: #333333;
-    }
-    h3 {
-        font-family: 'Arial', sans-serif;
-        font-size: 14pt;
-        text-align: center;
-        color: #333333;
-    }
-    .cell {
-        border: 1px solid black;
-        padding: 10px;
-        text-align: center;
-        background-color: #f9f9f9;
-        margin-bottom: 20px; /* Margen inferior para toda la "tabla" */
-    }
-    .header-cell {
-        background-color: #e0e0e0;
-        font-weight: bold;
-        border: 1px solid black;
-        padding: 10px;
-        text-align: center;
-       
-    }
-    .dataframe-cell {
-        overflow-x: auto;  /* Habilita scroll horizontal */
-        overflow-y: auto;  /* Habilita scroll vertical */
-        max-width: 100%;   /* Limita el ancho al 100% del contenedor */
-        max-height: 200px; /* Limita la altura a 300px y habilita scroll */
-    }
+            width: 100%;
+            height: 2px;
+            background-color: #333333;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        h1, h2 {
+            font-family: 'Arial', sans-serif;
+            font-size: 17pt;
+            text-align: left;
+            color: #333333;
+        }
+        h3 {
+            font-family: 'Arial', sans-serif;
+            font-size: 14pt;
+            text-align: center;
+            color: #333333;
+        }
+        .cell {
+            border: 1px solid black;
+            padding: 10px;
+            text-align: center;
+            background-color: #f9f9f9;
+            margin-bottom: 20px;
+        }
+        .header-cell {
+            background-color: #e0e0e0;
+            font-weight: bold;
+            border: 1px solid black;
+            padding: 10px;
+            text-align: center;
+        }
+        .dataframe-cell {
+            overflow-x: auto;
+            overflow-y: auto;
+            max-width: 100%;
+            max-height: 200px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+        th {
+            background-color: #2596be;
+            color: white;
+        }
+        td {
+            background-color: #f9f9f9;
+        }
     </style>
 """
 
@@ -258,33 +268,41 @@ if id_proyecto_seleccionado and selected_puestos:
                             selecciones_destino.append({'Puesto': descripcion, 'Letra': selected_letra_destino, 'Descripción': selected_descripcion_destino, 'Puntos': puntos_ajustados_destino})
                     else:
                         st.write(f"No se encontraron datos para la tabla de factores de destino {tabla_destino}.")
-
+#tabla de resumenes de selecciones
 
 for descripcion in selected_puestos:
+    # Separador de líneas
     st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
-    st.header(f"Resumen de Selecciones para el Puesto: {descripcion}")
-    st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
-
+    
+    # Encabezado del puesto
+    st.markdown(f"<h2>Resumen de Selecciones para el Puesto: {descripcion}</h2>", unsafe_allow_html=True)
     
     # Mostrar complementos específicos
     df_especificos_resumen = pd.DataFrame([item for item in selecciones_especificos if item['Puesto'] == descripcion])
     if not df_especificos_resumen.empty:
-        st.markdown("#### Complementos Específicos")
-        st.table(df_especificos_resumen[['Letra', 'Descripción', 'Puntos']])
+        st.markdown("<h3>Complementos Específicos</h3>", unsafe_allow_html=True)
+        
+        # Crear tabla personalizada
+        st.markdown(df_especificos_resumen.to_html(index=False, classes="table", border=0), unsafe_allow_html=True)
         
         # Sumar los puntos específicos
         total_puntos_especificos = df_especificos_resumen['Puntos'].sum()
-        st.markdown(f"**Total de Puntos Específicos: {total_puntos_especificos:.2f}**")  # Mostrar la suma formateada
-        
+        st.markdown(f"<b>Total de Puntos Específicos: {total_puntos_especificos:.2f}</b>", unsafe_allow_html=True)
+    
     # Mostrar complementos de destino
     df_destino_resumen = pd.DataFrame([item for item in selecciones_destino if item['Puesto'] == descripcion])
     if not df_destino_resumen.empty:
-        st.markdown("#### Complementos de Destino")
-        st.table(df_destino_resumen[['Letra', 'Descripción', 'Puntos']])
+        st.markdown("<h3>Complementos de Destino</h3>", unsafe_allow_html=True)
+        
+        # Crear tabla personalizada
+        st.markdown(df_destino_resumen.to_html(index=False, classes="table", border=0), unsafe_allow_html=True)
         
         # Sumar los puntos de destino
         total_puntos_destino = df_destino_resumen['Puntos'].sum()
-        st.markdown(f"**Total de Puntos de Destino: {total_puntos_destino:.2f}**")  # Mostrar la suma formateada
+        st.markdown(f"<b>Total de Puntos de Destino: {total_puntos_destino:.2f}</b>", unsafe_allow_html=True)
+
+    # Separador de líneas
+    st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 
 
     # Calcular sueldo total
