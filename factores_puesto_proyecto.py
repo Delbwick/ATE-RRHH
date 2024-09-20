@@ -173,7 +173,7 @@ if id_proyecto_seleccionado and selected_puestos:
                 # Factores Específicos
                 if tabla_especificos != 'No disponible':
                     st.subheader(f"Factores Específicos: {tabla_especificos}")
-                    st.markdown(f"<div class='header-cell'><h3>{tabla_especificos}}</h3></div>", unsafe_allow_html=True)
+                    st.markdown(f"<div class='header-cell'><h3>{tabla_especificos}</h3></div>", unsafe_allow_html=True)
                     df_especificos = obtener_datos_tabla(tabla_especificos)
                     if not df_especificos.empty:
                         #st.write("Tabla de Factores Específicos")
