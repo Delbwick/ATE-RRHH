@@ -331,12 +331,21 @@ sueldo_categoria_puesto = {}
 
 # Iterar por los puestos seleccionados y asignarles el sueldo de la categoría correspondiente
 for id_puesto in selected_puestos_ids:
-    categoria = puestos_categoria_dict.get(id_puesto)  # Obtener la categoría del puesto
-    if categoria in categorias_sueldo_dict:  # Verificar si la categoría tiene sueldo asociado
-        sueldo_categoria_puesto[id_puesto] = categorias_sueldo_dict[categoria]  # Asignar sueldo base
-    else:
-        sueldo_categoria_puesto[id_puesto] = 0  # Asignar 0 si no se encuentra la categoría
-
+    # Selectbox para elegir la categoría de sueldo
+        st.markdown("<h2>Selecciona la Categoría para el Puesto</h2>", unsafe_allow_html=True)
+        st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
+        categoria_seleccionada = st.selectbox(
+            f"Seleccione la categoría de sueldo para {puesto_nombre}",
+            list(categorias_sueldo_dict.keys()),
+            key=f"{puesto_id}_categoria"
+        )
+        
+        # Obtener el sueldo de la categoría seleccionada
+        sueldo = categorias_sueldo_dict[categoria_seleccionada]
+        st.write(f"Sueldo: {sueldo}")
+        
+        # Almacenar el sueldo en la variable
+        sueldo_categoria_puesto[puesto_id] = sueldo
 # Mostrar el resultado para ver los sueldos asignados por puesto
 st.write("Sueldo base por puesto:", sueldo_categoria_puesto)
 
