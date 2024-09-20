@@ -4,7 +4,7 @@ from google.cloud import bigquery
 import pandas as pd
 
 # Configurar la página de Streamlit
-st.set_page_config(page_title="RRHH Cálculo de Puestos por Proyecto y por puesto ", page_icon="🙇")
+st.set_page_config(page_title="RRHH Cálculo de Puestos por Proyecto y por puesto ", page_icon="👥")
 st.title("¡Bienvenido a RRHH! ")
 st.header("¡Calcula los Salarios Por Poryecto!")
 
@@ -156,7 +156,7 @@ selecciones_destino = []
 selected_puestos_ids = puestos_df.query(f"descripcion in {selected_puestos}")['id_puesto'].tolist()
 
 if id_proyecto_seleccionado and selected_puestos:
-    st.markdown(f"### Factores Seleccionados para el Proyecto {id_proyecto_seleccionado} {index_seleccionado} y el puesto {id_puesto}")
+    st.markdown(f"### Factores Seleccionados para el Proyecto {id_proyecto_seleccionado} {index_seleccionado}")
 
     for descripcion in selected_puestos:
         id_puesto = puestos_df.query(f"descripcion == '{descripcion}'")['id_puesto'].values[0]
@@ -164,7 +164,7 @@ if id_proyecto_seleccionado and selected_puestos:
 
         if not factores_df.empty:
             st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
-            st.write(f"Factores para el Puesto {id_puesto} ({descripcion})")
+            st.markdown(f"Factores para el Puesto {id_puesto} ({descripcion})")
 
             for index, row in factores_df.iterrows():
                 tabla_especificos = row['complementos_especificos']
