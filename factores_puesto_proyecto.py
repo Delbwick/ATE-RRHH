@@ -367,7 +367,7 @@ else:
 
 # Mostrar el cálculo para cada puesto
     st.markdown(f"<h2>Cálculo para el puesto: {puesto_nombre}</h2>", unsafe_allow_html=True)
-    st.write(f"Bruto Anual con Jornada Ordinaria: {sueldo} + {sueldo_especifico_ajustado} + {puntos_valoracion} = {sueldo_total_puesto:.2f} euros")
+    st.write(f"Bruto Anual con Jornada Ordinaria: {sueldo} + {valor_punto_especifico_proyecto} + {puntos_valoracion} = {sueldo_total_puesto:.2f} euros")
 
 # --- Cálculo de la modalidad de disponibilidad especial ---
 # Selección de la modalidad de disponibilidad especial
