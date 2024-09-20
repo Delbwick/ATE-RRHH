@@ -219,6 +219,7 @@ if id_proyecto_seleccionado and selected_puestos:
                             puntos_ajustados = puntos * (porcentaje_especifico / 100)
 
                             # Mostrar resultado
+                            st.markdown("<h4>Resultados de la Selección</h4>", unsafe_allow_html=True)
                             #st.write(f"Seleccionaste la letra: {selected_letra} y la descripción: {selected_descripcion}")
                             st.write(f"Seleccionaste la letra: {selected_letra}")
 
