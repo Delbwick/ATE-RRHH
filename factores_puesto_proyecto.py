@@ -412,44 +412,4 @@ st.markdown("Última publicación oficial: BOPV del 27 de febrero del 2024")
     #Fin CALUCLO DE SUELDOS v2
 #≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤
     
-    # Selección de la modalidad de disponibilidad especial
-    modalidad_disponibilidad = st.selectbox(
-        'Selecciona la modalidad de disponibilidad especial:',
-        options=[
-            'Ninguna',
-            'Jornada ampliada (hasta 10%)',
-            'Disponibilidad absoluta (hasta 15%)',
-            'Jornada ampliada con disponibilidad absoluta (hasta 20%)'
-        ]
-    )
-
-    # Inicialización del porcentaje según la modalidad seleccionada
-    porcentaje_disponibilidad = 0.0
-    if modalidad_disponibilidad == 'Jornada ampliada (hasta 10%)':
-        porcentaje_disponibilidad = 10.0
-    elif modalidad_disponibilidad == 'Disponibilidad absoluta (hasta 15%)':
-        porcentaje_disponibilidad = 15.0
-    elif modalidad_disponibilidad == 'Jornada ampliada con disponibilidad absoluta (hasta 20%)':
-        porcentaje_disponibilidad = 20.0
-
-    # Calcular el sueldo con disponibilidad especial
-    for puesto_id in selected_puestos_ids:
-        puesto_nombre = puestos_df.query(f"id_puesto == {puesto_id}")['descripcion'].values[0]
-        sueldo = sueldo_categoria_puesto[puesto_id]
-        
-        sueldo_total_puesto = sueldo + puntos_especifico_sueldo + puntos_valoracion
-        
-        sueldo_bruto_con_complementos = sueldo + puntos_especifico_sueldo + puntos_valoracion
-        if porcentaje_disponibilidad > 0:
-            incremento_disponibilidad = sueldo_bruto_con_complementos * (porcentaje_disponibilidad / 100)
-            sueldo_total_con_disponibilidad = sueldo_total_puesto + incremento_disponibilidad
-            st.write(f"Con la modalidad '{modalidad_disponibilidad}' ({porcentaje_disponibilidad}%), el sueldo total ajustado es: {sueldo_total_con_disponibilidad:.2f} euros")
-        else:
-            st.write("No se ha aplicado ningún complemento de disponibilidad especial.")
-
-    # Mostrar la referencia a la última publicación oficial
-    st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
-    st.markdown("Última publicación oficial: BOPV del 27 de febrero del 2024")
-
-else:
-    st.info("Selecciona un proyecto y puestos para ver los factores seleccionados.")
+ 
