@@ -200,9 +200,9 @@ if id_proyecto_seleccionado and selected_puestos:
 
                             # Input para porcentaje en la segunda columna
                             with col2:
-                                st.markdown(f"<div class='header-cell'><b>Peso del complemento de destino para {tabla_especificos}</b></div>", unsafe_allow_html=True)
+                                st.markdown(f"<div class='header-cell'><b>Peso del complemento específico para {tabla_especificos}</b></div>", unsafe_allow_html=True)
                                 #porcentaje_especifico = st.number_input(f"% {selected_descripcion}", min_value=0.0, max_value=100.0, value=100.0, step=1.0, key=f'porcentaje_especifico_{index}')
-                                porcentaje_especifico = st.number_input(f"%Peso del complemento de destino para {tabla_especificos}", min_value=0.0, max_value=100.0, value=100.0, step=1.0, key=f'porcentaje_especifico_{index}')
+                                porcentaje_especifico = st.number_input(f"%Peso del complemento específico para {tabla_especificos}", min_value=0.0, max_value=100.0, value=100.0, step=1.0, key=f'porcentaje_especifico_{index}')
 
 
                             # Calcular puntos ajustados
@@ -214,7 +214,7 @@ if id_proyecto_seleccionado and selected_puestos:
 
                             st.write(f"Puntos originales: {puntos}")
                             st.write(f"Puntos ajustados (con {porcentaje_especifico}%): {puntos_ajustados:.2f}")
-                            st.markdown(f"<div class='header-cell'><b>Total de puntos de destino con el peso específico</b></div>", unsafe_allow_html=True)
+                            st.markdown(f"<div class='header-cell'><b>Total de puntos de complemento específico con el peso porcentual</b></div>", unsafe_allow_html=True)
                             #st.markdown(f"<div class='cell'>{puntos_destino_peso}</div>", unsafe_allow_html=True)
                             st.markdown(f"<div class='cell'>{puntos_ajustados}</div>", unsafe_allow_html=True)
                             selecciones_especificos.append({'Puesto': descripcion, 'Letra': selected_letra, 'Descripción': selected_descripcion, 'Puntos': puntos_ajustados})
