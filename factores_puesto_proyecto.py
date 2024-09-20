@@ -261,7 +261,10 @@ if id_proyecto_seleccionado and selected_puestos:
 
 
 for descripcion in selected_puestos:
-    st.subheader(f"Resumen de Selecciones para el Puesto: {descripcion}")
+    st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
+    st.header(f"Resumen de Selecciones para el Puesto: {descripcion}")
+    st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
+
     
     # Mostrar complementos específicos
     df_especificos_resumen = pd.DataFrame([item for item in selecciones_especificos if item['Puesto'] == descripcion])
