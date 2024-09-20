@@ -200,7 +200,7 @@ if id_proyecto_seleccionado and selected_puestos:
 
                             # Input para porcentaje en la segunda columna
                             with col2:
-                                st.markdown(f"<div class='header-cell'><b>Peso del complemento de destino para {page_name}</b></div>", unsafe_allow_html=True)
+                                st.markdown(f"<div class='header-cell'><b>Peso del complemento de destino para {tabla_especificos}</b></div>", unsafe_allow_html=True)
                                 #porcentaje_especifico = st.number_input(f"% {selected_descripcion}", min_value=0.0, max_value=100.0, value=100.0, step=1.0, key=f'porcentaje_especifico_{index}')
                                 porcentaje_especifico = st.number_input(f"%Peso del complemento de destino para {tabla_especificos}", min_value=0.0, max_value=100.0, value=100.0, step=1.0, key=f'porcentaje_especifico_{index}')
 
