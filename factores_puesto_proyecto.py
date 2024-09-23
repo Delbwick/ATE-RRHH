@@ -440,6 +440,7 @@ st.write(f"<b>Complemento de destino:</b> {puntos_valoracion_anual}", unsafe_all
 # Cálculo final del sueldo total
 if puntos_valoracion_anual is not None:
     sueldo_total = sueldo + valor_punto_especifico_proyecto + puntos_valoracion_anual
+    sueldo_total_puesto=sueldo_total
     st.markdown(f"<h3>Sueldo Total</h3>", unsafe_allow_html=True)
     st.write(f"Sueldo total con complementos específicos y valoración destino: <b>{sueldo_total:.2f} euros</b>", unsafe_allow_html=True)
 else:
@@ -447,11 +448,11 @@ else:
 
 # Mostrar el cálculo para cada puesto
 st.markdown(f"<h2>Cálculo para el puesto: {puesto_nombre}</h2>", unsafe_allow_html=True)
-st.markdown(f"Bruto Anual con Jornada Ordinaria: {sueldo} + {valor_punto_especifico_proyecto} + {puntos_valoracion_anual} = <b>{sueldo_total:.2f} euros</b>", unsafe_allow_html=True)
-st.markdown(f"<div class='cell'>Bruto Anual con Jornada Ordinaria: {sueldo_total:.2f} euros</div>", unsafe_allow_html=True)
+#st.markdown(f"Bruto Anual con Jornada Ordinaria: {sueldo} + {valor_punto_especifico_proyecto} + {puntos_valoracion_anual} = <b>{sueldo_total:.2f} euros</b>", unsafe_allow_html=True)
+#st.markdown(f"<div class='cell'>Bruto Anual con Jornada Ordinaria: {sueldo_total:.2f} euros</div>", unsafe_allow_html=True)
 #ueldo_tatal_puesto no sabemos de donde viene
-#st.markdown(f"Bruto Anual con Jornada Ordinaria: {sueldo} + {valor_punto_especifico_proyecto} + {puntos_valoracion_anual} = <b>{sueldo_total_puesto:.2f} euros</b>", unsafe_allow_html=True)
-#st.markdown(f"<div class='cell'>Bruto Anual con Jornada Ordinaria: {sueldo_total_puesto:.2f} euros</div>", unsafe_allow_html=True)
+st.markdown(f"Bruto Anual con Jornada Ordinaria: {sueldo} + {valor_punto_especifico_proyecto} + {puntos_valoracion_anual} = <b>{sueldo_total_puesto:.2f} euros</b>", unsafe_allow_html=True)
+st.markdown(f"<div class='cell'>Bruto Anual con Jornada Ordinaria: {sueldo_total_puesto:.2f} euros</div>", unsafe_allow_html=True)
 
 
 # --- Cálculo de la modalidad de disponibilidad especial ---
