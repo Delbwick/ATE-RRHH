@@ -384,6 +384,7 @@ for puesto_id in selected_puestos_ids:
     sueldo = sueldo_categoria_puesto[puesto_id]
     
     sueldo_total_puesto = sueldo + puntos_especifico_sueldo + puntos_valoracion
+
     
     # Mostrar el cálculo para cada puesto
     #st.markdown(f"<h2>Cálculo para el puesto: {puesto_nombre}</h2>", unsafe_allow_html=True)
@@ -445,6 +446,9 @@ if puntos_valoracion_anual is not None:
     st.write(f"Sueldo total con complementos específicos y valoración destino: <b>{sueldo_total:.2f} euros</b>", unsafe_allow_html=True)
 else:
     st.write("<b>No se pudo obtener el complemento destino anual.</b>", unsafe_allow_html=True)
+
+
+sueldo_total = sueldo + valor_punto_especifico_proyecto + puntos_valoracion_anual
 
 sueldo_total_puesto=sueldo_total
 
