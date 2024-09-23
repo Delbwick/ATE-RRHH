@@ -67,6 +67,7 @@ client = bigquery.Client(credentials=credentials)
 
 #Incluimos Los primeros campos del Proyecto
 # Crear formulario para datos del proyecto
+'''
 st.title('Nuevo Proyecto:')
 st.markdown("<h2>Datos de Proyecto</h2>", unsafe_allow_html=True)
     # Línea horizontal ancha
@@ -120,6 +121,9 @@ with col1:
     fecha_alta = st.date_input('Fecha de Alta')
 with col2:
     pago = st.text_input('Forma de Pago')
+
+
+'''
 
 
 # Función para obtener puestos desde BigQuery
