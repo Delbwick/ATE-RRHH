@@ -67,7 +67,7 @@ client = bigquery.Client(credentials=credentials)
 
 #Incluimos Los primeros campos del Proyecto
 # Crear formulario para datos del proyecto
-'''
+"""
 st.title('Nuevo Proyecto:')
 st.markdown("<h2>Datos de Proyecto</h2>", unsafe_allow_html=True)
     # Línea horizontal ancha
@@ -123,7 +123,7 @@ with col2:
     pago = st.text_input('Forma de Pago')
 
 
-'''
+"""
 
 
 # Función para obtener puestos desde BigQuery
@@ -278,7 +278,7 @@ if selected_factores:
             opciones.insert(0, 'Ninguno')  # Añadir opción 'Ninguno' al inicio
 
             # Mostrar radio buttons para seleccionar una opción
-            seleccion = st.radio(f"Seleccione una opción para {nombre_completo.split('.')[-1]}:", opciones, key=f"radio_{id_tabla}")
+            #seleccion = st.radio(f"Seleccione una opción para {nombre_completo.split('.')[-1]}:", opciones, key=f"radio_{id_tabla}")
 
             if seleccion != 'Ninguno':
                 # Encontrar el valor seleccionado
@@ -381,7 +381,7 @@ if selected_factores_2:
             opciones.insert(0, 'Ninguno')  # Añadir opción 'Ninguno' al inicio
 
             # Mostrar radio buttons para seleccionar una opción
-            seleccion = st.radio(f"Seleccione una opción para {nombre_completo.split('.')[-1]}:", opciones, key=f"radio_{id_tabla}")
+            #seleccion = st.radio(f"Seleccione una opción para {nombre_completo.split('.')[-1]}:", opciones, key=f"radio_{id_tabla}")
 
             if seleccion != 'Ninguno':
                 # Encontrar el valor seleccionado
