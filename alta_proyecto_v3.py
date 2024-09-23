@@ -266,7 +266,9 @@ for nombre_tabla, (nombre_completo, id_tabla) in PAGES_TABLES.items():
 
 if selected_factores:
     st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
-    st.write("Selecciona los valores específicos de las tablas seleccionadas:")
+    #st.write("Selecciona los valores específicos de las tablas seleccionadas:") Esto valia cuando teniamos los radioboton (linea 283)
+    st.write("Tablas seleccionadas:")
+
 
     valores_seleccionados = {}
     for nombre_completo, id_tabla in selected_factores:
@@ -369,7 +371,8 @@ for nombre_tabla, (nombre_completo, id_tabla) in PAGES_TABLES_2.items():
 
 if selected_factores_2:
     st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
-    st.write("Selecciona los valores específicos de las tablas seleccionadas:")
+    #st.write("Selecciona los valores específicos de las tablas seleccionadas:") Esto valia con las radio button linea 386
+    st.write("Tablas seleccionadas:")
 
     valores_seleccionados_2 = {}
     for nombre_completo, id_tabla in selected_factores_2:
@@ -383,13 +386,13 @@ if selected_factores_2:
             # Mostrar radio buttons para seleccionar una opción
             #seleccion = st.radio(f"Seleccione una opción para {nombre_completo.split('.')[-1]}:", opciones, key=f"radio_{id_tabla}")
 
-            if seleccion != 'Ninguno':
+            #if seleccion != 'Ninguno':
                 # Encontrar el valor seleccionado
-                fila_seleccionada = df.loc[opciones.index(seleccion) - 1]  # -1 para compensar 'Ninguno'
-                valores_seleccionados_2[id_tabla] = fila_seleccionada[id_tabla]
+                #fila_seleccionada = df.loc[opciones.index(seleccion) - 1]  # -1 para compensar 'Ninguno'
+                #valores_seleccionados_2[id_tabla] = fila_seleccionada[id_tabla]
 
-    st.write("Valores seleccionados:")
-    st.write(valores_seleccionados_2)
+    #st.write("Valores seleccionados:")
+    #st.write(valores_seleccionados_2)
 
 
 
