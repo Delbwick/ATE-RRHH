@@ -448,9 +448,8 @@ else:
     st.write("<b>No se pudo obtener el complemento destino anual.</b>", unsafe_allow_html=True)
 
 
-sueldo_total = sueldo + valor_punto_especifico_proyecto + puntos_valoracion_anual
 
-sueldo_total_puesto=sueldo_total
+#sueldo_total_puesto=sueldo_total
 
 # Mostrar el cálculo para cada puesto
 st.markdown(f"<h2>Cálculo para el puesto: {puesto_nombre}</h2>", unsafe_allow_html=True)
