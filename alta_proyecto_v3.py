@@ -280,13 +280,13 @@ if selected_factores:
             # Mostrar radio buttons para seleccionar una opción
             #seleccion = st.radio(f"Seleccione una opción para {nombre_completo.split('.')[-1]}:", opciones, key=f"radio_{id_tabla}")
 
-            if seleccion != 'Ninguno':
+            #if seleccion != 'Ninguno':
                 # Encontrar el valor seleccionado
-                fila_seleccionada = df.loc[opciones.index(seleccion) - 1]  # -1 para compensar 'Ninguno'
-                valores_seleccionados[id_tabla] = fila_seleccionada[id_tabla]
+                #fila_seleccionada = df.loc[opciones.index(seleccion) - 1]  # -1 para compensar 'Ninguno'
+                #valores_seleccionados[id_tabla] = fila_seleccionada[id_tabla]
 
-    st.write("Valores seleccionados:")
-    st.write(valores_seleccionados)
+    #st.write("Valores seleccionados:")
+    #st.write(valores_seleccionados)
 
 
 
