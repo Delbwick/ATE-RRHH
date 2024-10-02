@@ -187,49 +187,33 @@ st.markdown("<h2>Selecciona los Factores de complemento de destino:</h2>", unsaf
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 st.write("Selecciona los Factores de complemento de destino:")
 # Diccionario de tablas de factores de compelemto destino
-PAGES_TABLES = {
-    "Formación": ("ate-rrhh-2024.Ate_kaibot_2024.formacion", "id_formacion_general"),
-    "Capacidades Necesarias": ("ate-rrhh-2024.Ate_kaibot_2024.capacidades_necesarias", "id_capacidades_necesarias"),
-    #"Autonomía-Complejidad de la Actividad": ("ate-rrhh-2024.Ate_kaibot_2024.complejidad", "id_complejidad"),
-    "Complejidad Técnica destino": ("ate-rrhh-2024.Ate_kaibot_2024.complejidad_tecnica", "id_complejidad_tecnica"),
-    "Complejidad Territorial": ("ate-rrhh-2024.Ate_kaibot_2024.complejidad_territorial", "id_complejidad_territorial"),
-    #"Complemento de Destino": ("ate-rrhh-2024.Ate_kaibot_2024.complemento_de_destino", "id_complemento_destino"),
-    #"Complemento Específico por Año": ("ate-rrhh-2024.Ate_kaibot_2024.complemento_específico_xaño", "id_complemento_especifico"),
-    #"Condiciones de Trabajo": ("ate-rrhh-2024.Ate_kaibot_2024.condiciones_de_trabajo", "id_condiciones"),
-    "Conocimientos básicos de acceso al puesto": ("ate-rrhh-2024.Ate_kaibot_2024.conocimientos_basicos_acceso_al_puesto", "id_conocimientos_basicos"),
-    #"Conocimientos específicos al puesto": ("ate-rrhh-2024.Ate_kaibot_2024.conocimientos_especificos", "id_conocimientos_especificos"),
-    #"Definitivo?¿ ": ("ate-rrhh-2024.Ate_kaibot_2024.definitivo", "id_definitivo"),
-    #"Esfuerzo Emocional": ("ate-rrhh-2024.Ate_kaibot_2024.esfuerzo_emocional", "id_esfuerzo"),
-    #"Esfuerzo Físico": ("ate-rrhh-2024.Ate_kaibot_2024.esfuerzo_fisico", "id_esfuerzo_fisico"),
-    #"Esfuerzo Mental": ("ate-rrhh-2024.Ate_kaibot_2024.esfuerzo_mental", "id_esfuerzo_mental"),
-    "Especialización destino /ACTUALIZACIÓN DE CONOCIMIENTOS /ESPECIALIZACIÓN/FICICULTAD TÉCNICA/": ("ate-rrhh-2024.Ate_kaibot_2024.especializacion", "id_especializacion"),
-    #"Idioma del Proyecto": ("ate-rrhh-2024.Ate_kaibot_2024.idioma_proyecto", "id_idioma_proyecto"),
-    #"Idiomas del puesto?": ("ate-rrhh-2024.Ate_kaibot_2024.idiomas", "id_idiomas"),
-    #"Idiomas (Euskera)": ("ate-rrhh-2024.Ate_kaibot_2024.idiomas_euskera", "id_idioma_euskera"),
-    #"Importancia Relativa": ("ate-rrhh-2024.Ate_kaibot_2024.importancia_relativa", "id_importancia"),
-    #"Incompatibilidad": ("ate-rrhh-2024.Ate_kaibot_2024.incompatibilidad", "id_incompatibilidad"),
-    "Autonomía-Iniciativa-Complejidad de la Actividad": ("ate-rrhh-2024.Ate_kaibot_2024.iniciativa", "id_iniciativa"),
-    "Mando": ("ate-rrhh-2024.Ate_kaibot_2024.mando", "id_mando"),
-    "Nivel de Formación": ("ate-rrhh-2024.Ate_kaibot_2024.nivel_de_fomacion", "id_formacion"),
-    #"Penosidad del Turno": ("ate-rrhh-2024.Ate_kaibot_2024.penosidad_turno", "id_penosidad_turno"),
-    #"Porcentajes Variables": ("ate-rrhh-2024.Ate_kaibot_2024.porcentajes_variables", "id_porcentajes_variables"),
-    #"Proyectos": ("ate-rrhh-2024.Ate_kaibot_2024.proyecto", "id_proyecto"),
-    #"Puestos": ("ate-rrhh-2024.Ate_kaibot_2024.puestos", "id_puesto"),
-    "Responsabilidad de la Actividad": ("ate-rrhh-2024.Ate_kaibot_2024.responsabilidad_actividad", "id_responsabilidad_actividad"),
-    "Responsabilidad Relacional": ("ate-rrhh-2024.Ate_kaibot_2024.responsabilidad", "id_responsabilidad"),
-    "Mando no cuantificado sobre personas": ("ate-rrhh-2024.Ate_kaibot_2024.mando_no_cuantificado_personas", "id_mando_no_cuantificado_personas"),
-    "Mando Cuantificado sobre Personas": ("ate-rrhh-2024.Ate_kaibot_2024.mando_cuantificado_personas", "id_mando_cuantificado_personas"),
-    "Autonomia, iniciativa, complejidad de la actividad": ("ate-rrhh-2024.Ate_kaibot_2024.Ate_kaibot_2024.autonomia_complejidad", "id_autonomia_complejidad"),
-    "RESPONSABILIDAD DE LA ACTIVIDAD_destino": ("ate-rrhh-2024.Ate_kaibot_2024.responsabilidad_actividad", "id_responsabilidad_actividad"),
-    "RESPONSABILIDAD DE LA ACTIVIDAD (PERJUICIOS)_destino": ("ate-rrhh-2024.Ate_kaibot_2024.responsabilidad_actividad_perjuicios", "id_responsabilidad_actividad_perjuicios"),
-    "RESPONSABILIDAD DE PERJUICIOS/INTERVENCIÓN SUBSANACIÓN_destino": ("ate-rrhh-2024.Ate_kaibot_2024.responsabilidad_actividad_subsanacion", "id_responsabilidad_actividad_subsanacion"),
-    "POLIVALENCIA_destino": ("ate-rrhh-2024.Ate_kaibot_2024.polivalencia", "id_polivalencia"),
+# Nombre del proyecto y dataset
+project_id = 'ate-rrhh-2024'
+dataset_id = 'Ate_kaibot_2024'
 
+# Consulta SQL para obtener las tablas y sus columnas principales (por ejemplo, la primera columna)
+query = f"""
+    SELECT table_name, column_name
+    FROM `{project_id}.{dataset_id}.INFORMATION_SCHEMA.COLUMNS`
+    WHERE ordinal_position = 1
+"""
 
-    #"Salario Base por Categoría y Año": ("ate-rrhh-2024.Ate_kaibot_2024.salario_base_xcategoria_xaño", "id_salario_base"),
-    #"Turno": ("ate-rrhh-2024.Ate_kaibot_2024.turno", "id_turno")
-    # Agregar el resto de las tablas aquí
-}
+# Ejecutar la consulta en BigQuery
+query_job = client.query(query)
+results = query_job.result()
+
+# Construir el diccionario dinámicamente
+PAGES_TABLES = {}
+for row in results:
+    table_name = row.table_name
+    column_name = row.column_name
+    
+    # Crear una entrada en el diccionario
+    # El valor puede cambiar dependiendo de cómo quieras estructurar el diccionario
+    PAGES_TABLES[table_name] = (f"{project_id}.{dataset_id}.{table_name}", column_name)
+
+# Ver el diccionario construido dinámicamente
+print(PAGES_TABLES)
 # Mostrar checkboxes para seleccionar las tablas de factores de complemento de destino
 selected_factores = []
 # Iterar sobre las tablas y sus detalles
