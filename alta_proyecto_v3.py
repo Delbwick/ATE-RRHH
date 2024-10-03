@@ -316,7 +316,7 @@ for nombre_tabla, (nombre_completo, id_tabla) in PAGES_TABLES.items():
                 st.write(f"Puntos ajustados (con {porcentaje_destino}%): {puntos_ajustados_destino:.2f}")
                 
                 # Guardar en la lista de selecciones
-                selecciones_destino.append({'Tabla': nombre_tabla, 'Letra': selected_letra_destino, 'Descripción': selected_descripcion_destino, 'Puntos': puntos_ajustados_destino})
+                #selecciones_destino.append({'Tabla': nombre_tabla, 'Letra': selected_letra_destino, 'Descripción': selected_descripcion_destino, 'Puntos': puntos_ajustados_destino})
 
 # Mostrar las selecciones al final si hay datos seleccionados
 if selecciones_destino:
