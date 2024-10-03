@@ -236,58 +236,6 @@ PAGES_TABLES = {
 #>>>>>>>>>>>>>>>>>>>>>>
 
 
-st.markdown("<h2>Selecciona los Factores de complemento de destino version 2:</h2>", unsafe_allow_html=True)
-st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
-
-# Nombre del proyecto y dataset
-project_id = 'ate-rrhh-2024'
-dataset_id = 'Ate_kaibot_2024'
-
-# Consulta SQL para obtener las tablas y sus columnas principales (por ejemplo, la primera columna)
-# Modificar la consulta para excluir tablas con nombres concretos
-query = f"""
-    SELECT table_name, column_name
-    FROM `{project_id}.{dataset_id}.INFORMATION_SCHEMA.COLUMNS`
-    WHERE ordinal_position = 1
-    AND table_name IN (
-        SELECT table_name
-        FROM `{project_id}.{dataset_id}.INFORMATION_SCHEMA.TABLE_OPTIONS`
-        WHERE option_name = 'labels'
-        AND option_value LIKE '%"destino"%'
-    )
-"""
-
-
-# Ejecutar la consulta en BigQuery
-query_job = client.query(query)
-results = query_job.result()
-
-# Construir el diccionario dinámicamente
-PAGES_TABLES = {}
-for row in results:
-    table_name = row.table_name
-    column_name = row.column_name
-    
-    # Crear una entrada en el diccionario
-    # El valor puede cambiar dependiendo de cómo quieras estructurar el diccionario
-    PAGES_TABLES[table_name] = (f"{project_id}.{dataset_id}.{table_name}", column_name)
-
-# Ver el diccionario construido dinámicamente
-print(PAGES_TABLES)
-
-
-# Mostrar checkboxes para seleccionar las tablas de factores de complemento de destino
-selected_factores = []
-# Iterar sobre las tablas y sus detalles
-for nombre_tabla, (nombre_completo, id_tabla) in PAGES_TABLES.items():
-    # Crear un checkbox para cada tabla
-    if st.checkbox(nombre_tabla):
-        selected_factores.append((nombre_completo, id_tabla))
-        # Obtener la descripción de la tabla
-        table = client.get_table(nombre_completo)  # Asegúrate de usar el nombre correcto para la llamada
-        descripcion = table.description
-        # Mostrar la descripción de la tabla
-        st.write(descripcion)
 
 
 #>>>>>>>>>>>>>>>>>>>>>>>>>VERSION3>
