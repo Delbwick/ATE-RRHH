@@ -244,7 +244,7 @@ query = f"""
     SELECT table_name
     FROM `{project_id}.{dataset_id}.INFORMATION_SCHEMA.TABLE_OPTIONS`
     WHERE option_name = 'labels'
-    AND option_value LIKE '%"tipo_complemento":"destino"%'
+    AND option_value LIKE '"destino"'
 """
 
 
