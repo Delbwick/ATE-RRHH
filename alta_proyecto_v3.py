@@ -231,6 +231,9 @@ PAGES_TABLES = {
     # Agregar el resto de las tablas aquí
 }
 
+st.markdown("<h2>Selecciona los Factores de complemento de destino version 2:</h2>", unsafe_allow_html=True)
+st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
+
 # Nombre del proyecto y dataset
 project_id = 'ate-rrhh-2024'
 dataset_id = 'Ate_kaibot_2024'
