@@ -242,7 +242,7 @@ dataset_id = 'Ate_kaibot_2024'
 # Modificar la consulta para excluir tablas con nombres concretos
 query = f"""
     SELECT table_name
-    FROM `{project_id}.{dataset_id}.INFORMATION_SCHEMA.TABLE_OPTIONS`
+    FROM `ate-rrhh-2024.Ate_kaibot_2024.INFORMATION_SCHEMA.TABLE_OPTIONS`
     WHERE option_name = 'labels'
     AND option_value LIKE '%"destino"%'
 """
