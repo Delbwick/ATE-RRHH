@@ -241,10 +241,10 @@ dataset_id = 'Ate_kaibot_2024'
 # Consulta SQL para obtener las tablas y sus columnas principales (por ejemplo, la primera columna)
 # Modificar la consulta para excluir tablas con nombres concretos
 query = f"""
-    SELECT table_name, column_name
-    FROM `{project_id}.{dataset_id}.INFORMATION_SCHEMA.COLUMNS`
-    WHERE ordinal_position = 1
-    AND table_name NOT IN ('complementos_de_destino_por_proyecto', 'penosidad_turno')
+    SELECT table_name
+    FROM `{project_id}.{dataset_id}.INFORMATION_SCHEMA.TABLE_OPTIONS`
+    WHERE option_name = 'labels'
+    AND option_value LIKE '%"tipo_complemento":"destino"%'
 """
 
 
