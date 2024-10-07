@@ -282,63 +282,41 @@ print(PAGES_TABLES)
 # Mostrar checkboxes para seleccionar las tablas de factores de complemento de destino
 selected_factores = []
 for nombre_tabla, (nombre_completo, id_tabla) in PAGES_TABLES.items():
-    # Separador para cada tabla
-    st.markdown("<hr>", unsafe_allow_html=True)
-
-    # Distribuir en dos columnas principales: una para el checkbox y otra para el resto de información
-    col1, col2 = st.columns([1, 3])
-
-    # Columna 1: Checkbox para seleccionar la tabla
-    with col1:
-        if st.checkbox(nombre_tabla):
-            selected_factores.append((nombre_completo, id_tabla))
-    
-    # Columna 2: Mostrar la descripción y los datos de la tabla si está seleccionada
-    if nombre_tabla in [factor[0] for factor in selected_factores]:
-        table = client.get_table(nombre_completo)
+    if st.checkbox(nombre_tabla):
+        selected_factores.append((nombre_completo, id_tabla))
+        # Obtener la descripción de la tabla
+        table = client.get_table(nombre_completo)  
         descripcion = table.description
-        col2.write(descripcion)
+        st.write(descripcion)
 
         # Obtener los datos de la tabla seleccionada
         df_factores = obtener_datos_tabla(nombre_completo)
         if not df_factores.empty:
-            # Distribuir los elementos en tres columnas: descripción, selectbox y número de porcentaje
-            col1, col2, col3 = st.columns([2, 3, 1])
+            st.write(f"Factores para la tabla: {nombre_tabla}")
+            st.dataframe(df_factores)
 
-            with col1:
-                # Mostrar los factores en una tabla
-                col1.write(f"Factores para la tabla: {nombre_tabla}")
-                col1.dataframe(df_factores)
-
-            with col2:
-                # Crear un selectbox para seleccionar el valor
-                opciones_destino = df_factores.apply(lambda r: f"{r['letra']} - {r['descripcion']}", axis=1).tolist()
-                seleccion_destino = col2.selectbox(f"Selecciona un valor para {nombre_tabla}:", opciones_destino, key=f"destino_{nombre_tabla}")
+            # Crear un selectbox para seleccionar el valor
+            opciones_destino = df_factores.apply(lambda r: f"{r['letra']} - {r['descripcion']}", axis=1).tolist()
+            seleccion_destino = st.selectbox(f"Selecciona un valor para {nombre_tabla}:", opciones_destino, key=f"destino_{nombre_tabla}")
 
             if seleccion_destino:
                 selected_letra_destino, selected_descripcion_destino = seleccion_destino.split(" - ")
                 puntos_destino = df_factores.query(f"letra == '{selected_letra_destino}'")['puntos'].values[0]
 
-                with col3:
-                    # Input para porcentaje en la tercera columna
-                    porcentaje_destino = col3.number_input(f"% {selected_descripcion_destino}", min_value=0.0, max_value=100.0, value=100.0, step=1.0, key=f'porcentaje_destino_{nombre_tabla}')
+                # Input para porcentaje
+                porcentaje_destino = st.number_input(f"% {selected_descripcion_destino}", min_value=0.0, max_value=100.0, value=100.0, step=1.0, key=f'porcentaje_destino_{nombre_tabla}')
 
                 # Calcular puntos ajustados
                 puntos_ajustados_destino = puntos_destino * (porcentaje_destino / 100)
 
-                # Mostrar resultados en una nueva línea
+                # Mostrar resultados
                 st.markdown("<h4>Resultados de la Selección</h4>", unsafe_allow_html=True)
                 st.write(f"Seleccionaste la letra: {selected_letra_destino}")
                 st.write(f"Puntos originales: {puntos_destino}")
                 st.write(f"Puntos ajustados (con {porcentaje_destino}%): {puntos_ajustados_destino:.2f}")
                 
                 # Guardar en la lista de selecciones
-                selecciones_destino.append({
-                    'Tabla': nombre_tabla, 
-                    'Letra': selected_letra_destino, 
-                    'Descripción': selected_descripcion_destino, 
-                    'Puntos': puntos_ajustados_destino
-                })
+                #selecciones_destino.append({'Tabla': nombre_tabla, 'Letra': selected_letra_destino, 'Descripción': selected_descripcion_destino, 'Puntos': puntos_ajustados_destino})
 
 # Mostrar las selecciones al final si hay datos seleccionados
 if selecciones_destino:
@@ -347,17 +325,6 @@ if selecciones_destino:
         st.write(f"Tabla: {seleccion['Tabla']}, Letra: {seleccion['Letra']}, Descripción: {seleccion['Descripción']}, Puntos Ajustados: {seleccion['Puntos']:.2f}")
 
 
-
-#mostrar los datos de otra manera
-#≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤<
-# Mostrar checkboxes para seleccionar las tablas de factores de complemento de destino
-
-
-
-
-
-#≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤<
-#≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤
 # Mostrar los datos seleccionados
 #if selected_factores:
   #  st.write("Selecciona los valores específicos de las tablas seleccionadas:")
