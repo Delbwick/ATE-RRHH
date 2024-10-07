@@ -283,6 +283,9 @@ selecciones_destino = []
 # Mostrar checkboxes para seleccionar las tablas de factores de complemento de destino
 selected_factores = []
 for nombre_tabla, (nombre_completo, id_tabla) in PAGES_TABLES.items():
+        # Separador para cada tabla
+    st.markdown("<hr>", unsafe_allow_html=True)
+
     if st.checkbox(nombre_tabla):
         selected_factores.append((nombre_completo, id_tabla))
         # Obtener la descripción de la tabla
