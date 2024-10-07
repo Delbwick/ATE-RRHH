@@ -314,9 +314,8 @@ for nombre_tabla, (nombre_completo, id_tabla) in PAGES_TABLES.items():
 
                 if seleccion_destino:
                     # Extraer letra y descripción seleccionada
-                    selected_letra_destino, _ = seleccion_destino.split(" - ")  # Descartamos la descripción completa
+                    selected_letra_destino, selected_descripcion_destino = seleccion_destino.split(" - ")
                     puntos_destino = df_factores.query(f"letra == '{selected_letra_destino}'")['puntos'].values[0]
-
 
                     # Input para porcentaje
                     porcentaje_destino = st.number_input(f"% {selected_descripcion_destino}", min_value=0.0, max_value=100.0, value=100.0, step=1.0, key=f'porcentaje_destino_{nombre_tabla}')
