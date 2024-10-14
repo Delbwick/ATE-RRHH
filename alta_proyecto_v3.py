@@ -402,7 +402,44 @@ PAGES_TABLES_2 = {
     # Agregar el resto de las tablas aquí
 }
 
+st.markdown("<h2>Selecciona los Factores de complemento Especifico version 2:</h2>", unsafe_allow_html=True)
+st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 
+# Nombre del proyecto y dataset
+project_id = 'ate-rrhh-2024'
+dataset_id = 'Ate_kaibot_2024'
+
+# Consulta SQL para obtener las tablas y sus columnas principales (por ejemplo, la primera columna)
+# Modificar la consulta para excluir tablas con nombres concretos
+query = f"""
+    SELECT table_name, column_name
+    FROM `{project_id}.{dataset_id}.INFORMATION_SCHEMA.COLUMNS`
+    WHERE ordinal_position = 1
+    AND table_name IN (
+        SELECT table_name
+        FROM `{project_id}.{dataset_id}.INFORMATION_SCHEMA.TABLE_OPTIONS`
+        WHERE option_name = 'labels'
+        AND option_value LIKE '%"especifico"%'
+    )
+"""
+
+
+# Ejecutar la consulta en BigQuery
+query_job = client.query(query)
+results = query_job.result()
+
+# Construir el diccionario dinámicamente
+PAGES_TABLES_2 = {}
+for row in results:
+    table_name = row.table_name
+    column_name = row.column_name
+    
+    # Crear una entrada en el diccionario
+    # El valor puede cambiar dependiendo de cómo quieras estructurar el diccionario
+    PAGES_TABLES_2[table_name] = (f"{project_id}.{dataset_id}.{table_name}", column_name)
+
+# Ver el diccionario construido dinámicamente
+print(PAGES_TABLES)
 # Mostrar checkboxes para seleccionar las tablas de factores de complemento de destino
 selected_factores_2 = []
 for nombre_tabla, (nombre_completo, id_tabla) in PAGES_TABLES_2.items():
