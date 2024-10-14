@@ -116,6 +116,27 @@ if selected_puestos:
 else:
     st.warning("Por favor, selecciona al menos un puesto para continuar.")
 
+#Funcion para ibcluir algun puesto nuevo
+# Función para insertar un nuevo puesto en BigQuery
+def add_puesto(nuevo_puesto):
+    query = f"""
+        INSERT INTO `ate-rrhh-2024.Ate_kaibot_2024.puestos` (descripcion)
+        VALUES ('{nuevo_puesto}')
+    """
+    query_job = client.query(query)
+    query_job.result()  # Esperar a que la inserción se complete
+
+# Mostrar el inputbox para añadir un nuevo puesto
+st.markdown("<h2>Añadir un nuevo puesto de trabajo</h2>", unsafe_allow_html=True)
+nuevo_puesto = st.text_input("Introduce el nombre del nuevo puesto")
+
+# Botón para añadir el puesto
+if st.button("Añadir puesto"):
+    if nuevo_puesto:
+        add_puesto(nuevo_puesto)
+        st.success(f"Se ha añadido el puesto: {nuevo_puesto}")
+    else:
+        st.error("El campo de puesto no puede estar vacío.")
 
 #botener datos de tablas
 
