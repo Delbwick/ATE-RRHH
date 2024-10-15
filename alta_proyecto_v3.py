@@ -462,7 +462,7 @@ for nombre_tabla, (nombre_completo, id_tabla) in PAGES_TABLES_2.items():
             st.dataframe(df_factores)
             # Columna 2 (30%): checkbox, selectbox y inputbox
         with col2:
-            if st.checkbox(f"Seleccionar {nombre_tabla}", key=f"checkbox_{nombre_tabla}"):
+            if st.checkbox(f"Seleccionar {nombre_tabla}", key=f"checkbox_especifico_{nombre_tabla}"):
                 selected_factores_2.append((nombre_completo, id_tabla))
 
                 # Crear un selectbox para seleccionar el valor
