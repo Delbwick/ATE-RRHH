@@ -466,27 +466,27 @@ for nombre_tabla, (nombre_completo, id_tabla) in PAGES_TABLES_2.items():
                 selected_factores_2.append((nombre_completo, id_tabla))
 
                 # Crear un selectbox para seleccionar el valor
-                opciones_destino = df_factores.apply(lambda r: f"{r['letra']} - {r['descripcion']}", axis=1).tolist()
-                seleccion_destino = st.selectbox(f"Selecciona un valor para {nombre_tabla}:", opciones_destino, key=f"destino_{nombre_tabla}")
+                opciones_especifico = df_factores.apply(lambda r: f"{r['letra']} - {r['descripcion']}", axis=1).tolist()
+                seleccion_especifico = st.selectbox(f"Selecciona un valor para {nombre_tabla}:", opciones_especifico, key=f"destino_{nombre_tabla}")
 
-                if seleccion_destino:
+                if seleccion_especifico:
                     # Extraer letra y descripción seleccionada
-                    selected_letra_destino, selected_descripcion_destino = seleccion_destino.split(" - ")
-                    selected_descripcion_destino = selected_descripcion_destino[:15] + "..."  # Truncar descripción si es muy larga
+                    selected_letra_especifico, selected_descripcion_especifico = seleccion_especifico.split(" - ")
+                    selected_descripcion_especifico = selected_descripcion_especifico[:15] + "..."  # Truncar descripción si es muy larga
 
-                    puntos_destino = df_factores.query(f"letra == '{selected_letra_destino}'")['puntos'].values[0]
+                    puntos_especifico = df_factores.query(f"letra == '{selected_letra_especifico}'")['puntos'].values[0]
 
                     # Input para porcentaje
-                    porcentaje_destino = st.number_input(f"% {selected_descripcion_destino}", min_value=0.0, max_value=100.0, value=100.0, step=1.0, key=f'porcentaje_destino_{nombre_tabla}')
+                    porcentaje_especifico = st.number_input(f"% {selected_descripcion_especifico}", min_value=0.0, max_value=100.0, value=100.0, step=1.0, key=f'porcentaje_especifico_{nombre_tabla}')
 
                     # Calcular puntos ajustados
-                    puntos_ajustados_destino = puntos_destino * (porcentaje_destino / 100)
+                    puntos_ajustados_especifico = puntos_especifico * (porcentaje_especifico / 100)
 
                     # Mostrar resultados en una nueva línea
                     st.markdown("<h4>Resultados de la Selección</h4>", unsafe_allow_html=True)
-                    st.write(f"Seleccionaste la letra: {selected_letra_destino}")
-                    st.write(f"Puntos originales: {puntos_destino}")
-                    st.write(f"Puntos ajustados (con {porcentaje_destino}%): {puntos_ajustados_destino:.2f}")
+                    st.write(f"Seleccionaste la letra: {selected_letra_especifico}")
+                    st.write(f"Puntos originales: {puntos_especifico}")
+                    st.write(f"Puntos ajustados (con {porcentaje_especifico}%): {puntos_ajustados_especifico:.2f}")
 
                     # Guardar en la lista de selecciones
                     selecciones_destino_2.append({
