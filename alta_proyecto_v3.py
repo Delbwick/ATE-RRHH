@@ -439,7 +439,8 @@ for row in results:
     PAGES_TABLES_2[table_name] = (f"{project_id}.{dataset_id}.{table_name}", column_name)
 
 # Ver el diccionario construido dinámicamente
-print(PAGES_TABLES)
+print(PAGES_TABLES_2)
+selecciones_especifico = []
 # Mostrar checkboxes para seleccionar las tablas de factores de complemento de destino
 selected_factores_2 = []
 for nombre_tabla, (nombre_completo, id_tabla) in PAGES_TABLES_2.items():
@@ -489,7 +490,7 @@ for nombre_tabla, (nombre_completo, id_tabla) in PAGES_TABLES_2.items():
                     st.write(f"Puntos ajustados (con {porcentaje_especifico}%): {puntos_ajustados_especifico:.2f}")
 
                     # Guardar en la lista de selecciones
-                    selecciones_destino_2.append({
+                    selecciones_especifico.append({
                         'Tabla': nombre_tabla, 
                         'Letra': selected_letra_destino, 
                         'Descripción': selected_descripcion_destino, 
@@ -497,9 +498,9 @@ for nombre_tabla, (nombre_completo, id_tabla) in PAGES_TABLES_2.items():
                     })
 
 # Mostrar las selecciones al final si hay datos seleccionados
-if selecciones_destino_2:
+if selecciones_especifico:
     st.markdown("<h3>Resumen de Factores Seleccionados</h3>", unsafe_allow_html=True)
-    for seleccion in selecciones_destino_2:
+    for seleccion in selecciones_especifico:
         st.write(f"Tabla: {seleccion['Tabla']}, Letra: {seleccion['Letra']}, Descripción: {seleccion['Descripción']}, Puntos Ajustados: {seleccion['Puntos']:.2f}")
 
 
