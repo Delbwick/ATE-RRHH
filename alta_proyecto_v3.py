@@ -492,9 +492,9 @@ for nombre_tabla, (nombre_completo, id_tabla) in PAGES_TABLES_2.items():
                     # Guardar en la lista de selecciones
                     selecciones_especifico.append({
                         'Tabla': nombre_tabla, 
-                        'Letra': selected_letra_destino, 
-                        'Descripción': selected_descripcion_destino, 
-                        'Puntos': puntos_ajustados_destino
+                        'Letra': selected_letra_especifico, 
+                        'Descripción': selected_descripcion_especifico, 
+                        'Puntos': puntos_ajustados_especifico
                     })
 
 # Mostrar las selecciones al final si hay datos seleccionados
