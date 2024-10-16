@@ -439,7 +439,8 @@ for row in results:
     PAGES_TABLES_2[table_name] = (f"{project_id}.{dataset_id}.{table_name}", column_name)
 
 # Ver el diccionario construido dinámicamente
-print(PAGES_TABLES)
+print(PAGES_TABLES_2)
+selecciones_especifico = []
 # Mostrar checkboxes para seleccionar las tablas de factores de complemento de destino
 selected_factores_2 = []
 for nombre_tabla, (nombre_completo, id_tabla) in PAGES_TABLES_2.items():
@@ -489,17 +490,17 @@ for nombre_tabla, (nombre_completo, id_tabla) in PAGES_TABLES_2.items():
                     st.write(f"Puntos ajustados (con {porcentaje_especifico}%): {puntos_ajustados_especifico:.2f}")
 
                     # Guardar en la lista de selecciones
-                    selecciones_destino_2.append({
+                    selecciones_especifico.append({
                         'Tabla': nombre_tabla, 
-                        'Letra': selected_letra_destino, 
-                        'Descripción': selected_descripcion_destino, 
-                        'Puntos': puntos_ajustados_destino
+                        'Letra': selected_letra_especifico, 
+                        'Descripción': selected_descripcion_especifico, 
+                        'Puntos': puntos_ajustados_especifico
                     })
 
 # Mostrar las selecciones al final si hay datos seleccionados
-if selecciones_destino_2:
+if selecciones_especifico:
     st.markdown("<h3>Resumen de Factores Seleccionados</h3>", unsafe_allow_html=True)
-    for seleccion in selecciones_destino_2:
+    for seleccion in selecciones_especifico:
         st.write(f"Tabla: {seleccion['Tabla']}, Letra: {seleccion['Letra']}, Descripción: {seleccion['Descripción']}, Puntos Ajustados: {seleccion['Puntos']:.2f}")
 
 
@@ -801,7 +802,9 @@ with st.form("alta_proyecto"):
                                 'id_proyecto': new_id_proyecto,
                                 'id_puesto': id_puesto,
                                 'complementos_especificos': nombre_completo_f,
-                                'complementos_destino': nombre_completo_d
+                                'complementos_destino': nombre_completo_d,
+                                'puntos_ajustados_especifico': puntos_ajustados_especifico,  # Nuevo campo para puntos específicos
+                                'puntos_ajustados_destino': puntos_ajustados_destino  # Nuevo campo para puntos destino
                             }
                             rows_to_insert_puestos.append(row)
 
@@ -810,12 +813,12 @@ with st.form("alta_proyecto"):
                 try:
                     query_insert_factores = """
                         INSERT INTO `ate-rrhh-2024.Ate_kaibot_2024.factores_seleccionados_x_puesto_x_proyecto`
-                        (id_proyecto, id_puesto, complementos_especificos, complementos_destino)
+                        (id_proyecto, id_puesto, complementos_especificos, complementos_destino, puntos_ajustados_especifico, puntos_ajustados_destino)
                         VALUES
                     """
                     valores = []
                     for row in rows_to_insert_puestos:
-                        valores.append(f"({row['id_proyecto']}, {row['id_puesto']}, '{row['complementos_especificos'].replace("'", "''")}', '{row['complementos_destino'].replace("'", "''")}')")
+                        valores.append(f"({row['id_proyecto']}, {row['id_puesto']}, '{row['complementos_especificos'].replace("'", "''")}', '{row['complementos_destino'].replace("'", "''")}', {row['puntos_ajustados_especifico']}, {row['puntos_ajustados_destino']})")
 
                     query_insert_factores += ", ".join(valores)
 
