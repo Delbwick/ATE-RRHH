@@ -138,7 +138,7 @@ def add_puesto(nuevo_puesto):
     #
     query = f"""
         INSERT INTO `ate-rrhh-2024.Ate_kaibot_2024.puestos` (id_puesto,descripcion)
-        VALUES ({new_id_puesto,}'{nuevo_puesto}')
+        VALUES ({new_id_puesto},'{nuevo_puesto}')
     """
     query_job = client.query(query)
     query_job.result()  # Esperar a que la inserción se complete
