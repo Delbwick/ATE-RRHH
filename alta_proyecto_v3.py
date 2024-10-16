@@ -815,6 +815,9 @@ with st.form("alta_proyecto"):
                     # Insertar cada combinación de factores específicos y de destino
                     for nombre_completo_f in [nombre_completo for nombre_completo, _ in selected_factores]:
                         for nombre_completo_d in [nombre_completo for nombre_completo, _ in selected_factores_2]:
+                            # Inicializa los puntos ajustados como None o 0 por defecto
+                            puntos_ajustados_especifico = None
+                            puntos_ajustados_destino = None
                             row = {
                                 'id_proyecto': new_id_proyecto,
                                 'id_puesto': id_puesto,
