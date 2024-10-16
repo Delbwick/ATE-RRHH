@@ -801,16 +801,16 @@ with st.form("alta_proyecto"):
                             # Inicializa los puntos ajustados como None o 0 por defecto
                             puntos_ajustados_especifico = None
                             puntos_ajustados_destino = None
-                             # Buscar en selecciones_especifico el que coincida con nombre_completo_f
+                            # Buscar en selecciones_especifico el que coincida con nombre_completo_f
                             for seleccion_especifico in selecciones_especifico:
-                            if seleccion_especifico['Tabla'] == nombre_completo_f.split('.')[-1]:
-                            puntos_ajustados_especifico = seleccion_especifico['Puntos']
-                            break  # Encontrado, no es necesario seguir buscando
+                                if seleccion_especifico['Tabla'] == nombre_completo_f.split('.')[-1]:
+                                    puntos_ajustados_especifico = seleccion_especifico['Puntos']
+                                    break  # Encontrado, no es necesario seguir buscando
                             # Buscar en selecciones_destino el que coincida con nombre_completo_d
                             for seleccion_destino in selecciones_destino:
-                            if seleccion_destino['Tabla'] == nombre_completo_d.split('.')[-1]:
-                            puntos_ajustados_destino = seleccion_destino['Puntos']
-                            break  # Encontrado, no es necesario seguir buscando
+                                if seleccion_destino['Tabla'] == nombre_completo_d.split('.')[-1]:
+                                    puntos_ajustados_destino = seleccion_destino['Puntos']
+                                    break  # Encontrado, no es necesario seguir buscando
                     
                             row = {
                                 'id_proyecto': new_id_proyecto,
