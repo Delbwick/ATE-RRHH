@@ -1,4 +1,3 @@
-
 import webbrowser  # para abrir otras apps
 import streamlit as st
 from google.oauth2 import service_account
@@ -799,6 +798,20 @@ with st.form("alta_proyecto"):
                     # Insertar cada combinación de factores específicos y de destino
                     for nombre_completo_f in [nombre_completo for nombre_completo, _ in selected_factores]:
                         for nombre_completo_d in [nombre_completo for nombre_completo, _ in selected_factores_2]:
+                            # Inicializa los puntos ajustados como None o 0 por defecto
+                            puntos_ajustados_especifico = None
+                            puntos_ajustados_destino = None
+                             # Buscar en selecciones_especifico el que coincida con nombre_completo_f
+                            for seleccion_especifico in selecciones_especifico:
+                            if seleccion_especifico['Tabla'] == nombre_completo_f.split('.')[-1]:
+                            puntos_ajustados_especifico = seleccion_especifico['Puntos']
+                            break  # Encontrado, no es necesario seguir buscando
+                            # Buscar en selecciones_destino el que coincida con nombre_completo_d
+                            for seleccion_destino in selecciones_destino:
+                            if seleccion_destino['Tabla'] == nombre_completo_d.split('.')[-1]:
+                            puntos_ajustados_destino = seleccion_destino['Puntos']
+                            break  # Encontrado, no es necesario seguir buscando
+                    
                             row = {
                                 'id_proyecto': new_id_proyecto,
                                 'id_puesto': id_puesto,
