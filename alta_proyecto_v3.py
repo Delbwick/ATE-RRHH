@@ -306,7 +306,7 @@ for nombre_tabla, (nombre_completo, id_tabla) in PAGES_TABLES.items():
 
 # Mostrar las selecciones al final si hay datos seleccionados
 if selecciones_destino:
-    st.markdown("<h3>Resumen de Factores Seleccionados</h3>", unsafe_allow_html=True)
+    st.markdown("<h3>Resumen de Factores de Complemento de Destino Seleccionados</h3>", unsafe_allow_html=True)
     for seleccion in selecciones_destino:
         st.write(f"Tabla: {seleccion['Tabla']}, Letra: {seleccion['Letra']}, Descripción: {seleccion['Descripción']}, Puntos Ajustados: {seleccion['Puntos']:.2f}")
 
@@ -499,7 +499,7 @@ for nombre_tabla, (nombre_completo, id_tabla) in PAGES_TABLES_2.items():
 
 # Mostrar las selecciones al final si hay datos seleccionados
 if selecciones_especifico:
-    st.markdown("<h3>Resumen de Factores Seleccionados</h3>", unsafe_allow_html=True)
+    st.markdown("<h3>Resumen de Factores de Complemento Especifico Seleccionados</h3>", unsafe_allow_html=True)
     for seleccion in selecciones_especifico:
         st.write(f"Tabla: {seleccion['Tabla']}, Letra: {seleccion['Letra']}, Descripción: {seleccion['Descripción']}, Puntos Ajustados: {seleccion['Puntos']:.2f}")
 
@@ -556,122 +556,6 @@ if selected_factores_2:
 #CONSULTA DE INSERCION de proyecto
 
 # Formulario de envío
-with st.form('addition'):
-    submit = st.form_submit_button('Alta nuevo cliente')
-
-if submit:
-    try:
-        # Consulta para obtener el último ID de proyecto
-        query_max_id = """
-        SELECT MAX(id_projecto) FROM `ate-rrhh-2024.Ate_kaibot_2024.proyecto`
-        """
-        query_job_max_id = client.query(query_max_id)
-        max_id_result = query_job_max_id.result()
-
-        max_id = 0
-        for row in max_id_result:
-            max_id = row[0]
-
-        # Incrementar el máximo ID en 1 para obtener el nuevo ID de proyecto
-        new_id_proyecto = max_id + 1 if max_id is not None else 1
-
-        # Consulta para insertar datos básicos en BigQuery
-        query_kai_insert = f"""
-            INSERT INTO `ate-rrhh-2024.Ate_kaibot_2024.proyecto` 
-            (id_projecto, nombre, descripcion, fecha_comienzo, fecha_fin, proyecto_activo_2) 
-            VALUES 
-            ({new_id_proyecto}, '{nombre}', '{descripcion}', '{fecha_inicio}', '{fecha_fin}', '{proyecto_activo}')
-        """
-        query_job_kai_insert = client.query(query_kai_insert)
-        query_job_kai_insert.result()  # Asegurarse de que la consulta se complete
-
-        st.write(new_id_proyecto)
-        
-    except Exception as e:
-        st.error(f"Error al insertar el registro: {e}")
-
-# Insertar los valores seleccionados en BigQuery
-# Generar un nuevo ID de proyecto
-
-new_id_proyecto = st.number_input('Nuevo ID de Proyecto', min_value=1, step=1)
-
-
-# Insertar los valores seleccionados en BigQuery
-if st.button('Insertar en BigQuery'):
-    rows_to_insert_1 = []
-    rows_to_insert_2 = []
-    rows_to_insert_puestos = []
-
-    # Procesar valores seleccionados para la primera tabla
-    for id_tabla, valores in valores_seleccionados.items():
-    # Verifica si valores es un iterable o un valor único
-        if isinstance(valores, (int, np.int64)):  # Si es un solo número
-            valores = [valores]  # Lo convertimos en una lista con un único elemento
-        for valor in valores:
-            row = {id_tabla: int(valor), 'id_proyecto': int(new_id_proyecto)}  # Convertimos a int
-
-            #row = {id_tabla: valor, 'id_proyecto': new_id_proyecto}
-            rows_to_insert_1.append(row)
-
-    # Procesar valores seleccionados para la segunda tabla
-    for id_tabla, valores in valores_seleccionados_2.items():
-         if isinstance(valores, (int, np.int64)):  # Si es un solo número
-            valores = [valores]  # Lo convertimos en una lista con un único elemento
-         for valor in valores:
-            row = {id_tabla: int(valor), 'id_proyecto': int(new_id_proyecto)}  # Convertimos a int
-
-            #row = {id_tabla: valor, 'id_proyecto': new_id_proyecto}
-            rows_to_insert_2.append(row)
-
-    # Procesar puestos seleccionados
-    for descripcion in selected_puestos:
-        # Obtener el id_puesto basado en la descripción del puesto
-        query = f"""
-            SELECT id_puesto
-            FROM `ate-rrhh-2024.Ate_kaibot_2024.puestos`
-            WHERE descripcion = '{descripcion}'
-        """
-        query_job = client.query(query)
-        results = query_job.result()
-        id_puesto = None
-        for row in results:
-            id_puesto = row.id_puesto
-            break
-
-        if id_puesto is not None:
-            row = {
-                'id_proyecto': new_id_proyecto,
-                'id_puesto': id_puesto
-            }
-            rows_to_insert_puestos.append(row)
-
-    # Insertar en la primera tabla
-    if rows_to_insert_1:
-        table_id_1 = "ate-rrhh-2024.Ate_kaibot_2024.complementos_de_destino_por_proyecto"
-        errors_1 = client.insert_rows_json(table_id_1, rows_to_insert_1)
-        if errors_1 == []:
-            st.success('Datos insertados exitosamente en complementos_de_destino_por_proyecto')
-        else:
-            st.error(f'Error al insertar datos en complementos_de_destino_por_proyecto: {errors_1}')
-
-    # Insertar en la segunda tabla
-    if rows_to_insert_2:
-        table_id_2 = "ate-rrhh-2024.Ate_kaibot_2024.complementos_especificos_por_proyecto"
-        errors_2 = client.insert_rows_json(table_id_2, rows_to_insert_2)
-        if errors_2 == []:
-            st.success('Datos insertados exitosamente en complementos_especificos_por_proyecto')
-        else:
-            st.error(f'Error al insertar datos en complementos_especificos_por_proyecto: {errors_2}')
-
-    # Insertar en la tabla de puestos seleccionados por proyectos
-    if rows_to_insert_puestos:
-        table_id_puestos = "ate-rrhh-2024.Ate_kaibot_2024.puestos_seleccionados_por_proyecto"
-        errors_puestos = client.insert_rows_json(table_id_puestos, rows_to_insert_puestos)
-        if errors_puestos == []:
-            st.success('Datos insertados exitosamente en puestos_seleccionados_por_proyecto')
-        else:
-            st.error(f'Error al insertar datos en puestos_seleccionados_por_proyecto: {errors_puestos}')
-
 
 # Función para abrir otra aplicación
 #def abrir_otra_app():
@@ -679,51 +563,7 @@ if st.button('Insertar en BigQuery'):
     #webbrowser.open_new_tab(url_otra_app)
 
 # Función para obtener datos de BigQuery
-# Función para obtener datos de BigQuery
-def obtener_datos_por_proyecto(id_proyecto):
-    query = f"""
-    SELECT 
-        ps.id_puesto,
-        cd.id_formacion_general,
-        cd.id_capacidades_necesarias,
-        cd.id_complejidad,
-        cd.id_complejidad_tecnica,
-        cd.id_complejidad_territorial,
-        cd.id_conocimientos_basicos,
-        cd.id_especializacion,
-        cd.id_iniciativa,
-        cd.id_mando,
-        cd.id_formacion,
-        cd.id_responsabilidad_actividad,
-        cd.id_responsabilidad,
-        
-    FROM 
-        `ate-rrhh-2024.Ate_kaibot_2024.puestos_seleccionados_por_proyecto` ps
-    LEFT JOIN 
-        `ate-rrhh-2024.Ate_kaibot_2024.complementos_de_destino_por_proyecto` cd
-    ON 
-        ps.id_proyecto = cd.id_proyecto
-    LEFT JOIN 
-        `ate-rrhh-2024.Ate_kaibot_2024.complementos_especificos_por_proyecto` ce
-    ON 
-        ps.id_proyecto = ce.id_proyecto
-    WHERE 
-        ps.id_proyecto = {id_proyecto}
-    """
-    query_job = client.query(query)
-    df = query_job.result().to_dataframe()
-    return df
 
-# Formulario de entrada
-st.title('Ver Datos del Proyecto')
-id_proyecto = st.number_input('ID de Proyecto', min_value=1, step=1)
-if st.button('Mostrar Datos'):
-    df = obtener_datos_por_proyecto(id_proyecto)
-    if not df.empty:
-        st.write('IDs Relacionados del Proyecto:')
-        st.dataframe(df)
-    else:
-        st.warning('No se encontraron datos para este ID de proyecto.')
 
 
 
