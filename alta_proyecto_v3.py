@@ -803,8 +803,9 @@ with st.form("alta_proyecto"):
                                 'id_puesto': id_puesto,
                                 'complementos_especificos': nombre_completo_f,
                                 'complementos_destino': nombre_completo_d,
-                                'puntos_ajustados_especifico': puntos_ajustados_especifico,  # Nuevo campo para puntos específicos
-                                'puntos_ajustados_destino': puntos_ajustados_destino  # Nuevo campo para puntos destino
+                                #'puntos_ajustados_especifico': puntos_ajustados_especifico,  # Nuevo campo para puntos específicos calculados
+                                'puntos_ajustados_especifico': puntos_especifico,  # Nuevo campo para puntos específicos originales
+                                'puntos_ajustados_destino': puntos_destino  # Nuevo campo para puntos destino
                             }
                             rows_to_insert_puestos.append(row)
 
