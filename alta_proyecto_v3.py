@@ -815,16 +815,11 @@ with st.form("alta_proyecto"):
                     # Insertar cada combinación de factores específicos y de destino
                     for nombre_completo_f in [nombre_completo for nombre_completo, _ in selected_factores]:
                         for nombre_completo_d in [nombre_completo for nombre_completo, _ in selected_factores_2]:
-                            # Inicializa los puntos ajustados como None o 0 por defecto
-                            puntos_ajustados_especifico = 0
-                            puntos_ajustados_destino = 0
                             row = {
                                 'id_proyecto': new_id_proyecto,
                                 'id_puesto': id_puesto,
                                 'complementos_especificos': nombre_completo_f,
-                                'complementos_destino': nombre_completo_d,
-                                'puntos_ajustados_especifico': puntos_ajustados_especifico,  # Nuevo campo para puntos específicos
-                                'puntos_ajustados_destino': puntos_ajustados_destino  # Nuevo campo para puntos destino
+                                'complementos_destino': nombre_completo_d
                             }
                             rows_to_insert_puestos.append(row)
 
@@ -833,12 +828,12 @@ with st.form("alta_proyecto"):
                 try:
                     query_insert_factores = """
                         INSERT INTO `ate-rrhh-2024.Ate_kaibot_2024.factores_seleccionados_x_puesto_x_proyecto`
-                        (id_proyecto, id_puesto, complementos_especificos, complementos_destino, puntos_ajustados_especifico, puntos_ajustados_destino)
+                        (id_proyecto, id_puesto, complementos_especificos, complementos_destino)
                         VALUES
                     """
                     valores = []
                     for row in rows_to_insert_puestos:
-                        valores.append(f"({row['id_proyecto']}, {row['id_puesto']}, '{row['complementos_especificos'].replace("'", "''")}', '{row['complementos_destino'].replace("'", "''")}', {row['puntos_ajustados_especifico']}, {row['puntos_ajustados_destino']})")
+                        valores.append(f"({row['id_proyecto']}, {row['id_puesto']}, '{row['complementos_especificos'].replace("'", "''")}', '{row['complementos_destino'].replace("'", "''")}')")
 
                     query_insert_factores += ", ".join(valores)
 
