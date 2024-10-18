@@ -84,7 +84,7 @@ PAGES_TABLES = {
     "RESPONSABILIDAD SOBRE USUARIOS DE RESIDENCIA": ("ate-rrhh-2024.Ate_kaibot_2024.responsabilidad_residencia", "id_responsabilidad_residencia"),
     "POLIVALENCIA": ("ate-rrhh-2024.Ate_kaibot_2024.polivalencia", "id_polivalencia"),
     "RESPONSABILIDAD PARCIAL SOBRE EL PRESUPUESTO": ("ate-rrhh-2024.Ate_kaibot_2024.responsabilidad_presupuesto", "id_responsabilidad_presupuesto"),
-
+    "RESPONSABILIDAD DE LA ACTIVIDAD ESPECIAL": ("ate-rrhh-2024.Ate_kaibot_2024.responsabilidad_actividad_especial", "id_responsabilidad_especial"),
     #fin tablas nuevas
     "Calendario-Jornada-Turno": ("ate-rrhh-2024.Ate_kaibot_2024.calendario_jornada-turno", "id_calendario_jornada_turno"),
     "Complejidad funcional": ("ate-rrhh-2024.Ate_kaibot_2024.complejidad_funcional", "id_complejidad_funcional"),
