@@ -8,7 +8,7 @@ import numpy as np
 
 
 # Configurar la página de Streamlit
-st.set_page_config(page_title="RRHH del Norte-Alta nuevos proyectos-beta3", page_icon="✅")
+st.set_page_config(page_title="RRHH del Norte-Alta nuevos proyectos-beta4", page_icon="✅")
 st.title("¡Bienvenido a RRHH del Norte! 👷")
 st.header("¡Empieza tu Proyecto! - beta3")
 
