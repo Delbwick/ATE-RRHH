@@ -160,6 +160,16 @@ puestos_df = get_puestos(id_proyecto_seleccionado)
 puestos_descripciones = puestos_df['descripcion'].tolist()
 selected_puestos = st.sidebar.multiselect("Selecciona los puestos", puestos_descripciones)
 
+#Seleccion de categoria
+
+opcion_proyecto = st.sidebar.selectbox(
+    "Seleccione una Categorias:",
+    ("A!", 
+     "A2", 
+     "B1", 
+     "B2")
+)
+
 # Variable para almacenar las selecciones
 selecciones_especificos = []
 selecciones_destino = []
