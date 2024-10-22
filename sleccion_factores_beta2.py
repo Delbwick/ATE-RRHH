@@ -70,6 +70,14 @@ client = bigquery.Client(credentials=credentials)
 # Crear el sidebar
 # Crear el sidebar
 st.sidebar.title("Opciones")
+opcion_proyecto = st.sidebar.selectbox(
+    "Seleccione un Proyectos:",
+    ("Acme", 
+     "Acme2", 
+     "Acme3", 
+     "Acme4")
+)
+
 
 # Crear el selectbox en el sidebar con las opciones
 opcion = st.sidebar.selectbox(
