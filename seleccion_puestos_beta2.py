@@ -68,7 +68,14 @@ client = bigquery.Client(credentials=credentials)
 #Incluimos Los primeros campos del Proyecto
 # Crear formulario para datos del proyecto
 
-
+st.sidebar.title("Opciones")
+opcion_proyecto = st.sidebar.selectbox(
+    "Seleccione un Proyectos:",
+    ("Acme", 
+     "Acme2", 
+     "Acme3", 
+     "Acme4")
+)
 
 # Función para obtener puestos desde BigQuery
 def get_puestos():
