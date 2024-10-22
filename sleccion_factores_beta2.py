@@ -1,4 +1,4 @@
-ion import webbrowser  # para abrir otras apps
+import webbrowser  # para abrir otras apps
 import streamlit as st
 from google.oauth2 import service_account
 from google.cloud import bigquery
