@@ -68,9 +68,10 @@ client = bigquery.Client(credentials=credentials)
 #Incluimos Los primeros campos del Proyecto
 # Crear formulario para datos del proyecto
 # Crear el sidebar
+# Crear el sidebar
 st.sidebar.title("Opciones")
 
-# Crear el selectbox en el sidebar con las nuevas opciones
+# Crear el selectbox en el sidebar con las opciones
 opcion = st.sidebar.selectbox(
     "Seleccione una categoría:",
     ("Factores de formación", 
@@ -79,22 +80,19 @@ opcion = st.sidebar.selectbox(
      "Factores de iniciativa o autonomía")
 )
 
-# Mostrar la opción seleccionada en el cuerpo de la aplicación
+# Modificar la etiqueta en función de la opción seleccionada
 if opcion == "Factores de formación":
-    st.write("Has seleccionado: Factores de formación")
-    # Lógica o elementos adicionales para esta opción
-
+    etiqueta = "factor_formacion"
 elif opcion == "Factores de jerarquización o mando":
-    st.write("Has seleccionado: Factores de jerarquización o mando")
-    # Lógica o elementos adicionales para esta opción
-
+    etiqueta = "factor_jerarquizacion"
 elif opcion == "Factores de responsabilidad":
-    st.write("Has seleccionado: Factores de responsabilidad")
-    # Lógica o elementos adicionales para esta opción
-
+    etiqueta = "factor_responsabilidad"
 elif opcion == "Factores de iniciativa o autonomía":
-    st.write("Has seleccionado: Factores de iniciativa o autonomía")
-    # Lógica o elementos adicionales para esta opción
+    etiqueta = "factor_iniciativa"
+else:
+    etiqueta = ""
+
+
 #
 def obtener_datos_tabla(tabla):
     query = f"SELECT * FROM `{tabla}` LIMIT 100"
@@ -127,7 +125,7 @@ query = f"""
         SELECT table_name
         FROM `{project_id}.{dataset_id}.INFORMATION_SCHEMA.TABLE_OPTIONS`
         WHERE option_name = 'labels'
-        AND option_value LIKE '%"destino"%'
+        AND option_value LIKE '%"{etiqueta}"%'
     )
 """
 
