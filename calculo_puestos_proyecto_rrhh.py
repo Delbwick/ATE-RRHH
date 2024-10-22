@@ -155,6 +155,20 @@ df_puestos_proyecto = pd.DataFrame(data=[row.values() for row in results_puestos
 st.markdown(f"<div class='cell dataframe-cell'>{df_puestos_proyecto.to_html(index=False)}</div>", unsafe_allow_html=True)
 
 
+#SELECCION CATEGORIA
+#≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤≤<ç
+# Selectbox para elegir la categoría de sueldo
+st.markdown("<h2>Selecciona la Categoría para el Puesto</h2>", unsafe_allow_html=True)
+st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
+categoria_seleccionada = st.selectbox(
+    f"Seleccione la categoría de sueldo para {puesto_nombre}",
+    list(categorias_sueldo_dict.keys()),
+    key=f"{puesto_id}_categoria"
+)
+
+
+
+
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #COMPLEMENTOS DE DESTINO POR PROYECTO
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
