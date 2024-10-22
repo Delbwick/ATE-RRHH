@@ -228,7 +228,7 @@ for nombre_tabla, (nombre_completo, id_tabla) in PAGES_TABLES.items():
 
                     # Mostrar resultados en una nueva línea
                     st.markdown("<h4>Resultados de la Selección</h4>", unsafe_allow_html=True)
-                    st.write(f"Seleccionaste la letra: {selected_letra_destino}")
+                    #st.write(f"Seleccionaste la letra: {selected_letra_destino}")
                     st.write(f"Puntos originales: {puntos_destino}")
                     st.write(f"Puntos ajustados (con {porcentaje_destino}%): {puntos_ajustados_destino:.2f}")
 
