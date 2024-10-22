@@ -207,7 +207,7 @@ for nombre_tabla, (nombre_completo, id_tabla) in PAGES_TABLES.items():
         # Columna 2 (30%): checkbox, selectbox y inputbox
         with col2:
             if st.checkbox(f"Seleccionar {nombre_tabla}", key=f"checkbox_{nombre_tabla}"):
-                selected_factores.append((nombre_completo, id_tabla))
+                #selected_factores.append((nombre_completo, id_tabla))
                 # Input para porcentaje
                 porcentaje_destino = st.number_input(f"% {selected_descripcion_destino}", min_value=0.0, max_value=100.0, value=100.0, step=1.0, key=f'porcentaje_destino_{nombre_tabla}')
 
