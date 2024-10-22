@@ -122,6 +122,22 @@ with col2:
     pago = st.text_input('Forma de Pago')
 
 
+#botener datos de tablas
+
+def obtener_datos_tabla(tabla):
+    query = f"SELECT * FROM `{tabla}` LIMIT 100"
+    return client.query(query).result().to_dataframe().fillna('No disponible')
+
+
+#
+
+#Finde Primeros campos de proyectos
+#para las selecciones de los factores que ya estan seleccionadops
+def obtener_datos_bigquery(nombre_tabla):
+    query = f"SELECT * FROM `{nombre_tabla}` LIMIT 100"  # Ajusta el límite según sea necesario
+    query_job = client.query(query)
+    df = query_job.result().to_dataframe()
+    return df
 
 
 st.markdown("<h2>Selecciona los Factores de complemento de destino version 2:</h2>", unsafe_allow_html=True)
