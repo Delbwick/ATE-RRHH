@@ -49,7 +49,7 @@ try:
     query_job_clientes = client.query(query_clientes)
     results_clientes = query_job_clientes.result()
     df_clientes = pd.DataFrame(data=[row.values() for row in results_clientes], columns=[field.name for field in results_clientes.schema])
-    st.dataframe(df_clientes)
+    #st.dataframe(df_clientes)
 except Exception as e:
     st.error(f"Error al ejecutar la consulta: {e}")
 
@@ -125,7 +125,7 @@ def abrir_otra_app():
     url_otra_app = "https://test-analytics-g7zhphce2svtgaye6sgiso.streamlit.app/"
     webbrowser.open_new_tab(url_otra_app)
 
-st.title("Ver listado de clientes")
+#st.title("Ver listado de clientes")
 
 # Botón para abrir la otra aplicación
 if st.button("Clientes"):
