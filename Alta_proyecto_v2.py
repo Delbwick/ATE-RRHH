@@ -211,7 +211,7 @@ for nombre_tabla, (nombre_completo, id_tabla) in PAGES_TABLES.items():
 
                 # Crear un selectbox para seleccionar el valor
                 opciones_destino = df_factores.apply(lambda r: f"{r['letra']} - {r['descripcion']}", axis=1).tolist()
-                seleccion_destino = st.selectbox(f"Selecciona un valor para {nombre_tabla}:", opciones_destino, key=f"destino_{nombre_tabla}")
+                #seleccion_destino = st.selectbox(f"Selecciona un valor para {nombre_tabla}:", opciones_destino, key=f"destino_{nombre_tabla}")
 
                 if seleccion_destino:
                     # Extraer letra y descripción seleccionada
