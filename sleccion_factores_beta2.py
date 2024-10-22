@@ -8,7 +8,7 @@ import numpy as np
 
 
 # Configurar la página de Streamlit
-st.set_page_config(page_title="RRHH del Norte-Sewlecciona los factores", page_icon="✅")
+st.set_page_config(page_title="RRHH del Norte-Sewlecciona los factores de complemento de Destino", page_icon="✅")
 st.title("¡Bienvenido a RRHH del Norte! 👷")
 st.header("¡Empieza tu Proyecto! - beta4")
 
@@ -70,27 +70,31 @@ client = bigquery.Client(credentials=credentials)
 # Crear el sidebar
 st.sidebar.title("Opciones")
 
-# Crear el selectbox en el sidebar
+# Crear el selectbox en el sidebar con las nuevas opciones
 opcion = st.sidebar.selectbox(
     "Seleccione una categoría:",
-    ("Factores de formación", "Factores de jerarquización o mando")
+    ("Factores de formación", 
+     "Factores de jerarquización o mando", 
+     "Factores de responsabilidad", 
+     "Factores de iniciativa o autonomía")
 )
 
 # Mostrar la opción seleccionada en el cuerpo de la aplicación
 if opcion == "Factores de formación":
     st.write("Has seleccionado: Factores de formación")
-    # Aquí puedes incluir más lógica o elementos que se desplieguen cuando seleccionen esta opción
+    # Lógica o elementos adicionales para esta opción
 
 elif opcion == "Factores de jerarquización o mando":
     st.write("Has seleccionado: Factores de jerarquización o mando")
-    # Aquí puedes incluir más lógica o elementos que se desplieguen cuando seleccionen esta opción
+    # Lógica o elementos adicionales para esta opción
 
+elif opcion == "Factores de responsabilidad":
+    st.write("Has seleccionado: Factores de responsabilidad")
+    # Lógica o elementos adicionales para esta opción
 
-
-def obtener_datos_tabla(tabla):
-    query = f"SELECT * FROM `{tabla}` LIMIT 100"
-    return client.query(query).result().to_dataframe().fillna('No disponible')
-
+elif opcion == "Factores de iniciativa o autonomía":
+    st.write("Has seleccionado: Factores de iniciativa o autonomía")
+    # Lógica o elementos adicionales para esta opción
 #
 
 #Finde Primeros campos de proyectos
