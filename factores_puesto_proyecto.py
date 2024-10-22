@@ -481,7 +481,10 @@ modalidad_disponibilidad = st.selectbox(
         'Jornada ampliada con disponibilidad absoluta (hasta 20%)'
     ]
 )
-
+st.number_input('Selecciona la modalidad de disponibilidad especial:',
+                                                  min_value=1.0,
+                                                  value=valor_punto_especifico_proyecto,
+                                                  step=0.01)
 # Inicialización del porcentaje según la modalidad seleccionada
 porcentaje_disponibilidad = 0.0
 if modalidad_disponibilidad == 'Jornada ampliada (hasta 10%)':
