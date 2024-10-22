@@ -483,7 +483,7 @@ modalidad_disponibilidad = st.selectbox(
 )
 st.number_input('Selecciona la modalidad de disponibilidad especial:',
                                                   min_value=1.0,
-                                                  value=valor_punto_especifico_proyecto,
+                                                  
                                                   step=0.01)
 # Inicialización del porcentaje según la modalidad seleccionada
 porcentaje_disponibilidad = 0.0
