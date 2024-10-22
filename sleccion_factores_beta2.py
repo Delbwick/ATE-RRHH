@@ -127,7 +127,7 @@ query = f"""
         WHERE option_name = 'labels'
         AND option_value LIKE '%"{etiqueta}"%'
     )
-    ORDER BY letra ASC -- Asumiendo que column_name es el campo string 'letra'
+    ORDER BY letra  -- Asumiendo que column_name es el campo string 'letra'
 """
 
 
