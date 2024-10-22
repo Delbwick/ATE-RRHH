@@ -134,6 +134,103 @@ def get_puestos():
     return puestos
 
 # Mostrar el selectbox de puestos
+st.markdown("<h2>Selecciona los Puestos de Trabajo del Proyecto</h2>", unsafe_allow_html=True)
+st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
+selected_puesto = st.selectbox("Selecciona un puesto", get_puestos())
+#mostrar los puestos como checkbox
+# Obtener los puestos
+puestos = get_puestos()
+
+
+# Crear dos columnas
+col1, col2 = st.columns(2)
+
+# Mostrar los puestos como checkboxes en dos columnas
+selected_puestos = []
+
+with col1:
+    st.write("Columna 1")
+    for descripcion in puestos[:len(puestos)//2]:
+        if st.checkbox(descripcion):
+            selected_puestos.append(descripcion)
+
+with col2:
+    st.write("Columna 2")
+    for descripcion in puestos[len(puestos)//2:]:
+        if st.checkbox(descripcion):
+            selected_puestos.append(descripcion)
+
+# Mostrar los puestos seleccionados
+if selected_puestos:
+    st.write("Puestos seleccionados:")
+    for descripcion in selected_puestos:
+        st.write(f"{descripcion}")
+else:
+    st.warning("Por favor, selecciona al menos un puesto para continuar.")
+
+#Funcion para ibcluir algun puesto nuevo
+#Primero vamos a obtener el nuevo id
+
+# Función para insertar un nuevo puesto en BigQuery
+def add_puesto(nuevo_puesto):
+    #Primero el id_puesto
+    # Consulta para obtener el último ID de proyecto
+    query_max_id_puestos = """
+        SELECT MAX(id_puesto) FROM `ate-rrhh-2024.Ate_kaibot_2024.puestos`
+        """
+    query_job_max_id_puestos = client.query(query_max_id_puestos)
+    max_id_result_puesto = query_job_max_id_puestos.result()
+
+    max_id_puesto = 0
+    for row in max_id_result_puesto:
+        max_id_puesto = row[0]
+
+        # Incrementar el máximo ID en 1 para obtener el nuevo ID de proyecto
+    new_id_puesto = max_id_puesto + 1 if max_id_puesto is not None else 1
+    #
+    query = f"""
+        INSERT INTO `ate-rrhh-2024.Ate_kaibot_2024.puestos` (id_puesto,descripcion)
+        VALUES ({new_id_puesto},'{nuevo_puesto}')
+    """
+    query_job = client.query(query)
+    query_job.result()  # Esperar a que la inserción se complete
+
+# Mostrar el inputbox para añadir un nuevo puesto
+st.markdown("<h2>Añadir un nuevo puesto de trabajo</h2>", unsafe_allow_html=True)
+nuevo_puesto = st.text_input("Introduce el nombre del nuevo puesto")
+
+# Botón para añadir el puesto
+if st.button("Añadir puesto"):
+    if nuevo_puesto:
+        add_puesto(nuevo_puesto)
+        st.success(f"Se ha añadido el puesto: {nuevo_puesto}")
+    else:
+        st.error("El campo de puesto no puede estar vacío.")
+
+#botener datos de tablas
+
+def obtener_datos_tabla(tabla):
+    query = f"SELECT * FROM `{tabla}` LIMIT 100"
+    return client.query(query).result().to_dataframe().fillna('No disponible')
+
+
+#
+
+
+
+
+# Función para obtener puestos desde BigQuery
+def get_puestos():
+    query = """
+        SELECT *
+        FROM `ate-rrhh-2024.Ate_kaibot_2024.puestos`
+    """
+    query_job = client.query(query)
+    results = query_job.result()
+    puestos = [row.descripcion for row in results]
+    return puestos
+
+# Mostrar el selectbox de puestos
 st.markdown("<h2>Datos de Puestos</h2>", unsafe_allow_html=True)
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 selected_puesto = st.selectbox("Selecciona un puesto", get_puestos())
