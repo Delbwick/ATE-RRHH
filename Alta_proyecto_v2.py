@@ -208,10 +208,29 @@ for nombre_tabla, (nombre_completo, id_tabla) in PAGES_TABLES.items():
         with col2:
             if st.checkbox(f"Seleccionar {nombre_tabla}", key=f"checkbox_{nombre_tabla}"):
                 selected_factores.append((nombre_completo, id_tabla))
+                # Input para porcentaje
+                porcentaje_destino = st.number_input(f"% {selected_descripcion_destino}", min_value=0.0, max_value=100.0, value=100.0, step=1.0, key=f'porcentaje_destino_{nombre_tabla}')
+
+                    # Calcular puntos ajustados
+                puntos_ajustados_destino = puntos_destino * (porcentaje_destino / 100)
+
+                    # Mostrar resultados en una nueva línea
+                st.markdown("<h4>Resultados de la Selección</h4>", unsafe_allow_html=True)
+                    #st.write(f"Seleccionaste la letra: {selected_letra_destino}")
+                st.write(f"Puntos originales: {puntos_destino}")
+                st.write(f"Puntos ajustados (con {porcentaje_destino}%): {puntos_ajustados_destino:.2f}")
+
+                    # Guardar en la lista de selecciones
+                selecciones_destino.append({
+                        'Tabla': nombre_tabla, 
+                        'Letra': selected_letra_destino, 
+                        'Descripción': selected_descripcion_destino, 
+                        'Puntos': puntos_ajustados_destino
+                })
 
                 # Crear un selectbox para seleccionar el valor
                 opciones_destino = df_factores.apply(lambda r: f"{r['letra']} - {r['descripcion']}", axis=1).tolist()
-                #seleccion_destino = st.selectbox(f"Selecciona un valor para {nombre_tabla}:", opciones_destino, key=f"destino_{nombre_tabla}")
+                seleccion_destino = st.selectbox(f"Selecciona un valor para {nombre_tabla}:", opciones_destino, key=f"destino_{nombre_tabla}")
 
                 if seleccion_destino:
                     # Extraer letra y descripción seleccionada
