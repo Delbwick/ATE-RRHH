@@ -96,7 +96,9 @@ elif opcion == "Factores de iniciativa o autonomía":
     st.write("Has seleccionado: Factores de iniciativa o autonomía")
     # Lógica o elementos adicionales para esta opción
 #
-
+def obtener_datos_tabla(tabla):
+    query = f"SELECT * FROM `{tabla}` LIMIT 100"
+    return client.query(query).result().to_dataframe().fillna('No disponible')
 #Finde Primeros campos de proyectos
 #para las selecciones de los factores que ya estan seleccionadops
 def obtener_datos_bigquery(nombre_tabla):
