@@ -71,7 +71,9 @@ client = bigquery.Client(credentials=credentials)
 
 
 
-
+def obtener_datos_tabla(tabla):
+    query = f"SELECT * FROM `{tabla}` LIMIT 100"
+    return client.query(query).result().to_dataframe().fillna('No disponible')
 
 #
 
