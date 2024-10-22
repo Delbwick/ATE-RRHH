@@ -123,7 +123,9 @@ def add_puesto(nuevo_puesto):
     # Consulta para obtener el último ID de proyecto
     query_max_id_puestos = """
         SELECT MAX(id_puesto) FROM `ate-rrhh-2024.Ate_kaibot_2024.puestos`
+        ORDER BY descripcion
         """
+        
     query_job_max_id_puestos = client.query(query_max_id_puestos)
     max_id_result_puesto = query_job_max_id_puestos.result()
 
