@@ -67,7 +67,23 @@ client = bigquery.Client(credentials=credentials)
 
 #Incluimos Los primeros campos del Proyecto
 # Crear formulario para datos del proyecto
+# Crear el sidebar
+st.sidebar.title("Opciones")
 
+# Crear el selectbox en el sidebar
+opcion = st.sidebar.selectbox(
+    "Seleccione una categoría:",
+    ("Factores de formación", "Factores de jerarquización o mando")
+)
+
+# Mostrar la opción seleccionada en el cuerpo de la aplicación
+if opcion == "Factores de formación":
+    st.write("Has seleccionado: Factores de formación")
+    # Aquí puedes incluir más lógica o elementos que se desplieguen cuando seleccionen esta opción
+
+elif opcion == "Factores de jerarquización o mando":
+    st.write("Has seleccionado: Factores de jerarquización o mando")
+    # Aquí puedes incluir más lógica o elementos que se desplieguen cuando seleccionen esta opción
 
 
 
