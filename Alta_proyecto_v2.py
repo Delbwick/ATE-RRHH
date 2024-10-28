@@ -65,63 +65,57 @@ client = bigquery.Client(credentials=credentials)
 #<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>
 
 
-#Incluimos Los primeros campos del Proyecto
 # Crear formulario para datos del proyecto
 st.title('Nuevo Proyecto:')
 st.markdown("<h2>Datos de Proyecto</h2>", unsafe_allow_html=True)
-    # Línea horizontal ancha
+# Línea horizontal ancha
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
-  
-col1, col2, col3, col4 = st.columns(4)
 
-with col1:
-    nombre = st.text_input('Nombre de Proyecto')
-with col2:
-    descripcion = st.text_input('Descripción')
-with col3:
-    fecha_inicio = st.date_input('Fecha de Inicio')
-with col4:
-    fecha_fin = st.date_input('Fecha de Fin')
+with st.form(key='nuevo_proyecto_form'):
+    col1, col2, col3, col4 = st.columns(4)
 
-# Filas para otros campos del proyecto
-col1, col2, col3, col4 = st.columns(4)
-with col1:
-    proyecto_activo = st.checkbox('Proyecto Activo')
-with col2:
-    id_ads = st.text_input('Cliente')
-with col3:
-    id_tag = st.date_input('Creado en')
-with col4:
-    id_propiedad = st.date_input('Actualizado en')
+    with col1:
+        nombre = st.text_input('Nombre de Proyecto')
+    with col2:
+        descripcion = st.text_input('Descripción')
+    with col3:
+        fecha_inicio = st.date_input('Fecha de Inicio')
+    with col4:
+        fecha_fin = st.date_input('Fecha de Fin')
 
-# Filas para datos adicionales
-col1, col2 = st.columns(2)
-with col1:
-    sector = st.selectbox('Sector', ['Ayuntamiento', 'Gobierno','Administración local',
-'Ayuntamiento de primera categoría',
-'Ayuntamiento de segunda categoría',
-'Ayuntamiento de tercera categoría',
-'Consorcio',
-'Mancomunidad',
-'Cuadrilla',
-'Entidad autónoma local',
-'Empresa pública',
-'Sociedad pública local',
-'Sociedad pública autonómica',
-'Sociedad pública estatal',
-'Agencia',
-'Departamento'])
-with col2:
-    tamano_empresa = st.radio('Selecciona el tamaño:', ['Pequeña', 'Mediana', 'Gran Empresa'])
+    # Filas para otros campos del proyecto
+    col1, col2, col3, col4 = st.columns(4)
+    with col1:
+        proyecto_activo = st.checkbox('Proyecto Activo')
+    with col2:
+        id_ads = st.text_input('Cliente')
+    with col3:
+        id_tag = st.date_input('Creado en')
+    with col4:
+        id_propiedad = st.date_input('Actualizado en')
 
-# Filas para datos de alta
-col1, col2 = st.columns(2)
-with col1:
-    fecha_alta = st.date_input('Fecha de Alta')
-with col2:
-    pago = st.text_input('Forma de Pago')
+    # Filas para datos adicionales
+    col1, col2 = st.columns(2)
+    with col1:
+        sector = st.selectbox('Sector', [
+            'Ayuntamiento', 'Gobierno', 'Administración local',
+            'Ayuntamiento de primera categoría', 'Ayuntamiento de segunda categoría',
+            'Ayuntamiento de tercera categoría', 'Consorcio', 'Mancomunidad',
+            'Cuadrilla', 'Entidad autónoma local', 'Empresa pública',
+            'Sociedad pública local', 'Sociedad pública autonómica',
+            'Sociedad pública estatal', 'Agencia', 'Departamento'
+        ])
+    with col2:
+        tamano_empresa = st.radio('Selecciona el tamaño:', ['Pequeña', 'Mediana', 'Gran Empresa'])
 
-# Botón de submit
+    # Filas para datos de alta
+    col1, col2 = st.columns(2)
+    with col1:
+        fecha_alta = st.date_input('Fecha de Alta')
+    with col2:
+        pago = st.text_input('Forma de Pago')
+
+    # Botón de submit
     submit = st.form_submit_button("Alta nuevo proyecto")
 
     if submit:
@@ -138,18 +132,4 @@ with col2:
                 max_id = row[0]
 
             # Incrementar el máximo ID en 1 para obtener el nuevo ID de proyecto
-            new_id_proyecto = max_id + 1 if max_id is not None else 1
-
-            # Insertar el nuevo proyecto en la tabla de proyectos
-            query_kai_insert = f"""
-                INSERT INTO `ate-rrhh-2024.Ate_kaibot_2024.proyecto` 
-                (id_projecto, nombre, descripcion, fecha_comienzo, fecha_fin, proyecto_activo) 
-                VALUES 
-                ({new_id_proyecto}, '{nombre.replace("'", "''")}', '{descripcion.replace("'", "''")}', '{fecha_inicio}', '{fecha_fin}', {proyecto_activo})
-            """
-            query_job_kai_insert = client.query(query_kai_insert)
-            query_job_kai_insert.result()  # Asegurarse de que la consulta se complete
-             st.success("¡Proyecto registrado exitosamente!")
-        
-        except Exception as e:
-            st.error(f"Error al registrar el proyecto: {e}")
+            new_id_proyecto = max_id + 1 if m
