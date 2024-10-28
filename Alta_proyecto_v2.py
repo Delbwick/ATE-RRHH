@@ -148,8 +148,14 @@ with st.form(key='nuevo_proyecto_form'):
             query_job_kai_insert.result()  # Asegurarse de que la consulta se complete
             st.success("¡Proyecto registrado exitosamente!")
             # Botón para abrir otra pantalla
-            if st.button("Ir a detalles del proyecto"):
-                webbrowser.open(f"/detalles_proyecto?id_proyecto={new_id_proyecto}")
+            # Botón para redirigir a la otra aplicación con el ID de proyecto
+            st.markdown(f"""
+                <a href="https://ate-rrhh-9keb7jlgxce6dthzz8gdzx.streamlit.app?id_proyecto={new_id_proyecto}" target="_blank">
+                    <button style="background-color:Green;padding:10px;border-radius:5px;color:white;border:none;">
+                    Ir a la APP de Cálculo de Valoraciones
+                    </button>
+                </a>
+            """, unsafe_allow_html=True)
 
         except Exception as e:
             st.error(f"Error al registrar el proyecto: {e}")
