@@ -135,7 +135,7 @@ if submit:
         # Insertar el nuevo proyecto en la tabla de proyectos
         query_kai_insert = """
             INSERT INTO `ate-rrhh-2024.Ate_kaibot_2024.proyecto` 
-            (id_proyecto, nombre, descripcion, fecha_comienzo, fecha_fin, proyecto_activo) 
+            (id_projecto, nombre, descripcion, fecha_comienzo, fecha_fin, proyecto_activo) 
             VALUES 
             (@new_id_proyecto, @nombre, @descripcion, @fecha_inicio, @fecha_fin, @proyecto_activo)
         """
