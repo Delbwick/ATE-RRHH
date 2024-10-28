@@ -122,4 +122,34 @@ with col2:
     pago = st.text_input('Forma de Pago')
 
 
+  # Botón de submit
+    submit = st.form_submit_button("Alta nuevo proyecto")
+
+    if submit:
+        try:
+            # Consulta para obtener el último ID de proyecto
+            query_max_id = """
+            SELECT MAX(id_projecto) FROM `ate-rrhh-2024.Ate_kaibot_2024.proyecto`
+            """
+            query_job_max_id = client.query(query_max_id)
+            max_id_result = query_job_max_id.result()
+
+            max_id = 0
+            for row in max_id_result:
+                max_id = row[0]
+
+            # Incrementar el máximo ID en 1 para obtener el nuevo ID de proyecto
+            new_id_proyecto = max_id + 1 if max_id is not None else 1
+
+            # Insertar el nuevo proyecto en la tabla de proyectos
+            query_kai_insert = f"""
+                INSERT INTO `ate-rrhh-2024.Ate_kaibot_2024.proyecto` 
+                (id_projecto, nombre, descripcion, fecha_comienzo, fecha_fin, proyecto_activo) 
+                VALUES 
+                ({new_id_proyecto}, '{nombre.replace("'", "''")}', '{descripcion.replace("'", "''")}', '{fecha_inicio}', '{fecha_fin}', {proyecto_activo})
+            """
+            query_job_kai_insert = client.query(query_kai_insert)
+            query_job_kai_insert.result()  # Asegurarse de que la consulta se complete
+
+
 
