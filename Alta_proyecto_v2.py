@@ -147,6 +147,9 @@ with st.form(key='nuevo_proyecto_form'):
             query_job_kai_insert = client.query(query_kai_insert)
             query_job_kai_insert.result()  # Asegurarse de que la consulta se complete
             st.success("¡Proyecto registrado exitosamente!")
+            # Botón para abrir otra pantalla
+            if st.button("Ir a detalles del proyecto"):
+                webbrowser.open(f"/detalles_proyecto?id_proyecto={new_id_proyecto}")
 
         except Exception as e:
             st.error(f"Error al registrar el proyecto: {e}")
