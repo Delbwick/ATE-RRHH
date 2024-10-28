@@ -154,3 +154,12 @@ with st.form(key='nuevo_proyecto_form'):
         except Exception as e:
             st.error(f"Error al registrar el proyecto: {e}")
 
+# Crear un botón
+st.markdown("""
+    <a href="https://ate-rrhh-9keb7jlgxce6dthzz8gdzx.streamlit.app?id_proyecto={new_id_proyecto}" target="_blank">
+        <button style="background-color:Green;padding:10px;border-radius:5px;color:white;border:none;">
+            Ir a la APP de Cálculo de Valoraciones
+        </button>
+    </a>
+    """, unsafe_allow_html=True)
+
