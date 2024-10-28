@@ -151,5 +151,5 @@ with col2:
             query_job_kai_insert.result()  # Asegurarse de que la consulta se complete
              st.success("¡Proyecto registrado exitosamente!")
         
-    except Exception as e:
-        st.error(f"Error al registrar el proyecto: {e}")
+        except Exception as e:
+            st.error(f"Error al registrar el proyecto: {e}")
