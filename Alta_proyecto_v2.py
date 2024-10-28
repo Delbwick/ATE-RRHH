@@ -132,4 +132,22 @@ with st.form(key='nuevo_proyecto_form'):
                 max_id = row[0]
 
             # Incrementar el máximo ID en 1 para obtener el nuevo ID de proyecto
-            new_id_proyecto = max_id + 1 if m
+            if max_id is not None:
+                new_id_proyecto = max_id + 1
+            else:
+                new_id_proyecto = 1
+
+            # Insertar el nuevo proyecto en la tabla de proyectos
+            query_kai_insert = f"""
+                INSERT INTO `ate-rrhh-2024.Ate_kaibot_2024.proyecto` 
+                (id_projecto, nombre, descripcion, fecha_comienzo, fecha_fin, proyecto_activo) 
+                VALUES 
+                ({new_id_proyecto}, '{nombre.replace("'", "''")}', '{descripcion.replace("'", "''")}', '{fecha_inicio}', '{fecha_fin}', {proyecto_activo})
+            """
+            query_job_kai_insert = client.query(query_kai_insert)
+            query_job_kai_insert.result()  # Asegurarse de que la consulta se complete
+            st.success("¡Proyecto registrado exitosamente!")
+
+        except Exception as e:
+            st.error(f"Error al registrar el proyecto: {e}")
+
