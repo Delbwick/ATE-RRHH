@@ -208,7 +208,7 @@ for nombre_tabla, (nombre_completo, id_tabla) in PAGES_TABLES.items():
                 # Guardar en la lista de selecciones
                 selecciones_destino.append({
                     'Tabla': nombre_tabla, 
-                    #'Letra': selected_letra_destino, 
+                    'Letra': selected_letra_destino, 
                     'Descripción': selected_descripcion_destino, 
                     'Puntos': puntos_ajustados_destino
                 })
