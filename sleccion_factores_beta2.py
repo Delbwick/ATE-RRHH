@@ -312,22 +312,17 @@ if selected_factores:
     #url_otra_app = "https://test-analytics-g7zhphce2svtgaye6sgiso.streamlit.app/"
     #webbrowser.open_new_tab(url_otra_app)
 
-# Función para obtener datos de BigQuery
-
 # Definir el nombre de la tabla donde guardaremos las selecciones
 tabla_seleccion = f"{project_id}.{dataset_id}.complemento_destino_x_proyecto"
 
-# Crear la función para insertar selecciones en BigQuery
-def guardar_selecciones_en_bigquery(tabla, proyecto, selecciones):
-    """Guarda las selecciones de complementos de destino en BigQuery."""
+# Crear la función para insertar solo el ID del proyecto y el nombre de la tabla seleccionada
+def guardar_selecciones_en_bigquery(tabla, id_proyecto, selecciones):
+    """Guarda solo el ID del proyecto y el nombre de la tabla de factores seleccionada en BigQuery."""
     registros = []
     for seleccion in selecciones:
         registros.append({
-            "proyecto": proyecto,
-            "tabla_seleccionada": seleccion['Tabla'],
-            "letra": seleccion['Letra'],
-            "descripcion": seleccion['Descripción'],
-            "puntos": seleccion['Puntos']
+            "id_proyecto": id_proyecto,            # ID del proyecto seleccionado
+            "complemento_destino": seleccion['Tabla']  # Nombre de la tabla de factores seleccionada
         })
     
     # Convertir a DataFrame y subir a BigQuery
@@ -337,17 +332,14 @@ def guardar_selecciones_en_bigquery(tabla, proyecto, selecciones):
 
 # Almacenar los complementos seleccionados
 if st.button("Guardar selecciones"):
-    # Llamar a la función para guardar las selecciones en BigQuery
-    guardar_selecciones_en_bigquery(tabla_seleccion, opcion_proyecto, selecciones_destino)
+    # Llamar a la función para guardar solo el ID del proyecto y la tabla seleccionada en BigQuery
+    guardar_selecciones_en_bigquery(tabla_seleccion, id_proyecto_seleccionado, selecciones_destino)
 
 # Mostrar las selecciones al final si hay datos seleccionados
 if selecciones_destino:
     st.markdown("<h3>Resumen de Factores de Complemento de Destino Seleccionados</h3>", unsafe_allow_html=True)
     for seleccion in selecciones_destino:
-        st.write(f"Tabla: {seleccion['Tabla']}, Letra: {seleccion['Letra']}, Descripción: {seleccion['Descripción']}, Puntos Ajustados: {seleccion['Puntos']:.2f}")
-
-
-
+        st.write(f"Tabla seleccionada: {seleccion['Tabla']}")
 
 
 
