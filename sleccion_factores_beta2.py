@@ -70,14 +70,43 @@ client = bigquery.Client(credentials=credentials)
 # Crear el sidebar
 # Crear el sidebar
 st.sidebar.title("Opciones")
-opcion_proyecto = st.sidebar.selectbox(
-    "Seleccione un Proyectos:",
-    ("Acme", 
-     "Acme2", 
-     "Acme3", 
-     "Acme4")
-)
+# Función para seleccionar los proyectos desde BigQuery
+def get_proyectos():
+    query = """
+        SELECT id_projecto, nombre
+        FROM `ate-rrhh-2024.Ate_kaibot_2024.proyecto`
+    """
+    query_job = client.query(query)
+    results = query_job.result()
+    proyectos = [{'id': row.id_projecto, 'nombre': row.nombre} for row in results]
+    return proyectos
 
+# Obtener el ID del proyecto de la URL (si está presente)
+id_proyecto_url = st.experimental_get_query_params().get('id_proyecto', [None])[0]
+
+# Obtener la lista de proyectos desde BigQuery
+proyectos = get_proyectos()
+
+# Extraer solo los nombres para mostrarlos en el selectbox
+proyectos_nombres = [proyecto['nombre'] for proyecto in proyectos]
+
+# Si hay un id_proyecto en la URL, selecciona ese por defecto
+if id_proyecto_url:
+    proyecto_inicial = next((proyecto['nombre'] for proyecto in proyectos if proyecto['id'] == id_proyecto_url), proyectos_nombres[0])
+else:
+    proyecto_inicial = proyectos_nombres[0]  # Primer proyecto como predeterminado
+
+# Crear el sidebar con el selectbox
+st.sidebar.title("Opciones")
+st.sidebar.markdown("<h2>Selecciona el proyecto que quieres calcular</h2>", unsafe_allow_html=True)
+opcion_proyecto = st.sidebar.selectbox("Seleccione un Proyecto:", proyectos_nombres, index=proyectos_nombres.index(proyecto_inicial))
+
+# Obtener el ID del proyecto seleccionado
+id_proyecto_seleccionado = next((proyecto['id'] for proyecto in proyectos if proyecto['nombre'] == opcion_proyecto), None)
+
+# Mostrar el ID seleccionado (para fines de verificación)
+if id_proyecto_seleccionado:
+    st.sidebar.write(f"ID del proyecto seleccionado: {id_proyecto_seleccionado}")
 
 # Crear el selectbox en el sidebar con las opciones
 opcion = st.sidebar.selectbox(
