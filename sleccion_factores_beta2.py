@@ -46,6 +46,29 @@ header_html = """
     }
     </style>
 """
+guardar_selecciones_html = """
+    <style>
+        .guardar-btn {
+            background-color: green;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .guardar-btn:hover {
+            background-color: blue;  /* Cambiar a azul en hover */
+        }
+    </style>
+    <button class="guardar-btn" onclick="guardar_selecciones()">Guardar selecciones</button>
+    <script>
+        function guardar_selecciones() {
+            document.getElementById('guardar-btn').click();
+        }
+    </script>
+"""
+
 
 # Agregar el HTML personalizado al encabezado
 st.markdown(header_html, unsafe_allow_html=True)
@@ -331,10 +354,29 @@ def guardar_selecciones_en_bigquery(tabla, id_proyecto, selecciones):
     st.success("Las selecciones se han guardado correctamente en BigQuery.")
 
 # Almacenar los complementos seleccionados
-if st.button("Guardar selecciones"):
-    # Llamar a la función para guardar solo el ID del proyecto y la tabla seleccionada en BigQuery
+# Mostrar el botón con el estilo personalizado
+st.markdown(guardar_selecciones_html, unsafe_allow_html=True)
+
+# Lógica para el botón de guardar selecciones
+if st.button("Guardar selecciones", key="guardar-btn"):
     guardar_selecciones_en_bigquery(tabla_seleccion, id_proyecto_seleccionado, selecciones_destino)
 
+# Espaciado entre los botones
+st.write("")
+
+# Crear una fila para organizar los botones en columnas
+col1, col2 = st.columns([1, 1])  # Columnas de ancho igual
+
+with col2:
+    # Botón para ir a la siguiente pantalla con el id_proyecto
+    siguiente_pantalla_html = f"""
+        <a href="https://tu-app-streamlit.com?id_proyecto={id_proyecto_seleccionado}" target="_blank">
+            <button style="background-color:darkorange; color:white; padding:10px 20px; border:none; border-radius:5px;">
+                Ir a la siguiente pantalla
+            </button>
+        </a>
+    """
+    st.markdown(siguiente_pantalla_html, unsafe_allow_html=True)
 # Mostrar las selecciones al final si hay datos seleccionados
 if selecciones_destino:
     st.markdown("<h3>Resumen de Factores de Complemento de Destino Seleccionados</h3>", unsafe_allow_html=True)
