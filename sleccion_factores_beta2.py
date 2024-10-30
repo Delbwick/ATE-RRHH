@@ -358,7 +358,7 @@ def guardar_selecciones_en_bigquery(tabla, id_proyecto, selecciones):
 st.markdown(guardar_selecciones_html, unsafe_allow_html=True)
 
 # Lógica para el botón de guardar selecciones
-if st.button("Guardar selecciones", key="guardar-btn"):
+if st.button("Guardar selecciones 2", key="guardar-btn"):
     guardar_selecciones_en_bigquery(tabla_seleccion, id_proyecto_seleccionado, selecciones_destino)
 
 # Espaciado entre los botones
