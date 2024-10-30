@@ -174,8 +174,8 @@ def obtener_datos_bigquery(nombre_tabla):
 
 
 st.markdown("<h2>Selecciona los Factores de complemento de destino version 2:</h2>", unsafe_allow_html=True)
-st.sidebar.markdown("<h2>Es necesario que selecciones por lo menos un Factor</h2>", unsafe_allow_html=True)
-st.sidebar.markdown("<p>Poe defecto el PRIMERO SIEMPRE ESTÄ SELECCIONADO</p>", unsafe_allow_html=True)
+st.markdown("<h2>Es necesario que selecciones por lo menos un Factor</h2>", unsafe_allow_html=True)
+st.markdown("<p>Poe defecto el PRIMERO SIEMPRE ESTÄ SELECCIONADO</p>", unsafe_allow_html=True)
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 
 # Nombre del proyecto y dataset
