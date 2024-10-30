@@ -215,11 +215,14 @@ for row in results:
 print(PAGES_TABLES)
 
 # Inicializar lista de selecciones de destino
-# Inicializar lista de selecciones de destino
-selecciones_destino = []
-
-# Mostrar checkboxes para seleccionar las tablas de factores de complemento de destino
 selected_factores = []
+selecciones_destino = []  # Aseguramos que la lista de selecciones esté vacía al iniciar
+
+# Seleccionar la primera tabla por defecto
+primer_nombre_tabla, (primer_nombre_completo, primer_id_tabla) = next(iter(PAGES_TABLES.items()))
+selected_factores.append((primer_nombre_completo, primer_id_tabla))
+
+# Bucle para recorrer PAGES_TABLES y mostrar opciones
 for nombre_tabla, (nombre_completo, id_tabla) in PAGES_TABLES.items():
     # Separador para cada tabla
     st.markdown("<hr>", unsafe_allow_html=True)
@@ -241,8 +244,12 @@ for nombre_tabla, (nombre_completo, id_tabla) in PAGES_TABLES.items():
 
         # Columna 2 (30%): checkbox e inputbox
         with col2:
-            if st.checkbox(f"Seleccionar {nombre_tabla}", key=f"checkbox_{nombre_tabla}"):
-                selected_factores.append((nombre_completo, id_tabla))
+            # Determinar si la tabla actual es la primera de PAGES_TABLES para marcarla por defecto
+            is_selected = (nombre_tabla == primer_nombre_tabla)
+
+            if st.checkbox(f"Seleccionar {nombre_tabla}", key=f"checkbox_{nombre_tabla}", value=is_selected):
+                if (nombre_completo, id_tabla) not in selected_factores:
+                    selected_factores.append((nombre_completo, id_tabla))
 
                 # Selección automática de la primera letra y descripción disponibles en df_factores
                 primera_fila = df_factores.iloc[0]
@@ -259,7 +266,6 @@ for nombre_tabla, (nombre_completo, id_tabla) in PAGES_TABLES.items():
 
                 # Mostrar resultados en una nueva línea
                 st.markdown("<h4>Resultados de la Selección</h4>", unsafe_allow_html=True)
-                #st.write(f"Seleccionaste la letra: {selected_letra_destino}")
                 st.write(f"Puntos originales: {puntos_destino}")
                 st.write(f"Puntos ajustados (con {porcentaje_destino}%): {puntos_ajustados_destino:.2f}")
 
