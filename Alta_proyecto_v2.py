@@ -152,7 +152,7 @@ with st.form(key='nuevo_proyecto_form'):
             st.markdown(f"""
                 <a href="https://ate-rrhh-jwinmwitfd8gsoc4va9cjc.streamlit.app?id_proyecto={new_id_proyecto}" target="_blank">
                     <button style="background-color:Green;padding:10px;border-radius:5px;color:white;border:none;">
-                    Ir a la APP de Cálculo de Valoraciones
+                    Ir a la APP de Seleccion de Factores
                     </button>
                 </a>
             """, unsafe_allow_html=True)
