@@ -50,7 +50,7 @@ if id_proyecto:
                 """, unsafe_allow_html=True)
 
         # Añadir las tarjetas con iconos y enlaces
-        crear_tarjeta(col1, "Selección de factores de complemento de destino", "https://example.com/factores_destino", "🏆")
+        crear_tarjeta(col1, "Selección de factores de complemento de destino", "https://ate-rrhh-sj96rw9k7b3phjarzwzqz8.streamlit.app", "🏆")
         crear_tarjeta(col2, "Selección de factores de complemento específico", "https://example.com/factores_especifico", "🎯")
         crear_tarjeta(col3, "Modificación de factores por proyecto", "https://example.com/factores_modificacion", "🔧")
         
