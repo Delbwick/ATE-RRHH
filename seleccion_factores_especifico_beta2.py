@@ -144,7 +144,7 @@ opcion = st.sidebar.selectbox(
 )
 
 # Modificar la etiqueta en función de la opción seleccionada
-if opcion == "Factores de formación":
+if opcion == "Factores de Especializacion Dificultad Técnica":
     etiqueta = "formacion"
 elif opcion == "Factores de jerarquización o mando":
     etiqueta = "factor_jerarquizacion"
