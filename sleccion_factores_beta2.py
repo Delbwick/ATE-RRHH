@@ -377,7 +377,7 @@ if st.button("Guardar selecciones"):
 st.markdown("""
     <a href="https://ate-rrhh-9keb7jlgxce6dthzz8gdzx.streamlit.app/" target="_blank">
         <button style="background-color:Green;padding:10px;border-radius:5px;color:white;border:none;">
-            Ir a Seleccion de Factores de Complementos Especificos
+            Ir a Actualizacion
         </button>
     </a>
     """, unsafe_allow_html=True)
