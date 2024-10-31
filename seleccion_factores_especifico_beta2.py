@@ -148,7 +148,7 @@ if opcion == "Factores de Especializacion Dificultad Técnica":
     etiqueta = "dificultad_tecnica"
 elif opcion == "Factores de jerarquización o mando":
     etiqueta = "factor_jerarquizacion"
-elif opcion == "Factores de responsabilidad":
+elif opcion == "Factores de Responsabilidad":
     etiqueta = "factor_responsabilidad"
 elif opcion == "Factores de iniciativa o autonomía":
     etiqueta = "factor_iniciativa"
