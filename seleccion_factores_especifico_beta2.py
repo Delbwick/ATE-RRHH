@@ -145,7 +145,7 @@ opcion = st.sidebar.selectbox(
 
 # Modificar la etiqueta en función de la opción seleccionada
 if opcion == "Factores de Especializacion Dificultad Técnica":
-    etiqueta = "formacion"
+    etiqueta = "dificultad_tecnica"
 elif opcion == "Factores de jerarquización o mando":
     etiqueta = "factor_jerarquizacion"
 elif opcion == "Factores de responsabilidad":
@@ -346,7 +346,7 @@ if selected_factores:
     #webbrowser.open_new_tab(url_otra_app)
 
 # Definir el nombre de la tabla donde guardaremos las selecciones
-tabla_seleccion = f"{project_id}.{dataset_id}.complemento_destino_x_proyecto"
+tabla_seleccion = f"{project_id}.{dataset_id}.complemento_especifico_x_proyecto"
 
 # Crear la función para insertar solo el ID del proyecto y el nombre de la tabla seleccionada
 def guardar_selecciones_en_bigquery(tabla, id_proyecto, selecciones):
@@ -355,7 +355,7 @@ def guardar_selecciones_en_bigquery(tabla, id_proyecto, selecciones):
     for seleccion in selecciones:
         registros.append({
             "id_proyecto": id_proyecto,            # ID del proyecto seleccionado
-            "complemento_destino": seleccion['Tabla']  # Nombre de la tabla de factores seleccionada
+            "complemento_especifico": seleccion['Tabla']  # Nombre de la tabla de factores seleccionada
         })
     
     # Convertir a DataFrame y subir a BigQuery
