@@ -14,7 +14,55 @@ scrollable_text_html = """
         1. Qué es un libro de valoración, para qué se utiliza y cómo funciona.
     </h3>
     <p style="font-family: Arial, sans-serif; font-size: 14px; color: #555555; text-align: justify;">
-        <!-- (tu contenido HTML aquí) -->
+       2.	El contenido del salario público.
+Cada empleado público (funcionario o personal laboral) puede cobrar una cantidad diferente, como consecuencia de la suma de los diferentes conceptos retributivos: retribuciones básicas -sueldo base, trienios-, y retribuciones complementarias -complemento de destino, complemento específico-. Sin perjuicio de otros complementos -por resultados en la gestión o productividad- o percepción de gratificaciones extraordinarias, en caso de que los hubiera. (art. 122 LEPV).
+La valoración sólo determina el complemento de destino y el complemento específico, aunque del estudio de los puestos de trabajo se pueden extraer otras propuestas.
+El grupo o categoría en el que se clasifica un determinado puesto de trabajo está vinculado a los requisitos de titulación para el acceso al puesto. Es decir, la titulación de la persona no tiene importancia, sino la exigida para el acceso al puesto.
+Atendiendo a la clasificación del puesto le corresponderán unas retribuciones básicas-sueldo y trienios*-. 
+Los importes correspondientes a doce mensualidades (para el periodo enero a diciembre de 2024) en concepto de retribuciones básicas, son los que se recogen a continuación :
+* Los trienios están regulados por Udalhitz (art. 69). 
+Grupo/subgrupo	Sueldo (euros)	Trienios (euros)
+A1	15.922,80	612,84
+A2	13.768,20	499,80
+B	12.035,28	438,48
+C1	10.337,52	378,36
+C2	8.603,76	257,52
+E	7.874,76	193,92
+
+
+Y para cada una de las pagas extraordinarias de los meses de junio y diciembre (2024), en concepto de sueldo y	trienios, las siguientes cuantías:
+
+Grupo/subgrupo	Sueldo 
+(euros)	Trienios 
+(euros)
+A1	818,82 	31,53
+A2	836,78	30,37
+B	866,84	31,60
+C1	744,56	27,21
+C2	710,44	21,24
+E	656,23	16,16
+
+La Ley 11/2022, de 1 de diciembre, del Empleo Público Vasco, establece en su artículo 122, en relación con el complemento del puesto de trabajo:
+3.	El complemento de destino se fijará anualmente en los Presupuestos Generales de la Comunidad Autónoma del País Vasco y será el correspondiente al puesto de trabajo que se desempeñe, de acuerdo con la estructura de niveles jerárquicos de responsabilidad que cada Administración Pública determine en función de sus facultades organizativas.
+Para la asignación del nivel de complemento de destino se tendrán en cuenta:
+•	Nivel de titulación exigido
+•	Nivel de coordinación requerido por la relación jerárquica o funcional del puesto
+•	Responsabilidad, iniciativa y autonomía en la toma de decisiones y en la adopción de medidas
+•	Grado de complejidad de la información a procesar para el correcto desarrollo de las tareas propias del	puesto	de trabajo
+
+
+
+4.	El mismo artículo de la ley recoge que, el complemento específico, que salvo norma o pacto en contrario será único por cada puesto de trabajo que tenga asignado, retribuye las condiciones especiales de cada puesto de trabajo:
+•	Dificultad técnica especial.
+•	Responsabilidad.
+•	Dedicación.
+•	Penosidad o peligrosidad.
+•	Y cualquier otra condición que se produzca en el puesto de trabajo.
+Podrá fijarse una cuantía por el factor de incompatibilidad cuando para el desempeño de determinados puestos se requiera una dedicación absoluta al servicio público.
+En ningún caso podrá percibirse el complemento específico como retribución consolidada, quedando condicionado el desempeño efectivo del puesto en las condiciones valoradas.
+Las Administraciones Públicas Vascas podrán asignar, en su caso, un complemento específico a todos los puestos de trabajo de su organización. 
+Las cuantías del complemento de destino se fijarán en la norma presupuestaria de cada Administración pública vasca, de acuerdo con los criterios que reglamentariamente establezca el órgano correspondiente para su determinación.
+
     </p>
 </div>
 """
@@ -37,15 +85,39 @@ def get_proyectos():
     return [{'id': row.id, 'nombre': row.nombre} for row in results]
 
 # Función para obtener tablas que contienen la columna 'tipo_factor'
+# Autenticación y cliente de BigQuery
+credentials = service_account.Credentials.from_service_account_info(
+    st.secrets["gcp_service_account"]
+)
+client = bigquery.Client(credentials=credentials)
+
+# Obtener todas las tablas y verificar si contienen tipo_factor
 def get_tablas_con_tipo_factor():
-    query = """
+    dataset_id = "YOUR_DATASET"  # Reemplaza con tu dataset en BigQuery
+    project_id = "YOUR_PROJECT"  # Reemplaza con tu proyecto en BigQuery
+    
+    # Consulta para obtener todas las tablas del dataset
+    tables_query = f"""
         SELECT table_name
-        FROM `YOUR_PROJECT.YOUR_DATASET.INFORMATION_SCHEMA.COLUMNS`
-        WHERE column_name = 'tipo_factor'
+        FROM `{project_id}.{dataset_id}.INFORMATION_SCHEMA.TABLES`
     """
-    query_job = client.query(query)
-    results = query_job.result()
-    return [row.table_name for row in results]
+    tables = client.query(tables_query).result()
+    
+    tablas_con_tipo_factor = []
+    for table in tables:
+        table_name = table.table_name
+        # Consulta para verificar si `tipo_factor` está presente como clave en la tabla
+        query = f"""
+            SELECT COUNT(1) AS has_tipo_factor
+            FROM `{project_id}.{dataset_id}.{table_name}`
+            WHERE 'tipo_factor' IN UNNEST(REGEXP_EXTRACT_ALL(TO_JSON_STRING(t), r'"([a-zA-Z0-9_]+)"'))
+        """
+        result = client.query(query).result()
+        if result and next(result).has_tipo_factor > 0:
+            tablas_con_tipo_factor.append(table_name)
+    
+    return tablas_con_tipo_factor
+
 
 # Función para obtener complementos específicos
 def get_complementos_especificos(id_proyecto):
