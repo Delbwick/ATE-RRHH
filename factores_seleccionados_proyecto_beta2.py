@@ -93,8 +93,8 @@ client = bigquery.Client(credentials=credentials)
 
 # Obtener todas las tablas y verificar si contienen tipo_factor
 def get_tablas_con_tipo_factor():
-    dataset_id = "YOUR_DATASET"  # Reemplaza con tu dataset en BigQuery
-    project_id = "YOUR_PROJECT"  # Reemplaza con tu proyecto en BigQuery
+    dataset_id = 'Ate_kaibot_2024'  # Reemplaza con tu dataset en BigQuery
+    project_id = 'ate-rrhh-2024' # Reemplaza con tu proyecto en BigQuery
     
     # Consulta para obtener todas las tablas del dataset
     tables_query = f"""
