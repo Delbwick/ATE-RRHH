@@ -228,7 +228,7 @@ for nombre_tabla, (nombre_completo, id_tabla) in PAGES_TABLES.items():
     # Separador para cada tabla
     st.markdown("<hr>", unsafe_allow_html=True)
 
-    # Crear dos columnas: 70% para el dataframe y 30% para selectbox/inputbox
+    # Crear dos columnas: 70% para el dataframe y 30% para selectbox
     col1, col2 = st.columns([7, 3])  # 70% y 30%
 
     # Obtener los datos de la tabla seleccionada
@@ -243,7 +243,7 @@ for nombre_tabla, (nombre_completo, id_tabla) in PAGES_TABLES.items():
             st.write(descripcion)
             st.dataframe(df_factores)
 
-        # Columna 2 (30%): checkbox e inputbox
+        # Columna 2 (30%): checkbox para seleccionar la tabla
         with col2:
             # Determinar si la tabla actual es la primera de PAGES_TABLES para marcarla por defecto
             is_selected = (nombre_tabla == primer_nombre_tabla)
@@ -259,10 +259,8 @@ for nombre_tabla, (nombre_completo, id_tabla) in PAGES_TABLES.items():
 
                 puntos_destino = primera_fila['puntos']
 
-                # Input para porcentaje
-                porcentaje_destino = st.number_input(f"% {selected_descripcion_destino}", min_value=0.0, max_value=100.0, value=100.0, step=1.0, key=f'porcentaje_destino_{nombre_tabla}')
-
-                # Calcular puntos ajustados
+                # Calcular puntos ajustados asumiendo 100% como porcentaje fijo
+                porcentaje_destino = 100.0
                 puntos_ajustados_destino = puntos_destino * (porcentaje_destino / 100)
 
                 # Mostrar resultados en una nueva línea
@@ -277,6 +275,7 @@ for nombre_tabla, (nombre_completo, id_tabla) in PAGES_TABLES.items():
                     'Descripción': selected_descripcion_destino, 
                     'Puntos': puntos_ajustados_destino
                 })
+
 
 
 # Mostrar las selecciones al final si hay datos seleccionados
