@@ -7,76 +7,17 @@ import pandas as pd
 st.set_page_config(page_title="RRHH del Norte - Selección de Factores", page_icon="📊")
 st.title("RRHH del Norte - Selección de Factores Específicos y de Destino-Manual preliminar")
 
-# HTML y CSS para mostrar el texto con desplazamiento en un contenedor de 300px de altura
+# HTML para mostrar el texto de desplazamiento
 scrollable_text_html = """
 <div style="width: 100%; max-height: 300px; overflow-y: auto; border: 1px solid #ccc; padding: 10px; background-color: #f9f9f9; border-radius: 5px;">
     <h3 style="font-family: Arial, sans-serif; font-size: 16px; color: #333333;">
         1. Qué es un libro de valoración, para qué se utiliza y cómo funciona.
     </h3>
     <p style="font-family: Arial, sans-serif; font-size: 14px; color: #555555; text-align: justify;">
-        Un libro de valoración se utiliza para valorar puestos de trabajo de forma objetiva. No se tienen en cuenta las personas que ocupan los puestos, sino los requisitos necesarios de cada puesto.
-        Se presentan los factores elegidos para valorar la organización, la graduación de los factores y el peso porcentual específico de cada factor en función de la organización.
-        El objetivo de la valoración de puestos de trabajo es establecer el valor relativo de los puestos de una organización, asignando a cada puesto una clasificación profesional y estableciendo una retribución en función de la valoración de diversos factores.
-        Hay que elegir los factores que se van a utilizar para realizar la valoración. Tanto los que determinan los complementos de destino como los que determinan los complementos específicos. La elección de los factores es relativamente libre mientras nos adaptemos a los criterios legales.
-        Además, a cada factor se le asignará un peso porcentual específico. De esta forma, escalonamos la importancia del propio factor dentro de la organización.
-        Los factores de cada complemento, de destino, por un lado, y los específicos, por otro, deben sumar cada uno por su lado un 100%.
-        Los pesos porcentuales se refieren y se suelen escoger según la importancia o repetición de determinadas funciones en los puestos de trabajo de la institución, aunque la negociación con los representantes sindicales puede dar porcentajes poco habituales.
-        Asimismo, los factores se dividen en niveles alfabéticos (se pueden añadir más graduaciones de la A a la G si se desea) y cada grado tiene una valoración entre 0 y 100.
-        La combinación del peso específico del factor y la valoración por puntos nos permite trasladarnos a un resultado económico numérico de cada puesto de trabajo.
-        2.	El contenido del salario público.
-Cada empleado público (funcionario o personal laboral) puede cobrar una cantidad diferente, como consecuencia de la suma de los diferentes conceptos retributivos: retribuciones básicas -sueldo base, trienios-, y retribuciones complementarias -complemento de destino, complemento específico-. Sin perjuicio de otros complementos -por resultados en la gestión o productividad- o percepción de gratificaciones extraordinarias, en caso de que los hubiera. (art. 122 LEPV).
-La valoración sólo determina el complemento de destino y el complemento específico, aunque del estudio de los puestos de trabajo se pueden extraer otras propuestas.
-El grupo o categoría en el que se clasifica un determinado puesto de trabajo está vinculado a los requisitos de titulación para el acceso al puesto. Es decir, la titulación de la persona no tiene importancia, sino la exigida para el acceso al puesto.
-Atendiendo a la clasificación del puesto le corresponderán unas retribuciones básicas-sueldo y trienios*-. 
-Los importes correspondientes a doce mensualidades (para el periodo enero a diciembre de 2024) en concepto de retribuciones básicas, son los que se recogen a continuación :
-* Los trienios están regulados por Udalhitz (art. 69). 
-Grupo/subgrupo	Sueldo (euros)	Trienios (euros)
-A1	15.922,80	612,84
-A2	13.768,20	499,80
-B	12.035,28	438,48
-C1	10.337,52	378,36
-C2	8.603,76	257,52
-E	7.874,76	193,92
-
-
-Y para cada una de las pagas extraordinarias de los meses de junio y diciembre (2024), en concepto de sueldo y	trienios, las siguientes cuantías:
-
-Grupo/subgrupo	Sueldo 
-(euros)	Trienios 
-(euros)
-A1	818,82 	31,53
-A2	836,78	30,37
-B	866,84	31,60
-C1	744,56	27,21
-C2	710,44	21,24
-E	656,23	16,16
-
-La Ley 11/2022, de 1 de diciembre, del Empleo Público Vasco, establece en su artículo 122, en relación con el complemento del puesto de trabajo:
-3.	El complemento de destino se fijará anualmente en los Presupuestos Generales de la Comunidad Autónoma del País Vasco y será el correspondiente al puesto de trabajo que se desempeñe, de acuerdo con la estructura de niveles jerárquicos de responsabilidad que cada Administración Pública determine en función de sus facultades organizativas.
-Para la asignación del nivel de complemento de destino se tendrán en cuenta:
-•	Nivel de titulación exigido
-•	Nivel de coordinación requerido por la relación jerárquica o funcional del puesto
-•	Responsabilidad, iniciativa y autonomía en la toma de decisiones y en la adopción de medidas
-•	Grado de complejidad de la información a procesar para el correcto desarrollo de las tareas propias del	puesto	de trabajo
-
-
-
-4.	El mismo artículo de la ley recoge que, el complemento específico, que salvo norma o pacto en contrario será único por cada puesto de trabajo que tenga asignado, retribuye las condiciones especiales de cada puesto de trabajo:
-•	Dificultad técnica especial.
-•	Responsabilidad.
-•	Dedicación.
-•	Penosidad o peligrosidad.
-•	Y cualquier otra condición que se produzca en el puesto de trabajo.
-Podrá fijarse una cuantía por el factor de incompatibilidad cuando para el desempeño de determinados puestos se requiera una dedicación absoluta al servicio público.
-En ningún caso podrá percibirse el complemento específico como retribución consolidada, quedando condicionado el desempeño efectivo del puesto en las condiciones valoradas.
-Las Administraciones Públicas Vascas podrán asignar, en su caso, un complemento específico a todos los puestos de trabajo de su organización. 
-Las cuantías del complemento de destino se fijarán en la norma presupuestaria de cada Administración pública vasca, de acuerdo con los criterios que reglamentariamente establezca el órgano correspondiente para su determinación.
-
+        <!-- (tu contenido HTML aquí) -->
     </p>
 </div>
 """
-
-# Mostrar el HTML en Streamlit
 st.markdown(scrollable_text_html, unsafe_allow_html=True)
 
 # Autenticación y cliente de BigQuery
@@ -95,7 +36,18 @@ def get_proyectos():
     results = query_job.result()
     return [{'id': row.id, 'nombre': row.nombre} for row in results]
 
-# Función para obtener complementos específicos (con nombres de tablas) de cada proyecto
+# Función para obtener tablas que contienen la columna 'tipo_factor'
+def get_tablas_con_tipo_factor():
+    query = """
+        SELECT table_name
+        FROM `YOUR_PROJECT.YOUR_DATASET.INFORMATION_SCHEMA.COLUMNS`
+        WHERE column_name = 'tipo_factor'
+    """
+    query_job = client.query(query)
+    results = query_job.result()
+    return [row.table_name for row in results]
+
+# Función para obtener complementos específicos
 def get_complementos_especificos(id_proyecto):
     query = f"""
         SELECT complemento_especifico
@@ -106,7 +58,7 @@ def get_complementos_especificos(id_proyecto):
     results = query_job.result()
     return [row.complemento_especifico for row in results]
 
-# Función para obtener complementos de destino (con nombres de tablas) de cada proyecto
+# Función para obtener complementos de destino
 def get_complementos_destino(id_proyecto):
     query = f"""
         SELECT complemento_destino
@@ -117,12 +69,33 @@ def get_complementos_destino(id_proyecto):
     results = query_job.result()
     return [row.complemento_destino for row in results]
 
-# Función para obtener datos de la tabla específica usando el nombre de la tabla
+# Función para obtener datos de la tabla específica
 def obtener_datos_tabla(nombre_tabla):
     query = f"SELECT * FROM `{nombre_tabla}` LIMIT 100"
     return client.query(query).result().to_dataframe().fillna('No disponible')
 
-# Crear el sidebar para selección de proyectos
+# Función para crear una nueva tabla en BigQuery desde Streamlit
+def crear_tabla_nueva():
+    st.sidebar.subheader("Crear una nueva tabla de factores")
+    table_name = st.sidebar.text_input("Nombre de la nueva tabla")
+    num_columns = st.sidebar.number_input("Número de columnas", min_value=1, max_value=10)
+    columns = []
+
+    for i in range(int(num_columns)):
+        col_name = st.sidebar.text_input(f"Nombre de la columna {i + 1}", key=f"col_name_{i}")
+        col_type = st.sidebar.selectbox(f"Tipo de dato de la columna {i + 1}", ["STRING", "INTEGER", "FLOAT", "BOOLEAN", "TIMESTAMP"], key=f"col_type_{i}")
+        columns.append((col_name, col_type))
+
+    if st.sidebar.button("Crear Tabla"):
+        if table_name and columns:
+            cols_str = ", ".join([f"{name} {dtype}" for name, dtype in columns])
+            query = f"CREATE TABLE `YOUR_PROJECT.YOUR_DATASET.{table_name}` ({cols_str})"
+            client.query(query)
+            st.sidebar.success("Tabla creada exitosamente")
+        else:
+            st.sidebar.error("Por favor, proporciona un nombre de tabla y al menos una columna.")
+
+# Sidebar para selección de proyecto y modificación de factores
 st.sidebar.title("Opciones de Proyecto")
 st.sidebar.markdown("<h2>Selecciona el proyecto que quieres calcular</h2>", unsafe_allow_html=True)
 
@@ -146,9 +119,20 @@ id_proyecto_seleccionado = next((proyecto['id'] for proyecto in proyectos if pro
 # Mostrar ID de proyecto seleccionado para verificación
 st.write(f"**ID del Proyecto Seleccionado**: {id_proyecto_seleccionado}")
 
-# Obtener y mostrar datos de tablas específicas para el proyecto seleccionado
+# Listar tablas que contienen 'tipo_factor' y permitir selección en el sidebar
+st.sidebar.subheader("Gestión de Factores para el Proyecto")
+tablas_con_tipo_factor = get_tablas_con_tipo_factor()
+factores_seleccionados = st.sidebar.multiselect("Factores disponibles:", tablas_con_tipo_factor)
+
+# Guardar factores seleccionados (puedes personalizar esta sección para almacenarlo en una base de datos)
+if st.sidebar.button("Guardar selección de factores"):
+    st.write(f"Factores guardados para el proyecto: {factores_seleccionados}")
+
+# Crear nueva tabla desde el sidebar
+crear_tabla_nueva()
+
+# Mostrar datos de tablas específicas para el proyecto seleccionado
 if id_proyecto_seleccionado:
-    # Complementos específicos
     complementos_especificos = get_complementos_especificos(id_proyecto_seleccionado)
     if complementos_especificos:
         st.write("### Factores Específicos del Proyecto")
@@ -159,7 +143,6 @@ if id_proyecto_seleccionado:
     else:
         st.write("No se encontraron complementos específicos para el proyecto seleccionado.")
     
-    # Complementos de destino
     complementos_destino = get_complementos_destino(id_proyecto_seleccionado)
     if complementos_destino:
         st.write("### Factores de Destino del Proyecto")
