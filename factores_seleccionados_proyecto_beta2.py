@@ -85,16 +85,6 @@ credentials = service_account.Credentials.from_service_account_info(
 )
 client = bigquery.Client(credentials=credentials)
 
-# Función para obtener proyectos desde BigQuery
-def get_proyectos():
-    query = """
-        SELECT id_projecto AS id, nombre
-        FROM `ate-rrhh-2024.Ate_kaibot_2024.proyecto`
-    """
-    query_job = client.query(query)
-    results = query_job.result()
-    return [{'id': row.id, 'nombre': row.nombre} for row in results]
-
 # Función para obtener complementos específicos (con nombres de tablas) de cada proyecto
 def get_complementos_especificos(id_proyecto):
     query = f"""
@@ -119,8 +109,13 @@ def get_complementos_destino(id_proyecto):
 
 # Función para obtener datos de la tabla específica usando el nombre de la tabla
 def obtener_datos_tabla(nombre_tabla):
-    query = f"SELECT * FROM `{nombre_tabla}` LIMIT 100"
-    return client.query(query).result().to_dataframe().fillna('No disponible')
+    try:
+        query = f"SELECT * FROM `{nombre_tabla}` LIMIT 100"
+        df = client.query(query).result().to_dataframe()
+        return df.fillna('No disponible')
+    except Exception as e:
+        st.error(f"Error al obtener datos de la tabla {nombre_tabla}: {e}")
+        return None
 
 # Crear el sidebar para selección de proyectos
 st.sidebar.title("Opciones de Proyecto")
@@ -155,7 +150,10 @@ if id_proyecto_seleccionado:
         for nombre_tabla in complementos_especificos:
             st.write(f"**Tabla: {nombre_tabla}**")
             df_complemento_especifico = obtener_datos_tabla(f"ate-rrhh-2024.Ate_kaibot_2024.{nombre_tabla}")
-            st.dataframe(df_complemento_especifico)
+            if df_complemento_especifico is not None:
+                st.dataframe(df_complemento_especifico)
+            else:
+                st.write(f"No se pudieron cargar datos para la tabla: {nombre_tabla}.")
     else:
         st.write("No se encontraron complementos específicos para el proyecto seleccionado.")
     
@@ -166,6 +164,10 @@ if id_proyecto_seleccionado:
         for nombre_tabla in complementos_destino:
             st.write(f"**Tabla: {nombre_tabla}**")
             df_complemento_destino = obtener_datos_tabla(f"ate-rrhh-2024.Ate_kaibot_2024.{nombre_tabla}")
-            st.dataframe(df_complemento_destino)
+            if df_complemento_destino is not None:
+                st.dataframe(df_complemento_destino)
+            else:
+                st.write(f"No se pudieron cargar datos para la tabla: {nombre_tabla}.")
     else:
         st.write("No se encontraron complementos de destino para el proyecto seleccionado.")
+
