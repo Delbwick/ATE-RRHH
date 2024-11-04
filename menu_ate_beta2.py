@@ -51,14 +51,14 @@ if id_proyecto:
 
         # Añadir las tarjetas con iconos y enlaces
         crear_tarjeta(col1, "Selección de factores de complemento de destino", "https://ate-rrhh-sj96rw9k7b3phjarzwzqz8.streamlit.app", "🏆")
-        crear_tarjeta(col2, "Selección de factores de complemento específico", "https://example.com/factores_especifico", "🎯")
+        crear_tarjeta(col2, "Selección de factores de complemento específico", "https://ate-rrhh-gjdmdvunktafyzemsvereq.streamlit.app/", "🎯")
         crear_tarjeta(col3, "Manuales preliminares", "https://example.com/manuales_preliminares", "📄")
        
         
         col1, col2, col3 = st.columns(3)
-        crear_tarjeta(col1, "Modificación de factores por proyecto", "https://example.com/factores_modificacion", "🔧")
-        crear_tarjeta(col2, "Selección de puestos por proyecto", "https://example.com/puestos_proyecto", "🧑‍💼")
-        crear_tarjeta(col3, "Cálculo de puestos de trabajo por proyecto", "https://example.com/calculo_puestos", "🧮")
+        crear_tarjeta(col1, "Modificación de factores por proyecto", "https://ate-rrhh-izvsuxhpkanqfvdymwklej.streamlit.app", "🔧")
+        crear_tarjeta(col2, "Selección de puestos por proyecto", "https://ate-rrhh-ocfc5vvxdvwq2bpapuddwg.streamlit.app/", "🧑‍💼")
+        crear_tarjeta(col3, "Cálculo de puestos de trabajo por proyecto", "https://ate-rrhh-9keb7jlgxce6dthzz8gdzx.streamlit.app/?id_proyecto={new_id_proyecto}", "🧮")
 
         col1, col2, col3 = st.columns(3)
         crear_tarjeta(col1, "Informes preliminares", "https://example.com/informes_preliminares", "📊")
