@@ -374,9 +374,9 @@ if st.button("Guardar selecciones"):
 
 # Crear un botón
 st.markdown("""
-    <a href="https://ate-rrhh-9keb7jlgxce6dthzz8gdzx.streamlit.app/" target="_blank">
+    <a href="https://ate-rrhh-jwinmwitfd8gsoc4va9cjc.streamlit.app/" target="_blank">
         <button style="background-color:Green;padding:10px;border-radius:5px;color:white;border:none;">
-            Ir a Actualizacion
+            Ir a Menu
         </button>
     </a>
     """, unsafe_allow_html=True)
