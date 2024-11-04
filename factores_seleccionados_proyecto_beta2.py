@@ -191,9 +191,26 @@ tables_query_job = client.query(query)
 tables = tables_query_job.result()
 tablas_seleccionadas = [row.table_name for row in tables]
 
+# Inicializar la lista de selecciones
+selecciones_destino = []
+
+# Mostrar las tablas y permitir la selección
+st.sidebar.markdown("<h2>Selecciona los Factores de complemento de destino:</h2>", unsafe_allow_html=True)
+for tabla in tablas_seleccionadas:
+    if st.sidebar.checkbox(tabla, key=f"checkbox_{tabla}"):
+        selecciones_destino.append(tabla)
+
+# Botón para guardar selecciones
+if st.sidebar.button("Guardar selecciones"):
+    tabla_seleccion = f"{project_id}.{dataset_id}.nombre_de_la_tabla_de_destino"  # Cambia este valor por el nombre correcto de la tabla de destino
+    guardar_selecciones_en_bigquery(tabla_seleccion, id_proyecto_seleccionado, selecciones_destino)
+
+#>>>>>>>>>>>>>>>>>>
+#>>>>>>>>>>>>>>>>>>
+#>>>>>>>>>>>>>>>>>>
 
 
-# Mostrar complementos específicos y de destino
+# Mostrar complementos específicos y de destino en pagna principal
 if id_proyecto_seleccionado:
     # Complementos específicos
     complementos_especificos = get_complementos_especificos(id_proyecto_seleccionado)
