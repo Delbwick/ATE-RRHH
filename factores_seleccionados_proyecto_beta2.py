@@ -10,55 +10,7 @@ st.title("RRHH del Norte - Selección de Factores Específicos y de Destino-Manu
 # HTML y CSS para mostrar el texto con desplazamiento en un contenedor de 300px de altura
 scrollable_text_html = """
 <div style="width: 100%; max-height: 300px; overflow-y: auto; border: 1px solid #ccc; padding: 10px; background-color: #f9f9f9; border-radius: 5px;">
-  2.	El contenido del salario público.
-Cada empleado público (funcionario o personal laboral) puede cobrar una cantidad diferente, como consecuencia de la suma de los diferentes conceptos retributivos: retribuciones básicas -sueldo base, trienios-, y retribuciones complementarias -complemento de destino, complemento específico-. Sin perjuicio de otros complementos -por resultados en la gestión o productividad- o percepción de gratificaciones extraordinarias, en caso de que los hubiera. (art. 122 LEPV).
-La valoración sólo determina el complemento de destino y el complemento específico, aunque del estudio de los puestos de trabajo se pueden extraer otras propuestas.
-El grupo o categoría en el que se clasifica un determinado puesto de trabajo está vinculado a los requisitos de titulación para el acceso al puesto. Es decir, la titulación de la persona no tiene importancia, sino la exigida para el acceso al puesto.
-Atendiendo a la clasificación del puesto le corresponderán unas retribuciones básicas-sueldo y trienios*-. 
-Los importes correspondientes a doce mensualidades (para el periodo enero a diciembre de 2024) en concepto de retribuciones básicas, son los que se recogen a continuación :
-* Los trienios están regulados por Udalhitz (art. 69). 
-Grupo/subgrupo	Sueldo (euros)	Trienios (euros)
-A1	15.922,80	612,84
-A2	13.768,20	499,80
-B	12.035,28	438,48
-C1	10.337,52	378,36
-C2	8.603,76	257,52
-E	7.874,76	193,92
-
-
-Y para cada una de las pagas extraordinarias de los meses de junio y diciembre (2024), en concepto de sueldo y	trienios, las siguientes cuantías:
-
-Grupo/subgrupo	Sueldo 
-(euros)	Trienios 
-(euros)
-A1	818,82 	31,53
-A2	836,78	30,37
-B	866,84	31,60
-C1	744,56	27,21
-C2	710,44	21,24
-E	656,23	16,16
-
-La Ley 11/2022, de 1 de diciembre, del Empleo Público Vasco, establece en su artículo 122, en relación con el complemento del puesto de trabajo:
-3.	El complemento de destino se fijará anualmente en los Presupuestos Generales de la Comunidad Autónoma del País Vasco y será el correspondiente al puesto de trabajo que se desempeñe, de acuerdo con la estructura de niveles jerárquicos de responsabilidad que cada Administración Pública determine en función de sus facultades organizativas.
-Para la asignación del nivel de complemento de destino se tendrán en cuenta:
-•	Nivel de titulación exigido
-•	Nivel de coordinación requerido por la relación jerárquica o funcional del puesto
-•	Responsabilidad, iniciativa y autonomía en la toma de decisiones y en la adopción de medidas
-•	Grado de complejidad de la información a procesar para el correcto desarrollo de las tareas propias del	puesto	de trabajo
-
-
-
-4.	El mismo artículo de la ley recoge que, el complemento específico, que salvo norma o pacto en contrario será único por cada puesto de trabajo que tenga asignado, retribuye las condiciones especiales de cada puesto de trabajo:
-•	Dificultad técnica especial.
-•	Responsabilidad.
-•	Dedicación.
-•	Penosidad o peligrosidad.
-•	Y cualquier otra condición que se produzca en el puesto de trabajo.
-Podrá fijarse una cuantía por el factor de incompatibilidad cuando para el desempeño de determinados puestos se requiera una dedicación absoluta al servicio público.
-En ningún caso podrá percibirse el complemento específico como retribución consolidada, quedando condicionado el desempeño efectivo del puesto en las condiciones valoradas.
-Las Administraciones Públicas Vascas podrán asignar, en su caso, un complemento específico a todos los puestos de trabajo de su organización. 
-Las cuantías del complemento de destino se fijarán en la norma presupuestaria de cada Administración pública vasca, de acuerdo con los criterios que reglamentariamente establezca el órgano correspondiente para su determinación.
-
+    <!-- Aquí va el contenido del HTML anterior -->
 </div>
 """
 st.markdown(scrollable_text_html, unsafe_allow_html=True)
@@ -78,6 +30,28 @@ def get_proyectos():
     query_job = client.query(query)
     results = query_job.result()
     return [{'id': row.id, 'nombre': row.nombre} for row in results]
+
+# Función para obtener nombres de tablas de complementos específicos
+def get_complementos_especificos(id_proyecto):
+    query = f"""
+        SELECT complemento_especifico
+        FROM `ate-rrhh-2024.Ate_kaibot_2024.complemento_especifico_x_proyecto`
+        WHERE id_proyecto = {id_proyecto}
+    """
+    query_job = client.query(query)
+    results = query_job.result()
+    return [row.complemento_especifico for row in results]
+
+# Función para obtener nombres de tablas de complementos de destino
+def get_complementos_destino(id_proyecto):
+    query = f"""
+        SELECT complemento_destino
+        FROM `ate-rrhh-2024.Ate_kaibot_2024.complemento_destino_x_proyecto`
+        WHERE id_proyecto = {id_proyecto}
+    """
+    query_job = client.query(query)
+    results = query_job.result()
+    return [row.complemento_destino for row in results]
 
 # CRUD Functions
 def insertar_datos(nombre_tabla, data):
@@ -166,7 +140,7 @@ if id_proyecto_seleccionado:
 
     else:
         st.write("No se encontraron complementos específicos para el proyecto seleccionado.")
-    
+
     # Complementos de destino
     complementos_destino = get_complementos_destino(id_proyecto_seleccionado)
     if complementos_destino:
@@ -174,14 +148,6 @@ if id_proyecto_seleccionado:
         for nombre_tabla in complementos_destino:
             st.write(f"**Tabla: {nombre_tabla}**")
             df_complemento_destino = obtener_datos_tabla(f"ate-rrhh-2024.Ate_kaibot_2024.{nombre_tabla}")
-            
-            # Muestra el DataFrame y permite la edición en línea
-            edited_df = st.experimental_data_editor(df_complemento_destino)
-            
-            # Guardar los cambios en BigQuery si se detectan modificaciones
-            if not edited_df.equals(df_complemento_destino):
-                for index, row in edited_df.iterrows():
-                    row_data = row.to_dict()
-                    if pd.isna(row_data.get("id")):  # Inserta si no existe id
-                        insertar_datos(nombre_tabla, row_data)
- 
+            st.dataframe(df_complemento_destino)
+    else:
+        st.write("No se encontraron complementos de destino para el proyecto seleccionado.")
