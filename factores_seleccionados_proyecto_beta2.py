@@ -143,6 +143,56 @@ else:
 opcion_proyecto = st.sidebar.selectbox("Seleccione un Proyecto:", proyectos_nombres, index=proyectos_nombres.index(proyecto_inicial))
 id_proyecto_seleccionado = next((proyecto['id'] for proyecto in proyectos if proyecto['nombre'] == opcion_proyecto), None)
 
+
+# Funcionalidad de selección de factores
+st.sidebar.markdown("<h2>Selecciona los Factores</h2>", unsafe_allow_html=True)
+opcion = st.sidebar.selectbox("Tipo de Factor", [
+    "Factores de formación", 
+    "Factores de jerarquización o mando", 
+    "Factores de responsabilidad", 
+    "Factores de iniciativa o autonomía", 
+    "Factores de Complejidad"
+])
+
+# Modificar la etiqueta en función de la opción seleccionada
+if opcion == "Factores de formación":
+    etiqueta = "formacion"
+elif opcion == "Factores de jerarquización o mando":
+    etiqueta = "factor_jerarquizacion"
+elif opcion == "Factores de responsabilidad":
+    etiqueta = "factor_responsabilidad"
+elif opcion == "Factores de iniciativa o autonomía":
+    etiqueta = "factor_iniciativa"
+elif opcion == "Factores de Complejidad":
+    etiqueta = "factor_complejidad"
+else:
+    etiqueta = ""
+
+# Obtener los datos de la tabla en función de la etiqueta
+project_id = 'ate-rrhh-2024'
+dataset_id = 'Ate_kaibot_2024'
+
+# Consulta SQL para obtener las tablas y sus columnas principales
+query = f"""
+    SELECT table_name, column_name
+    FROM `{project_id}.{dataset_id}.INFORMATION_SCHEMA.COLUMNS`
+    WHERE ordinal_position = 1
+    AND table_name IN (
+        SELECT table_name
+        FROM `{project_id}.{dataset_id}.INFORMATION_SCHEMA.TABLE_OPTIONS`
+        WHERE option_name = 'labels'
+        AND option_value LIKE '%"{etiqueta}"%'
+    )
+    ORDER BY column_name
+"""
+
+# Ejecutar la consulta y obtener los resultados
+tables_query_job = client.query(query)
+tables = tables_query_job.result()
+tablas_seleccionadas = [row.table_name for row in tables]
+
+
+
 # Mostrar complementos específicos y de destino
 if id_proyecto_seleccionado:
     # Complementos específicos
