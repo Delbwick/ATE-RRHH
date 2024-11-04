@@ -74,15 +74,15 @@ def mostrar_opciones_complementos(nombre_tabla, df, tipo_complemento):
     col1, col2, col3 = st.columns(3)
     
     with col1:
-        if st.button(f"Agregar {tipo_complemento}", key=f"add_{nombre_tabla}"):
+        if st.button(f"Agregar {tipo_complemento}", key=f"add_{nombre_tabla}_{tipo_complemento}"):
             agregar_fila(df, nombre_tabla)
             
     with col2:
-        if st.button(f"Eliminar {tipo_complemento}", key=f"delete_{nombre_tabla}"):
+        if st.button(f"Eliminar {tipo_complemento}", key=f"delete_{nombre_tabla}_{tipo_complemento}"):
             eliminar_fila(df, nombre_tabla)
             
     with col3:
-        if st.button(f"Editar {tipo_complemento}", key=f"edit_{nombre_tabla}"):
+        if st.button(f"Editar {tipo_complemento}", key=f"edit_{nombre_tabla}_{tipo_complemento}"):
             editar_fila(df, nombre_tabla)
 
 # Funciones para modificar el dataframe
@@ -90,9 +90,9 @@ def agregar_fila(df, nombre_tabla):
     # Formulario para agregar una nueva fila
     st.write("### Agregar una nueva fila")
     nueva_fila = {}
-    for i, col in enumerate(df.columns):
-        nueva_fila[col] = st.text_input(f"{col}", key=f"input_{nombre_tabla}_{col}_{i}")
-    
+    for col in df.columns:
+        nueva_fila[col] = st.text_input(f"{col}", key=f"input_{nombre_tabla}_add_{col}")
+
     if st.button("Guardar nueva fila", key=f"save_new_{nombre_tabla}"):
         new_df = df.append(nueva_fila, ignore_index=True)
         st.write("Fila agregada:")
@@ -116,9 +116,9 @@ def editar_fila(df, nombre_tabla):
     fila_seleccionada = df.loc[fila_index]
 
     valores_editados = {}
-    for i, col in enumerate(df.columns):
-        valores_editados[col] = st.text_input(f"{col}", fila_seleccionada[col], key=f"edit_{nombre_tabla}_{col}_{fila_index}_{i}")
-    
+    for col in df.columns:
+        valores_editados[col] = st.text_input(f"{col}", fila_seleccionada[col], key=f"edit_{nombre_tabla}_{col}_{fila_index}")
+
     if st.button("Guardar cambios", key=f"confirm_edit_{nombre_tabla}"):
         for col, val in valores_editados.items():
             df.at[fila_index, col] = val
