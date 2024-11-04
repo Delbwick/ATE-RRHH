@@ -40,6 +40,46 @@ def obtener_datos_tabla(tabla):
     query = f"SELECT * FROM `{tabla}` LIMIT 100"
     return client.query(query).result().to_dataframe().fillna('No disponible')
 
+def obtener_datos_bigquery(nombre_tabla):
+    query = f"SELECT * FROM `{nombre_tabla}` LIMIT 100"  # Ajusta el límite según sea necesario
+    query_job = client.query(query)
+    df = query_job.result().to_dataframe()
+    return df
+
+def get_complementos_especificos(id_proyecto):
+    # Función para obtener los complementos específicos de un proyecto
+    query = f"""
+        SELECT nombre_tabla
+        FROM `ate-rrhh-2024.Ate_kaibot_2024.complemento`
+        WHERE id_proyecto = @id_proyecto
+    """
+    job_config = bigquery.QueryJobConfig(
+        query_parameters=[
+            bigquery.ScalarQueryParameter("id_proyecto", "STRING", id_proyecto)
+        ]
+    )
+    query_job = client.query(query, job_config=job_config)
+    return [row.nombre_tabla for row in query_job.result()]
+
+def get_complementos_destino(id_proyecto):
+    # Función para obtener los complementos de destino de un proyecto
+    query = f"""
+        SELECT nombre_tabla
+        FROM `ate-rrhh-2024.Ate_kaibot_2024.destino`
+        WHERE id_proyecto = @id_proyecto
+    """
+    job_config = bigquery.QueryJobConfig(
+        query_parameters=[
+            bigquery.ScalarQueryParameter("id_proyecto", "STRING", id_proyecto)
+        ]
+    )
+    query_job = client.query(query, job_config=job_config)
+    return [row.nombre_tabla for row in query_job.result()]
+
+def mostrar_opciones_complementos(nombre_tabla, df, tipo):
+    st.write(f"### {tipo.capitalize()} - {nombre_tabla}")
+    st.dataframe(df)
+
 # Función para guardar selecciones en BigQuery
 def guardar_selecciones_en_bigquery(tabla, id_proyecto, selecciones):
     """Guarda solo el ID del proyecto y el nombre de la tabla de factores seleccionada en BigQuery."""
