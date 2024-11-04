@@ -75,51 +75,51 @@ def mostrar_opciones_complementos(nombre_tabla, df, tipo_complemento):
     
     with col1:
         if st.button(f"Agregar {tipo_complemento}", key=f"add_{nombre_tabla}"):
-            agregar_fila(df)
+            agregar_fila(df, nombre_tabla)
             
     with col2:
         if st.button(f"Eliminar {tipo_complemento}", key=f"delete_{nombre_tabla}"):
-            eliminar_fila(df)
+            eliminar_fila(df, nombre_tabla)
             
     with col3:
         if st.button(f"Editar {tipo_complemento}", key=f"edit_{nombre_tabla}"):
-            editar_fila(df)
+            editar_fila(df, nombre_tabla)
 
 # Funciones para modificar el dataframe
-def agregar_fila(df):
+def agregar_fila(df, nombre_tabla):
     # Formulario para agregar una nueva fila
     st.write("### Agregar una nueva fila")
     nueva_fila = {}
-    for col in df.columns:
-        nueva_fila[col] = st.text_input(f"{col}", key=f"input_{col}")
+    for i, col in enumerate(df.columns):
+        nueva_fila[col] = st.text_input(f"{col}", key=f"input_{nombre_tabla}_{col}_{i}")
     
-    if st.button("Guardar nueva fila"):
+    if st.button("Guardar nueva fila", key=f"save_new_{nombre_tabla}"):
         new_df = df.append(nueva_fila, ignore_index=True)
         st.write("Fila agregada:")
         st.dataframe(new_df)
         return new_df  # Devuelve el dataframe actualizado
 
-def eliminar_fila(df):
+def eliminar_fila(df, nombre_tabla):
     # Permite seleccionar y eliminar una fila
     st.write("### Seleccionar una fila para eliminar")
-    fila_index = st.selectbox("Seleccione el índice de la fila", df.index)
-    if st.button("Eliminar fila seleccionada"):
+    fila_index = st.selectbox("Seleccione el índice de la fila", df.index, key=f"delete_row_{nombre_tabla}")
+    if st.button("Eliminar fila seleccionada", key=f"confirm_delete_{nombre_tabla}"):
         df = df.drop(fila_index).reset_index(drop=True)
         st.write("Fila eliminada:")
         st.dataframe(df)
         return df
 
-def editar_fila(df):
+def editar_fila(df, nombre_tabla):
     # Permite seleccionar y editar una fila
     st.write("### Editar una fila existente")
-    fila_index = st.selectbox("Seleccione el índice de la fila para editar", df.index)
+    fila_index = st.selectbox("Seleccione el índice de la fila para editar", df.index, key=f"edit_row_{nombre_tabla}")
     fila_seleccionada = df.loc[fila_index]
 
     valores_editados = {}
-    for col in df.columns:
-        valores_editados[col] = st.text_input(f"{col}", fila_seleccionada[col], key=f"edit_{col}_{fila_index}")
+    for i, col in enumerate(df.columns):
+        valores_editados[col] = st.text_input(f"{col}", fila_seleccionada[col], key=f"edit_{nombre_tabla}_{col}_{fila_index}_{i}")
     
-    if st.button("Guardar cambios"):
+    if st.button("Guardar cambios", key=f"confirm_edit_{nombre_tabla}"):
         for col, val in valores_editados.items():
             df.at[fila_index, col] = val
         st.write("Fila actualizada:")
