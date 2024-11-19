@@ -82,7 +82,7 @@ def mostrar_opciones_complementos(nombre_tabla, df, tipo_complemento):
     st.dataframe(df)
 
     # Botones para agregar, eliminar y editar filas
-    col1, col2, col3 = st.columns(3)
+    col1, col2, col3,col4 = st.columns(4)
     
     with col1:
         if st.button(f"Agregar NUEVO SOLAMENTE VINCULADO A ESE PROYECTO{tipo_complemento}", key=f"add_{nombre_tabla}_{tipo_complemento}"):
@@ -95,6 +95,19 @@ def mostrar_opciones_complementos(nombre_tabla, df, tipo_complemento):
     with col3:
         if st.button(f"Editar (CLONAR FACTOR EXISTENTE POR PORYECTO){tipo_complemento}", key=f"edit_{nombre_tabla}_{tipo_complemento}"):
             editar_fila(df, nombre_tabla)
+    with col4:
+        # Input para porcentaje
+        porcentaje_destino = st.number_input(f"% {selected_descripcion_destino}", min_value=0.0, max_value=100.0, value=100.0, step=1.0, key=f'porcentaje_destino_{nombre_tabla}')
+
+        # Calcular puntos ajustados
+        puntos_ajustados_destino = puntos_destino * (porcentaje_destino / 100)
+
+        # Mostrar resultados en una nueva línea
+        st.markdown("<h4>Resultados de la Selección</h4>", unsafe_allow_html=True)
+        st.write(f"Puntos originales: {puntos_destino}")
+        st.write(f"Puntos ajustados (con {porcentaje_destino}%): {puntos_ajustados_destino:.2f}")
+
+            
 
 # Funciones para modificar el dataframe
 def agregar_fila(df, nombre_tabla):
@@ -156,7 +169,7 @@ id_proyecto_seleccionado = next((proyecto['id'] for proyecto in proyectos if pro
 
 
 # Funcionalidad de selección de factores
-st.sidebar.markdown("<h2>Selecciona los Factores</h2>", unsafe_allow_html=True)
+st.sidebar.markdown("<h2>Selecciona los Factores ¿Crear nuevo factor?Sustituimos el boton de las selecciones de factores</h2>", unsafe_allow_html=True)
 opcion = st.sidebar.selectbox("Tipo de Factor", [
     "Factores de formación", 
     "Factores de jerarquización o mando", 
