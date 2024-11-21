@@ -10,7 +10,7 @@ import numpy as np
 # Configurar la página de Streamlit
 st.set_page_config(page_title="APP VALORACIONES DE PUESTOS DE TRABAJO-Alta nuevos proyectos-beta4", page_icon="🤓")
 st.title("¡Bienvenido a APP VALORACIONES DE PUESTOS DE TRABAJO 👷")
-st.header("¡Empieza tu Proyecto!")
+st.header("¡Empieza dando de alta tu Proyecto!")
 
 # HTML personalizado para el encabezado
 header_html = """
@@ -52,7 +52,7 @@ st.markdown(header_html, unsafe_allow_html=True)
 
 # Agregar la imagen (logo) y el texto al encabezado
 st.markdown('<div class="header-container"><img class="logo" src="https://kaibot.es/wp-content/uploads/2024/11/banner-app-1.png" alt="Logo"></div>', unsafe_allow_html=True)
-st.write("# Alta nuevo Proyecto")
+#st.write("# Alta nuevo Proyecto")
 
 # Crear API client para BigQuery
 credentials = service_account.Credentials.from_service_account_info(
@@ -66,8 +66,8 @@ client = bigquery.Client(credentials=credentials)
 
 
 # Crear formulario para datos del proyecto
-st.title('Nuevo Proyecto:')
-st.markdown("<h2>Datos de Proyecto</h2>", unsafe_allow_html=True)
+#st.title('Nuevo Proyecto:')
+st.markdown("<h4>Introduce los Datos de tu nuevo Proyecto</h4>", unsafe_allow_html=True)
 # Línea horizontal ancha
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 
