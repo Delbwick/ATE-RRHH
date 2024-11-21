@@ -10,7 +10,7 @@ import numpy as np
 # Configurar la página de Streamlit
 st.set_page_config(page_title="RRHH del Norte-Selecciona los factores de complemento de Destino", page_icon="🏆")
 st.title("¡Bienvenido a APP VALORACIONES DE PUESTOS DE TRABAJO 👷")
-st.header("COntinuamos con la Seleccion de Factores de Complemento de Destino - beta4")
+st.header("Continuamos con la Seleccion de Factores de Complemento de Destino - beta4")
 
 # HTML personalizado para el encabezado
 # HTML personalizado para el encabezado
