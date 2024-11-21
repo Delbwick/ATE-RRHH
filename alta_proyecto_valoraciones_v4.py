@@ -14,24 +14,24 @@ st.header("¡Empieza tu Proyecto!")
 
 # HTML personalizado para el encabezado
 header_html = """
-    <style>
+     <style>
         .header-container {
-            background-color: #2596be; /* Color de fondo */
-            padding: 20px;
-            border-radius: 10px;
+            background-color: #007d9a; /* Color de fondo principal */
+            padding: 0;
             text-align: center;
         }
         .logo {
-            max-width: 150px;
-            margin-bottom: 10px;
+            width: 100%;  /* Hacer que el logo ocupe todo el ancho */
+            max-height: 200px; /* Limitar la altura del banner */
+            object-fit: cover;  /* Asegura que el logo se ajuste bien */
         }
         .wide-line {
-        width: 100%;
-        height: 2px;
-        background-color: #333333;
-        margin-top: 20px;
-        margin-bottom: 20px;
-    }
+            width: 100%;
+            height: 2px;
+            background-color: #dfa126; /* Color secundario */
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
     h1 {
         font-family: 'Arial', sans-serif;
         font-size: 17pt;
