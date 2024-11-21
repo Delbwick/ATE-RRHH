@@ -62,11 +62,15 @@ def insertar_registro(table_name, columns):
 
 # Función para actualizar registros en una tabla
 # Función para actualizar registros en una tabla
+# Función para actualizar registros en una tabla
 def actualizar_registro(table_name, columns, record_id):
     st.write("**Formulario para actualizar un registro existente**")
     
+    # Obtener el nombre de la clave primaria (la primera columna de la tabla)
+    primary_key = columns[0].name  # Suponemos que la primera columna es la clave primaria
+    
     # Obtener los valores actuales del registro
-    query = f"SELECT * FROM `{project_id}.{dataset_id}.{table_name}` WHERE id = {record_id}"
+    query = f"SELECT * FROM `{project_id}.{dataset_id}.{table_name}` WHERE {primary_key} = {record_id}"
     df = client.query(query).to_dataframe()
     
     if df.empty:
@@ -78,9 +82,9 @@ def actualizar_registro(table_name, columns, record_id):
     
     updated_values = {}
     
-    # Mostrar un input para cada columna (excepto 'id')
+    # Mostrar un input para cada columna (excepto la clave primaria)
     for column in columns:
-        if column.name != "id":  # No permitir editar la clave primaria
+        if column.name != primary_key:  # No permitir editar la clave primaria
             current_value = current_values.get(column.name, "")  # Obtener el valor actual
             if column.field_type == "STRING":
                 updated_values[column.name] = st.text_input(
@@ -120,7 +124,7 @@ def actualizar_registro(table_name, columns, record_id):
         try:
             # Crear la consulta de actualización
             update_query = ", ".join([f"{k}='{v}'" if isinstance(v, str) else f"{k}={v}" for k, v in updated_values.items()])
-            update_sql = f"UPDATE `{project_id}.{dataset_id}.{table_name}` SET {update_query} WHERE id={record_id}"
+            update_sql = f"UPDATE `{project_id}.{dataset_id}.{table_name}` SET {update_query} WHERE {primary_key}={record_id}"
             
             # Ejecutar la consulta de actualización
             client.query(update_sql)
