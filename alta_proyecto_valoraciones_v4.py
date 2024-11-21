@@ -12,87 +12,61 @@ st.set_page_config(page_title="APP VALORACIONES DE PUESTOS DE TRABAJO-Alta nuevo
 st.title("¡Bienvenido a APP VALORACIONES DE PUESTOS DE TRABAJO 👷")
 st.header("¡Empieza dando de alta tu Proyecto!")
 
-# HTML personalizado para el encabezado y estilos globales
+# HTML personalizado para el encabezado
 header_html = """
-    <style>
-        /* Colores principales */
-        :root {
-            --color-principal: #007d9a;
-            --color-secundario: #dfa126;
-            --color-texto: #333333;
-        }
-
-        /* Estilos generales */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            color: var(--color-texto);
-        }
-
+     <style>
         .header-container {
-            background-color: var(--color-principal);
+            background-color: #007d9a; /* Color de fondo principal */
             padding: 0;
             text-align: center;
         }
-
         .logo {
-            width: 100%;
-            max-height: 200px;
-            object-fit: cover;
+            width: 100%;  /* Hacer que el logo ocupe todo el ancho */
+            max-height: 300px; /* Limitar la altura del banner */
+            object-fit: cover;  /* Asegura que el logo se ajuste bien */
         }
-
         .wide-line {
             width: 100%;
             height: 2px;
-            background-color: var(--color-secundario);
+            background-color: #dfa126; /* Color secundario */
             margin-top: 20px;
             margin-bottom: 20px;
         }
-
-        h4 {
-            font-size: 20pt;
-            color: var(--color-principal);
-            font-weight: bold;
-        }
-
-        /* Estilo para el formulario */
-        .stTextInput, .stDateInput, .stCheckbox, .stSelectbox, .stRadio {
-            background-color: #ffffff;
-            border: 1px solid var(--color-principal);
-            border-radius: 5px;
-            padding: 10px;
-            margin-bottom: 10px;
-        }
-
-        .stTextInput input, .stDateInput input, .stCheckbox input, .stSelectbox select, .stRadio input {
-            color: var(--color-texto);
-        }
-
-        .stButton>button {
-            background-color: var(--color-secundario);
-            padding: 10px 20px;
-            border-radius: 5px;
-            color: white;
-            border: none;
-            font-size: 14pt;
-        }
-
-        .stButton>button:hover {
-            background-color: darkorange;
-        }
-
-        /* Estilo del botón de redirección */
-        .stButton a {
-            color: white;
-            text-decoration: none;
-        }
+    h1 {
+        font-family: 'Arial', sans-serif;
+        font-size: 17pt;
+        text-align: left;
+        color: #333333;
+    }
+    h2 {
+        font-family: 'Arial', sans-serif;
+        font-size: 17pt;
+        text-align: left;
+        color: #333333;
+    }
     </style>
 """
 
 # Agregar el HTML personalizado al encabezado
 st.markdown(header_html, unsafe_allow_html=True)
 
+# Agregar la imagen (logo) y el texto al encabezado
+st.markdown('<div class="header-container"><img class="logo" src="https://kaibot.es/wp-content/uploads/2024/11/banner-app-1.png" alt="Logo"></div>', unsafe_allow_html=True)
+#st.write("# Alta nuevo Proyecto")
+
+# Crear API client para BigQuery
+credentials = service_account.Credentials.from_service_account_info(
+    st.secrets["gcp_service_account"]
+)
+client = bigquery.Client(credentials=credentials)
+
+#>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<
+#CODIGO DE LA APLICACION
+#<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>
+
+
 # Crear formulario para datos del proyecto
+#st.title('Nuevo Proyecto:')
 st.markdown("<h4>Introduce los Datos de tu nuevo Proyecto</h4>", unsafe_allow_html=True)
 # Línea horizontal ancha
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
@@ -174,19 +148,23 @@ with st.form(key='nuevo_proyecto_form'):
             query_job_kai_insert.result()  # Asegurarse de que la consulta se complete
             st.success("¡Proyecto registrado exitosamente!")
             # Botón para abrir otra pantalla
+            # Botón para redirigir a la otra aplicación con el ID de proyecto
             st.markdown(f"""
                 <a href="https://ate-rrhh-jwinmwitfd8gsoc4va9cjc.streamlit.app?id_proyecto={new_id_proyecto}" target="_blank">
-                    <button class="stButton">Ir a la APP de Selección de Factores</button>
+                    <button style="background-color:Green;padding:10px;border-radius:5px;color:white;border:none;">
+                    Ir a la APP de Seleccion de Factores
+                    </button>
                 </a>
             """, unsafe_allow_html=True)
 
         except Exception as e:
             st.error(f"Error al registrar el proyecto: {e}")
 
-# Crear un botón para ir al menú principal
+# Crear un botón
 st.markdown("""
     <a href="https://ate-rrhh-jwinmwitfd8gsoc4va9cjc.streamlit.app?id_proyecto={new_id_proyecto}" target="_blank">
-        <button class="stButton">Ir al Menú Principal</button>
+        <button style="background-color:Green;padding:10px;border-radius:5px;color:white;border:none;">
+            Ir al Menú Principal
+        </button>
     </a>
     """, unsafe_allow_html=True)
-
