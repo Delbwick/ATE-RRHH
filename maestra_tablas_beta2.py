@@ -165,6 +165,7 @@ def eliminar_registro(table_name):
                 # Eliminar el registro con el ID seleccionado
                 client.query(f"DELETE FROM `{project_id}.{dataset_id}.{table_name}` WHERE {primary_key}={selected_record_id}")
                 st.success(f"Registro con ID {selected_record_id} eliminado con éxito.")
+                st.experimental_rerun()  # Refrescar la aplicación
             except Exception as e:
                 st.error(f"Error al eliminar el registro: {e}")
         else:
