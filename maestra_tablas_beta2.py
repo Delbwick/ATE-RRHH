@@ -92,9 +92,14 @@ def crear_tabla_nueva():
     columns = []
     for i in range(num_columns):
         col_name = st.text_input(f"Nombre de la columna {i + 1}", key=f"col_name_{i}")
-        col_type = st.selectbox(f"Tipo de dato de la columna {i + 1}", 
-                                ["STRING", "INTEGER", "FLOAT", "BOOLEAN", "TIMESTAMP"], 
-                                key=f"col_type_{i}")
+        col_type = st.selectbox(
+            f"Tipo de dato de la columna {i + 1}",
+            ["STRING", "INTEGER", "FLOAT", "BOOLEAN", "TIMESTAMP"],
+            key=f"col_type_{i}"
+        )
+        # Convertir FLOAT a FLOAT64
+        if col_type == "FLOAT":
+            col_type = "FLOAT64"
         if col_name:
             columns.append((col_name, col_type))
     if st.button("Crear Tabla"):
@@ -106,7 +111,6 @@ def crear_tabla_nueva():
             st.experimental_rerun()  # Refrescar la aplicación
         except Exception as e:
             st.error(f"Error al crear la tabla: {e}")
-
 # Menú lateral
 st.sidebar.title("Opciones de Tabla")
 opcion = st.sidebar.selectbox("Seleccione una opción", 
