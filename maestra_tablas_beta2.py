@@ -135,41 +135,13 @@ def actualizar_registro(table_name, columns, record_id):
 
 
 # Función para eliminar registros de una tabla
-# Función para eliminar registros de una tabla
-def eliminar_registro(table_name):
-    st.write("**Eliminar un registro de la tabla**")
-    
-    # Mostrar los primeros 100 registros de la tabla
-    query = f"SELECT * FROM `{project_id}.{dataset_id}.{table_name}` LIMIT 100"
-    df = client.query(query).to_dataframe()
-    
-    if df.empty:
-        st.warning(f"No hay registros en la tabla `{table_name}` para eliminar.")
-        return
-
-    # Mostrar el DataFrame con los registros
-    st.dataframe(df)
-
-    # Seleccionar el registro a eliminar
-    # Suponemos que la primera columna es la clave primaria (esto debe adaptarse si el nombre cambia)
-    primary_key = df.columns[0]
-    selected_record_id = st.selectbox(
-        "Selecciona el ID del registro a eliminar",
-        df[primary_key].tolist()
-    )
-
-    # Confirmar eliminación
-    if st.button("Eliminar registro"):
-        if selected_record_id:
-            try:
-                # Eliminar el registro con el ID seleccionado
-                client.query(f"DELETE FROM `{project_id}.{dataset_id}.{table_name}` WHERE {primary_key}={selected_record_id}")
-                st.success(f"Registro con ID {selected_record_id} eliminado con éxito.")
-            except Exception as e:
-                st.error(f"Error al eliminar el registro: {e}")
-        else:
-            st.error("Por favor, seleccione un registro para eliminar.")
-
+def eliminar_registro(table_name, record_id):
+    if st.button("Eliminar"):
+        try:
+            client.query(f"DELETE FROM `{project_id}.{dataset_id}.{table_name}` WHERE id={record_id}")
+            st.success("Registro eliminado con éxito")
+        except Exception as e:
+            st.error(f"Error al eliminar el registro: {e}")
 
 # Función para crear una nueva tabla
 def crear_tabla_nueva():
