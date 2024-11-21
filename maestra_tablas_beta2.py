@@ -120,7 +120,14 @@ def actualizar_registro(table_name, columns, record_id):
         try:
             # Crear la consulta de actualización
             update_query = ", ".join([f"{k}='{v}'" if isinstance(v, str) else f"{k}={v}" for k, v in updated_values.items()])
-            upda
+            update_sql = f"UPDATE `{project_id}.{dataset_id}.{table_name}` SET {update_query} WHERE id={record_id}"
+            
+            # Ejecutar la consulta de actualización
+            client.query(update_sql)
+            st.success("Registro actualizado con éxito")
+        except Exception as e:
+            st.error(f"Error al actualizar el registro: {e}")
+
 
 
 # Función para eliminar registros de una tabla
