@@ -123,10 +123,6 @@ def crear_tabla_nueva():
     else:
         etiqueta = None  # Ninguna etiqueta si "Ninguno" es seleccionado
     
-    # Asegurarse de que la etiqueta se incluya en la tabla
-    if etiqueta:
-        columns.append(("tipo_factor", "STRING"))
-    
     for i in range(num_columns):
         col_name = st.text_input(f"Nombre de la columna {i + 1}", key=f"col_name_{i}")
         col_type = st.selectbox(
@@ -142,22 +138,26 @@ def crear_tabla_nueva():
     
     if st.button("Crear Tabla"):
         try:
-            # Incluir la columna para el tipo de factor si se seleccionó una etiqueta
-            if etiqueta:
-                st.write(f"Se creará una columna 'tipo_factor' con el valor: {etiqueta}")
+            # Crear la tabla con la definición de las columnas
             cols_str = ", ".join([f"{name} {dtype}" for name, dtype in columns])
             query = f"CREATE TABLE `{project_id}.{dataset_id}.{table_name}` ({cols_str})"
             client.query(query)
             
-            # Insertar un valor predeterminado en la tabla para 'tipo_factor' si se seleccionó una etiqueta
+            # Si se seleccionó una etiqueta, añadirla como metadato de la tabla
             if etiqueta:
-                insert_query = f"INSERT INTO `{project_id}.{dataset_id}.{table_name}` (tipo_factor) VALUES ('{etiqueta}')"
-                client.query(insert_query)
+                label_query = f"""
+                    ALTER TABLE `{project_id}.{dataset_id}.{table_name}`
+                    SET OPTIONS (
+                        labels = [("tipo_factor", "{etiqueta}")]
+                    )
+                """
+                client.query(label_query)
 
-            st.success("Tabla creada exitosamente")
+            st.success(f"Tabla '{table_name}' creada exitosamente con etiqueta '{etiqueta}'")
             st.experimental_rerun()  # Refrescar la aplicación
         except Exception as e:
             st.error(f"Error al crear la tabla: {e}")
+
 
 # Menú lateral
 st.sidebar.title("Opciones de Tabla")
