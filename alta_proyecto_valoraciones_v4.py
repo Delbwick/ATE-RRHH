@@ -22,7 +22,7 @@ header_html = """
         }
         .logo {
             width: 100%;  /* Hacer que el logo ocupe todo el ancho */
-            max-height: 200px; /* Limitar la altura del banner */
+            max-height: 300px; /* Limitar la altura del banner */
             object-fit: cover;  /* Asegura que el logo se ajuste bien */
         }
         .wide-line {
