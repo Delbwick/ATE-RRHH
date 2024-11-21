@@ -84,6 +84,8 @@ def crear_tabla_nueva():
         query = f"CREATE TABLE `{project_id}.{dataset_id}.{table_name}` ({cols_str})"
         client.query(query)
         st.success("Tabla creada exitosamente")
+        # Rerun the application to reflect the changes
+        st.experimental_rerun()
 
 # Menú lateral
 st.sidebar.title("Opciones de Tabla")
