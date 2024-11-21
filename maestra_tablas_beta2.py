@@ -60,44 +60,20 @@ def insertar_registro(table_name, columns):
         except Exception as e:
             st.error(f"Error al insertar el registro: {e}")
 
+# Función para actualizar registros en una tabla
 def actualizar_registro(table_name, columns, record_id):
     st.write("**Formulario para actualizar un registro existente**")
-    
-    # Obtener los valores actuales del registro
-    query = f"SELECT * FROM `{project_id}.{dataset_id}.{table_name}` WHERE id = {record_id}"
-    df = client.query(query).to_dataframe()
-    
-    if df.empty:
-        st.error(f"No se encontró el registro con ID {record_id}.")
-        return
-    
-    # Crear un diccionario con los valores actuales del registro
-    current_values = df.iloc[0].to_dict()  # Tomamos el primer (y único) registro
-
     updated_values = {}
-    
-    # Para cada columna, mostramos un input pre-cargado con el valor actual
     for column in columns:
-        if column.name != "id":  # No permitir editar el campo 'id'
-            current_value = current_values.get(column.name, "")
-            updated_values[column.name] = st.text_input(
-                f"Nuevo valor para {column.name}", 
-                value=current_value,  # Pre-cargamos el valor actual
-                key=column.name
-            )
-
+        if column.name != "id":  # Suponiendo que 'id' es la clave primaria
+            updated_values[column.name] = st.text_input(f"Nuevo valor para {column.name}", key=column.name)
     if st.button("Actualizar"):
         try:
-            # Crear la consulta de actualización
             update_query = ", ".join([f"{k}='{v}'" for k, v in updated_values.items()])
-            update_sql = f"UPDATE `{project_id}.{dataset_id}.{table_name}` SET {update_query} WHERE id={record_id}"
-            
-            # Ejecutar la consulta
-            client.query(update_sql)
+            client.query(f"UPDATE `{project_id}.{dataset_id}.{table_name}` SET {update_query} WHERE id={record_id}")
             st.success("Registro actualizado con éxito")
         except Exception as e:
             st.error(f"Error al actualizar el registro: {e}")
-
 
 # Función para eliminar registros de una tabla
 def eliminar_registro(table_name, record_id):
