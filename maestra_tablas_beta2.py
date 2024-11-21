@@ -61,19 +61,67 @@ def insertar_registro(table_name, columns):
             st.error(f"Error al insertar el registro: {e}")
 
 # Función para actualizar registros en una tabla
+# Función para actualizar registros en una tabla
 def actualizar_registro(table_name, columns, record_id):
     st.write("**Formulario para actualizar un registro existente**")
+    
+    # Obtener los valores actuales del registro
+    query = f"SELECT * FROM `{project_id}.{dataset_id}.{table_name}` WHERE id = {record_id}"
+    df = client.query(query).to_dataframe()
+    
+    if df.empty:
+        st.error(f"No se encontró el registro con ID {record_id}.")
+        return
+    
+    # Crear un diccionario con los valores actuales del registro
+    current_values = df.iloc[0].to_dict()  # Tomamos el primer (y único) registro
+    
     updated_values = {}
+    
+    # Mostrar un input para cada columna (excepto 'id')
     for column in columns:
-        if column.name != "id":  # Suponiendo que 'id' es la clave primaria
-            updated_values[column.name] = st.text_input(f"Nuevo valor para {column.name}", key=column.name)
+        if column.name != "id":  # No permitir editar la clave primaria
+            current_value = current_values.get(column.name, "")  # Obtener el valor actual
+            if column.field_type == "STRING":
+                updated_values[column.name] = st.text_input(
+                    f"Nuevo valor para {column.name}",
+                    value=current_value,  # Pre-cargamos el valor actual
+                    key=column.name
+                )
+            elif column.field_type == "INTEGER":
+                updated_values[column.name] = st.number_input(
+                    f"Nuevo valor para {column.name}",
+                    value=current_value if current_value is not None else 0,  # Pre-cargamos el valor actual
+                    step=1,
+                    key=column.name
+                )
+            elif column.field_type == "FLOAT":
+                updated_values[column.name] = st.number_input(
+                    f"Nuevo valor para {column.name}",
+                    value=current_value if current_value is not None else 0.0,  # Pre-cargamos el valor actual
+                    step=0.1,
+                    key=column.name
+                )
+            elif column.field_type == "BOOLEAN":
+                updated_values[column.name] = st.checkbox(
+                    f"Nuevo valor para {column.name}",
+                    value=current_value if current_value is not None else False,  # Pre-cargamos el valor actual
+                    key=column.name
+                )
+            elif column.field_type == "TIMESTAMP":
+                updated_values[column.name] = st.date_input(
+                    f"Nuevo valor para {column.name}",
+                    value=current_value if current_value is not None else "",
+                    key=column.name
+                )
+
+    # Si el usuario presiona el botón de actualizar
     if st.button("Actualizar"):
         try:
-            update_query = ", ".join([f"{k}='{v}'" for k, v in updated_values.items()])
-            client.query(f"UPDATE `{project_id}.{dataset_id}.{table_name}` SET {update_query} WHERE id={record_id}")
-            st.success("Registro actualizado con éxito")
-        except Exception as e:
-            st.error(f"Error al actualizar el registro: {e}")
+            # Crear la consulta de actualización
+            update_query = ", ".join([f"{k}='{v}'" if isinstance(v, str) else f"{k}={v}" for k, v in updated_values.items()])
+            upda
+
 
 # Función para eliminar registros de una tabla
 def eliminar_registro(table_name, record_id):
