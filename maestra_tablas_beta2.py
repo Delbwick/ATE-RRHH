@@ -26,7 +26,7 @@ def listar_tablas():
 
 # Función para seleccionar tabla y ver registros
 def ver_tabla_seleccionada(table_name):
-    query = f"SELECT * FROM `{project_id}.{dataset_id}.{table_name}` LIMIT 100"
+    query = f"SELECT * FROM `{project_id}.{dataset_id}.{table_name}` ORDER BY table_name LIMIT 100"
     df = client.query(query).to_dataframe()
     st.dataframe(df)
     return df
