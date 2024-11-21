@@ -8,8 +8,8 @@ import numpy as np
 
 
 # Configurar la página de Streamlit
-st.set_page_config(page_title="RRHH del Norte-Alta nuevos proyectos-beta2", page_icon="🆕")
-st.title("¡Bienvenido a RRHH del Norte! 👷")
+st.set_page_config(page_title="APP VALORACIONES DE PUESTOS DE TRABAJO-Alta nuevos proyectos-beta4", page_icon="🤓")
+st.title("¡Bienvenido a APP VALORACIONES DE PUESTOS DE TRABAJO 👷")
 st.header("¡Empieza tu Proyecto!")
 
 # HTML personalizado para el encabezado
@@ -51,7 +51,7 @@ header_html = """
 st.markdown(header_html, unsafe_allow_html=True)
 
 # Agregar la imagen (logo) y el texto al encabezado
-st.markdown('<div class="header-container"><img class="logo" src="https://www.rrhhdelnorte.es/-_-/res/702f8fd0-46a5-4f0d-9c65-afb737164745/images/files/702f8fd0-46a5-4f0d-9c65-afb737164745/e0e4dc73-78c2-4413-b62c-250cbeea83fa/683-683/3b3822cd156fd081c427cc6b35617e4031b98c63" alt="Logo"></div>', unsafe_allow_html=True)
+st.markdown('<div class="header-container"><img class="logo" src="https://kaibot.es/wp-content/uploads/2024/11/banner-app-1.png" alt="Logo"></div>', unsafe_allow_html=True)
 st.write("# Alta nuevo Proyecto")
 
 # Crear API client para BigQuery
