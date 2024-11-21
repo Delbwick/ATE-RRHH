@@ -135,6 +135,7 @@ def actualizar_registro(table_name, columns, record_id):
 
 
 # Función para eliminar registros de una tabla
+# Función para eliminar registros de una tabla
 def eliminar_registro(table_name):
     st.write("**Eliminar un registro de la tabla**")
     
@@ -168,6 +169,7 @@ def eliminar_registro(table_name):
                 st.error(f"Error al eliminar el registro: {e}")
         else:
             st.error("Por favor, seleccione un registro para eliminar.")
+
 
 # Función para crear una nueva tabla
 def crear_tabla_nueva():
