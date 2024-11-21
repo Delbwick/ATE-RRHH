@@ -8,7 +8,7 @@ import numpy as np
 
 
 # Configurar la página de Streamlit
-st.set_page_config(page_title="RRHH del Norte-Selecciona los factores de complemento de Destino", page_icon="🏆")
+st.set_page_config(page_title="RRHH del Norte-Selecciona los factores de complemento de Destino", page_icon="🤔")
 st.title("¡Bienvenido a APP VALORACIONES DE PUESTOS DE TRABAJO 👷")
 st.header("Continuamos con la Seleccion de Factores de Complemento de Destino - beta4")
 
@@ -202,9 +202,9 @@ def obtener_datos_bigquery(nombre_tabla):
 
 
 
-st.markdown("<h2>Selecciona los Factores de complemento de destino version 2:</h2>", unsafe_allow_html=True)
+#st.markdown("<h2>Selecciona los Factores de complemento de destino version 2:</h2>", unsafe_allow_html=True)
 st.markdown("<h2>Es necesario que selecciones por lo menos un Factor</h2>", unsafe_allow_html=True)
-st.markdown("<p>Poe defecto el PRIMERO SIEMPRE ESTÄ SELECCIONADO</p>", unsafe_allow_html=True)
+st.markdown("<p>Por defecto el PRIMERO SIEMPRE ESTÁ SELECCIONADO</p>", unsafe_allow_html=True)
 st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
 
 # Nombre del proyecto y dataset
