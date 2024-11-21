@@ -15,6 +15,19 @@ st.header("¡Empieza dando de alta tu Proyecto!")
 # HTML personalizado para el encabezado
 header_html = """
      <style>
+          /* Colores principales */
+        :root {
+            --color-principal: #007d9a;
+            --color-secundario: #dfa126;
+            --color-texto: #333333;
+        }
+
+        /* Estilos generales */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: var(--color-texto);
+        }
         .header-container {
             background-color: #007d9a; /* Color de fondo principal */
             padding: 0;
@@ -28,7 +41,7 @@ header_html = """
         .wide-line {
             width: 100%;
             height: 2px;
-            background-color: #dfa126; /* Color secundario */
+            background-color: var(--color-secundario);
             margin-top: 20px;
             margin-bottom: 20px;
         }
@@ -44,6 +57,43 @@ header_html = """
         text-align: left;
         color: #333333;
     }
+    h4 {
+            font-size: 20pt;
+            color: var(--color-principal);
+            font-weight: bold;
+        }
+
+        /* Estilo para el formulario */
+        .stTextInput, .stDateInput, .stCheckbox, .stSelectbox, .stRadio {
+            background-color: #ffffff;
+            border: 1px solid var(--color-principal);
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .stTextInput input, .stDateInput input, .stCheckbox input, .stSelectbox select, .stRadio input {
+            color: var(--color-texto);
+        }
+
+        .stButton>button {
+            background-color: var(--color-secundario);
+            padding: 10px 20px;
+            border-radius: 5px;
+            color: white;
+            border: none;
+            font-size: 14pt;
+        }
+
+        .stButton>button:hover {
+            background-color: darkorange;
+        }
+
+        /* Estilo del botón de redirección */
+        .stButton a {
+            color: white;
+            text-decoration: none;
+        }
     </style>
 """
 
