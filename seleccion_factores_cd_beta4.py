@@ -135,6 +135,9 @@ def get_proyectos():
 
 # Obtener el ID del proyecto de la URL (si está presente)
 id_proyecto_url = st.experimental_get_query_params().get('id_proyecto', [None])[0]
+#st.write(id_proyecto_url)
+# Convertir id_proyecto_url a integer si existe, o dejarlo como None
+id_proyecto_url = int(id_proyecto_url) if id_proyecto_url else None
 
 # Obtener la lista de proyectos desde BigQuery
 proyectos = get_proyectos()
@@ -151,7 +154,7 @@ else:
 # Crear el sidebar con el selectbox
 st.sidebar.title("Opciones")
 st.sidebar.markdown("<h2>Selecciona el proyecto que quieres calcular</h2>", unsafe_allow_html=True)
-st.write(id_proyecto_url)
+
 
 opcion_proyecto = st.sidebar.selectbox("Seleccione un Proyecto:", proyectos_nombres, index=proyectos_nombres.index(proyecto_inicial))
 
