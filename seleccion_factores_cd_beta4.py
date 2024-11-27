@@ -151,7 +151,7 @@ else:
 # Crear el sidebar con el selectbox
 st.sidebar.title("Opciones")
 st.sidebar.markdown("<h2>Selecciona el proyecto que quieres calcular</h2>", unsafe_allow_html=True)
-
+st.write(id_proyecto_url)
 
 opcion_proyecto = st.sidebar.selectbox("Seleccione un Proyecto:", proyectos_nombres, index=proyectos_nombres.index(proyecto_inicial))
 
