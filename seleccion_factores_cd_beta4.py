@@ -403,12 +403,14 @@ if st.button("Guardar selecciones"):
 
 
 
+# Convertir id_proyecto_url a string si no lo es
+id_proyecto_url = str(id_proyecto_url) if id_proyecto_url else ""
 
-# Crear un botón
-st.markdown("""
+# Crear el botón con el enlace dinámico
+st.markdown(f"""
     <a href="https://ate-rrhh-gvym68tf8xp2pdhq6dy8xj.streamlit.app?id_proyecto={id_proyecto_url}" target="_blank">
         <button style="background-color:Green;padding:10px;border-radius:5px;color:white;border:none;">
-            Ir a Seleccion de Compelementos Especificos
+            Ir a Seleccion de Complementos Específicos
         </button>
     </a>
     """, unsafe_allow_html=True)
