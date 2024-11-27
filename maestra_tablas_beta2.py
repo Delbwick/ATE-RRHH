@@ -191,7 +191,8 @@ def crear_tabla_nueva():
          "Factores de iniciativa o autonomía", 
          "Factores de Complejidad", 
          "Factores de Especialización Dificultad Técnica", 
-         "Factores de Penosidad"
+         "Factores de Penosidad",
+         "Factores de Peligrosidad"
         ]
     )
     
@@ -210,6 +211,8 @@ def crear_tabla_nueva():
         etiqueta = "dificultad_tecnica"
     elif tipo_factor == "Factores de Penosidad":
         etiqueta = "factor_penosidad"
+    elif tipo_factor == "Factores de Peligrosidad":
+        etiqueta = "factor_peligrosidad"
     else:
         etiqueta = None  # Ninguna etiqueta si "Ninguno" es seleccionado
     
