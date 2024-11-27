@@ -88,12 +88,7 @@ header_html = """
     </style>
 """
 
-# Agregar el HTML personalizado al encabezado
-st.markdown(header_html, unsafe_allow_html=True)
 
-# Agregar la imagen (logo) y el texto al encabezado
-st.markdown('<div class="header-container"><img class="logo" src="https://kaibot.es/wp-content/uploads/2024/11/banner-app-1.png" alt="Logo"></div>', unsafe_allow_html=True)
-#st.write("# Alta nuevo Proyecto")
 
 # Configuración de la página y credenciales de BigQuery
 st.set_page_config(page_title="RRHH del Norte - Maestra de Tablas-beta2", page_icon="👨")
