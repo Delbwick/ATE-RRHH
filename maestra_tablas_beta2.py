@@ -2,6 +2,12 @@ import streamlit as st
 from google.oauth2 import service_account
 from google.cloud import bigquery
 
+# Configuración de la página y credenciales de BigQuery
+st.set_page_config(page_title="RRHH del Norte - Maestra de Tablas-beta2", page_icon="👨")
+credentials = service_account.Credentials.from_service_account_info(st.secrets["gcp_service_account"])
+client = bigquery.Client(credentials=credentials)
+
+
 #Estilos
 #HTML personalizado para el encabezado
 header_html = """
@@ -91,10 +97,7 @@ header_html = """
 st.markdown(header_html, unsafe_allow_html=True)
 
 
-# Configuración de la página y credenciales de BigQuery
-st.set_page_config(page_title="RRHH del Norte - Maestra de Tablas-beta2", page_icon="👨")
-credentials = service_account.Credentials.from_service_account_info(st.secrets["gcp_service_account"])
-client = bigquery.Client(credentials=credentials)
+
 
 # Proyecto y dataset en BigQuery
 project_id = 'ate-rrhh-2024'
