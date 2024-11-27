@@ -4,8 +4,100 @@ from google.cloud import bigquery
 import pandas as pd
 
 # Configuración de la página de Streamlit
-st.set_page_config(page_title="RRHH del Norte - Selección de Factores", page_icon="📊")
+st.set_page_config(page_title="RRHH del Norte - Selección de Factores", page_icon="🤓")
 st.title("RRHH del Norte - Selección de Factores Específicos y de Destino - Manual preliminar")
+
+# HTML personalizado para el encabezado
+header_html = """
+     <style>
+          /* Colores principales */
+        :root {
+            --color-principal: #007d9a;
+            --color-secundario: #dfa126;
+            --color-texto: #333333;
+        }
+
+        /* Estilos generales */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: var(--color-texto);
+        }
+        .header-container {
+            background-color: #007d9a; /* Color de fondo principal */
+            padding: 0;
+            text-align: center;
+        }
+        .logo {
+            width: 100%;  /* Hacer que el logo ocupe todo el ancho */
+            max-height: 300px; /* Limitar la altura del banner */
+            object-fit: cover;  /* Asegura que el logo se ajuste bien */
+        }
+        .wide-line {
+            width: 100%;
+            height: 2px;
+            background-color: var(--color-secundario);
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+    h1 {
+        font-family: 'Arial', sans-serif;
+        font-size: 17pt;
+        text-align: left;
+        color: #333333;
+    }
+    h2 {
+        font-family: 'Arial', sans-serif;
+        font-size: 17pt;
+        text-align: left;
+        color: #333333;
+    }
+    h4 {
+            font-size: 20pt;
+            color: var(--color-principal);
+            font-weight: bold;
+        }
+
+        /* Estilo para el formulario */
+        .stTextInput, .stDateInput, .stCheckbox, .stSelectbox, .stRadio {
+            background-color: #ffffff;
+            border: 1px solid var(--color-principal);
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .stTextInput input, .stDateInput input, .stCheckbox input, .stSelectbox select, .stRadio input {
+            color: var(--color-texto);
+        }
+
+        .stButton>button {
+            background-color: var(--color-secundario);
+            padding: 10px 20px;
+            border-radius: 5px;
+            color: white;
+            border: none;
+            font-size: 14pt;
+        }
+
+        .stButton>button:hover {
+            background-color: darkorange;
+        }
+
+        /* Estilo del botón de redirección */
+        .stButton a {
+            color: white;
+            text-decoration: none;
+        }
+    </style>
+"""
+
+# Agregar el HTML personalizado al encabezado
+st.markdown(header_html, unsafe_allow_html=True)
+
+# Agregar la imagen (logo) y el texto al encabezado
+st.markdown('<div class="header-container"><img class="logo" src="https://kaibot.es/wp-content/uploads/2024/11/banner-app-1.png" alt="Logo"></div>', unsafe_allow_html=True)
+#st.write("# Alta nuevo Proyecto")
 
 # HTML y CSS para mostrar el texto con desplazamiento en un contenedor de 300px de altura
 scrollable_text_html = """
