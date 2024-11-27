@@ -406,7 +406,7 @@ if st.button("Guardar selecciones"):
 
 # Crear un botón
 st.markdown("""
-    <a href="https://ate-rrhh-jwinmwitfd8gsoc4va9cjc.streamlit.app/?id_proyecto={new_id_proyecto}" target="_blank">
+    <a href="https://ate-rrhh-jwinmwitfd8gsoc4va9cjc.streamlit.app/?id_proyecto={id_proyecto_url}" target="_blank">
         <button style="background-color:Green;padding:10px;border-radius:5px;color:white;border:none;">
             Ir a Menu
         </button>
