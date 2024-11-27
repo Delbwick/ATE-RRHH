@@ -96,7 +96,9 @@ header_html = """
 # Agregar el HTML personalizado al encabezado
 st.markdown(header_html, unsafe_allow_html=True)
 
-
+# Agregar la imagen (logo) y el texto al encabezado
+st.markdown('<div class="header-container"><img class="logo" src="https://kaibot.es/wp-content/uploads/2024/11/banner-app-1.png" alt="Logo"></div>', unsafe_allow_html=True)
+#st.write("# Alta nuevo Proyecto")
 
 
 # Proyecto y dataset en BigQuery
@@ -104,7 +106,7 @@ project_id = 'ate-rrhh-2024'
 dataset_id = 'Ate_kaibot_2024'
 
 # Encabezado de la aplicación
-st.title("¡Bienvenido a RRHH del Norte! 👷")
+st.title("¡Bienvenido a APP de Valoraciones de Puestos de Trabajo 👷")
 st.header("Gestión de Tablas Maestras de Factores")
 
 # Función para listar tablas en el dataset, ordenadas por nombre
