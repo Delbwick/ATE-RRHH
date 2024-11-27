@@ -3,7 +3,7 @@ from google.oauth2 import service_account
 from google.cloud import bigquery
 
 #Estilos
- HTML personalizado para el encabezado
+#HTML personalizado para el encabezado
 header_html = """
      <style>
           /* Colores principales */
