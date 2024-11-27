@@ -406,7 +406,7 @@ if st.button("Guardar selecciones"):
 
 # Crear un botón
 st.markdown("""
-    <a href="https://ate-rrhh-gvym68tf8xp2pdhq6dy8xj.streamlit.app?id_proyecto={id_proyecto_url}" target="_blank">
+    <a href="https://ate-rrhh-gvym68tf8xp2pdhq6dy8xj.streamlit.app?id_proyecto={id_proyecto_seleccionado" target="_blank">
         <button style="background-color:Green;padding:10px;border-radius:5px;color:white;border:none;">
             Ir a Seleccion de Compelementos Especificos
         </button>
