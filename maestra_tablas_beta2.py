@@ -87,7 +87,8 @@ header_html = """
         }
     </style>
 """
-
+# Agregar el HTML personalizado al encabezado
+st.markdown(header_html, unsafe_allow_html=True)
 
 
 # Configuración de la página y credenciales de BigQuery
