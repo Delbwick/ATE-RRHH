@@ -4,7 +4,7 @@ from google.cloud import bigquery
 import pandas as pd
 
 # Configuración de la página de Streamlit
-st.set_page_config(page_title="RRHH del Norte - Selección de Factores", page_icon="😎")
+st.set_page_config(page_title="RRHH del Norte - Selección de Factores", page_icon="😏")
 st.title("RRHH del Norte - Selección de Factores Específicos y de Destino - Manual preliminar")
 
 # HTML personalizado para el encabezado
@@ -91,105 +91,6 @@ header_html = """
         }
     </style>
 """
-# HTML para las tablas estilizadas vacías
-tabla_vacia_html = """
-<style>
-    /* Estilo general para las tablas */
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 20px 0;
-        font-size: 16px;
-        font-family: Arial, sans-serif;
-        text-align: left;
-    }
-
-    /* Estilo para las celdas y encabezados */
-    th, td {
-        border: 1px solid #dddddd;
-        text-align: center;
-        padding: 8px;
-    }
-
-    /* Encabezados principales */
-    th {
-        background-color: #f9c66a; /* Naranja claro */
-        color: black;
-        font-weight: bold;
-    }
-
-    /* Columna de "Importancia" */
-    .importancia {
-        background-color: #fff799; /* Amarillo suave */
-        font-weight: bold;
-    }
-
-    /* Alternancia de filas */
-    tr:nth-child(even) {
-        background-color: #f2f2f2; /* Gris claro */
-    }
-</style>
-
-<!-- Tablas vacías -->
-<div>
-    <p>- A continuación, como punto de partida, se muestra una propuesta de factores...</p>
-    <table>
-        <tr>
-            <th colspan="2">Factores complemento de destino</th>
-        </tr>
-        <tr>
-            <td></td>
-            <td class="importancia"></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td class="importancia"></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td class="importancia"></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td class="importancia"></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td class="importancia"></td>
-        </tr>
-    </table>
-    
-    <table>
-        <tr>
-            <th colspan="2">Factores del complemento específico</th>
-        </tr>
-        <tr>
-            <td></td>
-            <td class="importancia"></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td class="importancia"></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td class="importancia"></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td class="importancia"></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td class="importancia"></td>
-        </tr>
-    </table>
-</div>
-"""
-
-# Renderizar las tablas vacías en Streamlit
-st.markdown(tabla_vacia_html, unsafe_allow_html=True)
-
 
 # Agregar el HTML personalizado al encabezado
 st.markdown(header_html, unsafe_allow_html=True)
