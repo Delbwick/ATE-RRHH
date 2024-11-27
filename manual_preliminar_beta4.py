@@ -89,6 +89,32 @@ header_html = """
             color: white;
             text-decoration: none;
         }
+
+        /* Estilos para las tablas */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #FFA07A; /* Fondo naranja claro para encabezado */
+            color: #333333; /* Color de texto */
+        }
+
+        td {
+            background-color: #F9F9F9; /* Fondo gris claro para celdas */
+        }
+
+        .important-column {
+            background-color: #FFFF99; /* Fondo amarillo para la columna de importancia */
+        }
     </style>
 """
 
@@ -97,7 +123,6 @@ st.markdown(header_html, unsafe_allow_html=True)
 
 # Agregar la imagen (logo) y el texto al encabezado
 st.markdown('<div class="header-container"><img class="logo" src="https://kaibot.es/wp-content/uploads/2024/11/banner-app-1.png" alt="Logo"></div>', unsafe_allow_html=True)
-#st.write("# Alta nuevo Proyecto")
 
 # HTML y CSS para mostrar el texto con desplazamiento en un contenedor de 300px de altura
 scrollable_text_html = """
@@ -175,33 +200,18 @@ proyectos_nombres = [proyecto['nombre'] for proyecto in proyectos]
 if id_proyecto_url:
     proyecto_inicial = next((proyecto['nombre'] for proyecto in proyectos if proyecto['id'] == id_proyecto_url), proyectos_nombres[0])
 else:
-    proyecto_inicial = proyectos_nombres[0]  # Primer proyecto como predeterminado
+    proyecto_inicial = proyectos_nombres[0]  # Por defecto, seleccionar el primer proyecto
 
-# Crear el sidebar con el selectbox
-st.sidebar.title("Opciones")
-st.sidebar.markdown("<h2>Selecciona el proyecto que quieres calcular</h2>", unsafe_allow_html=True)
+# Mostrar la lista de proyectos en un selectbox
+proyecto_seleccionado = st.selectbox('Selecciona el Proyecto:', proyectos_nombres, index=proyectos_nombres.index(proyecto_inicial))
 
-opcion_proyecto = st.sidebar.selectbox("Seleccione un Proyecto:", proyectos_nombres, index=proyectos_nombres.index(proyecto_inicial))
+# Filtrar el ID del proyecto correspondiente
+id_proyecto = next(proyecto['id'] for proyecto in proyectos if proyecto['nombre'] == proyecto_seleccionado)
 
-# Obtener el ID del proyecto seleccionado
-id_proyecto_seleccionado = next((proyecto['id'] for proyecto in proyectos if proyecto['nombre'] == opcion_proyecto), None)
+# Obtener y mostrar los complementos del proyecto seleccionado
+complementos_destino = get_complementos(id_proyecto, 'complemento_destino')
+complementos_especifico = get_complementos(id_proyecto, 'complemento_especifico')
 
-# Mostrar el ID seleccionado en el sidebar (opcional para verificación)
-if id_proyecto_seleccionado:
-    st.sidebar.write(f"ID del proyecto seleccionado: {id_proyecto_seleccionado}")
-
-# Si se ha seleccionado un proyecto, mostrar complementos
-if id_proyecto_seleccionado:
-    # Complementos específicos
-    complementos_especificos = get_complementos(id_proyecto_seleccionado, "complemento_especifico")
-    if complementos_especificos:
-        mostrar_complementos("Factores Específicos del Proyecto", complementos_especificos, "específico")
-    else:
-        st.write("No se encontraron complementos específicos para el proyecto seleccionado.")
-
-    # Complementos de destino
-    complementos_destino = get_complementos(id_proyecto_seleccionado, "complemento_destino")
-    if complementos_destino:
-        mostrar_complementos("Factores de Destino del Proyecto", complementos_destino, "destino")
-    else:
-        st.write("No se encontraron complementos de destino para el proyecto seleccionado.")
+# Mostrar las tablas de complementos
+mostrar_complementos("Factores complementarios de destino", complementos_destino, 'complemento_destino')
+mostrar_complementos("Factores complementarios específicos", complementos_especifico, 'complemento_especifico')
