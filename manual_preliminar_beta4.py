@@ -153,54 +153,13 @@ def obtener_datos_tabla(nombre_tabla):
     return df
 
 # Mostrar tablas de complementos en la página principal
-# Mostrar tablas de complementos con input para porcentaje y botón de actualización
-# Mostrar tablas de complementos con input para porcentaje y botón de actualización
-def mostrar_complementos(titulo, complementos, tipo_complemento, id_proyecto_seleccionado):
+def mostrar_complementos(titulo, complementos, tipo_complemento):
     st.subheader(titulo)
     for complemento in complementos:
-        # Mostrar título del complemento
-        st.write(f"**{complemento} ({tipo_complemento})**")
-
-        # Crear un input box para el porcentaje de importancia
-        porcentaje_input = st.text_input(
-            f"Porcentaje de importancia para {complemento} ({tipo_complemento})",
-            value="0%",  # Valor inicial
-            key=f"porcentaje_{complemento}"
-        )
-
-        # Obtener y mostrar la tabla directamente desde BigQuery (como antes)
         nombre_tabla = f"ate-rrhh-2024.Ate_kaibot_2024.{complemento}"
-        query = f"SELECT * FROM `{nombre_tabla}` LIMIT 100"
-        try:
-            df = client.query(query).to_dataframe().fillna('No disponible')
-            st.dataframe(df, use_container_width=True)
-        except Exception as e:
-            st.error(f"Error al consultar la tabla {complemento}: {e}")
-            continue
-
-        # Mostrar botón para actualizar el porcentaje
-        if st.button(f"Actualizar {complemento}", key=f"btn_{complemento}"):
-            try:
-                # Validar y convertir el porcentaje ingresado
-                porcentaje_importancia = float(porcentaje_input.strip('%')) / 100  # Convertir a decimal
-                if porcentaje_importancia < 0 or porcentaje_importancia > 1:
-                    st.error("Por favor, introduce un porcentaje válido (0% - 100%).")
-                    continue
-
-                # Actualizar el campo porcentaje_importancia en la tabla correspondiente
-                update_query = f"""
-                    UPDATE `ate-rrhh-2024.Ate_kaibot_2024.{tipo_complemento}_x_proyecto`
-                    SET porcentaje_importancia = {porcentaje_importancia}
-                    WHERE id_proyecto = {id_proyecto_seleccionado} AND {tipo_complemento} = '{complemento}'
-                """
-                client.query(update_query)
-                st.success(f"Porcentaje de {complemento} actualizado a {porcentaje_importancia * 100:.0f}%.")
-            except ValueError:
-                st.error("Por favor, introduce un porcentaje válido (por ejemplo, 20%).")
-            except Exception as e:
-                st.error(f"Error al actualizar el porcentaje: {e}")
-
-
+        df = obtener_datos_tabla(nombre_tabla)
+        st.write(f"**{complemento} ({tipo_complemento})**")
+        st.dataframe(df, use_container_width=True)
 
 # Obtener el ID del proyecto de la URL (si está presente)
 id_proyecto_url = st.experimental_get_query_params().get('id_proyecto', [None])[0]
@@ -233,16 +192,18 @@ if id_proyecto_seleccionado:
 
 # Si se ha seleccionado un proyecto, mostrar complementos
 if id_proyecto_seleccionado:
+    
+
     # Complementos de destino
     complementos_destino = get_complementos(id_proyecto_seleccionado, "complemento_destino")
     if complementos_destino:
-        mostrar_complementos("Factores de Destino del Proyecto", complementos_destino, "destino", id_proyecto_seleccionado)
+        mostrar_complementos("Factores de Destino del Proyecto", complementos_destino, "destino")
     else:
         st.write("No se encontraron complementos de destino para el proyecto seleccionado.")
 
-    # Complementos específicos
+     # Complementos específicos
     complementos_especificos = get_complementos(id_proyecto_seleccionado, "complemento_especifico")
     if complementos_especificos:
-        mostrar_complementos("Factores Específicos del Proyecto", complementos_especificos, "específico", id_proyecto_seleccionado)
+        mostrar_complementos("Factores Específicos del Proyecto", complementos_especificos, "específico")
     else:
         st.write("No se encontraron complementos específicos para el proyecto seleccionado.")
