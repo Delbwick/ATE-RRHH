@@ -130,6 +130,7 @@ client = bigquery.Client(credentials=credentials)
 # Función para obtener proyectos desde BigQuery
 # Función para obtener los proyectos desde BigQuery
 # Función para obtener los proyectos desde BigQuery
+# Función para obtener los proyectos desde BigQuery
 def get_proyectos():
     query = """
         SELECT id_projecto AS id, nombre
@@ -176,6 +177,10 @@ def convertir_a_decimal(porcentaje_input):
             return 0.0
     return float(porcentaje_input)  # Si no es un string con '%', devolverlo como está
 
+# Función para validar la suma de los porcentajes
+def validar_suma_porcentajes(porcentajes):
+    return sum(porcentajes) == 1.0  # La suma debe ser 1 (100%)
+
 # Mostrar la interfaz de usuario
 def mostrar_interfaz():
     # Obtener los proyectos
@@ -195,6 +200,12 @@ def mostrar_interfaz():
     if id_proyecto_seleccionado:
         st.sidebar.write(f"ID del proyecto seleccionado: {id_proyecto_seleccionado}")
 
+    # Mostrar mensaje de advertencia
+    st.markdown("""
+    **Importante**: Los porcentajes para los complementos de destino y específicos deben sumar **100%**.
+    Asegúrate de que la suma de los porcentajes de cada grupo sea exactamente 100%.
+    """)
+
     # Mostrar los complementos de destino y específicos
     if id_proyecto_seleccionado:
         # Obtener complementos
@@ -202,16 +213,14 @@ def mostrar_interfaz():
         complementos_especificos = get_complementos(id_proyecto_seleccionado, "complemento_especifico")
 
         # Diccionario para los porcentajes de cada complemento
-        porcentajes = {}
-
-        # Mostrar inputs para porcentajes en los títulos
-        st.subheader("Actualizar Porcentajes de Importancia")
+        porcentajes_destino = {}
+        porcentajes_especificos = {}
 
         # Complementos de destino
         for complemento in complementos_destino:
             porcentaje_input = st.text_input(f"Porcentaje para {complemento} (Destino) - Ejemplo: 20%", value="0.0")
             porcentaje_decimal = convertir_a_decimal(porcentaje_input)  # Convertir a decimal
-            porcentajes[complemento] = porcentaje_decimal
+            porcentajes_destino[complemento] = porcentaje_decimal
             # Mostrar tabla con los datos del complemento de destino
             nombre_tabla = f"ate-rrhh-2024.Ate_kaibot_2024.{complemento}"
             df = obtener_datos_tabla(nombre_tabla)
@@ -222,7 +231,7 @@ def mostrar_interfaz():
         for complemento in complementos_especificos:
             porcentaje_input = st.text_input(f"Porcentaje para {complemento} (Específico) - Ejemplo: 20%", value="0.0")
             porcentaje_decimal = convertir_a_decimal(porcentaje_input)  # Convertir a decimal
-            porcentajes[complemento] = porcentaje_decimal
+            porcentajes_especificos[complemento] = porcentaje_decimal
             # Mostrar tabla con los datos del complemento específico
             nombre_tabla = f"ate-rrhh-2024.Ate_kaibot_2024.{complemento}"
             df = obtener_datos_tabla(nombre_tabla)
@@ -231,19 +240,24 @@ def mostrar_interfaz():
 
         # Botón para actualizar los porcentajes
         if st.button("Actualizar Porcentajes"):
-            # Actualizar los porcentajes en BigQuery
-            try:
-                actualizar_porcentajes(id_proyecto_seleccionado, complementos_destino, "complemento_destino", porcentajes)
-                actualizar_porcentajes(id_proyecto_seleccionado, complementos_especificos, "complemento_especifico", porcentajes)
-                st.success("Porcentajes actualizados correctamente.")
-            except Exception as e:
-                st.error(f"Error al actualizar los porcentajes: {e}")
+            # Validar que las sumas de los porcentajes sean 100%
+            if not validar_suma_porcentajes(list(porcentajes_destino.values())):
+                st.error("Los porcentajes de los complementos de destino no suman 100%. Por favor, revisa los valores.")
+            elif not validar_suma_porcentajes(list(porcentajes_especificos.values())):
+                st.error("Los porcentajes de los complementos específicos no suman 100%. Por favor, revisa los valores.")
+            else:
+                try:
+                    # Actualizar los porcentajes en BigQuery
+                    actualizar_porcentajes(id_proyecto_seleccionado, complementos_destino, "complemento_destino", porcentajes_destino)
+                    actualizar_porcentajes(id_proyecto_seleccionado, complementos_especificos, "complemento_especifico", porcentajes_especificos)
+                    st.success("Porcentajes actualizados correctamente.")
+                except Exception as e:
+                    st.error(f"Error al actualizar los porcentajes: {e}")
     else:
         st.write("Selecciona un proyecto para actualizar los complementos.")
     
 # Llamar a la función para mostrar la interfaz
 mostrar_interfaz()
-
 
 st.markdown(f"""
     <a href="https://ate-rrhh-cojrq3ajth6dsyyuqznd9e.streamlit.app" target="_blank">
