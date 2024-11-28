@@ -163,4 +163,4 @@ def filtrar_complementos_por_categoria(complementos, categoria_seleccionada):
     return [complemento for complemento in complementos if categoria_orden.get(categoria_seleccionada, 7) <= categoria_orden.get(complemento['complemento'], 7)]
 
 # Mostrar la interfaz de usuario
-def mostrar_interfaz()
+def mostrar_interfaz():
