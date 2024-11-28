@@ -152,14 +152,38 @@ def obtener_datos_tabla(nombre_tabla):
     df = client.query(query).result().to_dataframe().fillna('No disponible')
     return df
 
-# Mostrar tablas de complementos en la página principal
+# Función para dar formato a los dataframes
+def formatear_dataframe(df):
+    # Aseguramos que la columna de Importancia sea tipo string con porcentaje
+    if "Importancia" in df.columns:
+        df["Importancia"] = df["Importancia"].astype(str) + "%"
+    
+    # Aplicamos estilo al dataframe
+    styled_df = df.style.set_table_styles(
+        [
+            {"selector": "thead th", "props": [("background-color", "#F28B20"), ("color", "white"), ("font-weight", "bold"), ("text-align", "center")]},
+            {"selector": "tbody td", "props": [("text-align", "center"), ("border", "1px solid black")]},
+            {"selector": "table", "props": [("border-collapse", "collapse"), ("width", "100%")]}
+        ]
+    ).hide(axis="index")
+    
+    return styled_df
+
+# Modificar la función de mostrar complementos
 def mostrar_complementos(titulo, complementos, tipo_complemento):
     st.subheader(titulo)
     for complemento in complementos:
         nombre_tabla = f"ate-rrhh-2024.Ate_kaibot_2024.{complemento}"
         df = obtener_datos_tabla(nombre_tabla)
-        st.write(f"**{complemento} ({tipo_complemento})**")
-        st.dataframe(df, use_container_width=True)
+
+        # Transformar el dataframe al formato deseado
+        if not df.empty and "Importancia" in df.columns:
+            df_formateado = formatear_dataframe(df)
+            st.write(f"**{complemento} ({tipo_complemento})**")
+            st.dataframe(df_formateado, use_container_width=True)
+        else:
+            st.write(f"No hay datos para {complemento}.")
+
 
 # Obtener el ID del proyecto de la URL (si está presente)
 id_proyecto_url = st.experimental_get_query_params().get('id_proyecto', [None])[0]
