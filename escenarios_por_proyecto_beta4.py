@@ -164,10 +164,12 @@ selected_puestos = st.sidebar.multiselect("Selecciona los puestos", puestos_desc
 
 opcion_proyecto = st.sidebar.selectbox(
     "Seleccione una Categorias:",
-    ("A!", 
+    ("A1", 
      "A2", 
      "B1", 
-     "B2")
+     "C1",
+     "C2",
+     "AP/E")
 )
 
 # Variable para almacenar las selecciones
