@@ -405,9 +405,8 @@ if st.button("Guardar selecciones"):
 # Convertir id_proyecto_url a string si no lo es
 id_proyecto_url = str(id_proyecto_url) if id_proyecto_url else ""
 
-
 # Crear un botón
-st.markdown("""
+st.markdown(f"""
     <a href="https://ate-rrhh-cojrq3ajth6dsyyuqznd9e.streamlit.app?id_proyecto={id_proyecto_url}" target="_blank">
         <button style="background-color:Green;padding:10px;border-radius:5px;color:white;border:none;">
             Ir a Manual Preliminar
