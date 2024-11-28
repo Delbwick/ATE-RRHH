@@ -192,12 +192,7 @@ if id_proyecto_seleccionado:
 
 # Si se ha seleccionado un proyecto, mostrar complementos
 if id_proyecto_seleccionado:
-    # Complementos específicos
-    complementos_especificos = get_complementos(id_proyecto_seleccionado, "complemento_especifico")
-    if complementos_especificos:
-        mostrar_complementos("Factores Específicos del Proyecto", complementos_especificos, "específico")
-    else:
-        st.write("No se encontraron complementos específicos para el proyecto seleccionado.")
+    
 
     # Complementos de destino
     complementos_destino = get_complementos(id_proyecto_seleccionado, "complemento_destino")
@@ -205,3 +200,10 @@ if id_proyecto_seleccionado:
         mostrar_complementos("Factores de Destino del Proyecto", complementos_destino, "destino")
     else:
         st.write("No se encontraron complementos de destino para el proyecto seleccionado.")
+
+     # Complementos específicos
+    complementos_especificos = get_complementos(id_proyecto_seleccionado, "complemento_especifico")
+    if complementos_especificos:
+        mostrar_complementos("Factores Específicos del Proyecto", complementos_especificos, "específico")
+    else:
+        st.write("No se encontraron complementos específicos para el proyecto seleccionado.")
