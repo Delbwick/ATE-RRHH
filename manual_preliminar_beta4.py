@@ -155,8 +155,6 @@ def obtener_datos_tabla(nombre_tabla):
 # Mostrar tablas de complementos en la página principal
 # Mostrar tablas de complementos con input para porcentaje y botón de actualización
 # Mostrar tablas de complementos con input para porcentaje y botón de actualización
-# Mostrar tablas de complementos con input para porcentaje y botón de actualización
-# Mostrar tablas de complementos con input para porcentaje y botón de actualización
 def mostrar_complementos(titulo, complementos, tipo_complemento, id_proyecto_seleccionado):
     st.subheader(titulo)
     for complemento in complementos:
@@ -183,18 +181,8 @@ def mostrar_complementos(titulo, complementos, tipo_complemento, id_proyecto_sel
         # Mostrar botón para actualizar el porcentaje
         if st.button(f"Actualizar {complemento}", key=f"btn_{complemento}"):
             try:
-                # Eliminar el símbolo '%' y convertir el valor a un float
-                porcentaje_str = porcentaje_input.strip('%')
-                
-                # Verificar que el valor es numérico
-                if not porcentaje_str.replace('.', '', 1).isdigit():
-                    st.error("Por favor, introduce un porcentaje válido (por ejemplo, 20%).")
-                    continue
-                
-                # Convertir el porcentaje a valor decimal
-                porcentaje_importancia = float(porcentaje_str) / 100  # Convertir a decimal (20% -> 0.20)
-                
-                # Validar que el porcentaje esté entre 0 y 1
+                # Validar y convertir el porcentaje ingresado
+                porcentaje_importancia = float(porcentaje_input.strip('%')) / 100  # Convertir a decimal
                 if porcentaje_importancia < 0 or porcentaje_importancia > 1:
                     st.error("Por favor, introduce un porcentaje válido (0% - 100%).")
                     continue
@@ -211,7 +199,6 @@ def mostrar_complementos(titulo, complementos, tipo_complemento, id_proyecto_sel
                 st.error("Por favor, introduce un porcentaje válido (por ejemplo, 20%).")
             except Exception as e:
                 st.error(f"Error al actualizar el porcentaje: {e}")
-
 
 
 
@@ -259,4 +246,3 @@ if id_proyecto_seleccionado:
         mostrar_complementos("Factores Específicos del Proyecto", complementos_especificos, "específico", id_proyecto_seleccionado)
     else:
         st.write("No se encontraron complementos específicos para el proyecto seleccionado.")
-
