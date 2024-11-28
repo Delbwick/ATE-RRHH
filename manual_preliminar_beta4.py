@@ -243,3 +243,12 @@ def mostrar_interfaz():
     
 # Llamar a la función para mostrar la interfaz
 mostrar_interfaz()
+
+
+st.markdown(f"""
+    <a href="https://ate-rrhh-cojrq3ajth6dsyyuqznd9e.streamlit.app?id_proyecto={id_proyecto_url}" target="_blank">
+        <button style="background-color:Green;padding:10px;border-radius:5px;color:white;border:none;">
+            Generar PowerPoint Manual Preliminar
+        </button>
+    </a>
+    """, unsafe_allow_html=True)
