@@ -163,4 +163,81 @@ def filtrar_complementos_por_categoria(complementos, categoria_seleccionada):
     return [complemento for complemento in complementos if categoria_orden.get(categoria_seleccionada, 7) <= categoria_orden.get(complemento['complemento'], 7)]
 
 # Mostrar la interfaz de usuario
+# Mostrar la interfaz de usuario
 def mostrar_interfaz():
+    # Obtener los proyectos
+    proyectos = get_proyectos()
+    proyectos_nombres = [proyecto['nombre'] for proyecto in proyectos]
+    proyecto_inicial = proyectos_nombres[0]  # Selección por defecto del primer proyecto
+
+    # Sidebar: Selector de proyecto
+    st.sidebar.title("Opciones")
+    st.sidebar.markdown("<h2>Selecciona el proyecto que quieres calcular</h2>", unsafe_allow_html=True)
+    opcion_proyecto = st.sidebar.selectbox("Seleccione un Proyecto:", proyectos_nombres, index=proyectos_nombres.index(proyecto_inicial))
+    
+    # Sidebar: Selector de categoría
+    categorias = ["a1", "a2", "b", "c1", "c2", "ap/e"]
+    categoria_seleccionada = st.sidebar.selectbox("Selecciona una categoría:", categorias)
+
+    # Obtener el ID del proyecto seleccionado
+    id_proyecto_seleccionado = next((proyecto['id'] for proyecto in proyectos if proyecto['nombre'] == opcion_proyecto), None)
+
+    # Mostrar el ID seleccionado en el sidebar (opcional para verificación)
+    if id_proyecto_seleccionado:
+        st.sidebar.write(f"ID del proyecto seleccionado: {id_proyecto_seleccionado}")
+
+    # Mostrar mensaje de advertencia
+    st.markdown("""
+    **Importante**: Los porcentajes para los complementos de destino y específicos deben sumar **100%**.
+    Asegúrate de que la suma de los porcentajes de cada grupo sea exactamente 100%.
+    """)
+
+    # Mostrar los complementos de destino y específicos según la categoría
+    if id_proyecto_seleccionado:
+        complementos_destino = get_complementos(id_proyecto_seleccionado, "complemento_destino")
+        complementos_especificos = get_complementos(id_proyecto_seleccionado, "complemento_especifico")
+
+        # Filtrar complementos por la categoría seleccionada
+        complementos_destino_filtrados = filtrar_complementos_por_categoria(complementos_destino, categoria_seleccionada)
+        complementos_especificos_filtrados = filtrar_complementos_por_categoria(complementos_especificos, categoria_seleccionada)
+
+        # Mostrar complementos de destino filtrados
+        for complemento in complementos_destino_filtrados:
+            nombre_complemento = complemento['complemento']
+            descripcion = complemento['descripcion']
+            st.write(f"**{nombre_complemento} (Destino)**")
+            st.write(f"Descripción: {descripcion}")
+            # Mostrar tabla con los datos del complemento de destino
+            nombre_tabla = f"ate-rrhh-2024.Ate_kaibot_2024.{nombre_complemento}"
+            df = obtener_datos_tabla(nombre_tabla)
+            st.dataframe(df, use_container_width=True)
+
+        # Mostrar complementos específicos filtrados
+        for complemento in complementos_especificos_filtrados:
+            nombre_complemento = complemento['complemento']
+            descripcion = complemento['descripcion']
+            st.write(f"**{nombre_complemento} (Específico)**")
+            st.write(f"Descripción: {descripcion}")
+            # Mostrar tabla con los datos del complemento específico
+            nombre_tabla = f"ate-rrhh-2024.Ate_kaibot_2024.{nombre_complemento}"
+            df = obtener_datos_tabla(nombre_tabla)
+            st.dataframe(df, use_container_width=True)
+
+        # Botón para actualizar los porcentajes
+        if st.button("Actualizar Porcentajes"):
+            if not validar_suma_porcentajes(list(porcentajes_destino.values())):
+                st.error("Los porcentajes de los complementos de destino no suman 100%. Por favor, revisa los valores.")
+            elif not validar_suma_porcentajes(list(porcentajes_especificos.values())):
+                st.error("Los porcentajes de los complementos específicos no suman 100%. Por favor, revisa los valores.")
+            else:
+                try:
+                    actualizar_porcentajes(id_proyecto_seleccionado, complementos_destino, "complemento_destino", porcentajes_destino)
+                    actualizar_porcentajes(id_proyecto_seleccionado, complementos_especificos, "complemento_especifico", porcentajes_especificos)
+                    st.success("Porcentajes actualizados correctamente.")
+                except Exception as e:
+                    st.error(f"Error al actualizar los porcentajes: {e}")
+    else:
+        st.write("Selecciona un proyecto para actualizar los complementos.")
+
+# Llamar a la función para mostrar la interfaz
+mostrar_interfaz()
