@@ -129,6 +129,7 @@ client = bigquery.Client(credentials=credentials)
 
 # Función para obtener proyectos desde BigQuery
 # Función para obtener los proyectos desde BigQuery
+# Función para obtener los proyectos desde BigQuery
 def get_proyectos():
     query = """
         SELECT id_projecto AS id, nombre
@@ -164,6 +165,17 @@ def actualizar_porcentajes(id_proyecto, complementos, tipo_complemento, porcenta
         """
         client.query(update_query)
 
+# Función para convertir los porcentajes introducidos por el usuario
+def convertir_a_decimal(porcentaje_input):
+    if isinstance(porcentaje_input, str) and "%" in porcentaje_input:
+        try:
+            # Eliminar '%' y convertir a decimal
+            porcentaje_decimal = float(porcentaje_input.replace('%', '').strip()) / 100
+            return porcentaje_decimal
+        except ValueError:
+            return 0.0
+    return float(porcentaje_input)  # Si no es un string con '%', devolverlo como está
+
 # Mostrar la interfaz de usuario
 def mostrar_interfaz():
     # Obtener los proyectos
@@ -197,22 +209,24 @@ def mostrar_interfaz():
 
         # Complementos de destino
         for complemento in complementos_destino:
-            porcentaje = st.number_input(f"Porcentaje para {complemento} (Destino)", min_value=0.0, max_value=1.0, value=0.0, step=0.01)
-            porcentajes[complemento] = porcentaje
+            porcentaje_input = st.text_input(f"Porcentaje para {complemento} (Destino) - Ejemplo: 20%", value="0.0")
+            porcentaje_decimal = convertir_a_decimal(porcentaje_input)  # Convertir a decimal
+            porcentajes[complemento] = porcentaje_decimal
             # Mostrar tabla con los datos del complemento de destino
             nombre_tabla = f"ate-rrhh-2024.Ate_kaibot_2024.{complemento}"
             df = obtener_datos_tabla(nombre_tabla)
-            st.write(f"**{complemento} (Destino) - Porcentaje: {porcentaje * 100}%**")
+            st.write(f"**{complemento} (Destino) - Porcentaje: {porcentaje_decimal * 100}%**")
             st.dataframe(df, use_container_width=True)
 
         # Complementos específicos
         for complemento in complementos_especificos:
-            porcentaje = st.number_input(f"Porcentaje para {complemento} (Específico)", min_value=0.0, max_value=1.0, value=0.0, step=0.01)
-            porcentajes[complemento] = porcentaje
+            porcentaje_input = st.text_input(f"Porcentaje para {complemento} (Específico) - Ejemplo: 20%", value="0.0")
+            porcentaje_decimal = convertir_a_decimal(porcentaje_input)  # Convertir a decimal
+            porcentajes[complemento] = porcentaje_decimal
             # Mostrar tabla con los datos del complemento específico
             nombre_tabla = f"ate-rrhh-2024.Ate_kaibot_2024.{complemento}"
             df = obtener_datos_tabla(nombre_tabla)
-            st.write(f"**{complemento} (Específico) - Porcentaje: {porcentaje * 100}%**")
+            st.write(f"**{complemento} (Específico) - Porcentaje: {porcentaje_decimal * 100}%**")
             st.dataframe(df, use_container_width=True)
 
         # Botón para actualizar los porcentajes
