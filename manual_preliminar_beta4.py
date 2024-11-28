@@ -156,6 +156,7 @@ def obtener_datos_tabla(nombre_tabla):
 # Mostrar tablas de complementos con input para porcentaje y botón de actualización
 # Mostrar tablas de complementos con input para porcentaje y botón de actualización
 # Mostrar tablas de complementos con input para porcentaje y botón de actualización
+# Mostrar tablas de complementos con input para porcentaje y botón de actualización
 def mostrar_complementos(titulo, complementos, tipo_complemento, id_proyecto_seleccionado):
     st.subheader(titulo)
     for complemento in complementos:
@@ -210,6 +211,7 @@ def mostrar_complementos(titulo, complementos, tipo_complemento, id_proyecto_sel
                 st.error("Por favor, introduce un porcentaje válido (por ejemplo, 20%).")
             except Exception as e:
                 st.error(f"Error al actualizar el porcentaje: {e}")
+
 
 
 
