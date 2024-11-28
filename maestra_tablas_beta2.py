@@ -213,6 +213,13 @@ def actualizar_registro(table_name, columns, record_id):
                     key=column.name
                 )
 
+    # Input para actualizar la descripción de la tabla
+    nueva_descripcion = st.text_input(
+        "Nueva descripción para la tabla",
+        value="",
+        placeholder="Ingresa una nueva descripción"
+    )
+
     # Si el usuario presiona el botón de actualizar
     if st.button("Actualizar"):
         try:
@@ -223,8 +230,18 @@ def actualizar_registro(table_name, columns, record_id):
             # Ejecutar la consulta de actualización
             client.query(update_sql)
             st.success("Registro actualizado con éxito")
+            
+            # Si se ingresó una nueva descripción, actualizar metadatos de la tabla
+            if nueva_descripcion:
+                table_ref = client.dataset(dataset_id).table(table_name)
+                table = client.get_table(table_ref)  # Obtener el objeto de la tabla
+                table.description = nueva_descripcion  # Actualizar la descripción
+                client.update_table(table, ["description"])  # Aplicar el cambio
+                st.success("Descripción de la tabla actualizada con éxito")
+                
         except Exception as e:
-            st.error(f"Error al actualizar el registro: {e}")
+            st.error(f"Error al actualizar el registro o la descripción: {e}")
+
 
 
 
