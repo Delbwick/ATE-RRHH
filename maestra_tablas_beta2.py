@@ -120,7 +120,18 @@ def listar_tablas():
     return [row.table_name for row in tables]
 
 # Función para seleccionar tabla y ver registros
+# Función para seleccionar tabla, ver registros y descripción
 def ver_tabla_seleccionada(table_name, order_by_column=None):
+    # Obtener la descripción de la tabla
+    try:
+        table = client.get_table(f"{project_id}.{dataset_id}.{table_name}")  # Obtener la tabla
+        descripcion_tabla = table.description  # Descripción de la tabla
+    except Exception as e:
+        descripcion_tabla = f"Error al obtener la descripción: {e}"
+    
+    # Mostrar la descripción
+    st.markdown(f"**Descripción de la tabla:** {descripcion_tabla if descripcion_tabla else 'Sin descripción disponible'}")
+
     # Si se especifica una columna para ordenar
     order_by_clause = f"ORDER BY {order_by_column}" if order_by_column else ""
     query = f"SELECT * FROM `{project_id}.{dataset_id}.{table_name}` {order_by_clause} LIMIT 100"
@@ -131,7 +142,6 @@ def ver_tabla_seleccionada(table_name, order_by_column=None):
     except Exception as e:
         st.error(f"Error al consultar la tabla: {e}")
         return None
-
 # Función para insertar registros en una tabla
 def insertar_registro(table_name, columns):
     st.write("**Formulario para insertar un nuevo registro**")
@@ -386,6 +396,7 @@ if opcion == "Ver tablas" and tabla_seleccionada:
     columna_orden = st.selectbox("Ordenar por columna:", ["Ninguna"] + columnas_nombres)
     columna_orden = columna_orden if columna_orden != "Ninguna" else None
     ver_tabla_seleccionada(tabla_seleccionada, order_by_column=columna_orden)
+
 
 elif opcion == "Insertar registro" and tabla_seleccionada:
     columnas = client.get_table(f"{project_id}.{dataset_id}.{tabla_seleccionada}").schema
