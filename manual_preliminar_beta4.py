@@ -266,3 +266,11 @@ st.markdown(f"""
         </button>
     </a>
     """, unsafe_allow_html=True)
+
+st.markdown(f"""
+    <a href="https://ate-rrhh-cojrq3ajth6dsyyuqznd9e.streamlit.app" target="_blank">
+        <button style="background-color:Green;padding:10px;border-radius:5px;color:white;border:none;">
+            Cálculo de Escenarios posibles
+        </button>
+    </a>
+    """, unsafe_allow_html=True)
