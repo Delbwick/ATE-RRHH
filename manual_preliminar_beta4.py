@@ -4,8 +4,8 @@ from google.cloud import bigquery
 import pandas as pd
 
 # Configuración de la página de Streamlit
-st.set_page_config(page_title="RRHH del Norte - Selección de Factores", page_icon="😏")
-st.title("RRHH del Norte - Selección de Factores Específicos y de Destino - Manual preliminar")
+st.set_page_config(page_title="App Valoraciones Puesto de trabajo - Manual Preliminar, page_icon="😏")
+st.title("App Valoraciones Puesto de trabajo - Manual Preliminar")
 
 # HTML personalizado para el encabezado
 header_html = """
