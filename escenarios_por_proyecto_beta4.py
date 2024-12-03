@@ -125,11 +125,7 @@ def obtener_datos_tabla(nombre_tabla):
     df = client.query(query).result().to_dataframe().fillna('No disponible')
     return df
 
-# Nueva funcionalidad: Validar porcentajes
-def validar_suma_porcentajes(porcentajes):
-    return sum(porcentajes) == 1.0  # La suma debe ser 1 (100%)
-
-# Nueva funcionalidad: Filtrar complementos según la categoría
+# Función para filtrar complementos según la categoría
 def filtrar_complementos_por_categoria(complementos, categoria_seleccionada):
     categoria_orden = {
         'ap/e': 1,
@@ -155,6 +151,10 @@ def mostrar_interfaz():
     st.sidebar.markdown("<h2>Selecciona el proyecto</h2>", unsafe_allow_html=True)
     opcion_proyecto = st.sidebar.selectbox("Seleccione un Proyecto:", proyectos_nombres)
 
+    # Selección de categoría en el sidebar
+    categorias = ['ap/e', 'a1', 'a2', 'b', 'c1', 'c2']
+    categoria_seleccionada = st.sidebar.selectbox("Seleccione una Categoría:", categorias)
+
     id_proyecto_seleccionado = next((proyecto['id'] for proyecto in proyectos if proyecto['nombre'] == opcion_proyecto), None)
 
     st.markdown("""
@@ -162,22 +162,28 @@ def mostrar_interfaz():
     """)
 
     if id_proyecto_seleccionado:
+        # Obtener y filtrar complementos específicos
         complementos_especificos = get_complementos_especificos(id_proyecto_seleccionado)
-        if complementos_especificos:
+        complementos_especificos_filtrados = filtrar_complementos_por_categoria(complementos_especificos, categoria_seleccionada)
+
+        if complementos_especificos_filtrados:
             st.write("### Factores Específicos del Proyecto")
-            for nombre_tabla in complementos_especificos:
+            for nombre_tabla in complementos_especificos_filtrados:
                 df_complemento = obtener_datos_tabla(f"ate-rrhh-2024.Ate_kaibot_2024.{nombre_tabla}")
                 mostrar_opciones_complementos(nombre_tabla, df_complemento, "complemento específico")
         else:
-            st.write("No se encontraron complementos específicos.")
+            st.write("No se encontraron complementos específicos para la categoría seleccionada.")
 
+        # Obtener y filtrar complementos de destino
         complementos_destino = get_complementos_destino(id_proyecto_seleccionado)
-        if complementos_destino:
+        complementos_destino_filtrados = filtrar_complementos_por_categoria(complementos_destino, categoria_seleccionada)
+
+        if complementos_destino_filtrados:
             st.write("### Factores de Destino del Proyecto")
-            for nombre_tabla in complementos_destino:
+            for nombre_tabla in complementos_destino_filtrados:
                 df_complemento = obtener_datos_tabla(f"ate-rrhh-2024.Ate_kaibot_2024.{nombre_tabla}")
                 mostrar_opciones_complementos(nombre_tabla, df_complemento, "complemento de destino")
         else:
-            st.write("No se encontraron complementos de destino.")
+            st.write("No se encontraron complementos de destino para la categoría seleccionada.")
 
 mostrar_interfaz()
