@@ -104,80 +104,53 @@ def get_proyectos():
     results = client.query(query).result()
     return [{'id': row.id, 'nombre': row.nombre} for row in results]
 
-# Función para obtener complementos para un proyecto
-def get_complementos(id_proyecto, tipo_complemento):
+# Función para obtener complementos específicos de cada proyecto
+def get_complementos_especificos(id_proyecto):
     query = f"""
-        SELECT {tipo_complemento}
-        FROM ate-rrhh-2024.Ate_kaibot_2024.{tipo_complemento}_x_proyecto
+        SELECT complemento_especifico
+        FROM `ate-rrhh-2024.Ate_kaibot_2024.complemento_especifico_x_proyecto`
         WHERE id_proyecto = {id_proyecto}
     """
-    results = client.query(query).result()
-    return [{'complemento': row[0]} for row in results]
+    query_job = client.query(query)
+    results = query_job.result()
+    return [row.complemento_especifico for row in results]
+
+# Función para obtener complementos de destino de cada proyecto
+def get_complementos_destino(id_proyecto):
+    query = f"""
+        SELECT complemento_destino
+        FROM `ate-rrhh-2024.Ate_kaibot_2024.complemento_destino_x_proyecto`
+        WHERE id_proyecto = {id_proyecto}
+    """
+    query_job = client.query(query)
+    results = query_job.result()
+    return [row.complemento_destino for row in results]
 
 # Función para obtener los datos de una tabla específica
 def obtener_datos_tabla(nombre_tabla):
     query = f"SELECT * FROM {nombre_tabla} LIMIT 100"
-    df = client.query(query).to_dataframe().fillna('No disponible')
+    df = client.query(query).result().to_dataframe().fillna('No disponible')
     return df
 
-# Función para actualizar el porcentaje de importancia en BigQuery
-def actualizar_porcentajes(id_proyecto, complementos, tipo_complemento, porcentajes):
-    for complemento in complementos:
-        porcentaje = porcentajes.get(complemento, 0)
-        update_query = f"""
-            UPDATE ate-rrhh-2024.Ate_kaibot_2024.{tipo_complemento}_x_proyecto
-            SET porcentaje_importancia = {porcentaje}
-            WHERE id_proyecto = {id_proyecto} AND {tipo_complemento} = '{complemento}'
-        """
-        client.query(update_query)
-
-# Función para convertir los porcentajes introducidos por el usuario
-def convertir_a_decimal(porcentaje_input):
-    if isinstance(porcentaje_input, str) and "%" in porcentaje_input:
-        try:
-            porcentaje_decimal = float(porcentaje_input.replace('%', '').strip()) / 100
-            return porcentaje_decimal
-        except ValueError:
-            return 0.0
-    return float(porcentaje_input)
-
-# Función para validar la suma de los porcentajes
-def validar_suma_porcentajes(porcentajes):
-    return sum(porcentajes) == 1.0  # La suma debe ser 1 (100%)
-
-# Función para obtener el complemento más relevante dependiendo de la categoría seleccionada
-def filtrar_complementos_por_categoria(complementos, categoria_seleccionada):
-    categoria_orden = {
-        'ap/e': 1,  # Más baja
-        'a1': 2,
-        'a2': 3,
-        'b': 4,
-        'c1': 5,
-        'c2': 6
-    }
-    return [complemento for complemento in complementos if categoria_orden.get(complemento['complemento'], 7) <= categoria_orden.get(categoria_seleccionada, 7)]
+# Función para mostrar opciones de complementos en Streamlit
+def mostrar_opciones_complementos(nombre_tabla, df, tipo_complemento):
+    st.write(f"#### Opciones para el {tipo_complemento}: {nombre_tabla}")
+    st.dataframe(df, use_container_width=True)
 
 # Mostrar la interfaz de usuario
 def mostrar_interfaz():
     # Obtener los proyectos
     proyectos = get_proyectos()
     proyectos_nombres = [proyecto['nombre'] for proyecto in proyectos]
-    proyecto_inicial = proyectos_nombres[0]
+    proyecto_inicial = proyectos_nombres[0]  # Selección por defecto del primer proyecto
 
     # Sidebar: Selector de proyecto
     st.sidebar.title("Opciones")
     st.sidebar.markdown("<h2>Selecciona el proyecto que quieres calcular</h2>", unsafe_allow_html=True)
     opcion_proyecto = st.sidebar.selectbox("Seleccione un Proyecto:", proyectos_nombres, index=proyectos_nombres.index(proyecto_inicial))
-    
-    # Sidebar: Selector de categoría
-    categorias = ["a1", "a2", "b", "c1", "c2", "ap/e"]
-    categoria_seleccionada = st.sidebar.selectbox("Selecciona una categoría:", categorias)
 
     # Obtener el ID del proyecto seleccionado
     id_proyecto_seleccionado = next((proyecto['id'] for proyecto in proyectos if proyecto['nombre'] == opcion_proyecto), None)
-
-    if id_proyecto_seleccionado:
-        st.sidebar.write(f"ID del proyecto seleccionado: {id_proyecto_seleccionado}")
 
     # Mostrar mensaje de advertencia
     st.markdown("""
@@ -185,46 +158,29 @@ def mostrar_interfaz():
     Asegúrate de que la suma de los porcentajes de cada grupo sea exactamente 100%.
     """)
 
-    # Mostrar los complementos de destino y específicos según la categoría
+    # Mostrar complementos específicos y de destino
     if id_proyecto_seleccionado:
-        complementos_destino = get_complementos(id_proyecto_seleccionado, "complemento_destino")
-        complementos_especificos = get_complementos(id_proyecto_seleccionado, "complemento_especifico")
+        # Complementos específicos
+        complementos_especificos = get_complementos_especificos(id_proyecto_seleccionado)
+        if complementos_especificos:
+            st.write("### Factores Específicos del Proyecto")
+            for nombre_tabla in complementos_especificos:
+                df_complemento_especifico = obtener_datos_tabla(f"ate-rrhh-2024.Ate_kaibot_2024.{nombre_tabla}")
+                mostrar_opciones_complementos(nombre_tabla, df_complemento_especifico, "complemento específico")
+        else:
+            st.write("No se encontraron complementos específicos para el proyecto seleccionado.")
 
-        # Filtrar complementos por la categoría seleccionada
-        complementos_destino_filtrados = filtrar_complementos_por_categoria(complementos_destino, categoria_seleccionada)
-        complementos_especificos_filtrados = filtrar_complementos_por_categoria(complementos_especificos, categoria_seleccionada)
-
-        # Mostrar complementos de destino filtrados
-        for complemento in complementos_destino_filtrados:
-            nombre_complemento = complemento['complemento']
-            st.write(f"**{nombre_complemento} (Destino)**")
-            nombre_tabla = f"ate-rrhh-2024.Ate_kaibot_2024.{nombre_complemento}"
-            df = obtener_datos_tabla(nombre_tabla)
-            st.dataframe(df, use_container_width=True)
-
-        # Mostrar complementos específicos filtrados
-        for complemento in complementos_especificos_filtrados:
-            nombre_complemento = complemento['complemento']
-            st.write(f"**{nombre_complemento} (Específico)**")
-            nombre_tabla = f"ate-rrhh-2024.Ate_kaibot_2024.{nombre_complemento}"
-            df = obtener_datos_tabla(nombre_tabla)
-            st.dataframe(df, use_container_width=True)
-
-        # Botón para actualizar los porcentajes
-        if st.button("Actualizar Porcentajes"):
-            if not validar_suma_porcentajes(list(porcentajes_destino.values())):
-                st.error("Los porcentajes de los complementos de destino no suman 100%. Por favor, revisa los valores.")
-            elif not validar_suma_porcentajes(list(porcentajes_especificos.values())):
-                st.error("Los porcentajes de los complementos específicos no suman 100%. Por favor, revisa los valores.")
-            else:
-                try:
-                    actualizar_porcentajes(id_proyecto_seleccionado, complementos_destino, "complemento_destino", porcentajes_destino)
-                    actualizar_porcentajes(id_proyecto_seleccionado, complementos_especificos, "complemento_especifico", porcentajes_especificos)
-                    st.success("Porcentajes actualizados correctamente.")
-                except Exception as e:
-                    st.error(f"Error al actualizar los porcentajes: {e}")
+        # Complementos de destino
+        complementos_destino = get_complementos_destino(id_proyecto_seleccionado)
+        if complementos_destino:
+            st.write("### Factores de Destino del Proyecto")
+            for nombre_tabla in complementos_destino:
+                df_complemento_destino = obtener_datos_tabla(f"ate-rrhh-2024.Ate_kaibot_2024.{nombre_tabla}")
+                mostrar_opciones_complementos(nombre_tabla, df_complemento_destino, "complemento de destino")
+        else:
+            st.write("No se encontraron complementos de destino para el proyecto seleccionado.")
     else:
-        st.write("Selecciona un proyecto para actualizar los complementos.")
+        st.write("Selecciona un proyecto para mostrar los complementos.")
 
 # Llamar a la función para mostrar la interfaz
 mostrar_interfaz()
