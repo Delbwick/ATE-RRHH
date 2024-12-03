@@ -8,53 +8,6 @@ st.set_page_config(page_title="APP Escenarios por proyecto ", page_icon="🤯")
 st.title("¡Bienvenido a RRHH! ")
 st.header("¡Calcula los Salarios Por Proyecto!")
 
-# HTML personalizado para el encabezado
-header_html = """
-    <style>
-        .header-container {
-            background-color: #2596be;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-        }
-        .logo {
-            max-width: 150px;
-            margin-bottom: 10px;
-        }
-        h1, h2 {
-            font-family: 'Arial', sans-serif;
-            font-size: 17pt;
-            text-align: left;
-            color: #333333;
-        }
-        h3 {
-            font-family: 'Arial', sans-serif;
-            font-size: 14pt;
-            text-align: center;
-            color: #333333;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-        th, td {
-            border: 1px solid #dddddd;
-            text-align: left;
-            padding: 8px;
-        }
-        th {
-            background-color: #2596be;
-            color: white;
-        }
-        td {
-            background-color: #f9f9f9;
-        }
-    </style>
-"""
-st.markdown(header_html, unsafe_allow_html=True)
-st.markdown('<div class="header-container"><img class="logo" src="https://www.rrhhdelnorte.es/-_-/res/702f8fd0-46a5-4f0d-9c65-afb737164745/images/files/702f8fd0-46a5-4f0d-9c65-afb737164745/e0e4dc73-78c2-4413-b62c-250cbeea83fa/683-683/3b3822cd156fd081c427cc6b35617e4031b98c63" alt="Logo"></div>', unsafe_allow_html=True)
-
 # Crear API client para BigQuery
 credentials = service_account.Credentials.from_service_account_info(
     st.secrets["gcp_service_account"]
@@ -92,13 +45,7 @@ def get_complementos_destino(id_proyecto):
     results = query_job.result()
     return [{'complemento_destino': row.complemento_destino, 'porcentaje_importancia': row.porcentaje_importancia} for row in results]
 
-# Función para obtener datos de una tabla específica
-def obtener_datos_tabla(nombre_tabla):
-    query = f"SELECT * FROM {nombre_tabla} LIMIT 100"
-    df = client.query(query).result().to_dataframe().fillna('No disponible')
-    return df
-
-# Mostrar complementos con la posibilidad de editar porcentajes
+# Función para mostrar complementos con porcentaje_importancia editable y descripción
 def mostrar_complementos_editables(df, tabla_nombre):
     st.write(f"### Descripción de la tabla: {tabla_nombre}")
     st.write(f"Esta tabla contiene los datos de los complementos asociados a la tabla `{tabla_nombre}` con su respectivo porcentaje de importancia.")
@@ -140,22 +87,18 @@ def mostrar_interfaz():
         complementos_especificos = get_complementos_especificos(id_proyecto_seleccionado)
         if complementos_especificos:
             st.write("### Factores Específicos del Proyecto")
-            for complemento in complementos_especificos:
-                # Mostrar los complementos específicos de cada tabla
-                df_complemento_especifico = obtener_datos_tabla(f"ate-rrhh-2024.Ate_kaibot_2024.{complemento['complemento_especifico']}")
-                mostrar_complementos_editables(df_complemento_especifico, complemento['complemento_especifico'])
+            df_complementos_especificos = pd.DataFrame(complementos_especificos)
+            mostrar_complementos_editables(df_complementos_especificos, "complemento_especifico_x_proyecto")
         else:
-            st.write("No se encontraron complementos específicos para el proyecto seleccionado.")
-        
-        # Complementos de destino
+            st.write("No se encontraron complementos específicos.")
+
+        # Obtener complementos de destino con porcentaje de importancia
         complementos_destino = get_complementos_destino(id_proyecto_seleccionado)
         if complementos_destino:
             st.write("### Factores de Destino del Proyecto")
-            for complemento in complementos_destino:
-                # Mostrar los complementos de destino de cada tabla
-                df_complemento_destino = obtener_datos_tabla(f"ate-rrhh-2024.Ate_kaibot_2024.{complemento['complemento_destino']}")
-                mostrar_complementos_editables(df_complemento_destino, complemento['complemento_destino'])
+            df_complementos_destino = pd.DataFrame(complementos_destino)
+            mostrar_complementos_editables(df_complementos_destino, "complemento_destino_x_proyecto")
         else:
-            st.write("No se encontraron complementos de destino para el proyecto seleccionado.")
+            st.write("No se encontraron complementos de destino.")
 
 mostrar_interfaz()
