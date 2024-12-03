@@ -21,13 +21,6 @@ header_html = """
             max-width: 150px;
             margin-bottom: 10px;
         }
-        .wide-line {
-            width: 100%;
-            height: 2px;
-            background-color: #333333;
-            margin-top: 20px;
-            margin-bottom: 20px;
-        }
         h1, h2 {
             font-family: 'Arial', sans-serif;
             font-size: 17pt;
@@ -39,26 +32,6 @@ header_html = """
             font-size: 14pt;
             text-align: center;
             color: #333333;
-        }
-        .cell {
-            border: 1px solid black;
-            padding: 10px;
-            text-align: center;
-            background-color: #f9f9f9;
-            margin-bottom: 20px;
-        }
-        .header-cell {
-            background-color: #e0e0e0;
-            font-weight: bold;
-            border: 1px solid black;
-            padding: 10px;
-            text-align: center;
-        }
-        .dataframe-cell {
-            overflow-x: auto;
-            overflow-y: auto;
-            max-width: 100%;
-            max-height: 200px;
         }
         table {
             width: 100%;
@@ -80,7 +53,6 @@ header_html = """
     </style>
 """
 st.markdown(header_html, unsafe_allow_html=True)
-st.markdown('<div class="header-container"><img class="logo" src="https://www.rrhhdelnorte.es/-_-/res/702f8fd0-46a5-4f0d-9c65-afb737164745/images/files/702f8fd0-46a5-4f0d-9c65-afb737164745/e0e4dc73-78c2-4413-b62c-250cbeea83fa/683-683/3b3822cd156fd081c427cc6b35617e4031b98c63" alt="Logo"></div>', unsafe_allow_html=True)
 
 # Crear API client para BigQuery
 credentials = service_account.Credentials.from_service_account_info(
