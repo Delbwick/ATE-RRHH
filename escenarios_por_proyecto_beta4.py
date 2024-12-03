@@ -4,7 +4,7 @@ from google.cloud import bigquery
 import pandas as pd
 
 # Configurar la página de Streamlit
-st.set_page_config(page_title="RRHH Cálculo de Puestos por Proyecto y por puesto ", page_icon="🤯")
+st.set_page_config(page_title="APP Escenarios por proyecto ", page_icon="🤯")
 st.title("¡Bienvenido a RRHH! ")
 st.header("¡Calcula los Salarios Por Poryecto!")
 
