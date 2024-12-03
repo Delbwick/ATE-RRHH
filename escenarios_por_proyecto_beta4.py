@@ -98,30 +98,28 @@ def obtener_datos_tabla(nombre_tabla):
     df = client.query(query).result().to_dataframe().fillna('No disponible')
     return df
 
-# Función para mostrar complementos con porcentaje_importancia editable
+# Mostrar complementos con la posibilidad de editar porcentajes
 def mostrar_complementos_editables(df, tabla_nombre):
+    st.write(f"### Descripción de la tabla: {tabla_nombre}")
+    st.write(f"Esta tabla contiene los datos de los complementos asociados a la tabla `{tabla_nombre}` con su respectivo porcentaje de importancia.")
+    
     for index, row in df.iterrows():
-        with st.form(key=f"form_{tabla_nombre}_{index}"):
-            # Para cada complemento, mostramos un input con su porcentaje
-            porcentaje_actual = row['porcentaje_importancia']
+        # Creamos dos columnas para la interfaz
+        col1, col2 = st.columns([3, 1])  # 75% para el dataframe, 25% para el inputbox
+
+        # Columna 1: Mostrar el DataFrame
+        with col1:
+            st.write(f"**{row['complemento_especifico' if 'complemento_especifico' in row else 'complemento_destino']}**")
+            st.write(f"Porcentaje de importancia: {row['porcentaje_importancia']}%")
+
+        # Columna 2: InputBox para modificar el porcentaje
+        with col2:
             nuevo_porcentaje = st.number_input(
-                f"Porcentaje de importancia para {row['complemento_especifico' if 'complemento_especifico' in row else 'complemento_destino']}",
-                min_value=0.0, max_value=100.0, value=porcentaje_actual, step=0.1
+                f"Modificar porcentaje para {row['complemento_especifico' if 'complemento_especifico' in row else 'complemento_destino']}",
+                min_value=0.0, max_value=100.0, value=row['porcentaje_importancia'], step=0.1
             )
             # Aquí puedes agregar cualquier lógica que necesites para actualizar la base de datos
-            st.form_submit_button(f"Actualizar {row['complemento_especifico' if 'complemento_especifico' in row else 'complemento_destino']}")
-
-# Filtrar complementos según la categoría
-def filtrar_complementos_por_categoria(complementos, categoria_seleccionada):
-    categoria_orden = {
-        'ap/e': 1,
-        'a1': 2,
-        'a2': 3,
-        'b': 4,
-        'c1': 5,
-        'c2': 6
-    }
-    return [complemento for complemento in complementos if categoria_orden.get(categoria_seleccionada, 7) <= categoria_orden.get(complemento, 7)]
+            st.button(f"Actualizar {row['complemento_especifico' if 'complemento_especifico' in row else 'complemento_destino']}")
 
 # Mostrar la interfaz principal
 def mostrar_interfaz():
@@ -130,9 +128,6 @@ def mostrar_interfaz():
     st.sidebar.title("Opciones")
     st.sidebar.markdown("<h2>Selecciona el proyecto</h2>", unsafe_allow_html=True)
     opcion_proyecto = st.sidebar.selectbox("Seleccione un Proyecto:", proyectos_nombres)
-
-    categorias = ['ap/e', 'a1', 'a2', 'b', 'c1', 'c2']
-    categoria_seleccionada = st.sidebar.selectbox("Seleccione una Categoría:", categorias)
 
     id_proyecto_seleccionado = next((proyecto['id'] for proyecto in proyectos if proyecto['nombre'] == opcion_proyecto), None)
 
@@ -145,18 +140,22 @@ def mostrar_interfaz():
         complementos_especificos = get_complementos_especificos(id_proyecto_seleccionado)
         if complementos_especificos:
             st.write("### Factores Específicos del Proyecto")
-            df_complementos_especificos = pd.DataFrame(complementos_especificos)
-            mostrar_complementos_editables(df_complementos_especificos, "complemento_especifico_x_proyecto")
+            for complemento in complementos_especificos:
+                # Mostrar los complementos específicos de cada tabla
+                df_complemento_especifico = obtener_datos_tabla(f"ate-rrhh-2024.Ate_kaibot_2024.{complemento['complemento_especifico']}")
+                mostrar_complementos_editables(df_complemento_especifico, complemento['complemento_especifico'])
         else:
-            st.write("No se encontraron complementos específicos.")
-
-        # Obtener complementos de destino con porcentaje de importancia
+            st.write("No se encontraron complementos específicos para el proyecto seleccionado.")
+        
+        # Complementos de destino
         complementos_destino = get_complementos_destino(id_proyecto_seleccionado)
         if complementos_destino:
             st.write("### Factores de Destino del Proyecto")
-            df_complementos_destino = pd.DataFrame(complementos_destino)
-            mostrar_complementos_editables(df_complementos_destino, "complemento_destino_x_proyecto")
+            for complemento in complementos_destino:
+                # Mostrar los complementos de destino de cada tabla
+                df_complemento_destino = obtener_datos_tabla(f"ate-rrhh-2024.Ate_kaibot_2024.{complemento['complemento_destino']}")
+                mostrar_complementos_editables(df_complemento_destino, complemento['complemento_destino'])
         else:
-            st.write("No se encontraron complementos de destino.")
+            st.write("No se encontraron complementos de destino para el proyecto seleccionado.")
 
 mostrar_interfaz()
