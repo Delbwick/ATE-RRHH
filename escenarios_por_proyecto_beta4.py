@@ -6,7 +6,7 @@ import pandas as pd
 # Configurar la página de Streamlit
 st.set_page_config(page_title="APP Escenarios por proyecto ", page_icon="🤯")
 st.title("¡Bienvenido a RRHH! ")
-st.header("¡Calcula los Salarios Por Poryecto!")
+st.header("¡Calcula los Salarios Por Proyecto!")
 
 # HTML personalizado para el encabezado
 header_html = """
@@ -79,15 +79,8 @@ header_html = """
         }
     </style>
 """
-
-# Agregar el HTML personalizado al encabezado
 st.markdown(header_html, unsafe_allow_html=True)
-
-# Agregar la imagen (logo) y el texto al encabezado
 st.markdown('<div class="header-container"><img class="logo" src="https://www.rrhhdelnorte.es/-_-/res/702f8fd0-46a5-4f0d-9c65-afb737164745/images/files/702f8fd0-46a5-4f0d-9c65-afb737164745/e0e4dc73-78c2-4413-b62c-250cbeea83fa/683-683/3b3822cd156fd081c427cc6b35617e4031b98c63" alt="Logo"></div>', unsafe_allow_html=True)
-#st.write("Detalle de proyectos")
-
-
 
 # Crear API client para BigQuery
 credentials = service_account.Credentials.from_service_account_info(
@@ -95,7 +88,7 @@ credentials = service_account.Credentials.from_service_account_info(
 )
 client = bigquery.Client(credentials=credentials)
 
-# Función para obtener proyectos desde BigQuery
+# Función para obtener proyectos
 def get_proyectos():
     query = """
         SELECT id_projecto AS id, nombre
@@ -115,7 +108,7 @@ def get_complementos_especificos(id_proyecto):
     results = query_job.result()
     return [row.complemento_especifico for row in results]
 
-# Función para obtener complementos de destino de cada proyecto
+# Función para obtener complementos de destino
 def get_complementos_destino(id_proyecto):
     query = f"""
         SELECT complemento_destino
@@ -126,61 +119,65 @@ def get_complementos_destino(id_proyecto):
     results = query_job.result()
     return [row.complemento_destino for row in results]
 
-# Función para obtener los datos de una tabla específica
+# Función para obtener datos de una tabla específica
 def obtener_datos_tabla(nombre_tabla):
     query = f"SELECT * FROM {nombre_tabla} LIMIT 100"
     df = client.query(query).result().to_dataframe().fillna('No disponible')
     return df
 
-# Función para mostrar opciones de complementos en Streamlit
+# Nueva funcionalidad: Validar porcentajes
+def validar_suma_porcentajes(porcentajes):
+    return sum(porcentajes) == 1.0  # La suma debe ser 1 (100%)
+
+# Nueva funcionalidad: Filtrar complementos según la categoría
+def filtrar_complementos_por_categoria(complementos, categoria_seleccionada):
+    categoria_orden = {
+        'ap/e': 1,
+        'a1': 2,
+        'a2': 3,
+        'b': 4,
+        'c1': 5,
+        'c2': 6
+    }
+    return [complemento for complemento in complementos if categoria_orden.get(categoria_seleccionada, 7) <= categoria_orden.get(complemento, 7)]
+
+# Mostrar complementos específicos y de destino
 def mostrar_opciones_complementos(nombre_tabla, df, tipo_complemento):
     st.write(f"#### Opciones para el {tipo_complemento}: {nombre_tabla}")
     st.dataframe(df, use_container_width=True)
 
-# Mostrar la interfaz de usuario
+# Mostrar la interfaz principal
 def mostrar_interfaz():
-    # Obtener los proyectos
     proyectos = get_proyectos()
     proyectos_nombres = [proyecto['nombre'] for proyecto in proyectos]
-    proyecto_inicial = proyectos_nombres[0]  # Selección por defecto del primer proyecto
-
-    # Sidebar: Selector de proyecto
+    proyecto_inicial = proyectos_nombres[0] if proyectos else None
     st.sidebar.title("Opciones")
-    st.sidebar.markdown("<h2>Selecciona el proyecto que quieres calcular</h2>", unsafe_allow_html=True)
-    opcion_proyecto = st.sidebar.selectbox("Seleccione un Proyecto:", proyectos_nombres, index=proyectos_nombres.index(proyecto_inicial))
+    st.sidebar.markdown("<h2>Selecciona el proyecto</h2>", unsafe_allow_html=True)
+    opcion_proyecto = st.sidebar.selectbox("Seleccione un Proyecto:", proyectos_nombres)
 
-    # Obtener el ID del proyecto seleccionado
     id_proyecto_seleccionado = next((proyecto['id'] for proyecto in proyectos if proyecto['nombre'] == opcion_proyecto), None)
 
-    # Mostrar mensaje de advertencia
     st.markdown("""
-    **Importante**: Los porcentajes para los complementos de destino y específicos deben sumar **100%**.
-    Asegúrate de que la suma de los porcentajes de cada grupo sea exactamente 100%.
+    **Importante**: Los porcentajes para los complementos deben sumar **100%**.
     """)
 
-    # Mostrar complementos específicos y de destino
     if id_proyecto_seleccionado:
-        # Complementos específicos
         complementos_especificos = get_complementos_especificos(id_proyecto_seleccionado)
         if complementos_especificos:
             st.write("### Factores Específicos del Proyecto")
             for nombre_tabla in complementos_especificos:
-                df_complemento_especifico = obtener_datos_tabla(f"ate-rrhh-2024.Ate_kaibot_2024.{nombre_tabla}")
-                mostrar_opciones_complementos(nombre_tabla, df_complemento_especifico, "complemento específico")
+                df_complemento = obtener_datos_tabla(f"ate-rrhh-2024.Ate_kaibot_2024.{nombre_tabla}")
+                mostrar_opciones_complementos(nombre_tabla, df_complemento, "complemento específico")
         else:
-            st.write("No se encontraron complementos específicos para el proyecto seleccionado.")
+            st.write("No se encontraron complementos específicos.")
 
-        # Complementos de destino
         complementos_destino = get_complementos_destino(id_proyecto_seleccionado)
         if complementos_destino:
             st.write("### Factores de Destino del Proyecto")
             for nombre_tabla in complementos_destino:
-                df_complemento_destino = obtener_datos_tabla(f"ate-rrhh-2024.Ate_kaibot_2024.{nombre_tabla}")
-                mostrar_opciones_complementos(nombre_tabla, df_complemento_destino, "complemento de destino")
+                df_complemento = obtener_datos_tabla(f"ate-rrhh-2024.Ate_kaibot_2024.{nombre_tabla}")
+                mostrar_opciones_complementos(nombre_tabla, df_complemento, "complemento de destino")
         else:
-            st.write("No se encontraron complementos de destino para el proyecto seleccionado.")
-    else:
-        st.write("Selecciona un proyecto para mostrar los complementos.")
+            st.write("No se encontraron complementos de destino.")
 
-# Llamar a la función para mostrar la interfaz
 mostrar_interfaz()
