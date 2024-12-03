@@ -97,35 +97,18 @@ def get_proyectos():
     results = client.query(query).result()
     return [{'id': row.id, 'nombre': row.nombre} for row in results]
 
-# Función para obtener complementos específicos de cada proyecto
-def get_complementos_especificos(id_proyecto):
+# Función para obtener complementos y sus porcentajes
+def obtener_complementos_con_importancia(tabla, id_proyecto):
     query = f"""
-        SELECT complemento_especifico
-        FROM `ate-rrhh-2024.Ate_kaibot_2024.complemento_especifico_x_proyecto`
+        SELECT complemento, porcentaje_importancia
+        FROM `ate-rrhh-2024.Ate_kaibot_2024.{tabla}`
         WHERE id_proyecto = {id_proyecto}
     """
     query_job = client.query(query)
     results = query_job.result()
-    return [row.complemento_especifico for row in results]
+    return [{'complemento': row.complemento, 'porcentaje_importancia': row.porcentaje_importancia} for row in results]
 
-# Función para obtener complementos de destino
-def get_complementos_destino(id_proyecto):
-    query = f"""
-        SELECT complemento_destino
-        FROM `ate-rrhh-2024.Ate_kaibot_2024.complemento_destino_x_proyecto`
-        WHERE id_proyecto = {id_proyecto}
-    """
-    query_job = client.query(query)
-    results = query_job.result()
-    return [row.complemento_destino for row in results]
-
-# Función para obtener datos de una tabla específica
-def obtener_datos_tabla(nombre_tabla):
-    query = f"SELECT * FROM {nombre_tabla} LIMIT 100"
-    df = client.query(query).result().to_dataframe().fillna('No disponible')
-    return df
-
-# Función para filtrar complementos según la categoría
+# Filtrar complementos por categoría
 def filtrar_complementos_por_categoria(complementos, categoria_seleccionada):
     categoria_orden = {
         'ap/e': 1,
@@ -135,12 +118,25 @@ def filtrar_complementos_por_categoria(complementos, categoria_seleccionada):
         'c1': 5,
         'c2': 6
     }
-    return [complemento for complemento in complementos if categoria_orden.get(categoria_seleccionada, 7) <= categoria_orden.get(complemento, 7)]
+    return [complemento for complemento in complementos if categoria_orden.get(categoria_seleccionada, 7) <= categoria_orden.get(complemento['complemento'], 7)]
 
-# Mostrar complementos específicos y de destino
-def mostrar_opciones_complementos(nombre_tabla, df, tipo_complemento):
-    st.write(f"#### Opciones para el {tipo_complemento}: {nombre_tabla}")
-    st.dataframe(df, use_container_width=True)
+# Mostrar complementos con inputs editables
+def mostrar_opciones_complementos_editables(nombre_tabla, complementos):
+    st.write(f"#### Opciones para el complemento: {nombre_tabla}")
+    for complemento in complementos:
+        col1, col2 = st.columns([3, 1])  # Dos columnas para alineación
+        with col1:
+            st.write(complemento['complemento'])  # Nombre del complemento
+        with col2:
+            nuevo_valor = st.number_input(
+                "Porcentaje importancia",
+                min_value=0.0,
+                max_value=100.0,
+                value=complemento['porcentaje_importancia'],
+                step=0.1,
+                key=f"{nombre_tabla}_{complemento['complemento']}"
+            )
+            complemento['porcentaje_importancia'] = nuevo_valor  # Actualizamos el valor editado
 
 # Mostrar la interfaz principal
 def mostrar_interfaz():
@@ -151,7 +147,6 @@ def mostrar_interfaz():
     st.sidebar.markdown("<h2>Selecciona el proyecto</h2>", unsafe_allow_html=True)
     opcion_proyecto = st.sidebar.selectbox("Seleccione un Proyecto:", proyectos_nombres)
 
-    # Selección de categoría en el sidebar
     categorias = ['ap/e', 'a1', 'a2', 'b', 'c1', 'c2']
     categoria_seleccionada = st.sidebar.selectbox("Seleccione una Categoría:", categorias)
 
@@ -162,27 +157,21 @@ def mostrar_interfaz():
     """)
 
     if id_proyecto_seleccionado:
-        # Obtener y filtrar complementos específicos
-        complementos_especificos = get_complementos_especificos(id_proyecto_seleccionado)
+        complementos_especificos = obtener_complementos_con_importancia('complemento_especifico_x_proyecto', id_proyecto_seleccionado)
         complementos_especificos_filtrados = filtrar_complementos_por_categoria(complementos_especificos, categoria_seleccionada)
 
         if complementos_especificos_filtrados:
             st.write("### Factores Específicos del Proyecto")
-            for nombre_tabla in complementos_especificos_filtrados:
-                df_complemento = obtener_datos_tabla(f"ate-rrhh-2024.Ate_kaibot_2024.{nombre_tabla}")
-                mostrar_opciones_complementos(nombre_tabla, df_complemento, "complemento específico")
+            mostrar_opciones_complementos_editables('complemento_especifico_x_proyecto', complementos_especificos_filtrados)
         else:
             st.write("No se encontraron complementos específicos para la categoría seleccionada.")
 
-        # Obtener y filtrar complementos de destino
-        complementos_destino = get_complementos_destino(id_proyecto_seleccionado)
+        complementos_destino = obtener_complementos_con_importancia('complemento_destino_x_proyecto', id_proyecto_seleccionado)
         complementos_destino_filtrados = filtrar_complementos_por_categoria(complementos_destino, categoria_seleccionada)
 
         if complementos_destino_filtrados:
             st.write("### Factores de Destino del Proyecto")
-            for nombre_tabla in complementos_destino_filtrados:
-                df_complemento = obtener_datos_tabla(f"ate-rrhh-2024.Ate_kaibot_2024.{nombre_tabla}")
-                mostrar_opciones_complementos(nombre_tabla, df_complemento, "complemento de destino")
+            mostrar_opciones_complementos_editables('complemento_destino_x_proyecto', complementos_destino_filtrados)
         else:
             st.write("No se encontraron complementos de destino para la categoría seleccionada.")
 
