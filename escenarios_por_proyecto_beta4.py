@@ -104,14 +104,16 @@ def get_proyectos():
     return [{'id': row.id, 'nombre': row.nombre} for row in results]
 
 # Función para obtener complementos para un proyecto
+# Función para obtener complementos para un proyecto
 def get_complementos(id_proyecto, tipo_complemento):
     query = f"""
-        SELECT {tipo_complemento}, descripcion
+        SELECT {tipo_complemento}
         FROM ate-rrhh-2024.Ate_kaibot_2024.{tipo_complemento}_x_proyecto
         WHERE id_proyecto = {id_proyecto}
     """
     results = client.query(query).result()
-    return [{'complemento': row[0], 'descripcion': row[1]} for row in results]
+    return [{'complemento': row[0]} for row in results]
+
 
 # Función para obtener los datos de una tabla específica
 def obtener_datos_tabla(nombre_tabla):
