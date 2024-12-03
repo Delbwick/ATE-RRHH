@@ -94,6 +94,7 @@ credentials = service_account.Credentials.from_service_account_info(
     st.secrets["gcp_service_account"]
 )
 client = bigquery.Client(credentials=credentials)
+
 # Función para obtener proyectos desde BigQuery
 def get_proyectos():
     query = """
@@ -104,7 +105,6 @@ def get_proyectos():
     return [{'id': row.id, 'nombre': row.nombre} for row in results]
 
 # Función para obtener complementos para un proyecto
-# Función para obtener complementos para un proyecto
 def get_complementos(id_proyecto, tipo_complemento):
     query = f"""
         SELECT {tipo_complemento}
@@ -114,11 +114,10 @@ def get_complementos(id_proyecto, tipo_complemento):
     results = client.query(query).result()
     return [{'complemento': row[0]} for row in results]
 
-
 # Función para obtener los datos de una tabla específica
 def obtener_datos_tabla(nombre_tabla):
     query = f"SELECT * FROM {nombre_tabla} LIMIT 100"
-    df = client.query(query).result().to_dataframe().fillna('No disponible')
+    df = client.query(query).to_dataframe().fillna('No disponible')
     return df
 
 # Función para actualizar el porcentaje de importancia en BigQuery
@@ -140,7 +139,7 @@ def convertir_a_decimal(porcentaje_input):
             return porcentaje_decimal
         except ValueError:
             return 0.0
-    return float(porcentaje_input)  # Si no es un string con '%', devolverlo como está
+    return float(porcentaje_input)
 
 # Función para validar la suma de los porcentajes
 def validar_suma_porcentajes(porcentajes):
@@ -148,10 +147,6 @@ def validar_suma_porcentajes(porcentajes):
 
 # Función para obtener el complemento más relevante dependiendo de la categoría seleccionada
 def filtrar_complementos_por_categoria(complementos, categoria_seleccionada):
-    """
-    Filtra los complementos según la categoría seleccionada.
-    Categorías con letras más altas se consideran más relevantes.
-    """
     categoria_orden = {
         'ap/e': 1,  # Más baja
         'a1': 2,
@@ -160,17 +155,14 @@ def filtrar_complementos_por_categoria(complementos, categoria_seleccionada):
         'c1': 5,
         'c2': 6
     }
-    
-    # Filtrar los complementos según la categoría seleccionada
-    return [complemento for complemento in complementos if categoria_orden.get(categoria_seleccionada, 7) <= categoria_orden.get(complemento['complemento'], 7)]
+    return [complemento for complemento in complementos if categoria_orden.get(complemento['complemento'], 7) <= categoria_orden.get(categoria_seleccionada, 7)]
 
-# Mostrar la interfaz de usuario
 # Mostrar la interfaz de usuario
 def mostrar_interfaz():
     # Obtener los proyectos
     proyectos = get_proyectos()
     proyectos_nombres = [proyecto['nombre'] for proyecto in proyectos]
-    proyecto_inicial = proyectos_nombres[0]  # Selección por defecto del primer proyecto
+    proyecto_inicial = proyectos_nombres[0]
 
     # Sidebar: Selector de proyecto
     st.sidebar.title("Opciones")
@@ -184,7 +176,6 @@ def mostrar_interfaz():
     # Obtener el ID del proyecto seleccionado
     id_proyecto_seleccionado = next((proyecto['id'] for proyecto in proyectos if proyecto['nombre'] == opcion_proyecto), None)
 
-    # Mostrar el ID seleccionado en el sidebar (opcional para verificación)
     if id_proyecto_seleccionado:
         st.sidebar.write(f"ID del proyecto seleccionado: {id_proyecto_seleccionado}")
 
@@ -206,10 +197,7 @@ def mostrar_interfaz():
         # Mostrar complementos de destino filtrados
         for complemento in complementos_destino_filtrados:
             nombre_complemento = complemento['complemento']
-            descripcion = complemento['descripcion']
             st.write(f"**{nombre_complemento} (Destino)**")
-            st.write(f"Descripción: {descripcion}")
-            # Mostrar tabla con los datos del complemento de destino
             nombre_tabla = f"ate-rrhh-2024.Ate_kaibot_2024.{nombre_complemento}"
             df = obtener_datos_tabla(nombre_tabla)
             st.dataframe(df, use_container_width=True)
@@ -217,10 +205,7 @@ def mostrar_interfaz():
         # Mostrar complementos específicos filtrados
         for complemento in complementos_especificos_filtrados:
             nombre_complemento = complemento['complemento']
-            descripcion = complemento['descripcion']
             st.write(f"**{nombre_complemento} (Específico)**")
-            st.write(f"Descripción: {descripcion}")
-            # Mostrar tabla con los datos del complemento específico
             nombre_tabla = f"ate-rrhh-2024.Ate_kaibot_2024.{nombre_complemento}"
             df = obtener_datos_tabla(nombre_tabla)
             st.dataframe(df, use_container_width=True)
