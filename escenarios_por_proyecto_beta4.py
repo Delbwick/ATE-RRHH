@@ -92,24 +92,25 @@ def get_complementos_destino(id_proyecto):
     results = query_job.result()
     return [{'complemento_destino': row.complemento_destino, 'porcentaje_importancia': row.porcentaje_importancia} for row in results]
 
-# Función para obtener datos de una tabla específica
-def obtener_datos_tabla(nombre_tabla):
-    query = f"SELECT * FROM {nombre_tabla} LIMIT 100"
-    df = client.query(query).result().to_dataframe().fillna('No disponible')
-    return df
-
 # Función para mostrar complementos con porcentaje_importancia editable
 def mostrar_complementos_editables(df, tabla_nombre):
     for index, row in df.iterrows():
-        with st.form(key=f"form_{tabla_nombre}_{index}"):
-            # Para cada complemento, mostramos un input con su porcentaje
-            porcentaje_actual = row['porcentaje_importancia']
+        # Creamos dos columnas para la interfaz
+        col1, col2 = st.columns([3, 1])  # 75% para el dataframe, 25% para el inputbox
+
+        # Columna 1: Mostrar el DataFrame
+        with col1:
+            st.write(f"**{row['complemento_especifico' if 'complemento_especifico' in row else 'complemento_destino']}**")
+            st.write(f"Porcentaje de importancia: {row['porcentaje_importancia']}%")
+
+        # Columna 2: InputBox para modificar el porcentaje
+        with col2:
             nuevo_porcentaje = st.number_input(
-                f"Porcentaje de importancia para {row['complemento_especifico' if 'complemento_especifico' in row else 'complemento_destino']}",
-                min_value=0.0, max_value=100.0, value=porcentaje_actual, step=0.1
+                f"Modificar porcentaje para {row['complemento_especifico' if 'complemento_especifico' in row else 'complemento_destino']}",
+                min_value=0.0, max_value=100.0, value=row['porcentaje_importancia'], step=0.1
             )
             # Aquí puedes agregar cualquier lógica que necesites para actualizar la base de datos
-            st.form_submit_button(f"Actualizar {row['complemento_especifico' if 'complemento_especifico' in row else 'complemento_destino']}")
+            st.button(f"Actualizar {row['complemento_especifico' if 'complemento_especifico' in row else 'complemento_destino']}")
 
 # Filtrar complementos según la categoría
 def filtrar_complementos_por_categoria(complementos, categoria_seleccionada):
