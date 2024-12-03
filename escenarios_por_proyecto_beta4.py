@@ -8,6 +8,53 @@ st.set_page_config(page_title="APP Escenarios por proyecto ", page_icon="🤯")
 st.title("¡Bienvenido a RRHH! ")
 st.header("¡Calcula los Salarios Por Proyecto!")
 
+# HTML personalizado para el encabezado
+header_html = """
+    <style>
+        .header-container {
+            background-color: #2596be;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .logo {
+            max-width: 150px;
+            margin-bottom: 10px;
+        }
+        h1, h2 {
+            font-family: 'Arial', sans-serif;
+            font-size: 17pt;
+            text-align: left;
+            color: #333333;
+        }
+        h3 {
+            font-family: 'Arial', sans-serif;
+            font-size: 14pt;
+            text-align: center;
+            color: #333333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+        th {
+            background-color: #2596be;
+            color: white;
+        }
+        td {
+            background-color: #f9f9f9;
+        }
+    </style>
+"""
+st.markdown(header_html, unsafe_allow_html=True)
+st.markdown('<div class="header-container"><img class="logo" src="https://www.rrhhdelnorte.es/-_-/res/702f8fd0-46a5-4f0d-9c65-afb737164745/images/files/702f8fd0-46a5-4f0d-9c65-afb737164745/e0e4dc73-78c2-4413-b62c-250cbeea83fa/683-683/3b3822cd156fd081c427cc6b35617e4031b98c63" alt="Logo"></div>', unsafe_allow_html=True)
+
 # Crear API client para BigQuery
 credentials = service_account.Credentials.from_service_account_info(
     st.secrets["gcp_service_account"]
@@ -45,7 +92,7 @@ def get_complementos_destino(id_proyecto):
     results = query_job.result()
     return [{'complemento_destino': row.complemento_destino, 'porcentaje_importancia': row.porcentaje_importancia} for row in results]
 
-# Función para mostrar complementos con porcentaje_importancia editable y descripción
+# Función para mostrar complementos con porcentaje_importancia editable
 def mostrar_complementos_editables(df, tabla_nombre):
     st.write(f"### Descripción de la tabla: {tabla_nombre}")
     st.write(f"Esta tabla contiene los datos de los complementos asociados a la tabla `{tabla_nombre}` con su respectivo porcentaje de importancia.")
@@ -68,6 +115,18 @@ def mostrar_complementos_editables(df, tabla_nombre):
             # Aquí puedes agregar cualquier lógica que necesites para actualizar la base de datos
             st.button(f"Actualizar {row['complemento_especifico' if 'complemento_especifico' in row else 'complemento_destino']}")
 
+# Filtrar complementos según la categoría
+def filtrar_complementos_por_categoria(complementos, categoria_seleccionada):
+    categoria_orden = {
+        'ap/e': 1,
+        'a1': 2,
+        'a2': 3,
+        'b': 4,
+        'c1': 5,
+        'c2': 6
+    }
+    return [complemento for complemento in complementos if categoria_orden.get(categoria_seleccionada, 7) <= categoria_orden.get(complemento, 7)]
+
 # Mostrar la interfaz principal
 def mostrar_interfaz():
     proyectos = get_proyectos()
@@ -75,6 +134,9 @@ def mostrar_interfaz():
     st.sidebar.title("Opciones")
     st.sidebar.markdown("<h2>Selecciona el proyecto</h2>", unsafe_allow_html=True)
     opcion_proyecto = st.sidebar.selectbox("Seleccione un Proyecto:", proyectos_nombres)
+
+    categorias = ['ap/e', 'a1', 'a2', 'b', 'c1', 'c2']
+    categoria_seleccionada = st.sidebar.selectbox("Seleccione una Categoría:", categorias)
 
     id_proyecto_seleccionado = next((proyecto['id'] for proyecto in proyectos if proyecto['nombre'] == opcion_proyecto), None)
 
