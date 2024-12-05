@@ -92,23 +92,10 @@ def get_complementos_destino(id_proyecto):
     results = query_job.result()
     return [{'complemento_destino': row.complemento_destino, 'porcentaje_importancia': row.porcentaje_importancia} for row in results]
 # Función para obtener y mostrar el contenido de una tabla
-def obtener_datos_tabla(nombre_tabla):
-    query = f"SELECT * FROM `ate-rrhh-2024.Ate_kaibot_2024.{nombre_tabla}`"
-    query_job = client.query(query)
-    results = query_job.result()
-    # Convertir a un DataFrame para mostrarlo en Streamlit
-    return pd.DataFrame([dict(row) for row in results])
-
-
-# Función para mostrar complementos con porcentaje_importancia editable
-
-# Función para mostrar complementos con porcentaje_importancia editable
-
-# Función para mostrar complementos con porcentaje_importancia editable
 # Función para determinar el orden de letras basado en la categoría seleccionada
 def ordenar_letras(categoria, df_tabla):
     if categoria == 'a1':
-        # Ordenar de mayor a menor, pero excluir "penosidad" y "peligrosidad"
+        # Ordenar por letra de mayor a menor (excluyendo los casos de penosidad y peligrosidad)
         letras_posibles = df_tabla[~df_tabla['descripcion'].str.contains('penosidad|peligrosidad', case=False, na=False)]
         letras_ordenadas = sorted(letras_posibles['letra'].unique(), reverse=True)
     
@@ -125,7 +112,7 @@ def ordenar_letras(categoria, df_tabla):
         letras_ordenadas = ['c']  # Solo 'c' para esta categoría
     
     elif categoria == 'ap/e':
-        # Ordenar de menor a mayor, pero excluir "penosidad" y "peligrosidad"
+        # Ordenar por letra de menor a mayor (excluyendo los casos de penosidad y peligrosidad)
         letras_posibles = df_tabla[~df_tabla['descripcion'].str.contains('penosidad|peligrosidad', case=False, na=False)]
         letras_ordenadas = sorted(letras_posibles['letra'].unique())
     
