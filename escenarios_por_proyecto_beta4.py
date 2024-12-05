@@ -101,10 +101,20 @@ def mostrar_complementos_editables(df, tabla_nombre):
         # Creamos dos columnas para la interfaz
         col1, col2 = st.columns([3, 1])  # 75% para el dataframe, 25% para el inputbox
 
-        # Columna 1: Mostrar el DataFrame
+        # Columna 1: Mostrar el DataFrame y los registros de la tabla
         with col1:
+            # Mostrar el nombre de complemento y porcentaje de importancia
             st.write(f"**{row['complemento_especifico' if 'complemento_especifico' in row else 'complemento_destino']}**")
             st.write(f"Porcentaje de importancia: {row['porcentaje_importancia']}%")
+            
+            # Mostrar el contenido de la tabla específica o de destino
+            nombre_tabla = row['complemento_especifico' if 'complemento_especifico' in row else 'complemento_destino']
+            try:
+                df_tabla = obtener_datos_tabla(nombre_tabla)  # Obtenemos el contenido de la tabla
+                st.write(f"Contenido de la tabla `{nombre_tabla}`:")
+                st.dataframe(df_tabla, use_container_width=True)
+            except Exception as e:
+                st.error(f"Error al cargar la tabla `{nombre_tabla}`: {e}")
 
         # Columna 2: InputBox para modificar el porcentaje
         with col2:
@@ -114,18 +124,6 @@ def mostrar_complementos_editables(df, tabla_nombre):
             )
             # Aquí puedes agregar cualquier lógica que necesites para actualizar la base de datos
             st.button(f"Actualizar {row['complemento_especifico' if 'complemento_especifico' in row else 'complemento_destino']}")
-
-# Filtrar complementos según la categoría
-def filtrar_complementos_por_categoria(complementos, categoria_seleccionada):
-    categoria_orden = {
-        'ap/e': 1,
-        'a1': 2,
-        'a2': 3,
-        'b': 4,
-        'c1': 5,
-        'c2': 6
-    }
-    return [complemento for complemento in complementos if categoria_orden.get(categoria_seleccionada, 7) <= categoria_orden.get(complemento, 7)]
 
 # Mostrar la interfaz principal
 def mostrar_interfaz():
@@ -164,3 +162,4 @@ def mostrar_interfaz():
             st.write("No se encontraron complementos de destino.")
 
 mostrar_interfaz()
+
