@@ -111,6 +111,7 @@ def ordenar_letras(categoria, df_tabla):
     # Filtramos las letras por las condiciones de la categoría
     if categoria == 'a1':
         # Ordenar de menor a mayor según la letra, y seleccionar la más alta (letra más grande)
+        letras_ordenadas = sorted(df_tabla['letra'].unique())  # Ordenamos 
         letras_ordenadas = sorted(df_tabla['letra'].unique(), reverse=True)  # Ordenamos de mayor a menor
     
     elif categoria == 'a2':
