@@ -93,6 +93,8 @@ def get_complementos_destino(id_proyecto):
     return [{'complemento_destino': row.complemento_destino, 'porcentaje_importancia': row.porcentaje_importancia} for row in results]
 # Función para obtener y mostrar el contenido de una tabla
 # Función para determinar el orden de letras basado en la categoría seleccionada
+
+
 def ordenar_letras(categoria, df_tabla):
     if categoria == 'a1':
         # Ordenar por letra de mayor a menor (excluyendo los casos de penosidad y peligrosidad)
