@@ -108,8 +108,9 @@ def obtener_datos_tabla(nombre_tabla):
 
 # Función para determinar el orden de letras basado en la categoría seleccionada
 def ordenar_letras(categoria, df_tabla):
+    # Filtramos las letras por las condiciones de la categoría
     if categoria == 'a1':
-        # Ordenar por letra de mayor a menor (excluyendo los casos de penosidad y peligrosidad)
+        # Ordenar de mayor a menor según la letra, excluyendo casos específicos como 'penosidad' o 'peligrosidad'
         letras_posibles = df_tabla[~df_tabla['descripcion'].str.contains('penosidad|peligrosidad', case=False, na=False)]
         letras_ordenadas = sorted(letras_posibles['letra'].unique(), reverse=True)
     
