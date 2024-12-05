@@ -92,36 +92,20 @@ def get_complementos_destino(id_proyecto):
     results = query_job.result()
     return [{'complemento_destino': row.complemento_destino, 'porcentaje_importancia': row.porcentaje_importancia} for row in results]
 # Función para obtener y mostrar el contenido de una tabla
-# Función para determinar el orden de letras basado en la categoría seleccionada
+def obtener_datos_tabla(nombre_tabla):
+    query = f"SELECT * FROM `ate-rrhh-2024.Ate_kaibot_2024.{nombre_tabla}`"
+    query_job = client.query(query)
+    results = query_job.result()
+    # Convertir a un DataFrame para mostrarlo en Streamlit
+    return pd.DataFrame([dict(row) for row in results])
 
-
-def ordenar_letras(categoria, df_tabla):
-    if categoria == 'a1':
-        # Ordenar por letra de mayor a menor (excluyendo los casos de penosidad y peligrosidad)
-        letras_posibles = df_tabla[~df_tabla['descripcion'].str.contains('penosidad|peligrosidad', case=False, na=False)]
-        letras_ordenadas = sorted(letras_posibles['letra'].unique(), reverse=True)
-    
-    elif categoria == 'a2':
-        letras_ordenadas = ['e']  # Solo 'e' para esta categoría
-    
-    elif categoria == 'b':
-        letras_ordenadas = ['e']  # Solo 'e' para esta categoría
-    
-    elif categoria == 'c1':
-        letras_ordenadas = ['d']  # Solo 'd' para esta categoría
-    
-    elif categoria == 'c2':
-        letras_ordenadas = ['c']  # Solo 'c' para esta categoría
-    
-    elif categoria == 'ap/e':
-        # Ordenar por letra de menor a mayor (excluyendo los casos de penosidad y peligrosidad)
-        letras_posibles = df_tabla[~df_tabla['descripcion'].str.contains('penosidad|peligrosidad', case=False, na=False)]
-        letras_ordenadas = sorted(letras_posibles['letra'].unique())
-    
-    return letras_ordenadas
 
 # Función para mostrar complementos con porcentaje_importancia editable
-def mostrar_complementos_editables(df, tabla_nombre, categoria_seleccionada):
+
+# Función para mostrar complementos con porcentaje_importancia editable
+
+# Función para mostrar complementos con porcentaje_importancia editable
+def mostrar_complementos_editables(df, tabla_nombre):
     st.write(f"### Descripción de la tabla: {tabla_nombre}")
     st.write(f"Esta tabla contiene los datos de los complementos asociados a la tabla `{tabla_nombre}` con su respectivo porcentaje de importancia.")
     
@@ -144,13 +128,8 @@ def mostrar_complementos_editables(df, tabla_nombre, categoria_seleccionada):
                 if not df_tabla.empty:
                     # Filtramos las columnas para mostrar solo "letra" y "descripcion"
                     if 'letra' in df_tabla.columns and 'descripcion' in df_tabla.columns:
-                        # Ordenamos las letras según la categoría seleccionada
-                        letras_ordenadas = ordenar_letras(categoria_seleccionada, df_tabla)
-
-                        # Filtramos las opciones de acuerdo con las letras ordenadas
-                        opciones = df_tabla[df_tabla['letra'].isin(letras_ordenadas)][['letra', 'descripcion']].drop_duplicates()
-
-                        # Mostrar el selectbox con las letras ordenadas
+                        # Crear un selectbox para que el usuario elija un registro de la tabla basado en "letra" y "descripcion"
+                        opciones = df_tabla[['letra', 'descripcion']].drop_duplicates()  # Filtrar solo las columnas 'letra' y 'descripcion'
                         opcion_seleccionada = st.selectbox(
                             f"Selecciona un registro de la tabla `{nombre_tabla}`:",
                             opciones.apply(lambda x: f"{x['letra']} - {x['descripcion']}", axis=1).values  # Formato del selectbox
@@ -200,7 +179,7 @@ def mostrar_interfaz():
         if complementos_especificos:
             st.write("### Factores Específicos del Proyecto")
             df_complementos_especificos = pd.DataFrame(complementos_especificos)
-            mostrar_complementos_editables(df_complementos_especificos, "complemento_especifico_x_proyecto", categoria_seleccionada)
+            mostrar_complementos_editables(df_complementos_especificos, "complemento_especifico_x_proyecto")
         else:
             st.write("No se encontraron complementos específicos.")
 
@@ -209,7 +188,7 @@ def mostrar_interfaz():
         if complementos_destino:
             st.write("### Factores de Destino del Proyecto")
             df_complementos_destino = pd.DataFrame(complementos_destino)
-            mostrar_complementos_editables(df_complementos_destino, "complemento_destino_x_proyecto", categoria_seleccionada)
+            mostrar_complementos_editables(df_complementos_destino, "complemento_destino_x_proyecto")
         else:
             st.write("No se encontraron complementos de destino.")
 
