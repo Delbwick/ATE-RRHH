@@ -71,7 +71,6 @@ def get_proyectos():
     return [{'id': row.id, 'nombre': row.nombre} for row in results]
 
 # Función para obtener complementos específicos de cada proyecto
-
 def get_complementos_especificos(id_proyecto):
     query = f"""
         SELECT complemento_especifico, porcentaje_importancia
@@ -92,12 +91,6 @@ def get_complementos_destino(id_proyecto):
     query_job = client.query(query)
     results = query_job.result()
     return [{'complemento_destino': row.complemento_destino, 'porcentaje_importancia': row.porcentaje_importancia} for row in results]
-# Función para obtener los datos de una tabla específica (complementos)
-def obtener_datos_tabla(nombre_tabla):
-    query = f"SELECT * FROM `{nombre_tabla}` LIMIT 100"
-    df = client.query(query).result().to_dataframe().fillna('No disponible')
-    return df
-
 
 # Función para mostrar complementos con porcentaje_importancia editable
 def mostrar_complementos_editables(df, tabla_nombre):
@@ -136,55 +129,38 @@ def filtrar_complementos_por_categoria(complementos, categoria_seleccionada):
 
 # Mostrar la interfaz principal
 def mostrar_interfaz():
-    # Obtener los proyectos
     proyectos = get_proyectos()
     proyectos_nombres = [proyecto['nombre'] for proyecto in proyectos]
-    
-    # Crear opciones en la barra lateral
     st.sidebar.title("Opciones")
     st.sidebar.markdown("<h2>Selecciona el proyecto</h2>", unsafe_allow_html=True)
     opcion_proyecto = st.sidebar.selectbox("Seleccione un Proyecto:", proyectos_nombres)
 
-    # Categorías disponibles
     categorias = ['ap/e', 'a1', 'a2', 'b', 'c1', 'c2']
     categoria_seleccionada = st.sidebar.selectbox("Seleccione una Categoría:", categorias)
 
-    # Obtener el ID del proyecto seleccionado
     id_proyecto_seleccionado = next((proyecto['id'] for proyecto in proyectos if proyecto['nombre'] == opcion_proyecto), None)
 
-    # Mensaje de información
     st.markdown("""
     **Importante**: Los porcentajes para los complementos deben sumar **100%**.
     """)
 
-    # Verificar si se seleccionó un proyecto
     if id_proyecto_seleccionado:
-        # Obtener complementos específicos con los datos de la tabla referencia
-        complementos_especificos = get_complementos(id_proyecto_seleccionado, "complemento_especifico")
+        # Obtener complementos específicos con porcentaje de importancia
+        complementos_especificos = get_complementos_especificos(id_proyecto_seleccionado)
         if complementos_especificos:
             st.write("### Factores Específicos del Proyecto")
-            for complemento in complementos_especificos:
-                nombre_tabla = f"ate-rrhh-2024.Ate_kaibot_2024.{complemento}"
-                df = obtener_datos_tabla(nombre_tabla)
-                st.write(f"**Tabla: {complemento} (Específico)**")
-                st.dataframe(df, use_container_width=True)
+            df_complementos_especificos = pd.DataFrame(complementos_especificos)
+            mostrar_complementos_editables(df_complementos_especificos, "complemento_especifico_x_proyecto")
         else:
             st.write("No se encontraron complementos específicos.")
 
-        # Obtener complementos de destino con los datos de la tabla referencia
-        complementos_destino = get_complementos(id_proyecto_seleccionado, "complemento_destino")
+        # Obtener complementos de destino con porcentaje de importancia
+        complementos_destino = get_complementos_destino(id_proyecto_seleccionado)
         if complementos_destino:
             st.write("### Factores de Destino del Proyecto")
-            for complemento in complementos_destino:
-                nombre_tabla = f"ate-rrhh-2024.Ate_kaibot_2024.{complemento}"
-                df = obtener_datos_tabla(nombre_tabla)
-                st.write(f"**Tabla: {complemento} (Destino)**")
-                st.dataframe(df, use_container_width=True)
+            df_complementos_destino = pd.DataFrame(complementos_destino)
+            mostrar_complementos_editables(df_complementos_destino, "complemento_destino_x_proyecto")
         else:
             st.write("No se encontraron complementos de destino.")
-    else:
-        st.write("Selecciona un proyecto para visualizar los complementos.")
 
-# Llamar a la función principal para mostrar la interfaz
 mostrar_interfaz()
-
