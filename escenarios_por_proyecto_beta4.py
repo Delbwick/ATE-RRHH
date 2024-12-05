@@ -236,7 +236,50 @@ def mostrar_interfaz():
 mostrar_interfaz()
 
 
-# Después de mostrar_interfaz(), empezamos los cálculos
+# Consulta para obtener las categorías de sueldo
+query_categorias_sueldo = """
+    SELECT nombre_categoria, sueldo
+    FROM `ate-rrhh-2024.Ate_kaibot_2024.valoracion_categoria_sueldo_por_ano`
+"""
+
+# Ejecutar la consulta para obtener las categorías de sueldo
+query_job_categorias_sueldo = client.query(query_categorias_sueldo)
+results_categorias_sueldo = query_job_categorias_sueldo.result()
+df_categorias_sueldo = pd.DataFrame(data=[row.values() for row in results_categorias_sueldo], columns=[field.name for field in results_categorias_sueldo.schema])
+
+# Convertir el DataFrame de categorías de sueldo en un diccionario para fácil acceso
+categorias_sueldo_dict = df_categorias_sueldo.set_index('nombre_categoria')['sueldo'].to_dict()
+
+# Mostrar el dataframe de categorías de sueldo
+st.dataframe(df_categorias_sueldo)
+
+# Almacenar los sueldos seleccionados por categoría
+sueldo_categoria_puesto = {}
+
+# Generar los selectboxes para elegir la categoría de sueldo
+st.markdown("<h2>Selecciona la Categoría de Sueldo</h2>", unsafe_allow_html=True)
+categoria_seleccionada = st.selectbox(
+    "Seleccione la categoría de sueldo",
+    list(categorias_sueldo_dict.keys())
+)
+
+# Obtener el sueldo de la categoría seleccionada
+sueldo = categorias_sueldo_dict[categoria_seleccionada]
+st.write(f"Sueldo base: {sueldo} euros")
+
+# Mensaje markdown para explicar la regla de tres
+st.markdown("<h2>Valoración para regla de 3 para tabla de complemento específico por Año (Variable) son 100 puntos -> 34.388,95 euros</h2>", unsafe_allow_html=True)
+valor_base = 34388.95  # euros
+
+# Input para que el usuario introduzca el valor de puntos específicos
+total_especifico = st.number_input('Introduce el número de puntos específicos del proyecto:',
+                                   min_value=1.0,
+                                   value=100.0,
+                                   step=0.01)
+
+# Calcular el valor de los puntos específicos del proyecto
+valor_punto_especifico_proyecto = (total_especifico * valor_base) / 100
+st.write(f"Valor de los puntos específicos del proyecto: {valor_punto_especifico_proyecto:.2f} euros")
 
 # Selección de la modalidad de disponibilidad especial
 modalidad_disponibilidad = st.selectbox(
@@ -258,27 +301,20 @@ elif modalidad_disponibilidad == 'Disponibilidad absoluta (hasta 15%)':
 elif modalidad_disponibilidad == 'Jornada ampliada con disponibilidad absoluta (hasta 20%)':
     porcentaje_disponibilidad = 20.0
 
-# Iterar sobre los puestos seleccionados
-for puesto_id in selected_puestos_ids:
-    puesto_nombre = df_puestos_proyecto.loc[df_puestos_proyecto['id_puesto'] == puesto_id, 'descripcion'].values[0]
-    sueldo_base = sueldo_categoria_puesto[puesto_id]
+# Calcular el complemento específico con el porcentaje de disponibilidad especial
+sueldo_bruto_con_complementos = sueldo + valor_punto_especifico_proyecto
+if porcentaje_disponibilidad > 0:
+    incremento_disponibilidad = sueldo_bruto_con_complementos * (porcentaje_disponibilidad / 100)
+    sueldo_total_con_disponibilidad = sueldo_bruto_con_complementos + incremento_disponibilidad
+    st.write(f"Con la modalidad '{modalidad_disponibilidad}' ({porcentaje_disponibilidad}%), el sueldo total ajustado es: {sueldo_total_con_disponibilidad:.2f} euros")
+else:
+    st.write(f"Sueldo total sin disponibilidad especial: {sueldo_bruto_con_complementos:.2f} euros")
 
-    # Cálculo de los sueldos adicionales: complemento específico y complemento de destino
-    sueldo_total_puesto = sueldo_base + puntos_especifico_peso_total + puntos_valoracion
+# Mostrar la referencia a la última publicación oficial
+st.markdown("<div class='wide-line'></div>", unsafe_allow_html=True)
+st.markdown("Última publicación oficial: BOPV del 27 de febrero del 2024")
 
-    # Mostrar el cálculo básico
-    st.markdown(f"<h2>Cálculo para el puesto: {puesto_nombre}</h2>", unsafe_allow_html=True)
-    st.write(f"Bruto Anual con Jornada Ordinaria: {sueldo_base} + {puntos_especifico_peso_total} + {puntos_valoracion} = {sueldo_total_puesto:.2f} euros")
-
-    # Cálculo del sueldo total con modalidad de disponibilidad especial
-    if porcentaje_disponibilidad > 0:
-        incremento_disponibilidad = sueldo_total_puesto * (porcentaje_disponibilidad / 100)
-        sueldo_total_con_disponibilidad = sueldo_total_puesto + incremento_disponibilidad
-        st.write(f"Con la modalidad '{modalidad_disponibilidad}' ({porcentaje_disponibilidad}%), el sueldo total ajustado es: {sueldo_total_con_disponibilidad:.2f} euros")
-    else:
-        st.write("No se ha aplicado ningún complemento de disponibilidad especial.")
-        
-# Botón de confirmación para guardar la valoración
+# Formulario de envío
 with st.form('addition'):
     submit = st.form_submit_button('Confirmar Valoración preliminar')
 
@@ -301,9 +337,9 @@ if submit:
         # Consulta para insertar datos básicos en BigQuery
         query_kai_insert = f"""
             INSERT INTO `ate-rrhh-2024.Ate_kaibot_2024.valoracion_preliminar_por_proyecto`
-            (Id_valoracion_preliminar, id_proyecto, id_puesto, nombre_puesto, puntos_destino, puntos_especifico, sueldo_base_puesto, importe_destino, importe_especifico, bruto_anual_puesto) 
+            (Id_valoracion_preliminar, id_proyecto, puntos_destino, puntos_especifico, sueldo_base_puesto, importe_destino,importe_especifico,bruto_anual_puesto) 
             VALUES 
-            ({new_id_valoracion_preliminar},{id_proyecto_seleccionado}, {puesto_id}, '{puesto_nombre}', {puntos_destino_peso_total}, {puntos_especifico_peso_total}, {sueldo_base},{puntos_valoracion},{puntos_especifico_sueldo},{sueldo_total_puesto})
+            ({new_id_valoracion_preliminar},{id_proyecto_seleccionado}, {total_especifico}, {total_especifico}, {sueldo},{valor_punto_especifico_proyecto},{valor_punto_especifico_proyecto},{sueldo_total_con_disponibilidad})
         """
         query_job_kai_insert = client.query(query_kai_insert)
         query_job_kai_insert.result()  # Asegurarse de que la consulta se complete
