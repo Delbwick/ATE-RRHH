@@ -101,15 +101,17 @@ def obtener_datos_tabla(nombre_tabla):
 
 
 # Función para mostrar complementos con porcentaje_importancia editable
+
+# Función para mostrar complementos con porcentaje_importancia editable
 def mostrar_complementos_editables(df, tabla_nombre):
     st.write(f"### Descripción de la tabla: {tabla_nombre}")
     st.write(f"Esta tabla contiene los datos de los complementos asociados a la tabla `{tabla_nombre}` con su respectivo porcentaje de importancia.")
     
     for index, row in df.iterrows():
         # Creamos dos columnas para la interfaz
-        col1, col2 = st.columns([3, 1])  # 75% para el dataframe, 25% para el inputbox
+        col1, col2 = st.columns([3, 1])  # 75% para el selectbox, 25% para el inputbox
 
-        # Columna 1: Mostrar el DataFrame y los registros de la tabla
+        # Columna 1: Mostrar el nombre de complemento y porcentaje de importancia
         with col1:
             # Mostrar el nombre de complemento y porcentaje de importancia
             st.write(f"**{row['complemento_especifico' if 'complemento_especifico' in row else 'complemento_destino']}**")
@@ -120,7 +122,19 @@ def mostrar_complementos_editables(df, tabla_nombre):
             try:
                 df_tabla = obtener_datos_tabla(nombre_tabla)  # Obtenemos el contenido de la tabla
                 st.write(f"Contenido de la tabla `{nombre_tabla}`:")
-                st.dataframe(df_tabla, use_container_width=True)
+
+                if not df_tabla.empty:
+                    # Crear un selectbox para que el usuario elija un registro de la tabla
+                    registro_seleccionado = st.selectbox(
+                        f"Selecciona un registro de la tabla `{nombre_tabla}`:",
+                        df_tabla.iloc[:, 0].values  # Mostrar la primera columna como opciones en el selectbox
+                    )
+                    # Mostrar detalles del registro seleccionado
+                    registro_detalle = df_tabla[df_tabla.iloc[:, 0] == registro_seleccionado]
+                    st.write("Detalles del registro seleccionado:")
+                    st.write(registro_detalle)
+                else:
+                    st.write(f"No se encontraron registros en la tabla `{nombre_tabla}`.")
             except Exception as e:
                 st.error(f"Error al cargar la tabla `{nombre_tabla}`: {e}")
 
@@ -170,3 +184,4 @@ def mostrar_interfaz():
             st.write("No se encontraron complementos de destino.")
 
 mostrar_interfaz()
+
