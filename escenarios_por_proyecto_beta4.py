@@ -114,16 +114,16 @@ def ordenar_letras(categoria, df_tabla):
         letras_ordenadas = sorted(letras_posibles['letra'].unique(), reverse=True)
     
     elif categoria == 'a2':
-        letras_ordenadas = ['e']  # Solo 'e' para esta categoría
+        letras_ordenadas = ['E']  # Solo 'e' para esta categoría
     
     elif categoria == 'b':
-        letras_ordenadas = ['e']  # Solo 'e' para esta categoría
+        letras_ordenadas = ['E']  # Solo 'e' para esta categoría
     
     elif categoria == 'c1':
-        letras_ordenadas = ['d']  # Solo 'd' para esta categoría
+        letras_ordenadas = ['D']  # Solo 'd' para esta categoría
     
     elif categoria == 'c2':
-        letras_ordenadas = ['c']  # Solo 'c' para esta categoría
+        letras_ordenadas = ['C']  # Solo 'c' para esta categoría
     
     elif categoria == 'ap/e':
         # Ordenar por letra de menor a mayor (excluyendo los casos de penosidad y peligrosidad)
