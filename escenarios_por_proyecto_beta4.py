@@ -108,9 +108,12 @@ def obtener_datos_tabla(nombre_tabla):
 
 # Función para determinar el orden de letras basado en la categoría seleccionada
 def ordenar_letras(categoria, df_tabla):
+    # Asegurarse de que no haya valores nulos en las columnas que vamos a procesar
+    df_tabla = df_tabla.dropna(subset=['letra', 'descripcion'])
+    
     # Filtramos las letras por las condiciones de la categoría
     if categoria == 'a1':
-        # Ordenar de mayor a menor según la letra, excluyendo casos específicos como 'penosidad' o 'peligrosidad'
+        # Excluir casos específicos como 'penosidad' o 'peligrosidad'
         letras_posibles = df_tabla[~df_tabla['descripcion'].str.contains('penosidad|peligrosidad', case=False, na=False)]
         
         # Convertir las letras a minúsculas para ordenarlas correctamente
@@ -129,11 +132,12 @@ def ordenar_letras(categoria, df_tabla):
         letras_ordenadas = ['C']  # Solo 'c' para esta categoría
     
     elif categoria == 'ap/e':
-        # Ordenar por letra de menor a mayor (excluyendo los casos de penosidad y peligrosidad)
+        # Excluir los casos de penosidad y peligrosidad, ordenar de menor a mayor
         letras_posibles = df_tabla[~df_tabla['descripcion'].str.contains('penosidad|peligrosidad', case=False, na=False)]
         letras_ordenadas = sorted(letras_posibles['letra'].str.lower().unique())
     
     return letras_ordenadas
+
 
 
 # Función para mostrar complementos con porcentaje_importancia editable
