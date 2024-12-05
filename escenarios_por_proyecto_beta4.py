@@ -103,6 +103,8 @@ def obtener_datos_tabla(nombre_tabla):
 # Función para mostrar complementos con porcentaje_importancia editable
 
 # Función para mostrar complementos con porcentaje_importancia editable
+
+# Función para mostrar complementos con porcentaje_importancia editable
 def mostrar_complementos_editables(df, tabla_nombre):
     st.write(f"### Descripción de la tabla: {tabla_nombre}")
     st.write(f"Esta tabla contiene los datos de los complementos asociados a la tabla `{tabla_nombre}` con su respectivo porcentaje de importancia.")
@@ -124,15 +126,22 @@ def mostrar_complementos_editables(df, tabla_nombre):
                 st.write(f"Contenido de la tabla `{nombre_tabla}`:")
 
                 if not df_tabla.empty:
-                    # Crear un selectbox para que el usuario elija un registro de la tabla
-                    registro_seleccionado = st.selectbox(
-                        f"Selecciona un registro de la tabla `{nombre_tabla}`:",
-                        df_tabla.iloc[:, 0].values  # Mostrar la primera columna como opciones en el selectbox
-                    )
-                    # Mostrar detalles del registro seleccionado
-                    registro_detalle = df_tabla[df_tabla.iloc[:, 0] == registro_seleccionado]
-                    st.write("Detalles del registro seleccionado:")
-                    st.write(registro_detalle)
+                    # Filtramos las columnas para mostrar solo "letra" y "descripcion"
+                    if 'letra' in df_tabla.columns and 'descripcion' in df_tabla.columns:
+                        # Crear un selectbox para que el usuario elija un registro de la tabla basado en "letra" y "descripcion"
+                        opciones = df_tabla[['letra', 'descripcion']].drop_duplicates()  # Filtrar solo las columnas 'letra' y 'descripcion'
+                        opcion_seleccionada = st.selectbox(
+                            f"Selecciona un registro de la tabla `{nombre_tabla}`:",
+                            opciones.apply(lambda x: f"{x['letra']} - {x['descripcion']}", axis=1).values  # Formato del selectbox
+                        )
+
+                        # Extraer los detalles del registro seleccionado
+                        letra_seleccionada, descripcion_seleccionada = opcion_seleccionada.split(' - ')
+                        registro_detalle = df_tabla[(df_tabla['letra'] == letra_seleccionada) & (df_tabla['descripcion'] == descripcion_seleccionada)]
+                        st.write("Detalles del registro seleccionado:")
+                        st.write(registro_detalle)
+                    else:
+                        st.write("La tabla no contiene las columnas 'letra' y 'descripcion'.")
                 else:
                     st.write(f"No se encontraron registros en la tabla `{nombre_tabla}`.")
             except Exception as e:
@@ -184,4 +193,5 @@ def mostrar_interfaz():
             st.write("No se encontraron complementos de destino.")
 
 mostrar_interfaz()
+
 
