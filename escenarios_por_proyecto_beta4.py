@@ -115,7 +115,14 @@ def mostrar_complementos_editables(df, tabla_nombre):
             st.write(f"**{row['complemento_especifico' if 'complemento_especifico' in row else 'complemento_destino']}**")
             st.write(f"Porcentaje de importancia: {row['porcentaje_importancia']}%")
             
-            st.dataframe(df, use_container_width=True)
+            # Mostrar el contenido de la tabla específica o de destino
+            nombre_tabla = row['complemento_especifico' if 'complemento_especifico' in row else 'complemento_destino']
+            try:
+                df_tabla = obtener_datos_tabla(nombre_tabla)  # Obtenemos el contenido de la tabla
+                st.write(f"Contenido de la tabla `{nombre_tabla}`:")
+                st.dataframe(df_tabla, use_container_width=True)
+            except Exception as e:
+                st.error(f"Error al cargar la tabla `{nombre_tabla}`: {e}")
 
         # Columna 2: InputBox para modificar el porcentaje
         with col2:
@@ -163,4 +170,3 @@ def mostrar_interfaz():
             st.write("No se encontraron complementos de destino.")
 
 mostrar_interfaz()
-
