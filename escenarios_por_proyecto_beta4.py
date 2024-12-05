@@ -112,8 +112,9 @@ def ordenar_letras(categoria, df_tabla):
     if categoria == 'a1':
         # Ordenar de menor a mayor según la letra, y seleccionar la más alta (letra más grande)
         # Ordenar de mayor a menor según la letra, usando pd.Categorical para asegurar el orden alfabético
-        letras_ordenadas = pd.Categorical(df_tabla['letra'], categories=[chr(i) for i in range(65, 91)], ordered=True)
-        letras_ordenadas = sorted(df_tabla['letra'].unique(), key=lambda x: letras_ordenadas.categories.get_loc(x), reverse=True)
+        df_tabla['letra'] = df_tabla['letra'].str.upper()  # Asegurarnos de que las letras estén en mayúsculas
+        # Ordenar las letras de forma alfabética (de Z a A)
+        letras_ordenadas = sorted(df_tabla['letra'].unique(), reverse=True)
     
     elif categoria == 'a2':
         letras_ordenadas = ['E']  # Solo 'e' para esta categoría
