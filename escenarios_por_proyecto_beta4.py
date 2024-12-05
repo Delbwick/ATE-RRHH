@@ -112,7 +112,9 @@ def ordenar_letras(categoria, df_tabla):
     if categoria == 'a1':
         # Ordenar de mayor a menor según la letra, excluyendo casos específicos como 'penosidad' o 'peligrosidad'
         letras_posibles = df_tabla[~df_tabla['descripcion'].str.contains('penosidad|peligrosidad', case=False, na=False)]
-        letras_ordenadas = sorted(letras_posibles['letra'].unique(), reverse=True)
+        
+        # Convertir las letras a minúsculas para ordenarlas correctamente
+        letras_ordenadas = sorted(letras_posibles['letra'].str.lower().unique(), reverse=True)
     
     elif categoria == 'a2':
         letras_ordenadas = ['E']  # Solo 'e' para esta categoría
@@ -129,9 +131,10 @@ def ordenar_letras(categoria, df_tabla):
     elif categoria == 'ap/e':
         # Ordenar por letra de menor a mayor (excluyendo los casos de penosidad y peligrosidad)
         letras_posibles = df_tabla[~df_tabla['descripcion'].str.contains('penosidad|peligrosidad', case=False, na=False)]
-        letras_ordenadas = sorted(letras_posibles['letra'].unique())
+        letras_ordenadas = sorted(letras_posibles['letra'].str.lower().unique())
     
     return letras_ordenadas
+
 
 # Función para mostrar complementos con porcentaje_importancia editable
 def mostrar_complementos_editables(df, tabla_nombre, categoria_seleccionada):
