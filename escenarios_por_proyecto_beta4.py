@@ -91,6 +91,14 @@ def get_complementos_destino(id_proyecto):
     query_job = client.query(query)
     results = query_job.result()
     return [{'complemento_destino': row.complemento_destino, 'porcentaje_importancia': row.porcentaje_importancia} for row in results]
+# Función para obtener y mostrar el contenido de una tabla
+def obtener_datos_tabla(nombre_tabla):
+    query = f"SELECT * FROM `ate-rrhh-2024.Ate_kaibot_2024.{nombre_tabla}`"
+    query_job = client.query(query)
+    results = query_job.result()
+    # Convertir a un DataFrame para mostrarlo en Streamlit
+    return pd.DataFrame([dict(row) for row in results])
+
 
 # Función para mostrar complementos con porcentaje_importancia editable
 def mostrar_complementos_editables(df, tabla_nombre):
