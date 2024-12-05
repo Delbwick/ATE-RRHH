@@ -107,44 +107,37 @@ def obtener_datos_tabla(nombre_tabla):
 # Función para mostrar complementos con porcentaje_importancia editable
 
 # Función para determinar el orden de letras basado en la categoría seleccionada
+
+
 import pandas as pd
 
 def ordenar_letras(categoria, df_tabla):
-    # Crear un diccionario de mapeo de letras a valores numéricos para garantizar el orden correcto
-    letras_map = {chr(i): i - 65 for i in range(65, 91)}  # A = 0, B = 1, ..., Z = 25
+    # Asegurarnos de que la columna 'letra' esté en mayúsculas
+    df_tabla['letra'] = df_tabla['letra'].str.upper()
     
-    # Filtramos las letras por las condiciones de la categoría
+    # Filtramos y ordenamos las letras según la categoría
     if categoria == 'a1':
-        # Ordenar de mayor a menor según la letra, excluyendo casos específicos como 'penosidad' o 'peligrosidad'
-        df_tabla['letra'] = df_tabla['letra'].str.upper()  # Aseguramos que las letras están en mayúsculas
-        df_tabla['letra_valor'] = df_tabla['letra'].map(letras_map)  # Mapear las letras a valores numéricos
-        df_tabla = df_tabla.dropna(subset=['letra_valor'])  # Eliminar posibles filas con NaN en 'letra'
-        # Ordenamos por el valor numérico de la letra (de mayor a menor)
-        df_tabla = df_tabla.sort_values(by='letra_valor', ascending=False)
-        letras_ordenadas = df_tabla['letra'].unique()  # Extraemos las letras ya ordenadas
+        # Ordenar de mayor a menor (A-Z) con la letra más alta primero
+        letras_ordenadas = sorted(df_tabla['letra'].unique(), reverse=True)  # De Z a A
     
     elif categoria == 'a2':
-        letras_ordenadas = ['E']  # Solo 'e' para esta categoría
+        letras_ordenadas = ['E']  # Solo 'E' para esta categoría
     
     elif categoria == 'b':
-        letras_ordenadas = ['E']  # Solo 'e' para esta categoría
+        letras_ordenadas = ['E']  # Solo 'E' para esta categoría
     
     elif categoria == 'c1':
-        letras_ordenadas = ['D']  # Solo 'd' para esta categoría
+        letras_ordenadas = ['D']  # Solo 'D' para esta categoría
     
     elif categoria == 'c2':
-        letras_ordenadas = ['C']  # Solo 'c' para esta categoría
+        letras_ordenadas = ['C']  # Solo 'C' para esta categoría
     
     elif categoria == 'ap/e':
-        # Ordenar por letra de menor a mayor
-        df_tabla['letra'] = df_tabla['letra'].str.upper()  # Aseguramos que las letras están en mayúsculas
-        df_tabla['letra_valor'] = df_tabla['letra'].map(letras_map)  # Mapear las letras a valores numéricos
-        df_tabla = df_tabla.dropna(subset=['letra_valor'])  # Eliminar posibles filas con NaN en 'letra'
-        # Ordenamos por el valor numérico de la letra (de menor a mayor)
-        df_tabla = df_tabla.sort_values(by='letra_valor', ascending=True)
-        letras_ordenadas = df_tabla['letra'].unique()  # Extraemos las letras ya ordenadas
+        # Ordenar de menor a mayor (A-Z) con la letra más baja primero
+        letras_ordenadas = sorted(df_tabla['letra'].unique())  # De A a Z
     
     return letras_ordenadas
+
 
 
 # Función para mostrar complementos con porcentaje_importancia editable
